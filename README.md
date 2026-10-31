@@ -168,3 +168,9 @@ La ROM v0.6 è conservata senza modifiche in quattro parti binarie nella cartell
 Aggiunti salvataggio automatico di SOUND/INTRO e ripristino all’avvio. Record SRAM di 8 byte, versione, controllo dei valori e byte di verifica; dati assenti o non validi ripristinano SOUND ON / INTRO ON. Il marcatore di validità viene scritto per ultimo. È un formato della ricostruzione, non quello del gioco originale. Non salva progressi o gemme.
 
 Test host con ASan/UBSan superati per tutte le quattro combinazioni, memoria vuota, corruzione di ciascun singolo bit e record non completato. Gameplay esistente ancora verificato dai test host. Non è stata eseguita una nuova compilazione ARM né una prova mGBA in questa sessione. Le ROM e le preview v0.6 incluse restano quelle precedenti.
+
+## Verifica automatica mGBA aggiunta
+
+La pipeline ora installa il core mGBA, esegue il percorso del frontend e delle due aree e verifica anche SOUND/INTRO scritti dal menu, mantenuti dopo reset del core e riportati ai valori predefiniti dopo corruzione del checksum. Questa prova non verifica la chiusura dell’emulatore e il caricamento del file `.sav` da disco. Il risultato viene conservato in `emulator-report.txt`, insieme alla ROM compilata e alle catture PNG reali, ingrandite senza interpolazione.
+
+In questa sessione sono passati i test host ASan/UBSan, l’audit delle posizioni e il controllo del convertitore di screenshot usando una cattura v0.6 come fixture. La nuova prova mGBA e la nuova build ARM sono predisposte, non eseguite localmente: non costituiscono ancora un risultato PASS.

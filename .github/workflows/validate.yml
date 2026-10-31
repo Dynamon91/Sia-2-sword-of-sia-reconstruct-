@@ -8,7 +8,7 @@ jobs:
       - name: Install build and audit dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi python3-pil python3-numpy
+          sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi python3-pil python3-numpy libmgba-dev
       - name: Restore and verify embedded assets
         run: python3 tools/unpack_assets.py
       - name: Test gameplay with sanitizers
@@ -17,6 +17,13 @@ jobs:
         run: python3 tools/audit_positions.py --output build/position-audit.json
       - name: Build native GBA ROM
         run: make
+      - name: Run mGBA gameplay and settings integration
+        run: |
+          gcc -Wall -Wextra -Werror tools/frontend_check.c src/game.c -lmgba -o build/frontend_check
+          ./build/frontend_check build/sia2_lab.gba > build/emulator-report.txt
+      - name: Convert emulator screenshots to PNG
+        run: |
+          python3 tools/export_previews.py build
       - name: Publish build for testing
         uses: actions/upload-artifact@v4
         with:
@@ -24,3 +31,5 @@ jobs:
           path: |
             build/sia2_lab.gba
             build/position-audit.json
+            build/emulator-report.txt
+            build/*.png

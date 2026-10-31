@@ -172,5 +172,21 @@ int main(int argc,char **argv){
  run(c,4900);state(c,6);assert(value(c,7)==0);
  tap(c,2);state(c,1);tap(c,1);state(c,2);tap(c,8);state(c,6);
  printf("PASS frontend v0.6: %u emulated frames; title/menu/options/credits, 8 story pages, intro playback/pause/resume/end/skip, recorded audio including level audio end, native portrait/captions, OBJ cursor, pickup HUD 1/2 with timeout, arrival, registered portal position continuity, camera-zero backgrounds byte-verified in VRAM, two linked areas, bridge, two gems/persistence/reset, fall respawn, jump/ladder/platform/camera, return trip, sign and pause. Audio samples=%u absolute energy=%llu\n",c->frameCounter(c),samples,(unsigned long long)energy);
+ /* Exercise settings through the actual menu before resetting the CPU. */
+ tap(c,2);state(c,1);tap(c,128);tap(c,1);state(c,4);
+ tap(c,64); /* OPTIONS retains the INTRO selection: move to SOUND. */
+ tap(c,1);assert(value(c,3)==0);
+ tap(c,128);tap(c,1);assert(value(c,4)==0);
+ assert(c->busRead8(c,0x0E000000)=='L');
+ assert(c->busRead8(c,0x0E000005)==0);
+ c->setKeys(c,0);c->reset(c);run(c,90);state(c,0);
+ assert(value(c,3)==0&&value(c,4)==0&&value(c,7)==0);
+ tap(c,8);tap(c,128);tap(c,1);state(c,4);
+ capture(c,"build/options_saved.ppm");
+ /* A damaged checksum must select documented defaults on the next boot. */
+ c->busWrite8(c,0x0E000006,c->busRead8(c,0x0E000006)^1);
+ c->setKeys(c,0);c->reset(c);run(c,90);state(c,0);
+ assert(value(c,3)==1&&value(c,4)==1);
+ puts("PASS settings integration: menu writes SRAM, soft-reset reload, corrupt-record defaults. Disk save reload and real hardware are not tested.");
  c->deinit(c);free(pixels);
 }
