@@ -174,7 +174,7 @@ int main(int argc,char **argv){
  printf("PASS frontend v0.6: %u emulated frames; title/menu/options/credits, 8 story pages, intro playback/pause/resume/end/skip, recorded audio including level audio end, native portrait/captions, OBJ cursor, pickup HUD 1/2 with timeout, arrival, registered portal position continuity, camera-zero backgrounds byte-verified in VRAM, two linked areas, bridge, two gems/persistence/reset, fall respawn, jump/ladder/platform/camera, return trip, sign and pause. Audio samples=%u absolute energy=%llu\n",c->frameCounter(c),samples,(unsigned long long)energy);
  /* Exercise settings through the actual menu before resetting the CPU. */
  tap(c,2);state(c,1);tap(c,128);tap(c,1);state(c,4);
- tap(c,64); /* OPTIONS retains the INTRO selection: move to SOUND. */
+ /* Entering OPTIONS always selects SOUND. */
  tap(c,1);assert(value(c,3)==0);
  tap(c,128);tap(c,1);assert(value(c,4)==0);
  assert(c->busRead8(c,0x0E000000)=='L');
