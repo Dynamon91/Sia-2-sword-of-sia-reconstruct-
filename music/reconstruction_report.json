@@ -1,0 +1,5772 @@
+{
+  "source_sha256": "d406313b8bbfc3fde5664c7882e81267a544d4bae621f883a3b71dda7ae1cb33",
+  "source_pcm": "signed 8-bit mono 16384 Hz",
+  "duration_seconds": 251.0,
+  "method": "median harmonic/percussive mask; four-component harmonic-template matching; unquantized note segmentation; neutral additive synthesis",
+  "notes": 958,
+  "pitch_range_considered": [
+    36,
+    96
+  ],
+  "midi_timebase_bpm": 120,
+  "tempo_estimated": false,
+  "original_samples_recovered": false,
+  "original_score_recovered": false,
+  "integrated_in_rom": false,
+  "limitations": [
+    "Effects with stable pitch can remain in the harmonic reference and transcription.",
+    "Missed notes, false notes and octave errors require listening and manual correction.",
+    "No original instruments or percussion reconstructed.",
+    "No loop point or original tempo confirmed."
+  ],
+  "note_events": [
+    {
+      "start": 0.17969,
+      "end": 0.28906,
+      "midi_pitch": 62,
+      "strength": 0.12665
+    },
+    {
+      "start": 0.17969,
+      "end": 0.30469,
+      "midi_pitch": 58,
+      "strength": 0.22025
+    },
+    {
+      "start": 0.72656,
+      "end": 0.88281,
+      "midi_pitch": 67,
+      "strength": 0.16978
+    },
+    {
+      "start": 0.99219,
+      "end": 1.39844,
+      "midi_pitch": 67,
+      "strength": 0.18214
+    },
+    {
+      "start": 1.17969,
+      "end": 1.30469,
+      "midi_pitch": 64,
+      "strength": 0.12946
+    },
+    {
+      "start": 1.42969,
+      "end": 1.53906,
+      "midi_pitch": 64,
+      "strength": 0.13436
+    },
+    {
+      "start": 1.69531,
+      "end": 1.80469,
+      "midi_pitch": 64,
+      "strength": 0.12355
+    },
+    {
+      "start": 2.17969,
+      "end": 2.28906,
+      "midi_pitch": 64,
+      "strength": 0.13704
+    },
+    {
+      "start": 2.22656,
+      "end": 2.33594,
+      "midi_pitch": 67,
+      "strength": 0.13009
+    },
+    {
+      "start": 2.44531,
+      "end": 2.57031,
+      "midi_pitch": 65,
+      "strength": 0.14541
+    },
+    {
+      "start": 2.57031,
+      "end": 2.88281,
+      "midi_pitch": 82,
+      "strength": 0.18485
+    },
+    {
+      "start": 2.69531,
+      "end": 2.80469,
+      "midi_pitch": 65,
+      "strength": 0.15865
+    },
+    {
+      "start": 2.94531,
+      "end": 3.05469,
+      "midi_pitch": 62,
+      "strength": 0.13105
+    },
+    {
+      "start": 2.94531,
+      "end": 3.05469,
+      "midi_pitch": 65,
+      "strength": 0.14442
+    },
+    {
+      "start": 3.21094,
+      "end": 3.32031,
+      "midi_pitch": 65,
+      "strength": 0.13773
+    },
+    {
+      "start": 3.44531,
+      "end": 3.58594,
+      "midi_pitch": 58,
+      "strength": 0.20477
+    },
+    {
+      "start": 3.46094,
+      "end": 3.57031,
+      "midi_pitch": 62,
+      "strength": 0.13144
+    },
+    {
+      "start": 3.69531,
+      "end": 3.83594,
+      "midi_pitch": 58,
+      "strength": 0.20857
+    },
+    {
+      "start": 3.71094,
+      "end": 3.82031,
+      "midi_pitch": 62,
+      "strength": 0.12855
+    },
+    {
+      "start": 3.96094,
+      "end": 4.07031,
+      "midi_pitch": 62,
+      "strength": 0.12687
+    },
+    {
+      "start": 3.96094,
+      "end": 4.08594,
+      "midi_pitch": 58,
+      "strength": 0.2195
+    },
+    {
+      "start": 4.21094,
+      "end": 4.32031,
+      "midi_pitch": 58,
+      "strength": 0.21212
+    },
+    {
+      "start": 4.44531,
+      "end": 4.58594,
+      "midi_pitch": 63,
+      "strength": 0.17122
+    },
+    {
+      "start": 4.49219,
+      "end": 4.61719,
+      "midi_pitch": 56,
+      "strength": 0.22583
+    },
+    {
+      "start": 4.69531,
+      "end": 4.83594,
+      "midi_pitch": 63,
+      "strength": 0.16522
+    },
+    {
+      "start": 4.71094,
+      "end": 4.86719,
+      "midi_pitch": 56,
+      "strength": 0.20845
+    },
+    {
+      "start": 4.94531,
+      "end": 5.07031,
+      "midi_pitch": 63,
+      "strength": 0.15989
+    },
+    {
+      "start": 4.96094,
+      "end": 5.11719,
+      "midi_pitch": 56,
+      "strength": 0.18975
+    },
+    {
+      "start": 5.22656,
+      "end": 5.35156,
+      "midi_pitch": 56,
+      "strength": 0.19824
+    },
+    {
+      "start": 5.46094,
+      "end": 5.57031,
+      "midi_pitch": 55,
+      "strength": 0.13406
+    },
+    {
+      "start": 5.49219,
+      "end": 5.63281,
+      "midi_pitch": 58,
+      "strength": 0.16159
+    },
+    {
+      "start": 5.69531,
+      "end": 5.83594,
+      "midi_pitch": 55,
+      "strength": 0.14144
+    },
+    {
+      "start": 5.71094,
+      "end": 5.82031,
+      "midi_pitch": 58,
+      "strength": 0.15051
+    },
+    {
+      "start": 6.21094,
+      "end": 6.33594,
+      "midi_pitch": 55,
+      "strength": 0.14178
+    },
+    {
+      "start": 6.21094,
+      "end": 6.38281,
+      "midi_pitch": 58,
+      "strength": 0.15505
+    },
+    {
+      "start": 6.46094,
+      "end": 6.58594,
+      "midi_pitch": 55,
+      "strength": 0.14058
+    },
+    {
+      "start": 6.50781,
+      "end": 6.63281,
+      "midi_pitch": 59,
+      "strength": 0.1413
+    },
+    {
+      "start": 6.78906,
+      "end": 6.91406,
+      "midi_pitch": 59,
+      "strength": 0.15019
+    },
+    {
+      "start": 6.96094,
+      "end": 7.08594,
+      "midi_pitch": 55,
+      "strength": 0.13584
+    },
+    {
+      "start": 7.22656,
+      "end": 7.35156,
+      "midi_pitch": 55,
+      "strength": 0.13856
+    },
+    {
+      "start": 7.47656,
+      "end": 7.58594,
+      "midi_pitch": 63,
+      "strength": 0.14869
+    },
+    {
+      "start": 7.71094,
+      "end": 7.83594,
+      "midi_pitch": 63,
+      "strength": 0.15687
+    },
+    {
+      "start": 7.97656,
+      "end": 8.10156,
+      "midi_pitch": 63,
+      "strength": 0.17103
+    },
+    {
+      "start": 8.21094,
+      "end": 8.33594,
+      "midi_pitch": 63,
+      "strength": 0.13936
+    },
+    {
+      "start": 8.21094,
+      "end": 8.35156,
+      "midi_pitch": 67,
+      "strength": 0.19885
+    },
+    {
+      "start": 8.47656,
+      "end": 8.61719,
+      "midi_pitch": 53,
+      "strength": 0.14821
+    },
+    {
+      "start": 8.52344,
+      "end": 8.69531,
+      "midi_pitch": 65,
+      "strength": 0.18085
+    },
+    {
+      "start": 8.74219,
+      "end": 8.86719,
+      "midi_pitch": 56,
+      "strength": 0.19355
+    },
+    {
+      "start": 8.96094,
+      "end": 9.07031,
+      "midi_pitch": 72,
+      "strength": 0.14888
+    },
+    {
+      "start": 8.99219,
+      "end": 9.11719,
+      "midi_pitch": 56,
+      "strength": 0.17271
+    },
+    {
+      "start": 9.07031,
+      "end": 9.36719,
+      "midi_pitch": 84,
+      "strength": 0.15136
+    },
+    {
+      "start": 9.24219,
+      "end": 9.36719,
+      "midi_pitch": 56,
+      "strength": 0.17696
+    },
+    {
+      "start": 9.49219,
+      "end": 9.63281,
+      "midi_pitch": 56,
+      "strength": 0.21272
+    },
+    {
+      "start": 9.75781,
+      "end": 9.86719,
+      "midi_pitch": 56,
+      "strength": 0.17903
+    },
+    {
+      "start": 9.99219,
+      "end": 10.11719,
+      "midi_pitch": 74,
+      "strength": 0.15983
+    },
+    {
+      "start": 10.00781,
+      "end": 10.11719,
+      "midi_pitch": 56,
+      "strength": 0.16266
+    },
+    {
+      "start": 10.25781,
+      "end": 10.39844,
+      "midi_pitch": 56,
+      "strength": 0.19693
+    },
+    {
+      "start": 10.32031,
+      "end": 10.46094,
+      "midi_pitch": 75,
+      "strength": 0.21397
+    },
+    {
+      "start": 10.47656,
+      "end": 10.67969,
+      "midi_pitch": 65,
+      "strength": 0.22329
+    },
+    {
+      "start": 10.60156,
+      "end": 10.99219,
+      "midi_pitch": 77,
+      "strength": 0.26669
+    },
+    {
+      "start": 10.74219,
+      "end": 10.94531,
+      "midi_pitch": 65,
+      "strength": 0.16846
+    },
+    {
+      "start": 10.99219,
+      "end": 11.19531,
+      "midi_pitch": 65,
+      "strength": 0.18165
+    },
+    {
+      "start": 11.22656,
+      "end": 11.42969,
+      "midi_pitch": 65,
+      "strength": 0.19315
+    },
+    {
+      "start": 11.49219,
+      "end": 11.67969,
+      "midi_pitch": 58,
+      "strength": 0.23519
+    },
+    {
+      "start": 11.63281,
+      "end": 11.74219,
+      "midi_pitch": 70,
+      "strength": 0.23943
+    },
+    {
+      "start": 11.71094,
+      "end": 11.83594,
+      "midi_pitch": 94,
+      "strength": 0.15075
+    },
+    {
+      "start": 11.72656,
+      "end": 11.86719,
+      "midi_pitch": 58,
+      "strength": 0.24968
+    },
+    {
+      "start": 11.83594,
+      "end": 11.94531,
+      "midi_pitch": 70,
+      "strength": 0.18778
+    },
+    {
+      "start": 11.96094,
+      "end": 12.08594,
+      "midi_pitch": 58,
+      "strength": 0.16623
+    },
+    {
+      "start": 12.22656,
+      "end": 12.41406,
+      "midi_pitch": 58,
+      "strength": 0.16453
+    },
+    {
+      "start": 12.77344,
+      "end": 12.89844,
+      "midi_pitch": 36,
+      "strength": 0.15145
+    },
+    {
+      "start": 13.83594,
+      "end": 14.03906,
+      "midi_pitch": 77,
+      "strength": 0.23176
+    },
+    {
+      "start": 14.16406,
+      "end": 14.35156,
+      "midi_pitch": 79,
+      "strength": 0.2088
+    },
+    {
+      "start": 14.27344,
+      "end": 14.41406,
+      "midi_pitch": 67,
+      "strength": 0.16457
+    },
+    {
+      "start": 14.89844,
+      "end": 15.00781,
+      "midi_pitch": 74,
+      "strength": 0.14505
+    },
+    {
+      "start": 15.00781,
+      "end": 15.16406,
+      "midi_pitch": 62,
+      "strength": 0.15308
+    },
+    {
+      "start": 15.08594,
+      "end": 15.46094,
+      "midi_pitch": 74,
+      "strength": 0.17655
+    },
+    {
+      "start": 15.55469,
+      "end": 15.71094,
+      "midi_pitch": 58,
+      "strength": 0.16661
+    },
+    {
+      "start": 15.80469,
+      "end": 15.94531,
+      "midi_pitch": 58,
+      "strength": 0.19665
+    },
+    {
+      "start": 16.57031,
+      "end": 16.92969,
+      "midi_pitch": 84,
+      "strength": 0.16084
+    },
+    {
+      "start": 17.50781,
+      "end": 17.63281,
+      "midi_pitch": 64,
+      "strength": 0.16476
+    },
+    {
+      "start": 17.86719,
+      "end": 18.05469,
+      "midi_pitch": 77,
+      "strength": 0.21115
+    },
+    {
+      "start": 18.21094,
+      "end": 18.36719,
+      "midi_pitch": 79,
+      "strength": 0.19819
+    },
+    {
+      "start": 18.28906,
+      "end": 18.39844,
+      "midi_pitch": 76,
+      "strength": 0.13492
+    },
+    {
+      "start": 18.32031,
+      "end": 18.42969,
+      "midi_pitch": 67,
+      "strength": 0.16284
+    },
+    {
+      "start": 18.53906,
+      "end": 18.69531,
+      "midi_pitch": 62,
+      "strength": 0.13889
+    },
+    {
+      "start": 18.69531,
+      "end": 18.86719,
+      "midi_pitch": 74,
+      "strength": 0.15128
+    },
+    {
+      "start": 18.97656,
+      "end": 19.08594,
+      "midi_pitch": 83,
+      "strength": 0.26505
+    },
+    {
+      "start": 19.53906,
+      "end": 19.64844,
+      "midi_pitch": 62,
+      "strength": 0.11968
+    },
+    {
+      "start": 19.55469,
+      "end": 19.66406,
+      "midi_pitch": 58,
+      "strength": 0.17444
+    },
+    {
+      "start": 19.75781,
+      "end": 19.91406,
+      "midi_pitch": 58,
+      "strength": 0.20568
+    },
+    {
+      "start": 19.78906,
+      "end": 19.92969,
+      "midi_pitch": 62,
+      "strength": 0.1363
+    },
+    {
+      "start": 20.03906,
+      "end": 20.16406,
+      "midi_pitch": 58,
+      "strength": 0.18569
+    },
+    {
+      "start": 20.05469,
+      "end": 20.16406,
+      "midi_pitch": 62,
+      "strength": 0.13173
+    },
+    {
+      "start": 20.30469,
+      "end": 20.41406,
+      "midi_pitch": 58,
+      "strength": 0.19123
+    },
+    {
+      "start": 20.53906,
+      "end": 21.50781,
+      "midi_pitch": 56,
+      "strength": 0.2364
+    },
+    {
+      "start": 21.55469,
+      "end": 21.69531,
+      "midi_pitch": 55,
+      "strength": 0.14875
+    },
+    {
+      "start": 21.58594,
+      "end": 21.71094,
+      "midi_pitch": 58,
+      "strength": 0.16045
+    },
+    {
+      "start": 21.80469,
+      "end": 21.94531,
+      "midi_pitch": 55,
+      "strength": 0.1691
+    },
+    {
+      "start": 21.80469,
+      "end": 21.96094,
+      "midi_pitch": 58,
+      "strength": 0.14892
+    },
+    {
+      "start": 22.03906,
+      "end": 22.22656,
+      "midi_pitch": 55,
+      "strength": 0.1804
+    },
+    {
+      "start": 22.27344,
+      "end": 22.49219,
+      "midi_pitch": 55,
+      "strength": 0.1574
+    },
+    {
+      "start": 22.57031,
+      "end": 22.67969,
+      "midi_pitch": 55,
+      "strength": 0.13781
+    },
+    {
+      "start": 22.78906,
+      "end": 22.96094,
+      "midi_pitch": 59,
+      "strength": 0.17912
+    },
+    {
+      "start": 22.80469,
+      "end": 22.91406,
+      "midi_pitch": 55,
+      "strength": 0.1329
+    },
+    {
+      "start": 23.05469,
+      "end": 23.16406,
+      "midi_pitch": 55,
+      "strength": 0.14059
+    },
+    {
+      "start": 23.08594,
+      "end": 23.46094,
+      "midi_pitch": 59,
+      "strength": 0.15119
+    },
+    {
+      "start": 23.32031,
+      "end": 23.42969,
+      "midi_pitch": 55,
+      "strength": 0.12728
+    },
+    {
+      "start": 23.57031,
+      "end": 23.67969,
+      "midi_pitch": 63,
+      "strength": 0.14563
+    },
+    {
+      "start": 23.60156,
+      "end": 23.75781,
+      "midi_pitch": 67,
+      "strength": 0.13484
+    },
+    {
+      "start": 23.80469,
+      "end": 23.91406,
+      "midi_pitch": 63,
+      "strength": 0.14864
+    },
+    {
+      "start": 24.05469,
+      "end": 24.16406,
+      "midi_pitch": 63,
+      "strength": 0.1389
+    },
+    {
+      "start": 24.30469,
+      "end": 24.44531,
+      "midi_pitch": 63,
+      "strength": 0.18919
+    },
+    {
+      "start": 24.57031,
+      "end": 25.96094,
+      "midi_pitch": 56,
+      "strength": 0.21011
+    },
+    {
+      "start": 26.05469,
+      "end": 26.22656,
+      "midi_pitch": 56,
+      "strength": 0.16225
+    },
+    {
+      "start": 26.30469,
+      "end": 26.46094,
+      "midi_pitch": 56,
+      "strength": 0.20905
+    },
+    {
+      "start": 27.08594,
+      "end": 27.19531,
+      "midi_pitch": 65,
+      "strength": 0.12525
+    },
+    {
+      "start": 27.71094,
+      "end": 27.83594,
+      "midi_pitch": 67,
+      "strength": 0.12586
+    },
+    {
+      "start": 28.60156,
+      "end": 29.85156,
+      "midi_pitch": 48,
+      "strength": 0.1771
+    },
+    {
+      "start": 29.88281,
+      "end": 30.03906,
+      "midi_pitch": 48,
+      "strength": 0.13688
+    },
+    {
+      "start": 30.11719,
+      "end": 30.53906,
+      "midi_pitch": 67,
+      "strength": 0.21879
+    },
+    {
+      "start": 30.61719,
+      "end": 31.02344,
+      "midi_pitch": 70,
+      "strength": 0.19466
+    },
+    {
+      "start": 30.86719,
+      "end": 30.97656,
+      "midi_pitch": 65,
+      "strength": 0.13724
+    },
+    {
+      "start": 31.36719,
+      "end": 31.47656,
+      "midi_pitch": 65,
+      "strength": 0.13332
+    },
+    {
+      "start": 31.49219,
+      "end": 32.00781,
+      "midi_pitch": 58,
+      "strength": 0.20295
+    },
+    {
+      "start": 32.10156,
+      "end": 32.33594,
+      "midi_pitch": 69,
+      "strength": 0.33111
+    },
+    {
+      "start": 32.41406,
+      "end": 32.52344,
+      "midi_pitch": 55,
+      "strength": 0.18572
+    },
+    {
+      "start": 32.72656,
+      "end": 33.03906,
+      "midi_pitch": 65,
+      "strength": 0.20157
+    },
+    {
+      "start": 32.83594,
+      "end": 33.17969,
+      "midi_pitch": 53,
+      "strength": 0.14612
+    },
+    {
+      "start": 33.60156,
+      "end": 33.83594,
+      "midi_pitch": 52,
+      "strength": 0.17858
+    },
+    {
+      "start": 33.61719,
+      "end": 33.77344,
+      "midi_pitch": 76,
+      "strength": 0.15782
+    },
+    {
+      "start": 33.89844,
+      "end": 34.13281,
+      "midi_pitch": 53,
+      "strength": 0.16109
+    },
+    {
+      "start": 34.10156,
+      "end": 34.25781,
+      "midi_pitch": 55,
+      "strength": 0.1383
+    },
+    {
+      "start": 34.13281,
+      "end": 34.24219,
+      "midi_pitch": 95,
+      "strength": 0.12542
+    },
+    {
+      "start": 34.14844,
+      "end": 34.46094,
+      "midi_pitch": 67,
+      "strength": 0.23763
+    },
+    {
+      "start": 34.64844,
+      "end": 36.10156,
+      "midi_pitch": 50,
+      "strength": 0.19413
+    },
+    {
+      "start": 34.72656,
+      "end": 35.07031,
+      "midi_pitch": 62,
+      "strength": 0.22598
+    },
+    {
+      "start": 35.38281,
+      "end": 35.49219,
+      "midi_pitch": 65,
+      "strength": 0.1267
+    },
+    {
+      "start": 35.63281,
+      "end": 35.78906,
+      "midi_pitch": 62,
+      "strength": 0.20844
+    },
+    {
+      "start": 35.82031,
+      "end": 35.96094,
+      "midi_pitch": 62,
+      "strength": 0.13859
+    },
+    {
+      "start": 36.21094,
+      "end": 36.32031,
+      "midi_pitch": 50,
+      "strength": 0.12196
+    },
+    {
+      "start": 36.64844,
+      "end": 36.75781,
+      "midi_pitch": 76,
+      "strength": 0.14073
+    },
+    {
+      "start": 36.67969,
+      "end": 36.78906,
+      "midi_pitch": 67,
+      "strength": 0.1695
+    },
+    {
+      "start": 36.72656,
+      "end": 37.91406,
+      "midi_pitch": 48,
+      "strength": 0.17829
+    },
+    {
+      "start": 36.89844,
+      "end": 37.02344,
+      "midi_pitch": 67,
+      "strength": 0.13571
+    },
+    {
+      "start": 37.94531,
+      "end": 38.08594,
+      "midi_pitch": 48,
+      "strength": 0.14173
+    },
+    {
+      "start": 38.17969,
+      "end": 38.58594,
+      "midi_pitch": 67,
+      "strength": 0.23161
+    },
+    {
+      "start": 38.64844,
+      "end": 39.07031,
+      "midi_pitch": 70,
+      "strength": 0.19906
+    },
+    {
+      "start": 38.89844,
+      "end": 39.02344,
+      "midi_pitch": 65,
+      "strength": 0.13698
+    },
+    {
+      "start": 39.50781,
+      "end": 39.61719,
+      "midi_pitch": 58,
+      "strength": 0.13029
+    },
+    {
+      "start": 39.66406,
+      "end": 39.96094,
+      "midi_pitch": 69,
+      "strength": 0.30401
+    },
+    {
+      "start": 39.67969,
+      "end": 39.78906,
+      "midi_pitch": 58,
+      "strength": 0.14891
+    },
+    {
+      "start": 40.00781,
+      "end": 40.19531,
+      "midi_pitch": 70,
+      "strength": 0.2538
+    },
+    {
+      "start": 40.19531,
+      "end": 40.30469,
+      "midi_pitch": 58,
+      "strength": 0.21658
+    },
+    {
+      "start": 40.33594,
+      "end": 40.44531,
+      "midi_pitch": 72,
+      "strength": 0.15234
+    },
+    {
+      "start": 40.39844,
+      "end": 40.50781,
+      "midi_pitch": 65,
+      "strength": 0.14595
+    },
+    {
+      "start": 40.63281,
+      "end": 40.75781,
+      "midi_pitch": 55,
+      "strength": 0.1754
+    },
+    {
+      "start": 40.72656,
+      "end": 41.00781,
+      "midi_pitch": 67,
+      "strength": 0.21062
+    },
+    {
+      "start": 41.21094,
+      "end": 41.32031,
+      "midi_pitch": 67,
+      "strength": 0.11782
+    },
+    {
+      "start": 41.67969,
+      "end": 42.03906,
+      "midi_pitch": 67,
+      "strength": 0.16658
+    },
+    {
+      "start": 42.41406,
+      "end": 42.52344,
+      "midi_pitch": 64,
+      "strength": 0.12009
+    },
+    {
+      "start": 42.92969,
+      "end": 43.03906,
+      "midi_pitch": 65,
+      "strength": 0.13902
+    },
+    {
+      "start": 43.17969,
+      "end": 43.28906,
+      "midi_pitch": 65,
+      "strength": 0.13566
+    },
+    {
+      "start": 43.66406,
+      "end": 43.77344,
+      "midi_pitch": 65,
+      "strength": 0.15104
+    },
+    {
+      "start": 43.91406,
+      "end": 44.03906,
+      "midi_pitch": 65,
+      "strength": 0.12675
+    },
+    {
+      "start": 44.21094,
+      "end": 44.32031,
+      "midi_pitch": 58,
+      "strength": 0.19735
+    },
+    {
+      "start": 44.69531,
+      "end": 45.00781,
+      "midi_pitch": 48,
+      "strength": 0.20419
+    },
+    {
+      "start": 44.92969,
+      "end": 45.05469,
+      "midi_pitch": 67,
+      "strength": 0.14404
+    },
+    {
+      "start": 44.96094,
+      "end": 45.10156,
+      "midi_pitch": 60,
+      "strength": 0.20083
+    },
+    {
+      "start": 45.10156,
+      "end": 45.66406,
+      "midi_pitch": 48,
+      "strength": 0.16616
+    },
+    {
+      "start": 45.71094,
+      "end": 46.13281,
+      "midi_pitch": 48,
+      "strength": 0.15484
+    },
+    {
+      "start": 46.16406,
+      "end": 46.27344,
+      "midi_pitch": 55,
+      "strength": 0.17405
+    },
+    {
+      "start": 46.24219,
+      "end": 46.55469,
+      "midi_pitch": 67,
+      "strength": 0.20998
+    },
+    {
+      "start": 46.71094,
+      "end": 47.10156,
+      "midi_pitch": 70,
+      "strength": 0.19625
+    },
+    {
+      "start": 47.46094,
+      "end": 47.57031,
+      "midi_pitch": 65,
+      "strength": 0.13959
+    },
+    {
+      "start": 47.72656,
+      "end": 48.07031,
+      "midi_pitch": 58,
+      "strength": 0.19315
+    },
+    {
+      "start": 48.02344,
+      "end": 48.24219,
+      "midi_pitch": 69,
+      "strength": 0.30395
+    },
+    {
+      "start": 48.08594,
+      "end": 48.19531,
+      "midi_pitch": 57,
+      "strength": 0.20076
+    },
+    {
+      "start": 48.24219,
+      "end": 48.35156,
+      "midi_pitch": 58,
+      "strength": 0.15157
+    },
+    {
+      "start": 48.36719,
+      "end": 48.57031,
+      "midi_pitch": 67,
+      "strength": 0.22567
+    },
+    {
+      "start": 48.67969,
+      "end": 48.86719,
+      "midi_pitch": 53,
+      "strength": 0.14956
+    },
+    {
+      "start": 48.80469,
+      "end": 49.07031,
+      "midi_pitch": 65,
+      "strength": 0.19877
+    },
+    {
+      "start": 49.71094,
+      "end": 49.88281,
+      "midi_pitch": 64,
+      "strength": 0.17182
+    },
+    {
+      "start": 49.74219,
+      "end": 49.92969,
+      "midi_pitch": 52,
+      "strength": 0.17431
+    },
+    {
+      "start": 50.21094,
+      "end": 50.35156,
+      "midi_pitch": 76,
+      "strength": 0.15149
+    },
+    {
+      "start": 50.27344,
+      "end": 50.58594,
+      "midi_pitch": 67,
+      "strength": 0.15101
+    },
+    {
+      "start": 50.72656,
+      "end": 51.14844,
+      "midi_pitch": 62,
+      "strength": 0.18123
+    },
+    {
+      "start": 50.72656,
+      "end": 52.16406,
+      "midi_pitch": 50,
+      "strength": 0.20851
+    },
+    {
+      "start": 50.97656,
+      "end": 51.08594,
+      "midi_pitch": 65,
+      "strength": 0.11835
+    },
+    {
+      "start": 52.22656,
+      "end": 52.42969,
+      "midi_pitch": 46,
+      "strength": 0.21391
+    },
+    {
+      "start": 52.24219,
+      "end": 52.58594,
+      "midi_pitch": 58,
+      "strength": 0.2775
+    },
+    {
+      "start": 52.52344,
+      "end": 52.66406,
+      "midi_pitch": 46,
+      "strength": 0.15915
+    },
+    {
+      "start": 52.71094,
+      "end": 52.86719,
+      "midi_pitch": 56,
+      "strength": 0.17594
+    },
+    {
+      "start": 52.74219,
+      "end": 54.00781,
+      "midi_pitch": 48,
+      "strength": 0.14527
+    },
+    {
+      "start": 52.78906,
+      "end": 53.00781,
+      "midi_pitch": 84,
+      "strength": 0.12909
+    },
+    {
+      "start": 52.99219,
+      "end": 53.10156,
+      "midi_pitch": 56,
+      "strength": 0.17291
+    },
+    {
+      "start": 53.22656,
+      "end": 53.38281,
+      "midi_pitch": 56,
+      "strength": 0.18606
+    },
+    {
+      "start": 53.46094,
+      "end": 53.58594,
+      "midi_pitch": 63,
+      "strength": 0.1694
+    },
+    {
+      "start": 53.49219,
+      "end": 53.66406,
+      "midi_pitch": 56,
+      "strength": 0.18534
+    },
+    {
+      "start": 53.74219,
+      "end": 53.86719,
+      "midi_pitch": 56,
+      "strength": 0.19569
+    },
+    {
+      "start": 54.00781,
+      "end": 54.14844,
+      "midi_pitch": 56,
+      "strength": 0.17043
+    },
+    {
+      "start": 54.21094,
+      "end": 54.38281,
+      "midi_pitch": 56,
+      "strength": 0.18799
+    },
+    {
+      "start": 54.24219,
+      "end": 54.46094,
+      "midi_pitch": 50,
+      "strength": 0.17523
+    },
+    {
+      "start": 54.47656,
+      "end": 54.61719,
+      "midi_pitch": 63,
+      "strength": 0.20933
+    },
+    {
+      "start": 54.47656,
+      "end": 54.67969,
+      "midi_pitch": 56,
+      "strength": 0.25094
+    },
+    {
+      "start": 54.74219,
+      "end": 55.10156,
+      "midi_pitch": 62,
+      "strength": 0.16674
+    },
+    {
+      "start": 54.77344,
+      "end": 55.71094,
+      "midi_pitch": 50,
+      "strength": 0.20726
+    },
+    {
+      "start": 55.74219,
+      "end": 56.21094,
+      "midi_pitch": 58,
+      "strength": 0.25816
+    },
+    {
+      "start": 56.00781,
+      "end": 56.71094,
+      "midi_pitch": 46,
+      "strength": 0.1795
+    },
+    {
+      "start": 56.25781,
+      "end": 56.38281,
+      "midi_pitch": 62,
+      "strength": 0.12279
+    },
+    {
+      "start": 56.82031,
+      "end": 58.11719,
+      "midi_pitch": 48,
+      "strength": 0.1682
+    },
+    {
+      "start": 56.99219,
+      "end": 57.11719,
+      "midi_pitch": 67,
+      "strength": 0.1364
+    },
+    {
+      "start": 57.00781,
+      "end": 57.13281,
+      "midi_pitch": 76,
+      "strength": 0.1456
+    },
+    {
+      "start": 57.49219,
+      "end": 57.61719,
+      "midi_pitch": 64,
+      "strength": 0.12512
+    },
+    {
+      "start": 58.25781,
+      "end": 58.36719,
+      "midi_pitch": 64,
+      "strength": 0.11824
+    },
+    {
+      "start": 58.49219,
+      "end": 58.61719,
+      "midi_pitch": 64,
+      "strength": 0.12059
+    },
+    {
+      "start": 58.80469,
+      "end": 58.91406,
+      "midi_pitch": 67,
+      "strength": 0.13994
+    },
+    {
+      "start": 59.00781,
+      "end": 59.11719,
+      "midi_pitch": 64,
+      "strength": 0.12257
+    },
+    {
+      "start": 59.28906,
+      "end": 59.41406,
+      "midi_pitch": 67,
+      "strength": 0.1358
+    },
+    {
+      "start": 59.50781,
+      "end": 59.63281,
+      "midi_pitch": 64,
+      "strength": 0.13066
+    },
+    {
+      "start": 59.89844,
+      "end": 60.00781,
+      "midi_pitch": 88,
+      "strength": 0.13778
+    },
+    {
+      "start": 60.77344,
+      "end": 60.92969,
+      "midi_pitch": 56,
+      "strength": 0.15977
+    },
+    {
+      "start": 60.85156,
+      "end": 60.96094,
+      "midi_pitch": 39,
+      "strength": 0.12694
+    },
+    {
+      "start": 61.03906,
+      "end": 61.19531,
+      "midi_pitch": 56,
+      "strength": 0.19529
+    },
+    {
+      "start": 61.28906,
+      "end": 61.42969,
+      "midi_pitch": 56,
+      "strength": 0.19987
+    },
+    {
+      "start": 61.30469,
+      "end": 61.66406,
+      "midi_pitch": 79,
+      "strength": 0.13175
+    },
+    {
+      "start": 61.39844,
+      "end": 61.53906,
+      "midi_pitch": 84,
+      "strength": 0.16232
+    },
+    {
+      "start": 61.53906,
+      "end": 61.67969,
+      "midi_pitch": 56,
+      "strength": 0.18865
+    },
+    {
+      "start": 61.77344,
+      "end": 61.88281,
+      "midi_pitch": 63,
+      "strength": 0.1644
+    },
+    {
+      "start": 61.78906,
+      "end": 61.92969,
+      "midi_pitch": 56,
+      "strength": 0.17877
+    },
+    {
+      "start": 62.27344,
+      "end": 62.38281,
+      "midi_pitch": 63,
+      "strength": 0.1628
+    },
+    {
+      "start": 62.30469,
+      "end": 62.42969,
+      "midi_pitch": 56,
+      "strength": 0.22789
+    },
+    {
+      "start": 62.52344,
+      "end": 62.64844,
+      "midi_pitch": 63,
+      "strength": 0.22781
+    },
+    {
+      "start": 62.53906,
+      "end": 62.69531,
+      "midi_pitch": 56,
+      "strength": 0.18099
+    },
+    {
+      "start": 62.55469,
+      "end": 62.66406,
+      "midi_pitch": 87,
+      "strength": 0.22557
+    },
+    {
+      "start": 62.88281,
+      "end": 63.00781,
+      "midi_pitch": 74,
+      "strength": 0.19055
+    },
+    {
+      "start": 63.00781,
+      "end": 63.21094,
+      "midi_pitch": 62,
+      "strength": 0.21264
+    },
+    {
+      "start": 63.28906,
+      "end": 63.39844,
+      "midi_pitch": 62,
+      "strength": 0.13558
+    },
+    {
+      "start": 63.53906,
+      "end": 63.66406,
+      "midi_pitch": 65,
+      "strength": 0.12319
+    },
+    {
+      "start": 63.78906,
+      "end": 63.91406,
+      "midi_pitch": 65,
+      "strength": 0.15282
+    },
+    {
+      "start": 63.89844,
+      "end": 64.03906,
+      "midi_pitch": 82,
+      "strength": 0.20762
+    },
+    {
+      "start": 64.00781,
+      "end": 64.11719,
+      "midi_pitch": 94,
+      "strength": 0.16493
+    },
+    {
+      "start": 64.03906,
+      "end": 64.16406,
+      "midi_pitch": 65,
+      "strength": 0.13977
+    },
+    {
+      "start": 64.32031,
+      "end": 64.42969,
+      "midi_pitch": 58,
+      "strength": 0.2008
+    },
+    {
+      "start": 67.64844,
+      "end": 67.75781,
+      "midi_pitch": 53,
+      "strength": 0.12701
+    },
+    {
+      "start": 67.80469,
+      "end": 68.25781,
+      "midi_pitch": 50,
+      "strength": 0.17603
+    },
+    {
+      "start": 67.91406,
+      "end": 68.02344,
+      "midi_pitch": 81,
+      "strength": 0.16759
+    },
+    {
+      "start": 68.02344,
+      "end": 68.27344,
+      "midi_pitch": 62,
+      "strength": 0.20084
+    },
+    {
+      "start": 68.38281,
+      "end": 68.77344,
+      "midi_pitch": 52,
+      "strength": 0.15481
+    },
+    {
+      "start": 68.44531,
+      "end": 68.66406,
+      "midi_pitch": 64,
+      "strength": 0.24303
+    },
+    {
+      "start": 68.82031,
+      "end": 69.00781,
+      "midi_pitch": 56,
+      "strength": 0.2172
+    },
+    {
+      "start": 69.32031,
+      "end": 69.50781,
+      "midi_pitch": 56,
+      "strength": 0.24302
+    },
+    {
+      "start": 69.33594,
+      "end": 69.52344,
+      "midi_pitch": 80,
+      "strength": 0.28837
+    },
+    {
+      "start": 69.50781,
+      "end": 69.80469,
+      "midi_pitch": 68,
+      "strength": 0.29615
+    },
+    {
+      "start": 69.86719,
+      "end": 69.99219,
+      "midi_pitch": 56,
+      "strength": 0.21707
+    },
+    {
+      "start": 70.38281,
+      "end": 70.50781,
+      "midi_pitch": 67,
+      "strength": 0.15283
+    },
+    {
+      "start": 70.58594,
+      "end": 70.72656,
+      "midi_pitch": 77,
+      "strength": 0.16632
+    },
+    {
+      "start": 70.66406,
+      "end": 70.78906,
+      "midi_pitch": 68,
+      "strength": 0.12894
+    },
+    {
+      "start": 70.86719,
+      "end": 70.97656,
+      "midi_pitch": 58,
+      "strength": 0.21156
+    },
+    {
+      "start": 70.96094,
+      "end": 71.10156,
+      "midi_pitch": 82,
+      "strength": 0.22024
+    },
+    {
+      "start": 71.13281,
+      "end": 71.27344,
+      "midi_pitch": 82,
+      "strength": 0.17415
+    },
+    {
+      "start": 71.36719,
+      "end": 71.74219,
+      "midi_pitch": 68,
+      "strength": 0.25853
+    },
+    {
+      "start": 71.38281,
+      "end": 71.49219,
+      "midi_pitch": 58,
+      "strength": 0.19455
+    },
+    {
+      "start": 71.64844,
+      "end": 71.78906,
+      "midi_pitch": 87,
+      "strength": 0.21537
+    },
+    {
+      "start": 71.86719,
+      "end": 71.97656,
+      "midi_pitch": 58,
+      "strength": 0.17078
+    },
+    {
+      "start": 71.91406,
+      "end": 72.30469,
+      "midi_pitch": 67,
+      "strength": 0.19381
+    },
+    {
+      "start": 72.44531,
+      "end": 72.55469,
+      "midi_pitch": 68,
+      "strength": 0.1172
+    },
+    {
+      "start": 72.47656,
+      "end": 72.78906,
+      "midi_pitch": 65,
+      "strength": 0.18007
+    },
+    {
+      "start": 72.91406,
+      "end": 73.30469,
+      "midi_pitch": 67,
+      "strength": 0.1769
+    },
+    {
+      "start": 73.33594,
+      "end": 73.49219,
+      "midi_pitch": 48,
+      "strength": 0.18715
+    },
+    {
+      "start": 73.67969,
+      "end": 73.97656,
+      "midi_pitch": 48,
+      "strength": 0.20385
+    },
+    {
+      "start": 74.35156,
+      "end": 74.49219,
+      "midi_pitch": 48,
+      "strength": 0.2038
+    },
+    {
+      "start": 74.69531,
+      "end": 74.82031,
+      "midi_pitch": 48,
+      "strength": 0.19656
+    },
+    {
+      "start": 74.85156,
+      "end": 75.00781,
+      "midi_pitch": 48,
+      "strength": 0.21338
+    },
+    {
+      "start": 75.10156,
+      "end": 75.25781,
+      "midi_pitch": 48,
+      "strength": 0.20129
+    },
+    {
+      "start": 75.60156,
+      "end": 75.71094,
+      "midi_pitch": 43,
+      "strength": 0.19493
+    },
+    {
+      "start": 75.86719,
+      "end": 76.00781,
+      "midi_pitch": 48,
+      "strength": 0.20415
+    },
+    {
+      "start": 76.10156,
+      "end": 76.24219,
+      "midi_pitch": 48,
+      "strength": 0.19928
+    },
+    {
+      "start": 76.58594,
+      "end": 76.72656,
+      "midi_pitch": 43,
+      "strength": 0.22611
+    },
+    {
+      "start": 76.91406,
+      "end": 77.02344,
+      "midi_pitch": 56,
+      "strength": 0.20531
+    },
+    {
+      "start": 77.41406,
+      "end": 77.52344,
+      "midi_pitch": 56,
+      "strength": 0.20561
+    },
+    {
+      "start": 77.91406,
+      "end": 78.03906,
+      "midi_pitch": 56,
+      "strength": 0.22906
+    },
+    {
+      "start": 78.41406,
+      "end": 78.53906,
+      "midi_pitch": 56,
+      "strength": 0.19611
+    },
+    {
+      "start": 78.89844,
+      "end": 79.00781,
+      "midi_pitch": 62,
+      "strength": 0.16027
+    },
+    {
+      "start": 78.91406,
+      "end": 79.02344,
+      "midi_pitch": 58,
+      "strength": 0.178
+    },
+    {
+      "start": 79.39844,
+      "end": 79.60156,
+      "midi_pitch": 62,
+      "strength": 0.1786
+    },
+    {
+      "start": 79.92969,
+      "end": 80.10156,
+      "midi_pitch": 58,
+      "strength": 0.15893
+    },
+    {
+      "start": 80.44531,
+      "end": 80.61719,
+      "midi_pitch": 58,
+      "strength": 0.15401
+    },
+    {
+      "start": 80.89844,
+      "end": 81.25781,
+      "midi_pitch": 56,
+      "strength": 0.18883
+    },
+    {
+      "start": 80.94531,
+      "end": 81.24219,
+      "midi_pitch": 60,
+      "strength": 0.15611
+    },
+    {
+      "start": 81.30469,
+      "end": 81.63281,
+      "midi_pitch": 56,
+      "strength": 0.22578
+    },
+    {
+      "start": 81.91406,
+      "end": 82.03906,
+      "midi_pitch": 56,
+      "strength": 0.18929
+    },
+    {
+      "start": 82.27344,
+      "end": 82.38281,
+      "midi_pitch": 62,
+      "strength": 0.17997
+    },
+    {
+      "start": 82.42969,
+      "end": 82.53906,
+      "midi_pitch": 56,
+      "strength": 0.16728
+    },
+    {
+      "start": 82.57031,
+      "end": 82.75781,
+      "midi_pitch": 63,
+      "strength": 0.182
+    },
+    {
+      "start": 82.66406,
+      "end": 82.78906,
+      "midi_pitch": 75,
+      "strength": 0.27983
+    },
+    {
+      "start": 82.91406,
+      "end": 83.05469,
+      "midi_pitch": 62,
+      "strength": 0.24282
+    },
+    {
+      "start": 82.92969,
+      "end": 83.10156,
+      "midi_pitch": 58,
+      "strength": 0.18562
+    },
+    {
+      "start": 82.96094,
+      "end": 83.32031,
+      "midi_pitch": 50,
+      "strength": 0.15814
+    },
+    {
+      "start": 83.11719,
+      "end": 83.63281,
+      "midi_pitch": 62,
+      "strength": 0.17355
+    },
+    {
+      "start": 83.46094,
+      "end": 83.61719,
+      "midi_pitch": 58,
+      "strength": 0.20405
+    },
+    {
+      "start": 83.94531,
+      "end": 84.24219,
+      "midi_pitch": 58,
+      "strength": 0.15757
+    },
+    {
+      "start": 84.03906,
+      "end": 84.14844,
+      "midi_pitch": 82,
+      "strength": 0.17696
+    },
+    {
+      "start": 84.21094,
+      "end": 84.33594,
+      "midi_pitch": 82,
+      "strength": 0.16762
+    },
+    {
+      "start": 84.33594,
+      "end": 84.50781,
+      "midi_pitch": 58,
+      "strength": 0.15268
+    },
+    {
+      "start": 84.92969,
+      "end": 85.25781,
+      "midi_pitch": 56,
+      "strength": 0.16861
+    },
+    {
+      "start": 85.17969,
+      "end": 85.28906,
+      "midi_pitch": 63,
+      "strength": 0.15869
+    },
+    {
+      "start": 85.38281,
+      "end": 86.38281,
+      "midi_pitch": 56,
+      "strength": 0.18779
+    },
+    {
+      "start": 86.44531,
+      "end": 86.57031,
+      "midi_pitch": 56,
+      "strength": 0.16729
+    },
+    {
+      "start": 86.46094,
+      "end": 86.61719,
+      "midi_pitch": 62,
+      "strength": 0.14028
+    },
+    {
+      "start": 86.67969,
+      "end": 86.85156,
+      "midi_pitch": 63,
+      "strength": 0.1817
+    },
+    {
+      "start": 86.69531,
+      "end": 86.82031,
+      "midi_pitch": 56,
+      "strength": 0.15902
+    },
+    {
+      "start": 86.96094,
+      "end": 87.52344,
+      "midi_pitch": 62,
+      "strength": 0.20551
+    },
+    {
+      "start": 87.72656,
+      "end": 87.83594,
+      "midi_pitch": 62,
+      "strength": 0.1417
+    },
+    {
+      "start": 87.94531,
+      "end": 88.10156,
+      "midi_pitch": 62,
+      "strength": 0.18254
+    },
+    {
+      "start": 88.05469,
+      "end": 88.39844,
+      "midi_pitch": 70,
+      "strength": 0.19541
+    },
+    {
+      "start": 88.47656,
+      "end": 88.61719,
+      "midi_pitch": 58,
+      "strength": 0.15499
+    },
+    {
+      "start": 88.69531,
+      "end": 88.82031,
+      "midi_pitch": 62,
+      "strength": 0.19655
+    },
+    {
+      "start": 88.72656,
+      "end": 88.85156,
+      "midi_pitch": 58,
+      "strength": 0.16797
+    },
+    {
+      "start": 88.94531,
+      "end": 89.08594,
+      "midi_pitch": 48,
+      "strength": 0.19088
+    },
+    {
+      "start": 89.16406,
+      "end": 89.32031,
+      "midi_pitch": 84,
+      "strength": 0.1393
+    },
+    {
+      "start": 89.17969,
+      "end": 89.35156,
+      "midi_pitch": 64,
+      "strength": 0.17761
+    },
+    {
+      "start": 89.44531,
+      "end": 89.57031,
+      "midi_pitch": 64,
+      "strength": 0.17255
+    },
+    {
+      "start": 89.69531,
+      "end": 89.82031,
+      "midi_pitch": 64,
+      "strength": 0.14373
+    },
+    {
+      "start": 89.94531,
+      "end": 90.07031,
+      "midi_pitch": 64,
+      "strength": 0.13572
+    },
+    {
+      "start": 90.21094,
+      "end": 90.32031,
+      "midi_pitch": 64,
+      "strength": 0.12831
+    },
+    {
+      "start": 90.44531,
+      "end": 90.57031,
+      "midi_pitch": 64,
+      "strength": 0.13602
+    },
+    {
+      "start": 90.69531,
+      "end": 90.82031,
+      "midi_pitch": 64,
+      "strength": 0.13499
+    },
+    {
+      "start": 90.97656,
+      "end": 91.08594,
+      "midi_pitch": 65,
+      "strength": 0.13431
+    },
+    {
+      "start": 91.21094,
+      "end": 91.33594,
+      "midi_pitch": 65,
+      "strength": 0.1377
+    },
+    {
+      "start": 91.22656,
+      "end": 91.33594,
+      "midi_pitch": 62,
+      "strength": 0.12268
+    },
+    {
+      "start": 91.46094,
+      "end": 91.58594,
+      "midi_pitch": 65,
+      "strength": 0.13673
+    },
+    {
+      "start": 91.72656,
+      "end": 91.83594,
+      "midi_pitch": 65,
+      "strength": 0.13853
+    },
+    {
+      "start": 91.97656,
+      "end": 92.10156,
+      "midi_pitch": 58,
+      "strength": 0.21644
+    },
+    {
+      "start": 92.46094,
+      "end": 92.66406,
+      "midi_pitch": 36,
+      "strength": 0.22904
+    },
+    {
+      "start": 92.49219,
+      "end": 92.83594,
+      "midi_pitch": 64,
+      "strength": 0.15406
+    },
+    {
+      "start": 92.63281,
+      "end": 92.75781,
+      "midi_pitch": 85,
+      "strength": 0.34746
+    },
+    {
+      "start": 92.97656,
+      "end": 93.08594,
+      "midi_pitch": 64,
+      "strength": 0.12759
+    },
+    {
+      "start": 93.21094,
+      "end": 93.33594,
+      "midi_pitch": 64,
+      "strength": 0.1263
+    },
+    {
+      "start": 93.27344,
+      "end": 93.42969,
+      "midi_pitch": 67,
+      "strength": 0.16871
+    },
+    {
+      "start": 93.52344,
+      "end": 93.92969,
+      "midi_pitch": 67,
+      "strength": 0.21045
+    },
+    {
+      "start": 93.96094,
+      "end": 94.08594,
+      "midi_pitch": 64,
+      "strength": 0.13427
+    },
+    {
+      "start": 94.21094,
+      "end": 94.33594,
+      "midi_pitch": 64,
+      "strength": 0.13695
+    },
+    {
+      "start": 94.72656,
+      "end": 94.83594,
+      "midi_pitch": 64,
+      "strength": 0.13137
+    },
+    {
+      "start": 94.99219,
+      "end": 95.10156,
+      "midi_pitch": 65,
+      "strength": 0.13482
+    },
+    {
+      "start": 95.24219,
+      "end": 95.35156,
+      "midi_pitch": 62,
+      "strength": 0.12488
+    },
+    {
+      "start": 95.24219,
+      "end": 95.35156,
+      "midi_pitch": 65,
+      "strength": 0.13646
+    },
+    {
+      "start": 95.49219,
+      "end": 95.75781,
+      "midi_pitch": 65,
+      "strength": 0.24684
+    },
+    {
+      "start": 95.75781,
+      "end": 95.86719,
+      "midi_pitch": 62,
+      "strength": 0.13593
+    },
+    {
+      "start": 95.99219,
+      "end": 96.13281,
+      "midi_pitch": 58,
+      "strength": 0.19958
+    },
+    {
+      "start": 96.00781,
+      "end": 96.11719,
+      "midi_pitch": 62,
+      "strength": 0.12864
+    },
+    {
+      "start": 96.24219,
+      "end": 96.35156,
+      "midi_pitch": 62,
+      "strength": 0.12617
+    },
+    {
+      "start": 96.24219,
+      "end": 96.36719,
+      "midi_pitch": 58,
+      "strength": 0.21993
+    },
+    {
+      "start": 96.50781,
+      "end": 96.63281,
+      "midi_pitch": 58,
+      "strength": 0.21775
+    },
+    {
+      "start": 96.74219,
+      "end": 96.88281,
+      "midi_pitch": 58,
+      "strength": 0.21134
+    },
+    {
+      "start": 97.30469,
+      "end": 97.46094,
+      "midi_pitch": 67,
+      "strength": 0.16615
+    },
+    {
+      "start": 97.53906,
+      "end": 97.96094,
+      "midi_pitch": 67,
+      "strength": 0.21022
+    },
+    {
+      "start": 98.16406,
+      "end": 98.30469,
+      "midi_pitch": 37,
+      "strength": 0.27362
+    },
+    {
+      "start": 98.53906,
+      "end": 98.64844,
+      "midi_pitch": 67,
+      "strength": 0.13939
+    },
+    {
+      "start": 98.74219,
+      "end": 98.86719,
+      "midi_pitch": 64,
+      "strength": 0.13124
+    },
+    {
+      "start": 99.02344,
+      "end": 99.13281,
+      "midi_pitch": 65,
+      "strength": 0.14202
+    },
+    {
+      "start": 99.11719,
+      "end": 99.41406,
+      "midi_pitch": 82,
+      "strength": 0.1803
+    },
+    {
+      "start": 99.50781,
+      "end": 99.63281,
+      "midi_pitch": 65,
+      "strength": 0.13763
+    },
+    {
+      "start": 99.52344,
+      "end": 99.63281,
+      "midi_pitch": 62,
+      "strength": 0.14061
+    },
+    {
+      "start": 99.75781,
+      "end": 99.88281,
+      "midi_pitch": 65,
+      "strength": 0.13307
+    },
+    {
+      "start": 100.02344,
+      "end": 100.14844,
+      "midi_pitch": 58,
+      "strength": 0.2204
+    },
+    {
+      "start": 100.52344,
+      "end": 100.66406,
+      "midi_pitch": 58,
+      "strength": 0.19946
+    },
+    {
+      "start": 100.77344,
+      "end": 100.89844,
+      "midi_pitch": 58,
+      "strength": 0.21308
+    },
+    {
+      "start": 100.78906,
+      "end": 100.89844,
+      "midi_pitch": 62,
+      "strength": 0.12024
+    },
+    {
+      "start": 101.00781,
+      "end": 101.14844,
+      "midi_pitch": 63,
+      "strength": 0.15522
+    },
+    {
+      "start": 101.02344,
+      "end": 101.17969,
+      "midi_pitch": 56,
+      "strength": 0.20618
+    },
+    {
+      "start": 101.25781,
+      "end": 101.38281,
+      "midi_pitch": 63,
+      "strength": 0.16375
+    },
+    {
+      "start": 101.28906,
+      "end": 101.44531,
+      "midi_pitch": 56,
+      "strength": 0.19724
+    },
+    {
+      "start": 101.50781,
+      "end": 101.63281,
+      "midi_pitch": 63,
+      "strength": 0.16277
+    },
+    {
+      "start": 101.53906,
+      "end": 101.67969,
+      "midi_pitch": 56,
+      "strength": 0.20975
+    },
+    {
+      "start": 101.78906,
+      "end": 101.91406,
+      "midi_pitch": 56,
+      "strength": 0.20692
+    },
+    {
+      "start": 102.02344,
+      "end": 102.14844,
+      "midi_pitch": 55,
+      "strength": 0.13462
+    },
+    {
+      "start": 102.05469,
+      "end": 102.19531,
+      "midi_pitch": 58,
+      "strength": 0.15513
+    },
+    {
+      "start": 102.41406,
+      "end": 102.53906,
+      "midi_pitch": 37,
+      "strength": 0.256
+    },
+    {
+      "start": 102.77344,
+      "end": 102.89844,
+      "midi_pitch": 55,
+      "strength": 0.14141
+    },
+    {
+      "start": 102.77344,
+      "end": 102.94531,
+      "midi_pitch": 58,
+      "strength": 0.13906
+    },
+    {
+      "start": 103.02344,
+      "end": 103.14844,
+      "midi_pitch": 55,
+      "strength": 0.1325
+    },
+    {
+      "start": 103.25781,
+      "end": 103.42969,
+      "midi_pitch": 59,
+      "strength": 0.15677
+    },
+    {
+      "start": 103.27344,
+      "end": 103.39844,
+      "midi_pitch": 55,
+      "strength": 0.14105
+    },
+    {
+      "start": 103.52344,
+      "end": 103.64844,
+      "midi_pitch": 55,
+      "strength": 0.14124
+    },
+    {
+      "start": 103.52344,
+      "end": 103.71094,
+      "midi_pitch": 59,
+      "strength": 0.16354
+    },
+    {
+      "start": 103.77344,
+      "end": 103.89844,
+      "midi_pitch": 55,
+      "strength": 0.13761
+    },
+    {
+      "start": 104.03906,
+      "end": 104.14844,
+      "midi_pitch": 63,
+      "strength": 0.14895
+    },
+    {
+      "start": 104.27344,
+      "end": 104.41406,
+      "midi_pitch": 37,
+      "strength": 0.26576
+    },
+    {
+      "start": 104.52344,
+      "end": 104.64844,
+      "midi_pitch": 63,
+      "strength": 0.16618
+    },
+    {
+      "start": 104.78906,
+      "end": 104.92969,
+      "midi_pitch": 67,
+      "strength": 0.16737
+    },
+    {
+      "start": 105.05469,
+      "end": 105.16406,
+      "midi_pitch": 56,
+      "strength": 0.13204
+    },
+    {
+      "start": 105.05469,
+      "end": 105.22656,
+      "midi_pitch": 65,
+      "strength": 0.17239
+    },
+    {
+      "start": 105.57031,
+      "end": 105.67969,
+      "midi_pitch": 56,
+      "strength": 0.16974
+    },
+    {
+      "start": 105.75781,
+      "end": 105.92969,
+      "midi_pitch": 84,
+      "strength": 0.15216
+    },
+    {
+      "start": 105.82031,
+      "end": 105.94531,
+      "midi_pitch": 56,
+      "strength": 0.17826
+    },
+    {
+      "start": 106.05469,
+      "end": 106.19531,
+      "midi_pitch": 56,
+      "strength": 0.21177
+    },
+    {
+      "start": 106.32031,
+      "end": 106.44531,
+      "midi_pitch": 56,
+      "strength": 0.17369
+    },
+    {
+      "start": 106.57031,
+      "end": 106.67969,
+      "midi_pitch": 56,
+      "strength": 0.16738
+    },
+    {
+      "start": 106.57031,
+      "end": 106.67969,
+      "midi_pitch": 74,
+      "strength": 0.1594
+    },
+    {
+      "start": 106.78906,
+      "end": 106.89844,
+      "midi_pitch": 63,
+      "strength": 0.24393
+    },
+    {
+      "start": 106.82031,
+      "end": 106.94531,
+      "midi_pitch": 56,
+      "strength": 0.17297
+    },
+    {
+      "start": 106.89844,
+      "end": 107.02344,
+      "midi_pitch": 75,
+      "strength": 0.23098
+    },
+    {
+      "start": 107.05469,
+      "end": 107.21094,
+      "midi_pitch": 65,
+      "strength": 0.2228
+    },
+    {
+      "start": 107.05469,
+      "end": 107.55469,
+      "midi_pitch": 77,
+      "strength": 0.28609
+    },
+    {
+      "start": 107.25781,
+      "end": 107.47656,
+      "midi_pitch": 65,
+      "strength": 0.19296
+    },
+    {
+      "start": 107.55469,
+      "end": 107.71094,
+      "midi_pitch": 65,
+      "strength": 0.22077
+    },
+    {
+      "start": 107.78906,
+      "end": 107.94531,
+      "midi_pitch": 65,
+      "strength": 0.20568
+    },
+    {
+      "start": 107.94531,
+      "end": 108.05469,
+      "midi_pitch": 77,
+      "strength": 0.16232
+    },
+    {
+      "start": 108.05469,
+      "end": 108.17969,
+      "midi_pitch": 65,
+      "strength": 0.14998
+    },
+    {
+      "start": 108.16406,
+      "end": 108.33594,
+      "midi_pitch": 70,
+      "strength": 0.25303
+    },
+    {
+      "start": 108.27344,
+      "end": 108.39844,
+      "midi_pitch": 94,
+      "strength": 0.13874
+    },
+    {
+      "start": 108.39844,
+      "end": 108.50781,
+      "midi_pitch": 70,
+      "strength": 0.17172
+    },
+    {
+      "start": 108.50781,
+      "end": 108.69531,
+      "midi_pitch": 58,
+      "strength": 0.16417
+    },
+    {
+      "start": 108.77344,
+      "end": 108.91406,
+      "midi_pitch": 58,
+      "strength": 0.16285
+    },
+    {
+      "start": 108.91406,
+      "end": 109.02344,
+      "midi_pitch": 70,
+      "strength": 0.12702
+    },
+    {
+      "start": 109.11719,
+      "end": 109.36719,
+      "midi_pitch": 84,
+      "strength": 0.16293
+    },
+    {
+      "start": 109.30469,
+      "end": 109.41406,
+      "midi_pitch": 60,
+      "strength": 0.19517
+    },
+    {
+      "start": 109.39844,
+      "end": 109.52344,
+      "midi_pitch": 84,
+      "strength": 0.14791
+    },
+    {
+      "start": 109.82031,
+      "end": 109.92969,
+      "midi_pitch": 64,
+      "strength": 0.1179
+    },
+    {
+      "start": 110.05469,
+      "end": 110.17969,
+      "midi_pitch": 64,
+      "strength": 0.16761
+    },
+    {
+      "start": 110.41406,
+      "end": 110.60156,
+      "midi_pitch": 77,
+      "strength": 0.19875
+    },
+    {
+      "start": 110.74219,
+      "end": 110.89844,
+      "midi_pitch": 79,
+      "strength": 0.20302
+    },
+    {
+      "start": 110.82031,
+      "end": 110.96094,
+      "midi_pitch": 67,
+      "strength": 0.14933
+    },
+    {
+      "start": 111.57031,
+      "end": 111.72656,
+      "midi_pitch": 62,
+      "strength": 0.18726
+    },
+    {
+      "start": 111.72656,
+      "end": 111.86719,
+      "midi_pitch": 74,
+      "strength": 0.17261
+    },
+    {
+      "start": 111.83594,
+      "end": 111.94531,
+      "midi_pitch": 65,
+      "strength": 0.13587
+    },
+    {
+      "start": 112.10156,
+      "end": 112.27344,
+      "midi_pitch": 58,
+      "strength": 0.19984
+    },
+    {
+      "start": 112.33594,
+      "end": 112.46094,
+      "midi_pitch": 62,
+      "strength": 0.13503
+    },
+    {
+      "start": 112.36719,
+      "end": 112.49219,
+      "midi_pitch": 58,
+      "strength": 0.17426
+    },
+    {
+      "start": 112.83594,
+      "end": 112.94531,
+      "midi_pitch": 62,
+      "strength": 0.13554
+    },
+    {
+      "start": 113.17969,
+      "end": 113.46094,
+      "midi_pitch": 84,
+      "strength": 0.16459
+    },
+    {
+      "start": 114.08594,
+      "end": 114.21094,
+      "midi_pitch": 64,
+      "strength": 0.14922
+    },
+    {
+      "start": 114.77344,
+      "end": 114.92969,
+      "midi_pitch": 79,
+      "strength": 0.21485
+    },
+    {
+      "start": 114.85156,
+      "end": 114.97656,
+      "midi_pitch": 67,
+      "strength": 0.14835
+    },
+    {
+      "start": 115.10156,
+      "end": 115.25781,
+      "midi_pitch": 62,
+      "strength": 0.18372
+    },
+    {
+      "start": 115.22656,
+      "end": 115.44531,
+      "midi_pitch": 74,
+      "strength": 0.15936
+    },
+    {
+      "start": 115.60156,
+      "end": 115.71094,
+      "midi_pitch": 65,
+      "strength": 0.13059
+    },
+    {
+      "start": 115.61719,
+      "end": 115.72656,
+      "midi_pitch": 62,
+      "strength": 0.12238
+    },
+    {
+      "start": 116.35156,
+      "end": 116.47656,
+      "midi_pitch": 58,
+      "strength": 0.18519
+    },
+    {
+      "start": 116.60156,
+      "end": 116.74219,
+      "midi_pitch": 58,
+      "strength": 0.21656
+    },
+    {
+      "start": 116.85156,
+      "end": 116.97656,
+      "midi_pitch": 58,
+      "strength": 0.19886
+    },
+    {
+      "start": 117.10156,
+      "end": 117.22656,
+      "midi_pitch": 63,
+      "strength": 0.18084
+    },
+    {
+      "start": 117.11719,
+      "end": 118.07031,
+      "midi_pitch": 56,
+      "strength": 0.20828
+    },
+    {
+      "start": 117.60156,
+      "end": 117.74219,
+      "midi_pitch": 63,
+      "strength": 0.17239
+    },
+    {
+      "start": 118.10156,
+      "end": 118.22656,
+      "midi_pitch": 55,
+      "strength": 0.15249
+    },
+    {
+      "start": 118.16406,
+      "end": 118.28906,
+      "midi_pitch": 58,
+      "strength": 0.14806
+    },
+    {
+      "start": 118.38281,
+      "end": 118.52344,
+      "midi_pitch": 58,
+      "strength": 0.15634
+    },
+    {
+      "start": 118.60156,
+      "end": 118.78906,
+      "midi_pitch": 55,
+      "strength": 0.16149
+    },
+    {
+      "start": 118.89844,
+      "end": 119.00781,
+      "midi_pitch": 67,
+      "strength": 0.17061
+    },
+    {
+      "start": 119.10156,
+      "end": 119.22656,
+      "midi_pitch": 55,
+      "strength": 0.13812
+    },
+    {
+      "start": 119.11719,
+      "end": 119.30469,
+      "midi_pitch": 59,
+      "strength": 0.14439
+    },
+    {
+      "start": 119.36719,
+      "end": 119.53906,
+      "midi_pitch": 59,
+      "strength": 0.1679
+    },
+    {
+      "start": 119.38281,
+      "end": 119.49219,
+      "midi_pitch": 55,
+      "strength": 0.1345
+    },
+    {
+      "start": 119.61719,
+      "end": 119.74219,
+      "midi_pitch": 55,
+      "strength": 0.13541
+    },
+    {
+      "start": 119.64844,
+      "end": 119.78906,
+      "midi_pitch": 59,
+      "strength": 0.14471
+    },
+    {
+      "start": 119.86719,
+      "end": 119.99219,
+      "midi_pitch": 55,
+      "strength": 0.12531
+    },
+    {
+      "start": 120.13281,
+      "end": 120.24219,
+      "midi_pitch": 63,
+      "strength": 0.15233
+    },
+    {
+      "start": 120.32031,
+      "end": 120.57031,
+      "midi_pitch": 67,
+      "strength": 0.16413
+    },
+    {
+      "start": 120.36719,
+      "end": 120.49219,
+      "midi_pitch": 63,
+      "strength": 0.14625
+    },
+    {
+      "start": 120.86719,
+      "end": 120.99219,
+      "midi_pitch": 63,
+      "strength": 0.20686
+    },
+    {
+      "start": 120.88281,
+      "end": 121.02344,
+      "midi_pitch": 39,
+      "strength": 0.14529
+    },
+    {
+      "start": 121.13281,
+      "end": 122.75781,
+      "midi_pitch": 56,
+      "strength": 0.21159
+    },
+    {
+      "start": 121.38281,
+      "end": 121.49219,
+      "midi_pitch": 63,
+      "strength": 0.18359
+    },
+    {
+      "start": 122.86719,
+      "end": 123.05469,
+      "midi_pitch": 56,
+      "strength": 0.21308
+    },
+    {
+      "start": 123.89844,
+      "end": 124.02344,
+      "midi_pitch": 62,
+      "strength": 0.12362
+    },
+    {
+      "start": 124.27344,
+      "end": 124.38281,
+      "midi_pitch": 67,
+      "strength": 0.12482
+    },
+    {
+      "start": 125.28906,
+      "end": 126.60156,
+      "midi_pitch": 48,
+      "strength": 0.16867
+    },
+    {
+      "start": 126.63281,
+      "end": 126.74219,
+      "midi_pitch": 55,
+      "strength": 0.17514
+    },
+    {
+      "start": 126.66406,
+      "end": 126.80469,
+      "midi_pitch": 95,
+      "strength": 0.13541
+    },
+    {
+      "start": 126.71094,
+      "end": 127.11719,
+      "midi_pitch": 67,
+      "strength": 0.20452
+    },
+    {
+      "start": 127.16406,
+      "end": 127.58594,
+      "midi_pitch": 70,
+      "strength": 0.20926
+    },
+    {
+      "start": 127.42969,
+      "end": 127.53906,
+      "midi_pitch": 65,
+      "strength": 0.13153
+    },
+    {
+      "start": 127.67969,
+      "end": 127.78906,
+      "midi_pitch": 65,
+      "strength": 0.14035
+    },
+    {
+      "start": 128.05469,
+      "end": 128.16406,
+      "midi_pitch": 58,
+      "strength": 0.13022
+    },
+    {
+      "start": 128.36719,
+      "end": 128.58594,
+      "midi_pitch": 58,
+      "strength": 0.19616
+    },
+    {
+      "start": 128.66406,
+      "end": 128.89844,
+      "midi_pitch": 69,
+      "strength": 0.27895
+    },
+    {
+      "start": 129.16406,
+      "end": 129.32031,
+      "midi_pitch": 53,
+      "strength": 0.14536
+    },
+    {
+      "start": 129.22656,
+      "end": 129.53906,
+      "midi_pitch": 65,
+      "strength": 0.23803
+    },
+    {
+      "start": 129.50781,
+      "end": 129.72656,
+      "midi_pitch": 53,
+      "strength": 0.15894
+    },
+    {
+      "start": 130.17969,
+      "end": 130.39844,
+      "midi_pitch": 52,
+      "strength": 0.1413
+    },
+    {
+      "start": 130.17969,
+      "end": 130.52344,
+      "midi_pitch": 64,
+      "strength": 0.20355
+    },
+    {
+      "start": 130.69531,
+      "end": 131.02344,
+      "midi_pitch": 67,
+      "strength": 0.17458
+    },
+    {
+      "start": 131.19531,
+      "end": 132.69531,
+      "midi_pitch": 50,
+      "strength": 0.2235
+    },
+    {
+      "start": 131.21094,
+      "end": 131.64844,
+      "midi_pitch": 62,
+      "strength": 0.19117
+    },
+    {
+      "start": 131.44531,
+      "end": 131.55469,
+      "midi_pitch": 65,
+      "strength": 0.12486
+    },
+    {
+      "start": 131.67969,
+      "end": 131.82031,
+      "midi_pitch": 62,
+      "strength": 0.17893
+    },
+    {
+      "start": 132.19531,
+      "end": 132.50781,
+      "midi_pitch": 62,
+      "strength": 0.17234
+    },
+    {
+      "start": 132.94531,
+      "end": 133.05469,
+      "midi_pitch": 62,
+      "strength": 0.15579
+    },
+    {
+      "start": 132.94531,
+      "end": 133.05469,
+      "midi_pitch": 65,
+      "strength": 0.13689
+    },
+    {
+      "start": 133.21094,
+      "end": 133.52344,
+      "midi_pitch": 48,
+      "strength": 0.2089
+    },
+    {
+      "start": 133.46094,
+      "end": 133.57031,
+      "midi_pitch": 67,
+      "strength": 0.1683
+    },
+    {
+      "start": 133.47656,
+      "end": 133.61719,
+      "midi_pitch": 60,
+      "strength": 0.17959
+    },
+    {
+      "start": 133.61719,
+      "end": 134.19531,
+      "midi_pitch": 48,
+      "strength": 0.16832
+    },
+    {
+      "start": 134.24219,
+      "end": 134.53906,
+      "midi_pitch": 48,
+      "strength": 0.16377
+    },
+    {
+      "start": 134.69531,
+      "end": 134.85156,
+      "midi_pitch": 55,
+      "strength": 0.16851
+    },
+    {
+      "start": 134.72656,
+      "end": 134.85156,
+      "midi_pitch": 95,
+      "strength": 0.15379
+    },
+    {
+      "start": 134.85156,
+      "end": 135.05469,
+      "midi_pitch": 67,
+      "strength": 0.15938
+    },
+    {
+      "start": 135.22656,
+      "end": 135.64844,
+      "midi_pitch": 70,
+      "strength": 0.19849
+    },
+    {
+      "start": 135.47656,
+      "end": 135.58594,
+      "midi_pitch": 65,
+      "strength": 0.13333
+    },
+    {
+      "start": 136.08594,
+      "end": 136.19531,
+      "midi_pitch": 58,
+      "strength": 0.12305
+    },
+    {
+      "start": 136.22656,
+      "end": 136.35156,
+      "midi_pitch": 58,
+      "strength": 0.15394
+    },
+    {
+      "start": 136.28906,
+      "end": 136.47656,
+      "midi_pitch": 69,
+      "strength": 0.31598
+    },
+    {
+      "start": 136.46094,
+      "end": 136.66406,
+      "midi_pitch": 58,
+      "strength": 0.16813
+    },
+    {
+      "start": 136.57031,
+      "end": 136.75781,
+      "midi_pitch": 70,
+      "strength": 0.24328
+    },
+    {
+      "start": 136.88281,
+      "end": 137.07031,
+      "midi_pitch": 72,
+      "strength": 0.16116
+    },
+    {
+      "start": 136.97656,
+      "end": 137.08594,
+      "midi_pitch": 65,
+      "strength": 0.15001
+    },
+    {
+      "start": 137.22656,
+      "end": 137.36719,
+      "midi_pitch": 95,
+      "strength": 0.12643
+    },
+    {
+      "start": 137.24219,
+      "end": 137.69531,
+      "midi_pitch": 67,
+      "strength": 0.23498
+    },
+    {
+      "start": 137.74219,
+      "end": 137.88281,
+      "midi_pitch": 67,
+      "strength": 0.13507
+    },
+    {
+      "start": 138.24219,
+      "end": 138.36719,
+      "midi_pitch": 67,
+      "strength": 0.16912
+    },
+    {
+      "start": 138.39844,
+      "end": 138.58594,
+      "midi_pitch": 67,
+      "strength": 0.16317
+    },
+    {
+      "start": 138.75781,
+      "end": 138.86719,
+      "midi_pitch": 67,
+      "strength": 0.14827
+    },
+    {
+      "start": 139.24219,
+      "end": 139.35156,
+      "midi_pitch": 65,
+      "strength": 0.12956
+    },
+    {
+      "start": 139.49219,
+      "end": 139.60156,
+      "midi_pitch": 65,
+      "strength": 0.13642
+    },
+    {
+      "start": 139.74219,
+      "end": 139.85156,
+      "midi_pitch": 65,
+      "strength": 0.13672
+    },
+    {
+      "start": 139.99219,
+      "end": 140.10156,
+      "midi_pitch": 65,
+      "strength": 0.14905
+    },
+    {
+      "start": 140.49219,
+      "end": 140.60156,
+      "midi_pitch": 65,
+      "strength": 0.12857
+    },
+    {
+      "start": 141.25781,
+      "end": 142.60156,
+      "midi_pitch": 48,
+      "strength": 0.16953
+    },
+    {
+      "start": 141.38281,
+      "end": 141.60156,
+      "midi_pitch": 60,
+      "strength": 0.23076
+    },
+    {
+      "start": 142.50781,
+      "end": 142.61719,
+      "midi_pitch": 64,
+      "strength": 0.12212
+    },
+    {
+      "start": 142.78906,
+      "end": 143.16406,
+      "midi_pitch": 67,
+      "strength": 0.23964
+    },
+    {
+      "start": 143.25781,
+      "end": 143.69531,
+      "midi_pitch": 70,
+      "strength": 0.19515
+    },
+    {
+      "start": 143.50781,
+      "end": 143.63281,
+      "midi_pitch": 65,
+      "strength": 0.14576
+    },
+    {
+      "start": 144.07031,
+      "end": 144.22656,
+      "midi_pitch": 58,
+      "strength": 0.11942
+    },
+    {
+      "start": 144.28906,
+      "end": 144.42969,
+      "midi_pitch": 58,
+      "strength": 0.22945
+    },
+    {
+      "start": 144.47656,
+      "end": 144.61719,
+      "midi_pitch": 58,
+      "strength": 0.20241
+    },
+    {
+      "start": 144.69531,
+      "end": 144.80469,
+      "midi_pitch": 69,
+      "strength": 0.32338
+    },
+    {
+      "start": 144.94531,
+      "end": 145.05469,
+      "midi_pitch": 55,
+      "strength": 0.14988
+    },
+    {
+      "start": 145.25781,
+      "end": 145.53906,
+      "midi_pitch": 53,
+      "strength": 0.14407
+    },
+    {
+      "start": 145.39844,
+      "end": 145.74219,
+      "midi_pitch": 65,
+      "strength": 0.18908
+    },
+    {
+      "start": 145.75781,
+      "end": 145.86719,
+      "midi_pitch": 53,
+      "strength": 0.11865
+    },
+    {
+      "start": 146.27344,
+      "end": 146.44531,
+      "midi_pitch": 76,
+      "strength": 0.1618
+    },
+    {
+      "start": 146.30469,
+      "end": 146.49219,
+      "midi_pitch": 52,
+      "strength": 0.2265
+    },
+    {
+      "start": 146.82031,
+      "end": 147.14844,
+      "midi_pitch": 67,
+      "strength": 0.19099
+    },
+    {
+      "start": 147.28906,
+      "end": 147.49219,
+      "midi_pitch": 62,
+      "strength": 0.22009
+    },
+    {
+      "start": 147.32031,
+      "end": 148.74219,
+      "midi_pitch": 50,
+      "strength": 0.19968
+    },
+    {
+      "start": 148.78906,
+      "end": 149.13281,
+      "midi_pitch": 58,
+      "strength": 0.23965
+    },
+    {
+      "start": 148.92969,
+      "end": 149.22656,
+      "midi_pitch": 46,
+      "strength": 0.19201
+    },
+    {
+      "start": 149.30469,
+      "end": 149.44531,
+      "midi_pitch": 56,
+      "strength": 0.18347
+    },
+    {
+      "start": 149.30469,
+      "end": 150.28906,
+      "midi_pitch": 48,
+      "strength": 0.16151
+    },
+    {
+      "start": 149.39844,
+      "end": 149.53906,
+      "midi_pitch": 84,
+      "strength": 0.13242
+    },
+    {
+      "start": 149.53906,
+      "end": 149.71094,
+      "midi_pitch": 56,
+      "strength": 0.18887
+    },
+    {
+      "start": 149.77344,
+      "end": 149.96094,
+      "midi_pitch": 56,
+      "strength": 0.18653
+    },
+    {
+      "start": 150.03906,
+      "end": 150.14844,
+      "midi_pitch": 63,
+      "strength": 0.14581
+    },
+    {
+      "start": 150.05469,
+      "end": 150.22656,
+      "midi_pitch": 56,
+      "strength": 0.18778
+    },
+    {
+      "start": 150.32031,
+      "end": 150.42969,
+      "midi_pitch": 56,
+      "strength": 0.18808
+    },
+    {
+      "start": 150.32031,
+      "end": 150.57031,
+      "midi_pitch": 48,
+      "strength": 0.13282
+    },
+    {
+      "start": 150.57031,
+      "end": 150.71094,
+      "midi_pitch": 56,
+      "strength": 0.1849
+    },
+    {
+      "start": 150.78906,
+      "end": 150.94531,
+      "midi_pitch": 56,
+      "strength": 0.20009
+    },
+    {
+      "start": 150.82031,
+      "end": 151.02344,
+      "midi_pitch": 50,
+      "strength": 0.18332
+    },
+    {
+      "start": 151.03906,
+      "end": 151.21094,
+      "midi_pitch": 63,
+      "strength": 0.25846
+    },
+    {
+      "start": 151.03906,
+      "end": 151.22656,
+      "midi_pitch": 56,
+      "strength": 0.21245
+    },
+    {
+      "start": 151.30469,
+      "end": 152.27344,
+      "midi_pitch": 50,
+      "strength": 0.22363
+    },
+    {
+      "start": 151.44531,
+      "end": 151.66406,
+      "midi_pitch": 62,
+      "strength": 0.13525
+    },
+    {
+      "start": 151.80469,
+      "end": 151.96094,
+      "midi_pitch": 65,
+      "strength": 0.16793
+    },
+    {
+      "start": 152.05469,
+      "end": 152.22656,
+      "midi_pitch": 65,
+      "strength": 0.1668
+    },
+    {
+      "start": 152.32031,
+      "end": 152.77344,
+      "midi_pitch": 58,
+      "strength": 0.3019
+    },
+    {
+      "start": 152.49219,
+      "end": 153.27344,
+      "midi_pitch": 46,
+      "strength": 0.18728
+    },
+    {
+      "start": 153.05469,
+      "end": 153.16406,
+      "midi_pitch": 62,
+      "strength": 0.12766
+    },
+    {
+      "start": 153.32031,
+      "end": 153.66406,
+      "midi_pitch": 48,
+      "strength": 0.17772
+    },
+    {
+      "start": 153.50781,
+      "end": 153.72656,
+      "midi_pitch": 76,
+      "strength": 0.15642
+    },
+    {
+      "start": 153.57031,
+      "end": 153.69531,
+      "midi_pitch": 67,
+      "strength": 0.14281
+    },
+    {
+      "start": 153.72656,
+      "end": 154.27344,
+      "midi_pitch": 48,
+      "strength": 0.15543
+    },
+    {
+      "start": 154.32031,
+      "end": 154.42969,
+      "midi_pitch": 64,
+      "strength": 0.12508
+    },
+    {
+      "start": 154.35156,
+      "end": 154.69531,
+      "midi_pitch": 48,
+      "strength": 0.14915
+    },
+    {
+      "start": 154.55469,
+      "end": 154.66406,
+      "midi_pitch": 64,
+      "strength": 0.12412
+    },
+    {
+      "start": 155.57031,
+      "end": 155.67969,
+      "midi_pitch": 64,
+      "strength": 0.12543
+    },
+    {
+      "start": 156.46094,
+      "end": 156.57031,
+      "midi_pitch": 88,
+      "strength": 0.13708
+    },
+    {
+      "start": 156.57031,
+      "end": 156.67969,
+      "midi_pitch": 64,
+      "strength": 0.13909
+    },
+    {
+      "start": 157.33594,
+      "end": 157.49219,
+      "midi_pitch": 56,
+      "strength": 0.18532
+    },
+    {
+      "start": 157.57031,
+      "end": 157.67969,
+      "midi_pitch": 63,
+      "strength": 0.19738
+    },
+    {
+      "start": 157.60156,
+      "end": 157.75781,
+      "midi_pitch": 56,
+      "strength": 0.20885
+    },
+    {
+      "start": 157.85156,
+      "end": 157.99219,
+      "midi_pitch": 56,
+      "strength": 0.19595
+    },
+    {
+      "start": 157.85156,
+      "end": 158.10156,
+      "midi_pitch": 79,
+      "strength": 0.13189
+    },
+    {
+      "start": 157.96094,
+      "end": 158.21094,
+      "midi_pitch": 84,
+      "strength": 0.16154
+    },
+    {
+      "start": 158.11719,
+      "end": 158.24219,
+      "midi_pitch": 56,
+      "strength": 0.17281
+    },
+    {
+      "start": 158.33594,
+      "end": 158.44531,
+      "midi_pitch": 63,
+      "strength": 0.16528
+    },
+    {
+      "start": 158.35156,
+      "end": 158.49219,
+      "midi_pitch": 56,
+      "strength": 0.20288
+    },
+    {
+      "start": 158.60156,
+      "end": 158.72656,
+      "midi_pitch": 56,
+      "strength": 0.18542
+    },
+    {
+      "start": 158.86719,
+      "end": 159.00781,
+      "midi_pitch": 56,
+      "strength": 0.21352
+    },
+    {
+      "start": 159.00781,
+      "end": 159.13281,
+      "midi_pitch": 75,
+      "strength": 0.31134
+    },
+    {
+      "start": 159.08594,
+      "end": 159.21094,
+      "midi_pitch": 63,
+      "strength": 0.21481
+    },
+    {
+      "start": 159.11719,
+      "end": 159.27344,
+      "midi_pitch": 56,
+      "strength": 0.1759
+    },
+    {
+      "start": 159.13281,
+      "end": 159.24219,
+      "midi_pitch": 87,
+      "strength": 0.19496
+    },
+    {
+      "start": 159.42969,
+      "end": 159.60156,
+      "midi_pitch": 74,
+      "strength": 0.18374
+    },
+    {
+      "start": 159.60156,
+      "end": 159.75781,
+      "midi_pitch": 62,
+      "strength": 0.17054
+    },
+    {
+      "start": 159.86719,
+      "end": 159.97656,
+      "midi_pitch": 62,
+      "strength": 0.1353
+    },
+    {
+      "start": 159.88281,
+      "end": 159.99219,
+      "midi_pitch": 58,
+      "strength": 0.20029
+    },
+    {
+      "start": 160.10156,
+      "end": 160.21094,
+      "midi_pitch": 62,
+      "strength": 0.12212
+    },
+    {
+      "start": 160.35156,
+      "end": 160.49219,
+      "midi_pitch": 65,
+      "strength": 0.15763
+    },
+    {
+      "start": 160.47656,
+      "end": 160.61719,
+      "midi_pitch": 82,
+      "strength": 0.19222
+    },
+    {
+      "start": 160.60156,
+      "end": 160.72656,
+      "midi_pitch": 58,
+      "strength": 0.21431
+    },
+    {
+      "start": 160.60156,
+      "end": 160.74219,
+      "midi_pitch": 65,
+      "strength": 0.13876
+    },
+    {
+      "start": 164.13281,
+      "end": 164.24219,
+      "midi_pitch": 64,
+      "strength": 0.11814
+    },
+    {
+      "start": 164.39844,
+      "end": 164.82031,
+      "midi_pitch": 50,
+      "strength": 0.1873
+    },
+    {
+      "start": 164.55469,
+      "end": 164.83594,
+      "midi_pitch": 62,
+      "strength": 0.20121
+    },
+    {
+      "start": 164.92969,
+      "end": 165.32031,
+      "midi_pitch": 52,
+      "strength": 0.16193
+    },
+    {
+      "start": 164.96094,
+      "end": 165.16406,
+      "midi_pitch": 64,
+      "strength": 0.23439
+    },
+    {
+      "start": 165.41406,
+      "end": 165.53906,
+      "midi_pitch": 56,
+      "strength": 0.20373
+    },
+    {
+      "start": 165.88281,
+      "end": 166.03906,
+      "midi_pitch": 80,
+      "strength": 0.18792
+    },
+    {
+      "start": 165.89844,
+      "end": 166.03906,
+      "midi_pitch": 56,
+      "strength": 0.23908
+    },
+    {
+      "start": 165.97656,
+      "end": 166.35156,
+      "midi_pitch": 68,
+      "strength": 0.31203
+    },
+    {
+      "start": 166.21094,
+      "end": 166.32031,
+      "midi_pitch": 87,
+      "strength": 0.19901
+    },
+    {
+      "start": 166.35156,
+      "end": 166.55469,
+      "midi_pitch": 56,
+      "strength": 0.19957
+    },
+    {
+      "start": 166.92969,
+      "end": 167.05469,
+      "midi_pitch": 56,
+      "strength": 0.17798
+    },
+    {
+      "start": 167.19531,
+      "end": 167.35156,
+      "midi_pitch": 65,
+      "strength": 0.15769
+    },
+    {
+      "start": 167.24219,
+      "end": 167.35156,
+      "midi_pitch": 68,
+      "strength": 0.12962
+    },
+    {
+      "start": 167.39844,
+      "end": 167.50781,
+      "midi_pitch": 65,
+      "strength": 0.14043
+    },
+    {
+      "start": 167.42969,
+      "end": 167.55469,
+      "midi_pitch": 58,
+      "strength": 0.20628
+    },
+    {
+      "start": 167.52344,
+      "end": 167.66406,
+      "midi_pitch": 82,
+      "strength": 0.21481
+    },
+    {
+      "start": 167.69531,
+      "end": 167.83594,
+      "midi_pitch": 82,
+      "strength": 0.17893
+    },
+    {
+      "start": 167.97656,
+      "end": 168.28906,
+      "midi_pitch": 68,
+      "strength": 0.2764
+    },
+    {
+      "start": 168.21094,
+      "end": 168.35156,
+      "midi_pitch": 87,
+      "strength": 0.21346
+    },
+    {
+      "start": 168.44531,
+      "end": 168.85156,
+      "midi_pitch": 67,
+      "strength": 0.18997
+    },
+    {
+      "start": 169.05469,
+      "end": 169.33594,
+      "midi_pitch": 65,
+      "strength": 0.1638
+    },
+    {
+      "start": 169.19531,
+      "end": 169.32031,
+      "midi_pitch": 56,
+      "strength": 0.12514
+    },
+    {
+      "start": 169.19531,
+      "end": 169.35156,
+      "midi_pitch": 44,
+      "strength": 0.65795
+    },
+    {
+      "start": 169.35156,
+      "end": 169.61719,
+      "midi_pitch": 46,
+      "strength": 0.3677
+    },
+    {
+      "start": 169.47656,
+      "end": 169.83594,
+      "midi_pitch": 67,
+      "strength": 0.16341
+    },
+    {
+      "start": 170.60156,
+      "end": 170.74219,
+      "midi_pitch": 44,
+      "strength": 0.66611
+    },
+    {
+      "start": 170.61719,
+      "end": 170.74219,
+      "midi_pitch": 56,
+      "strength": 0.13538
+    },
+    {
+      "start": 170.77344,
+      "end": 170.92969,
+      "midi_pitch": 46,
+      "strength": 0.38657
+    },
+    {
+      "start": 170.89844,
+      "end": 171.03906,
+      "midi_pitch": 48,
+      "strength": 0.27605
+    },
+    {
+      "start": 171.03906,
+      "end": 171.19531,
+      "midi_pitch": 44,
+      "strength": 0.32624
+    },
+    {
+      "start": 171.36719,
+      "end": 171.50781,
+      "midi_pitch": 49,
+      "strength": 0.20585
+    },
+    {
+      "start": 171.69531,
+      "end": 171.83594,
+      "midi_pitch": 48,
+      "strength": 0.18907
+    },
+    {
+      "start": 172.14844,
+      "end": 172.27344,
+      "midi_pitch": 43,
+      "strength": 0.23225
+    },
+    {
+      "start": 172.44531,
+      "end": 172.58594,
+      "midi_pitch": 48,
+      "strength": 0.19266
+    },
+    {
+      "start": 172.67969,
+      "end": 172.80469,
+      "midi_pitch": 48,
+      "strength": 0.19925
+    },
+    {
+      "start": 172.94531,
+      "end": 173.05469,
+      "midi_pitch": 64,
+      "strength": 0.15864
+    },
+    {
+      "start": 173.17969,
+      "end": 173.28906,
+      "midi_pitch": 43,
+      "strength": 0.21223
+    },
+    {
+      "start": 173.47656,
+      "end": 173.58594,
+      "midi_pitch": 56,
+      "strength": 0.20962
+    },
+    {
+      "start": 173.97656,
+      "end": 174.10156,
+      "midi_pitch": 56,
+      "strength": 0.20863
+    },
+    {
+      "start": 174.47656,
+      "end": 174.61719,
+      "midi_pitch": 56,
+      "strength": 0.20908
+    },
+    {
+      "start": 175.47656,
+      "end": 175.58594,
+      "midi_pitch": 58,
+      "strength": 0.1758
+    },
+    {
+      "start": 175.94531,
+      "end": 176.11719,
+      "midi_pitch": 62,
+      "strength": 0.18422
+    },
+    {
+      "start": 176.30469,
+      "end": 176.46094,
+      "midi_pitch": 44,
+      "strength": 0.65639
+    },
+    {
+      "start": 176.46094,
+      "end": 176.72656,
+      "midi_pitch": 46,
+      "strength": 0.39143
+    },
+    {
+      "start": 176.88281,
+      "end": 177.05469,
+      "midi_pitch": 42,
+      "strength": 0.30177
+    },
+    {
+      "start": 176.97656,
+      "end": 177.14844,
+      "midi_pitch": 58,
+      "strength": 0.15369
+    },
+    {
+      "start": 177.33594,
+      "end": 177.49219,
+      "midi_pitch": 53,
+      "strength": 0.12892
+    },
+    {
+      "start": 177.49219,
+      "end": 177.88281,
+      "midi_pitch": 56,
+      "strength": 0.1711
+    },
+    {
+      "start": 177.61719,
+      "end": 177.74219,
+      "midi_pitch": 42,
+      "strength": 0.27953
+    },
+    {
+      "start": 177.71094,
+      "end": 177.85156,
+      "midi_pitch": 44,
+      "strength": 0.67521
+    },
+    {
+      "start": 177.89844,
+      "end": 178.03906,
+      "midi_pitch": 46,
+      "strength": 0.48036
+    },
+    {
+      "start": 177.99219,
+      "end": 178.10156,
+      "midi_pitch": 56,
+      "strength": 0.1414
+    },
+    {
+      "start": 178.00781,
+      "end": 178.11719,
+      "midi_pitch": 48,
+      "strength": 0.19275
+    },
+    {
+      "start": 178.32031,
+      "end": 178.50781,
+      "midi_pitch": 53,
+      "strength": 0.15307
+    },
+    {
+      "start": 178.52344,
+      "end": 178.63281,
+      "midi_pitch": 49,
+      "strength": 0.17341
+    },
+    {
+      "start": 178.97656,
+      "end": 179.11719,
+      "midi_pitch": 56,
+      "strength": 0.15648
+    },
+    {
+      "start": 179.21094,
+      "end": 179.35156,
+      "midi_pitch": 75,
+      "strength": 0.28613
+    },
+    {
+      "start": 179.47656,
+      "end": 179.61719,
+      "midi_pitch": 62,
+      "strength": 0.23781
+    },
+    {
+      "start": 179.50781,
+      "end": 179.67969,
+      "midi_pitch": 58,
+      "strength": 0.17078
+    },
+    {
+      "start": 179.52344,
+      "end": 179.71094,
+      "midi_pitch": 50,
+      "strength": 0.16795
+    },
+    {
+      "start": 179.66406,
+      "end": 180.21094,
+      "midi_pitch": 62,
+      "strength": 0.19906
+    },
+    {
+      "start": 179.74219,
+      "end": 179.89844,
+      "midi_pitch": 50,
+      "strength": 0.12753
+    },
+    {
+      "start": 180.02344,
+      "end": 180.17969,
+      "midi_pitch": 58,
+      "strength": 0.17276
+    },
+    {
+      "start": 180.50781,
+      "end": 180.96094,
+      "midi_pitch": 58,
+      "strength": 0.16997
+    },
+    {
+      "start": 180.60156,
+      "end": 180.71094,
+      "midi_pitch": 82,
+      "strength": 0.16932
+    },
+    {
+      "start": 180.77344,
+      "end": 180.88281,
+      "midi_pitch": 82,
+      "strength": 0.16526
+    },
+    {
+      "start": 181.02344,
+      "end": 181.22656,
+      "midi_pitch": 58,
+      "strength": 0.16381
+    },
+    {
+      "start": 181.50781,
+      "end": 181.63281,
+      "midi_pitch": 56,
+      "strength": 0.16099
+    },
+    {
+      "start": 181.67969,
+      "end": 182.64844,
+      "midi_pitch": 56,
+      "strength": 0.21903
+    },
+    {
+      "start": 181.69531,
+      "end": 181.88281,
+      "midi_pitch": 84,
+      "strength": 0.15368
+    },
+    {
+      "start": 182.71094,
+      "end": 182.89844,
+      "midi_pitch": 56,
+      "strength": 0.18318
+    },
+    {
+      "start": 183.02344,
+      "end": 183.14844,
+      "midi_pitch": 56,
+      "strength": 0.16125
+    },
+    {
+      "start": 183.24219,
+      "end": 183.35156,
+      "midi_pitch": 63,
+      "strength": 0.20534
+    },
+    {
+      "start": 183.25781,
+      "end": 183.38281,
+      "midi_pitch": 56,
+      "strength": 0.15535
+    },
+    {
+      "start": 183.50781,
+      "end": 183.66406,
+      "midi_pitch": 58,
+      "strength": 0.19152
+    },
+    {
+      "start": 183.63281,
+      "end": 183.96094,
+      "midi_pitch": 62,
+      "strength": 0.20246
+    },
+    {
+      "start": 184.00781,
+      "end": 184.32031,
+      "midi_pitch": 62,
+      "strength": 0.18907
+    },
+    {
+      "start": 184.27344,
+      "end": 184.39844,
+      "midi_pitch": 58,
+      "strength": 0.15984
+    },
+    {
+      "start": 184.50781,
+      "end": 184.61719,
+      "midi_pitch": 65,
+      "strength": 0.13878
+    },
+    {
+      "start": 184.52344,
+      "end": 184.64844,
+      "midi_pitch": 62,
+      "strength": 0.16319
+    },
+    {
+      "start": 184.53906,
+      "end": 184.64844,
+      "midi_pitch": 58,
+      "strength": 0.21736
+    },
+    {
+      "start": 184.64844,
+      "end": 184.78906,
+      "midi_pitch": 70,
+      "strength": 0.1912
+    },
+    {
+      "start": 184.72656,
+      "end": 184.83594,
+      "midi_pitch": 94,
+      "strength": 0.15426
+    },
+    {
+      "start": 184.83594,
+      "end": 184.96094,
+      "midi_pitch": 70,
+      "strength": 0.18971
+    },
+    {
+      "start": 185.02344,
+      "end": 185.17969,
+      "midi_pitch": 62,
+      "strength": 0.16975
+    },
+    {
+      "start": 185.25781,
+      "end": 185.38281,
+      "midi_pitch": 62,
+      "strength": 0.19414
+    },
+    {
+      "start": 185.50781,
+      "end": 185.66406,
+      "midi_pitch": 48,
+      "strength": 0.20268
+    },
+    {
+      "start": 185.52344,
+      "end": 185.64844,
+      "midi_pitch": 64,
+      "strength": 0.1564
+    },
+    {
+      "start": 185.61719,
+      "end": 185.89844,
+      "midi_pitch": 84,
+      "strength": 0.13468
+    },
+    {
+      "start": 185.74219,
+      "end": 185.85156,
+      "midi_pitch": 64,
+      "strength": 0.13962
+    },
+    {
+      "start": 186.00781,
+      "end": 186.13281,
+      "midi_pitch": 64,
+      "strength": 0.15214
+    },
+    {
+      "start": 186.50781,
+      "end": 186.63281,
+      "midi_pitch": 64,
+      "strength": 0.13723
+    },
+    {
+      "start": 186.75781,
+      "end": 186.88281,
+      "midi_pitch": 64,
+      "strength": 0.13814
+    },
+    {
+      "start": 187.02344,
+      "end": 187.14844,
+      "midi_pitch": 64,
+      "strength": 0.12642
+    },
+    {
+      "start": 187.27344,
+      "end": 187.38281,
+      "midi_pitch": 64,
+      "strength": 0.13022
+    },
+    {
+      "start": 187.53906,
+      "end": 187.64844,
+      "midi_pitch": 65,
+      "strength": 0.13315
+    },
+    {
+      "start": 187.78906,
+      "end": 187.89844,
+      "midi_pitch": 65,
+      "strength": 0.14662
+    },
+    {
+      "start": 188.03906,
+      "end": 188.14844,
+      "midi_pitch": 62,
+      "strength": 0.13482
+    },
+    {
+      "start": 188.03906,
+      "end": 188.14844,
+      "midi_pitch": 65,
+      "strength": 0.13774
+    },
+    {
+      "start": 188.28906,
+      "end": 188.39844,
+      "midi_pitch": 65,
+      "strength": 0.13808
+    },
+    {
+      "start": 188.53906,
+      "end": 188.66406,
+      "midi_pitch": 58,
+      "strength": 0.20835
+    },
+    {
+      "start": 188.78906,
+      "end": 188.89844,
+      "midi_pitch": 62,
+      "strength": 0.12882
+    },
+    {
+      "start": 188.78906,
+      "end": 188.91406,
+      "midi_pitch": 58,
+      "strength": 0.22084
+    },
+    {
+      "start": 189.03906,
+      "end": 189.17969,
+      "midi_pitch": 58,
+      "strength": 0.21093
+    },
+    {
+      "start": 189.28906,
+      "end": 189.41406,
+      "midi_pitch": 58,
+      "strength": 0.22174
+    },
+    {
+      "start": 189.83594,
+      "end": 189.99219,
+      "midi_pitch": 67,
+      "strength": 0.16661
+    },
+    {
+      "start": 190.03906,
+      "end": 190.16406,
+      "midi_pitch": 64,
+      "strength": 0.13322
+    },
+    {
+      "start": 190.08594,
+      "end": 190.49219,
+      "midi_pitch": 67,
+      "strength": 0.18209
+    },
+    {
+      "start": 190.27344,
+      "end": 190.39844,
+      "midi_pitch": 64,
+      "strength": 0.12434
+    },
+    {
+      "start": 191.03906,
+      "end": 191.14844,
+      "midi_pitch": 64,
+      "strength": 0.13585
+    },
+    {
+      "start": 191.07031,
+      "end": 191.17969,
+      "midi_pitch": 67,
+      "strength": 0.1444
+    },
+    {
+      "start": 191.28906,
+      "end": 191.41406,
+      "midi_pitch": 64,
+      "strength": 0.13063
+    },
+    {
+      "start": 191.55469,
+      "end": 191.66406,
+      "midi_pitch": 65,
+      "strength": 0.13375
+    },
+    {
+      "start": 191.82031,
+      "end": 191.92969,
+      "midi_pitch": 65,
+      "strength": 0.13441
+    },
+    {
+      "start": 192.05469,
+      "end": 192.44531,
+      "midi_pitch": 65,
+      "strength": 0.21889
+    },
+    {
+      "start": 192.30469,
+      "end": 192.42969,
+      "midi_pitch": 62,
+      "strength": 0.13586
+    },
+    {
+      "start": 192.57031,
+      "end": 192.67969,
+      "midi_pitch": 62,
+      "strength": 0.1294
+    },
+    {
+      "start": 192.57031,
+      "end": 192.69531,
+      "midi_pitch": 58,
+      "strength": 0.21688
+    },
+    {
+      "start": 193.05469,
+      "end": 193.19531,
+      "midi_pitch": 58,
+      "strength": 0.20223
+    },
+    {
+      "start": 193.32031,
+      "end": 193.42969,
+      "midi_pitch": 62,
+      "strength": 0.12439
+    },
+    {
+      "start": 193.32031,
+      "end": 193.44531,
+      "midi_pitch": 58,
+      "strength": 0.21942
+    },
+    {
+      "start": 193.55469,
+      "end": 193.67969,
+      "midi_pitch": 64,
+      "strength": 0.12581
+    },
+    {
+      "start": 193.58594,
+      "end": 193.69531,
+      "midi_pitch": 67,
+      "strength": 0.14197
+    },
+    {
+      "start": 193.80469,
+      "end": 193.91406,
+      "midi_pitch": 64,
+      "strength": 0.13604
+    },
+    {
+      "start": 193.85156,
+      "end": 194.00781,
+      "midi_pitch": 67,
+      "strength": 0.16944
+    },
+    {
+      "start": 194.11719,
+      "end": 194.52344,
+      "midi_pitch": 67,
+      "strength": 0.18228
+    },
+    {
+      "start": 194.30469,
+      "end": 194.42969,
+      "midi_pitch": 64,
+      "strength": 0.12297
+    },
+    {
+      "start": 194.80469,
+      "end": 194.92969,
+      "midi_pitch": 64,
+      "strength": 0.1295
+    },
+    {
+      "start": 195.58594,
+      "end": 195.69531,
+      "midi_pitch": 65,
+      "strength": 0.14202
+    },
+    {
+      "start": 195.69531,
+      "end": 195.83594,
+      "midi_pitch": 82,
+      "strength": 0.2126
+    },
+    {
+      "start": 195.82031,
+      "end": 195.92969,
+      "midi_pitch": 65,
+      "strength": 0.15548
+    },
+    {
+      "start": 195.86719,
+      "end": 196.00781,
+      "midi_pitch": 82,
+      "strength": 0.1706
+    },
+    {
+      "start": 196.08594,
+      "end": 196.19531,
+      "midi_pitch": 65,
+      "strength": 0.14403
+    },
+    {
+      "start": 196.33594,
+      "end": 196.44531,
+      "midi_pitch": 62,
+      "strength": 0.13059
+    },
+    {
+      "start": 196.33594,
+      "end": 196.44531,
+      "midi_pitch": 65,
+      "strength": 0.14767
+    },
+    {
+      "start": 196.58594,
+      "end": 196.69531,
+      "midi_pitch": 62,
+      "strength": 0.1286
+    },
+    {
+      "start": 196.58594,
+      "end": 196.71094,
+      "midi_pitch": 58,
+      "strength": 0.21546
+    },
+    {
+      "start": 196.83594,
+      "end": 196.96094,
+      "midi_pitch": 58,
+      "strength": 0.21922
+    },
+    {
+      "start": 196.85156,
+      "end": 196.96094,
+      "midi_pitch": 62,
+      "strength": 0.12635
+    },
+    {
+      "start": 197.08594,
+      "end": 197.19531,
+      "midi_pitch": 62,
+      "strength": 0.13339
+    },
+    {
+      "start": 197.08594,
+      "end": 197.21094,
+      "midi_pitch": 58,
+      "strength": 0.22072
+    },
+    {
+      "start": 197.33594,
+      "end": 197.46094,
+      "midi_pitch": 58,
+      "strength": 0.21018
+    },
+    {
+      "start": 197.60156,
+      "end": 197.74219,
+      "midi_pitch": 56,
+      "strength": 0.19867
+    },
+    {
+      "start": 197.85156,
+      "end": 197.99219,
+      "midi_pitch": 56,
+      "strength": 0.20031
+    },
+    {
+      "start": 198.07031,
+      "end": 198.21094,
+      "midi_pitch": 63,
+      "strength": 0.17248
+    },
+    {
+      "start": 198.10156,
+      "end": 198.24219,
+      "midi_pitch": 56,
+      "strength": 0.21345
+    },
+    {
+      "start": 198.35156,
+      "end": 198.47656,
+      "midi_pitch": 56,
+      "strength": 0.20593
+    },
+    {
+      "start": 198.58594,
+      "end": 198.71094,
+      "midi_pitch": 55,
+      "strength": 0.12915
+    },
+    {
+      "start": 198.63281,
+      "end": 198.75781,
+      "midi_pitch": 58,
+      "strength": 0.15114
+    },
+    {
+      "start": 198.83594,
+      "end": 198.97656,
+      "midi_pitch": 55,
+      "strength": 0.14654
+    },
+    {
+      "start": 199.07031,
+      "end": 199.21094,
+      "midi_pitch": 55,
+      "strength": 0.12921
+    },
+    {
+      "start": 199.11719,
+      "end": 199.22656,
+      "midi_pitch": 58,
+      "strength": 0.13842
+    },
+    {
+      "start": 199.33594,
+      "end": 199.46094,
+      "midi_pitch": 55,
+      "strength": 0.13839
+    },
+    {
+      "start": 199.33594,
+      "end": 199.50781,
+      "midi_pitch": 58,
+      "strength": 0.15838
+    },
+    {
+      "start": 199.60156,
+      "end": 199.72656,
+      "midi_pitch": 55,
+      "strength": 0.13649
+    },
+    {
+      "start": 199.83594,
+      "end": 199.96094,
+      "midi_pitch": 55,
+      "strength": 0.13552
+    },
+    {
+      "start": 199.91406,
+      "end": 200.02344,
+      "midi_pitch": 59,
+      "strength": 0.16611
+    },
+    {
+      "start": 200.10156,
+      "end": 200.22656,
+      "midi_pitch": 55,
+      "strength": 0.14337
+    },
+    {
+      "start": 200.10156,
+      "end": 200.25781,
+      "midi_pitch": 59,
+      "strength": 0.14724
+    },
+    {
+      "start": 200.35156,
+      "end": 200.47656,
+      "midi_pitch": 55,
+      "strength": 0.14233
+    },
+    {
+      "start": 200.60156,
+      "end": 200.71094,
+      "midi_pitch": 63,
+      "strength": 0.14449
+    },
+    {
+      "start": 200.85156,
+      "end": 200.96094,
+      "midi_pitch": 63,
+      "strength": 0.13517
+    },
+    {
+      "start": 201.08594,
+      "end": 201.22656,
+      "midi_pitch": 63,
+      "strength": 0.18317
+    },
+    {
+      "start": 201.33594,
+      "end": 201.49219,
+      "midi_pitch": 67,
+      "strength": 0.17874
+    },
+    {
+      "start": 201.35156,
+      "end": 201.46094,
+      "midi_pitch": 63,
+      "strength": 0.14364
+    },
+    {
+      "start": 201.60156,
+      "end": 201.78906,
+      "midi_pitch": 65,
+      "strength": 0.18732
+    },
+    {
+      "start": 201.63281,
+      "end": 201.74219,
+      "midi_pitch": 56,
+      "strength": 0.14277
+    },
+    {
+      "start": 202.10156,
+      "end": 202.21094,
+      "midi_pitch": 72,
+      "strength": 0.17813
+    },
+    {
+      "start": 202.32031,
+      "end": 202.49219,
+      "midi_pitch": 84,
+      "strength": 0.15877
+    },
+    {
+      "start": 202.63281,
+      "end": 202.75781,
+      "midi_pitch": 56,
+      "strength": 0.21251
+    },
+    {
+      "start": 202.88281,
+      "end": 203.00781,
+      "midi_pitch": 56,
+      "strength": 0.17285
+    },
+    {
+      "start": 203.13281,
+      "end": 203.25781,
+      "midi_pitch": 56,
+      "strength": 0.16036
+    },
+    {
+      "start": 203.19531,
+      "end": 203.32031,
+      "midi_pitch": 62,
+      "strength": 0.12369
+    },
+    {
+      "start": 203.33594,
+      "end": 203.49219,
+      "midi_pitch": 63,
+      "strength": 0.24069
+    },
+    {
+      "start": 203.36719,
+      "end": 203.52344,
+      "midi_pitch": 56,
+      "strength": 0.19597
+    },
+    {
+      "start": 203.44531,
+      "end": 203.60156,
+      "midi_pitch": 75,
+      "strength": 0.22539
+    },
+    {
+      "start": 203.60156,
+      "end": 204.11719,
+      "midi_pitch": 77,
+      "strength": 0.298
+    },
+    {
+      "start": 203.61719,
+      "end": 203.78906,
+      "midi_pitch": 65,
+      "strength": 0.22881
+    },
+    {
+      "start": 203.82031,
+      "end": 204.05469,
+      "midi_pitch": 65,
+      "strength": 0.19585
+    },
+    {
+      "start": 204.11719,
+      "end": 204.27344,
+      "midi_pitch": 65,
+      "strength": 0.21956
+    },
+    {
+      "start": 204.25781,
+      "end": 204.36719,
+      "midi_pitch": 77,
+      "strength": 0.18665
+    },
+    {
+      "start": 204.36719,
+      "end": 204.53906,
+      "midi_pitch": 65,
+      "strength": 0.21047
+    },
+    {
+      "start": 204.63281,
+      "end": 204.74219,
+      "midi_pitch": 65,
+      "strength": 0.14426
+    },
+    {
+      "start": 204.66406,
+      "end": 204.77344,
+      "midi_pitch": 58,
+      "strength": 0.22029
+    },
+    {
+      "start": 204.74219,
+      "end": 204.86719,
+      "midi_pitch": 70,
+      "strength": 0.23676
+    },
+    {
+      "start": 204.83594,
+      "end": 204.94531,
+      "midi_pitch": 94,
+      "strength": 0.15932
+    },
+    {
+      "start": 204.85156,
+      "end": 204.96094,
+      "midi_pitch": 58,
+      "strength": 0.2608
+    },
+    {
+      "start": 204.96094,
+      "end": 205.07031,
+      "midi_pitch": 70,
+      "strength": 0.19059
+    },
+    {
+      "start": 205.35156,
+      "end": 205.50781,
+      "midi_pitch": 58,
+      "strength": 0.14936
+    },
+    {
+      "start": 205.69531,
+      "end": 206.10156,
+      "midi_pitch": 84,
+      "strength": 0.1583
+    },
+    {
+      "start": 205.86719,
+      "end": 205.97656,
+      "midi_pitch": 60,
+      "strength": 0.20045
+    },
+    {
+      "start": 206.61719,
+      "end": 206.75781,
+      "midi_pitch": 64,
+      "strength": 0.15394
+    },
+    {
+      "start": 206.97656,
+      "end": 207.16406,
+      "midi_pitch": 77,
+      "strength": 0.23428
+    },
+    {
+      "start": 207.30469,
+      "end": 207.47656,
+      "midi_pitch": 79,
+      "strength": 0.1987
+    },
+    {
+      "start": 207.38281,
+      "end": 207.52344,
+      "midi_pitch": 67,
+      "strength": 0.13748
+    },
+    {
+      "start": 208.02344,
+      "end": 208.14844,
+      "midi_pitch": 74,
+      "strength": 0.17297
+    },
+    {
+      "start": 208.14844,
+      "end": 208.28906,
+      "midi_pitch": 62,
+      "strength": 0.19087
+    },
+    {
+      "start": 208.24219,
+      "end": 208.60156,
+      "midi_pitch": 74,
+      "strength": 0.17746
+    },
+    {
+      "start": 208.67969,
+      "end": 208.85156,
+      "midi_pitch": 58,
+      "strength": 0.19161
+    },
+    {
+      "start": 208.91406,
+      "end": 209.07031,
+      "midi_pitch": 58,
+      "strength": 0.19308
+    },
+    {
+      "start": 209.72656,
+      "end": 210.02344,
+      "midi_pitch": 84,
+      "strength": 0.1553
+    },
+    {
+      "start": 210.14844,
+      "end": 210.25781,
+      "midi_pitch": 64,
+      "strength": 0.11215
+    },
+    {
+      "start": 210.67969,
+      "end": 210.78906,
+      "midi_pitch": 64,
+      "strength": 0.1335
+    },
+    {
+      "start": 210.89844,
+      "end": 211.00781,
+      "midi_pitch": 64,
+      "strength": 0.13145
+    },
+    {
+      "start": 210.99219,
+      "end": 211.19531,
+      "midi_pitch": 77,
+      "strength": 0.23151
+    },
+    {
+      "start": 211.32031,
+      "end": 211.49219,
+      "midi_pitch": 79,
+      "strength": 0.20532
+    },
+    {
+      "start": 211.42969,
+      "end": 211.55469,
+      "midi_pitch": 67,
+      "strength": 0.1713
+    },
+    {
+      "start": 211.66406,
+      "end": 211.83594,
+      "midi_pitch": 62,
+      "strength": 0.17424
+    },
+    {
+      "start": 211.83594,
+      "end": 212.08594,
+      "midi_pitch": 74,
+      "strength": 0.17391
+    },
+    {
+      "start": 212.66406,
+      "end": 212.78906,
+      "midi_pitch": 58,
+      "strength": 0.20932
+    },
+    {
+      "start": 212.67969,
+      "end": 212.80469,
+      "midi_pitch": 62,
+      "strength": 0.12315
+    },
+    {
+      "start": 212.91406,
+      "end": 213.03906,
+      "midi_pitch": 58,
+      "strength": 0.18104
+    },
+    {
+      "start": 212.92969,
+      "end": 213.05469,
+      "midi_pitch": 62,
+      "strength": 0.13867
+    },
+    {
+      "start": 213.16406,
+      "end": 213.28906,
+      "midi_pitch": 58,
+      "strength": 0.15876
+    },
+    {
+      "start": 213.19531,
+      "end": 213.39844,
+      "midi_pitch": 81,
+      "strength": 0.36037
+    },
+    {
+      "start": 213.25781,
+      "end": 213.52344,
+      "midi_pitch": 83,
+      "strength": 0.35453
+    },
+    {
+      "start": 213.30469,
+      "end": 213.42969,
+      "midi_pitch": 86,
+      "strength": 0.16435
+    },
+    {
+      "start": 213.33594,
+      "end": 213.55469,
+      "midi_pitch": 91,
+      "strength": 0.22856
+    },
+    {
+      "start": 213.42969,
+      "end": 213.55469,
+      "midi_pitch": 58,
+      "strength": 0.19748
+    },
+    {
+      "start": 213.66406,
+      "end": 213.80469,
+      "midi_pitch": 63,
+      "strength": 0.17433
+    },
+    {
+      "start": 213.69531,
+      "end": 214.64844,
+      "midi_pitch": 56,
+      "strength": 0.2005
+    },
+    {
+      "start": 213.91406,
+      "end": 214.02344,
+      "midi_pitch": 63,
+      "strength": 0.14322
+    },
+    {
+      "start": 214.17969,
+      "end": 214.32031,
+      "midi_pitch": 63,
+      "strength": 0.1564
+    },
+    {
+      "start": 214.71094,
+      "end": 214.85156,
+      "midi_pitch": 58,
+      "strength": 0.16337
+    },
+    {
+      "start": 214.92969,
+      "end": 215.07031,
+      "midi_pitch": 55,
+      "strength": 0.14377
+    },
+    {
+      "start": 214.92969,
+      "end": 215.10156,
+      "midi_pitch": 58,
+      "strength": 0.15754
+    },
+    {
+      "start": 215.17969,
+      "end": 215.33594,
+      "midi_pitch": 55,
+      "strength": 0.14385
+    },
+    {
+      "start": 215.67969,
+      "end": 215.80469,
+      "midi_pitch": 55,
+      "strength": 0.14174
+    },
+    {
+      "start": 215.71094,
+      "end": 215.85156,
+      "midi_pitch": 59,
+      "strength": 0.15528
+    },
+    {
+      "start": 216.22656,
+      "end": 216.33594,
+      "midi_pitch": 59,
+      "strength": 0.15478
+    },
+    {
+      "start": 216.36719,
+      "end": 216.57031,
+      "midi_pitch": 59,
+      "strength": 0.12574
+    },
+    {
+      "start": 216.69531,
+      "end": 216.80469,
+      "midi_pitch": 63,
+      "strength": 0.149
+    },
+    {
+      "start": 216.92969,
+      "end": 217.05469,
+      "midi_pitch": 63,
+      "strength": 0.15023
+    },
+    {
+      "start": 217.17969,
+      "end": 217.32031,
+      "midi_pitch": 63,
+      "strength": 0.18881
+    },
+    {
+      "start": 217.42969,
+      "end": 217.57031,
+      "midi_pitch": 63,
+      "strength": 0.20396
+    },
+    {
+      "start": 217.71094,
+      "end": 218.69531,
+      "midi_pitch": 56,
+      "strength": 0.20709
+    },
+    {
+      "start": 218.74219,
+      "end": 219.16406,
+      "midi_pitch": 56,
+      "strength": 0.23438
+    },
+    {
+      "start": 219.24219,
+      "end": 219.35156,
+      "midi_pitch": 56,
+      "strength": 0.19966
+    },
+    {
+      "start": 219.49219,
+      "end": 219.60156,
+      "midi_pitch": 56,
+      "strength": 0.17806
+    },
+    {
+      "start": 220.22656,
+      "end": 220.33594,
+      "midi_pitch": 65,
+      "strength": 0.13241
+    },
+    {
+      "start": 220.80469,
+      "end": 220.97656,
+      "midi_pitch": 67,
+      "strength": 0.12807
+    },
+    {
+      "start": 221.08594,
+      "end": 221.27344,
+      "midi_pitch": 55,
+      "strength": 0.14166
+    },
+    {
+      "start": 221.74219,
+      "end": 222.05469,
+      "midi_pitch": 48,
+      "strength": 0.20559
+    },
+    {
+      "start": 221.99219,
+      "end": 222.14844,
+      "midi_pitch": 60,
+      "strength": 0.18154
+    },
+    {
+      "start": 222.14844,
+      "end": 223.16406,
+      "midi_pitch": 48,
+      "strength": 0.168
+    },
+    {
+      "start": 223.21094,
+      "end": 223.35156,
+      "midi_pitch": 55,
+      "strength": 0.15334
+    },
+    {
+      "start": 223.27344,
+      "end": 223.60156,
+      "midi_pitch": 67,
+      "strength": 0.22394
+    },
+    {
+      "start": 223.72656,
+      "end": 224.14844,
+      "midi_pitch": 70,
+      "strength": 0.19506
+    },
+    {
+      "start": 223.99219,
+      "end": 224.11719,
+      "midi_pitch": 65,
+      "strength": 0.12885
+    },
+    {
+      "start": 224.24219,
+      "end": 224.35156,
+      "midi_pitch": 65,
+      "strength": 0.13738
+    },
+    {
+      "start": 224.35156,
+      "end": 224.50781,
+      "midi_pitch": 58,
+      "strength": 0.11877
+    },
+    {
+      "start": 224.63281,
+      "end": 224.89844,
+      "midi_pitch": 58,
+      "strength": 0.18097
+    },
+    {
+      "start": 224.96094,
+      "end": 225.08594,
+      "midi_pitch": 58,
+      "strength": 0.21102
+    },
+    {
+      "start": 224.99219,
+      "end": 225.10156,
+      "midi_pitch": 65,
+      "strength": 0.12286
+    },
+    {
+      "start": 225.36719,
+      "end": 225.47656,
+      "midi_pitch": 69,
+      "strength": 0.26258
+    },
+    {
+      "start": 225.53906,
+      "end": 225.71094,
+      "midi_pitch": 67,
+      "strength": 0.19341
+    },
+    {
+      "start": 225.72656,
+      "end": 226.02344,
+      "midi_pitch": 53,
+      "strength": 0.13547
+    },
+    {
+      "start": 225.75781,
+      "end": 226.25781,
+      "midi_pitch": 65,
+      "strength": 0.18862
+    },
+    {
+      "start": 226.74219,
+      "end": 226.89844,
+      "midi_pitch": 76,
+      "strength": 0.15858
+    },
+    {
+      "start": 226.77344,
+      "end": 226.97656,
+      "midi_pitch": 52,
+      "strength": 0.21879
+    },
+    {
+      "start": 227.00781,
+      "end": 227.21094,
+      "midi_pitch": 65,
+      "strength": 0.20095
+    },
+    {
+      "start": 227.27344,
+      "end": 227.63281,
+      "midi_pitch": 67,
+      "strength": 0.24503
+    },
+    {
+      "start": 227.74219,
+      "end": 227.86719,
+      "midi_pitch": 62,
+      "strength": 0.17178
+    },
+    {
+      "start": 227.78906,
+      "end": 228.75781,
+      "midi_pitch": 50,
+      "strength": 0.24351
+    },
+    {
+      "start": 227.89844,
+      "end": 228.36719,
+      "midi_pitch": 62,
+      "strength": 0.20339
+    },
+    {
+      "start": 228.50781,
+      "end": 228.61719,
+      "midi_pitch": 65,
+      "strength": 0.12434
+    },
+    {
+      "start": 228.75781,
+      "end": 229.13281,
+      "midi_pitch": 62,
+      "strength": 0.17158
+    },
+    {
+      "start": 228.78906,
+      "end": 229.11719,
+      "midi_pitch": 50,
+      "strength": 0.17712
+    },
+    {
+      "start": 229.28906,
+      "end": 229.41406,
+      "midi_pitch": 62,
+      "strength": 0.15833
+    },
+    {
+      "start": 229.50781,
+      "end": 229.61719,
+      "midi_pitch": 65,
+      "strength": 0.14053
+    },
+    {
+      "start": 229.77344,
+      "end": 230.05469,
+      "midi_pitch": 48,
+      "strength": 0.18999
+    },
+    {
+      "start": 229.97656,
+      "end": 230.13281,
+      "midi_pitch": 60,
+      "strength": 0.24002
+    },
+    {
+      "start": 230.13281,
+      "end": 230.75781,
+      "midi_pitch": 48,
+      "strength": 0.17952
+    },
+    {
+      "start": 230.78906,
+      "end": 231.10156,
+      "midi_pitch": 48,
+      "strength": 0.16948
+    },
+    {
+      "start": 231.02344,
+      "end": 231.13281,
+      "midi_pitch": 64,
+      "strength": 0.13872
+    },
+    {
+      "start": 231.27344,
+      "end": 231.41406,
+      "midi_pitch": 79,
+      "strength": 0.16626
+    },
+    {
+      "start": 231.38281,
+      "end": 231.64844,
+      "midi_pitch": 67,
+      "strength": 0.16988
+    },
+    {
+      "start": 231.77344,
+      "end": 232.21094,
+      "midi_pitch": 70,
+      "strength": 0.21556
+    },
+    {
+      "start": 232.03906,
+      "end": 232.16406,
+      "midi_pitch": 65,
+      "strength": 0.1318
+    },
+    {
+      "start": 232.28906,
+      "end": 232.39844,
+      "midi_pitch": 65,
+      "strength": 0.13839
+    },
+    {
+      "start": 232.39844,
+      "end": 232.53906,
+      "midi_pitch": 58,
+      "strength": 0.11584
+    },
+    {
+      "start": 232.89844,
+      "end": 233.10156,
+      "midi_pitch": 69,
+      "strength": 0.30504
+    },
+    {
+      "start": 233.03906,
+      "end": 233.14844,
+      "midi_pitch": 65,
+      "strength": 0.12466
+    },
+    {
+      "start": 233.03906,
+      "end": 233.27344,
+      "midi_pitch": 58,
+      "strength": 0.19042
+    },
+    {
+      "start": 233.30469,
+      "end": 233.44531,
+      "midi_pitch": 58,
+      "strength": 0.2115
+    },
+    {
+      "start": 233.53906,
+      "end": 233.64844,
+      "midi_pitch": 65,
+      "strength": 0.14589
+    },
+    {
+      "start": 233.80469,
+      "end": 233.91406,
+      "midi_pitch": 67,
+      "strength": 0.14564
+    },
+    {
+      "start": 233.96094,
+      "end": 234.16406,
+      "midi_pitch": 67,
+      "strength": 0.1632
+    },
+    {
+      "start": 234.30469,
+      "end": 234.42969,
+      "midi_pitch": 67,
+      "strength": 0.15647
+    },
+    {
+      "start": 234.82031,
+      "end": 234.92969,
+      "midi_pitch": 67,
+      "strength": 0.15595
+    },
+    {
+      "start": 234.96094,
+      "end": 235.16406,
+      "midi_pitch": 67,
+      "strength": 0.17103
+    },
+    {
+      "start": 235.28906,
+      "end": 235.39844,
+      "midi_pitch": 64,
+      "strength": 0.12008
+    },
+    {
+      "start": 235.33594,
+      "end": 235.44531,
+      "midi_pitch": 67,
+      "strength": 0.13389
+    },
+    {
+      "start": 236.05469,
+      "end": 236.16406,
+      "midi_pitch": 65,
+      "strength": 0.14459
+    },
+    {
+      "start": 236.32031,
+      "end": 236.42969,
+      "midi_pitch": 65,
+      "strength": 0.13189
+    },
+    {
+      "start": 236.55469,
+      "end": 236.67969,
+      "midi_pitch": 65,
+      "strength": 0.13489
+    },
+    {
+      "start": 237.19531,
+      "end": 237.35156,
+      "midi_pitch": 36,
+      "strength": 0.19107
+    },
+    {
+      "start": 237.27344,
+      "end": 237.38281,
+      "midi_pitch": 75,
+      "strength": 0.16408
+    },
+    {
+      "start": 237.27344,
+      "end": 237.39844,
+      "midi_pitch": 44,
+      "strength": 0.53116
+    },
+    {
+      "start": 237.32031,
+      "end": 237.50781,
+      "midi_pitch": 58,
+      "strength": 0.15362
+    },
+    {
+      "start": 237.42969,
+      "end": 237.57031,
+      "midi_pitch": 46,
+      "strength": 0.4683
+    },
+    {
+      "start": 237.55469,
+      "end": 237.66406,
+      "midi_pitch": 49,
+      "strength": 0.22235
+    },
+    {
+      "start": 237.72656,
+      "end": 237.86719,
+      "midi_pitch": 44,
+      "strength": 0.60528
+    },
+    {
+      "start": 237.86719,
+      "end": 237.97656,
+      "midi_pitch": 60,
+      "strength": 0.11681
+    },
+    {
+      "start": 237.92969,
+      "end": 238.05469,
+      "midi_pitch": 46,
+      "strength": 0.45719
+    },
+    {
+      "start": 237.94531,
+      "end": 238.07031,
+      "midi_pitch": 42,
+      "strength": 0.2673
+    },
+    {
+      "start": 238.03906,
+      "end": 238.25781,
+      "midi_pitch": 48,
+      "strength": 0.25657
+    },
+    {
+      "start": 238.24219,
+      "end": 238.38281,
+      "midi_pitch": 45,
+      "strength": 0.28676
+    },
+    {
+      "start": 238.41406,
+      "end": 238.55469,
+      "midi_pitch": 48,
+      "strength": 0.14563
+    },
+    {
+      "start": 238.72656,
+      "end": 238.83594,
+      "midi_pitch": 46,
+      "strength": 0.18727
+    },
+    {
+      "start": 238.83594,
+      "end": 239.03906,
+      "midi_pitch": 48,
+      "strength": 0.1516
+    },
+    {
+      "start": 239.14844,
+      "end": 239.25781,
+      "midi_pitch": 75,
+      "strength": 0.22574
+    },
+    {
+      "start": 239.14844,
+      "end": 239.28906,
+      "midi_pitch": 44,
+      "strength": 0.66413
+    },
+    {
+      "start": 239.32031,
+      "end": 239.42969,
+      "midi_pitch": 55,
+      "strength": 0.12939
+    },
+    {
+      "start": 239.32031,
+      "end": 239.47656,
+      "midi_pitch": 46,
+      "strength": 0.45991
+    },
+    {
+      "start": 239.44531,
+      "end": 239.55469,
+      "midi_pitch": 48,
+      "strength": 0.17961
+    },
+    {
+      "start": 239.74219,
+      "end": 239.85156,
+      "midi_pitch": 53,
+      "strength": 0.12897
+    },
+    {
+      "start": 239.83594,
+      "end": 240.25781,
+      "midi_pitch": 70,
+      "strength": 0.22348
+    },
+    {
+      "start": 240.64844,
+      "end": 241.19531,
+      "midi_pitch": 58,
+      "strength": 0.1692
+    },
+    {
+      "start": 241.13281,
+      "end": 241.35156,
+      "midi_pitch": 57,
+      "strength": 0.14648
+    },
+    {
+      "start": 241.17969,
+      "end": 241.38281,
+      "midi_pitch": 69,
+      "strength": 0.39642
+    },
+    {
+      "start": 241.35156,
+      "end": 241.47656,
+      "midi_pitch": 58,
+      "strength": 0.14998
+    },
+    {
+      "start": 241.50781,
+      "end": 241.71094,
+      "midi_pitch": 67,
+      "strength": 0.22625
+    },
+    {
+      "start": 241.58594,
+      "end": 241.69531,
+      "midi_pitch": 58,
+      "strength": 0.16963
+    },
+    {
+      "start": 241.92969,
+      "end": 242.05469,
+      "midi_pitch": 93,
+      "strength": 0.12796
+    },
+    {
+      "start": 242.02344,
+      "end": 242.22656,
+      "midi_pitch": 65,
+      "strength": 0.18716
+    },
+    {
+      "start": 242.16406,
+      "end": 242.39844,
+      "midi_pitch": 53,
+      "strength": 0.16619
+    },
+    {
+      "start": 242.85156,
+      "end": 243.07031,
+      "midi_pitch": 52,
+      "strength": 0.2012
+    },
+    {
+      "start": 242.89844,
+      "end": 243.00781,
+      "midi_pitch": 76,
+      "strength": 0.17803
+    },
+    {
+      "start": 243.11719,
+      "end": 243.28906,
+      "midi_pitch": 53,
+      "strength": 0.17555
+    },
+    {
+      "start": 243.39844,
+      "end": 243.71094,
+      "midi_pitch": 67,
+      "strength": 0.17637
+    },
+    {
+      "start": 243.85156,
+      "end": 245.22656,
+      "midi_pitch": 50,
+      "strength": 0.2097
+    },
+    {
+      "start": 243.86719,
+      "end": 244.19531,
+      "midi_pitch": 62,
+      "strength": 0.17229
+    },
+    {
+      "start": 244.60156,
+      "end": 244.71094,
+      "midi_pitch": 65,
+      "strength": 0.13249
+    },
+    {
+      "start": 245.10156,
+      "end": 245.21094,
+      "midi_pitch": 58,
+      "strength": 0.1937
+    },
+    {
+      "start": 245.35156,
+      "end": 245.71094,
+      "midi_pitch": 58,
+      "strength": 0.22136
+    },
+    {
+      "start": 245.36719,
+      "end": 245.80469,
+      "midi_pitch": 46,
+      "strength": 0.20778
+    },
+    {
+      "start": 245.86719,
+      "end": 246.00781,
+      "midi_pitch": 56,
+      "strength": 0.17657
+    },
+    {
+      "start": 245.86719,
+      "end": 246.85156,
+      "midi_pitch": 48,
+      "strength": 0.14793
+    },
+    {
+      "start": 245.97656,
+      "end": 246.11719,
+      "midi_pitch": 84,
+      "strength": 0.13678
+    },
+    {
+      "start": 246.11719,
+      "end": 246.28906,
+      "midi_pitch": 56,
+      "strength": 0.17814
+    },
+    {
+      "start": 246.35156,
+      "end": 246.46094,
+      "midi_pitch": 63,
+      "strength": 0.15301
+    },
+    {
+      "start": 246.39844,
+      "end": 246.50781,
+      "midi_pitch": 56,
+      "strength": 0.16448
+    },
+    {
+      "start": 246.60156,
+      "end": 246.71094,
+      "midi_pitch": 63,
+      "strength": 0.13977
+    },
+    {
+      "start": 246.63281,
+      "end": 246.78906,
+      "midi_pitch": 56,
+      "strength": 0.19943
+    },
+    {
+      "start": 246.88281,
+      "end": 247.00781,
+      "midi_pitch": 56,
+      "strength": 0.17227
+    },
+    {
+      "start": 246.88281,
+      "end": 247.13281,
+      "midi_pitch": 48,
+      "strength": 0.13449
+    },
+    {
+      "start": 247.13281,
+      "end": 247.24219,
+      "midi_pitch": 56,
+      "strength": 0.1992
+    },
+    {
+      "start": 247.38281,
+      "end": 247.61719,
+      "midi_pitch": 50,
+      "strength": 0.22652
+    },
+    {
+      "start": 247.41406,
+      "end": 247.53906,
+      "midi_pitch": 56,
+      "strength": 0.1654
+    },
+    {
+      "start": 247.60156,
+      "end": 247.80469,
+      "midi_pitch": 56,
+      "strength": 0.22391
+    },
+    {
+      "start": 247.61719,
+      "end": 247.75781,
+      "midi_pitch": 63,
+      "strength": 0.25783
+    },
+    {
+      "start": 247.61719,
+      "end": 247.82031,
+      "midi_pitch": 51,
+      "strength": 0.13702
+    },
+    {
+      "start": 247.86719,
+      "end": 247.99219,
+      "midi_pitch": 62,
+      "strength": 0.19553
+    },
+    {
+      "start": 247.91406,
+      "end": 248.85156,
+      "midi_pitch": 50,
+      "strength": 0.23494
+    },
+    {
+      "start": 248.05469,
+      "end": 248.22656,
+      "midi_pitch": 62,
+      "strength": 0.17138
+    },
+    {
+      "start": 248.86719,
+      "end": 249.33594,
+      "midi_pitch": 58,
+      "strength": 0.24396
+    },
+    {
+      "start": 248.88281,
+      "end": 249.25781,
+      "midi_pitch": 46,
+      "strength": 0.22518
+    },
+    {
+      "start": 249.13281,
+      "end": 249.24219,
+      "midi_pitch": 65,
+      "strength": 0.13113
+    },
+    {
+      "start": 249.32031,
+      "end": 249.72656,
+      "midi_pitch": 46,
+      "strength": 0.18122
+    },
+    {
+      "start": 249.64844,
+      "end": 249.75781,
+      "midi_pitch": 62,
+      "strength": 0.12636
+    },
+    {
+      "start": 249.89844,
+      "end": 250.86719,
+      "midi_pitch": 48,
+      "strength": 0.16207
+    },
+    {
+      "start": 250.64844,
+      "end": 250.75781,
+      "midi_pitch": 76,
+      "strength": 0.17166
+    }
+  ]
+}

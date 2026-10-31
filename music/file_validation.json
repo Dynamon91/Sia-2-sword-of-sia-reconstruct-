@@ -1,0 +1,23 @@
+{
+  "level1_harmonic_reference.wav": {
+    "seconds": 251.0,
+    "peak": 19452
+  },
+  "level1_resynthesis_draft.wav": {
+    "seconds": 251.0,
+    "peak": 6386
+  },
+  "preview_harmonic_30s.wav": {
+    "seconds": 30.0,
+    "peak": 15203
+  },
+  "preview_reconstruction_30s.wav": {
+    "seconds": 30.0,
+    "peak": 3174
+  },
+  "preview_source_30s.wav": {
+    "seconds": 30.0,
+    "peak": 19453
+  },
+  "midi_header_and_event_bounds": "PASS"
+}
