@@ -1,0 +1,26 @@
+{
+  "source": "Lady Sia 2  Sword Of Sia (GBA) Longplay Walkthrough  WORLD 1 LEVEL 1 (Unreleased).mp4",
+  "stills": {
+    "TITLE": 5,
+    "MENU": 8,
+    "SEA": 24,
+    "ELDERS": 36,
+    "CHAMBER": 60,
+    "SCOPE": 72,
+    "BIRD": 92,
+    "ARRIVAL": 112,
+    "ROOM": 114
+  },
+  "intro_start": 10,
+  "intro_end": 108,
+  "intro_fps": 6,
+  "audio_rate": 16384,
+  "source_overlays_retained": true,
+  "method": "240x160 indexed frames; sampled playback; mixed recording audio",
+  "audio_lengths": {
+    "title": 131072,
+    "intro": 1605632,
+    "level": 4112384
+  },
+  "intro_frames": 588
+}

@@ -1,0 +1,53 @@
+{
+  "source_times": [
+    8,
+    112,
+    113.8,
+    120.5,
+    125.5,
+    367
+  ],
+  "portrait": {
+    "source_box": [
+      0,
+      102,
+      64,
+      160
+    ],
+    "native_position": [
+      0,
+      102
+    ]
+  },
+  "gem_counter": {
+    "native_gem_position": [
+      95,
+      11
+    ],
+    "native_digit_position": [
+      129,
+      29
+    ],
+    "popup_ticks": 150,
+    "digits_observed": [
+      0,
+      1,
+      2
+    ]
+  },
+  "menu_cursor": {
+    "native_position": [
+      16,
+      44
+    ],
+    "row_step": 24
+  },
+  "obj_tile_bytes": 6144,
+  "dialogue_method": "source white ink difference masks with reconstructed black outline",
+  "limits": [
+    "compressed video pixels, not original art",
+    "popup duration approximate",
+    "blue lower indicator and health behavior not identified",
+    "options/pause/credits not verified against original"
+  ]
+}

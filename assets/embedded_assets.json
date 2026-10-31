@@ -1,0 +1,113 @@
+{
+  "rom_sha256": "a7398dca7ea9ae608f2fce68b6a33dc329de3f554740d4001e9bfbdc6639fb2b",
+  "assets": [
+    {
+      "path": "assets/visuals.bin",
+      "offset": 9224,
+      "length": 23230464,
+      "sha256": "a59a3d541eff2b6c071bb84d05fdd8a5ab87572fc7ff885d5f3af958bfa144a9"
+    },
+    {
+      "path": "assets/audio_title.pcm",
+      "offset": 23239688,
+      "length": 133120,
+      "sha256": "3de137b6e8d1871dfb61a6e6993f224da9379cab05ba132bf9625c453a199bb5"
+    },
+    {
+      "path": "assets/audio_intro.pcm",
+      "offset": 23372808,
+      "length": 1607680,
+      "sha256": "6cccf90f7e81757291e0a0e552a40763228edd1a72ffebe502d3bda0320f8ec6"
+    },
+    {
+      "path": "assets/audio_level.pcm",
+      "offset": 24980488,
+      "length": 4114432,
+      "sha256": "d406313b8bbfc3fde5664c7882e81267a544d4bae621f883a3b71dda7ae1cb33"
+    },
+    {
+      "path": "assets/font.bin",
+      "offset": 29094920,
+      "length": 768,
+      "sha256": "1764a3646baec1e24e714a9fd82534d9acebd03aac32ba24386b75c79e23e031"
+    },
+    {
+      "path": "assets/room.bin",
+      "offset": 29095688,
+      "length": 38912,
+      "sha256": "ef8d5ae49f0a974b2e463464d545d4375b176ec74d8b26600e0dc6e53df30a5d"
+    },
+    {
+      "path": "assets/room_sprites.bin",
+      "offset": 29134600,
+      "length": 11008,
+      "sha256": "df207580397e00745cbab13221220b01fe0a84214f435135a744a6e7ad2da325"
+    },
+    {
+      "path": "assets/room_sky.bin",
+      "offset": 29145608,
+      "length": 11520,
+      "sha256": "ccc4198459f10d67ab81a28dc74e7ae211d0bd2bfecc8b4b8147e0be3db4f7b4"
+    },
+    {
+      "path": "assets/bridge.bin",
+      "offset": 29157128,
+      "length": 38912,
+      "sha256": "52d272ffda5d2a4b6a438a0022e073631f8f4c5f739fcceb06ea869bb27fe9fb"
+    },
+    {
+      "path": "assets/bridge_sky.bin",
+      "offset": 29196040,
+      "length": 11520,
+      "sha256": "71106ec60dd0474a86d4edadfb833607de6b0a8fd3619d18e45a0cc3c07861dd"
+    },
+    {
+      "path": "assets/bridge_run.bin",
+      "offset": 29207560,
+      "length": 2688,
+      "sha256": "f95883d4354f2177aa48622930005a5f8d7ee1bbb3d6f24b943e7c63a0c5b27c"
+    },
+    {
+      "path": "assets/ui_palette.bin",
+      "offset": 29210248,
+      "length": 512,
+      "sha256": "8c060cefbbda07622abd4d623d226e5278c0acf95d26ddda62b2608f1f6ab86e"
+    },
+    {
+      "path": "assets/ui_tiles.bin",
+      "offset": 29210760,
+      "length": 6144,
+      "sha256": "43603452bae3b3ee8428630a2fd6d3a736ccc715afccdbf0a141018cd882aeed"
+    },
+    {
+      "path": "assets/ui_dialogs.bin",
+      "offset": 29216904,
+      "length": 20416,
+      "sha256": "f16cfe4bba27f67e44c36980f13ca70942bc532f735dfdb0bdbe3bd5d6a475d4"
+    },
+    {
+      "path": "assets/room_backdrop.bin",
+      "offset": 29237320,
+      "length": 38912,
+      "sha256": "76facdcdb2528844eb77884873850a550fd89cb9c933ebf47039fe5fceb363bd"
+    },
+    {
+      "path": "assets/room_spans.bin",
+      "offset": 29276232,
+      "length": 21224,
+      "sha256": "9dd1a923c5e25904e529bdea4c84963c61491557d3ca94d8d54a2c3819351f14"
+    },
+    {
+      "path": "assets/bridge_backdrop.bin",
+      "offset": 29297456,
+      "length": 38912,
+      "sha256": "a0a6bc83288e982b4f11565dbbf7b483289cb7b7572ed6460a85763e6098b320"
+    },
+    {
+      "path": "assets/bridge_spans.bin",
+      "offset": 29336368,
+      "length": 21072,
+      "sha256": "e08d2aa8109d110a6b529ded31f6eb726653bb12816555fc66fe3aa684cf4e20"
+    }
+  ]
+}

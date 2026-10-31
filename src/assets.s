@@ -1,0 +1,73 @@
+.section .rodata.assets,"a"
+.balign 4
+.global assets_visuals
+assets_visuals:
+.incbin "assets/visuals.bin"
+.balign 4
+.global audio_title
+audio_title:
+.incbin "assets/audio_title.pcm"
+.balign 4
+.global audio_intro
+audio_intro:
+.incbin "assets/audio_intro.pcm"
+.balign 4
+.global audio_level
+audio_level:
+.incbin "assets/audio_level.pcm"
+.balign 4
+.global asset_font
+asset_font:
+.incbin "assets/font.bin"
+.balign 4
+.global room_background
+room_background:
+.incbin "assets/room.bin"
+.balign 4
+.global room_sprites
+room_sprites:
+.incbin "assets/room_sprites.bin"
+.balign 4
+.global room_sky
+room_sky:
+.incbin "assets/room_sky.bin"
+.balign 4
+.global bridge_background
+bridge_background:
+.incbin "assets/bridge.bin"
+.balign 4
+.global bridge_sky
+bridge_sky:
+.incbin "assets/bridge_sky.bin"
+.balign 4
+.global bridge_run
+bridge_run:
+.incbin "assets/bridge_run.bin"
+.balign 4
+.global ui_palette
+ui_palette:
+.incbin "assets/ui_palette.bin"
+.balign 4
+.global ui_tiles
+ui_tiles:
+.incbin "assets/ui_tiles.bin"
+.balign 4
+.global ui_dialogs
+ui_dialogs:
+.incbin "assets/ui_dialogs.bin"
+.balign 4
+.global room_backdrop
+room_backdrop:
+.incbin "assets/room_backdrop.bin"
+.balign 4
+.global room_spans
+room_spans:
+.incbin "assets/room_spans.bin"
+.balign 4
+.global bridge_backdrop
+bridge_backdrop:
+.incbin "assets/bridge_backdrop.bin"
+.balign 4
+.global bridge_spans
+bridge_spans:
+.incbin "assets/bridge_spans.bin"

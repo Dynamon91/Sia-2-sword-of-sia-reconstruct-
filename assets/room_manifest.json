@@ -1,0 +1,65 @@
+{
+  "method": "temporal patches, difference masks and shared palette, not original asset recovery",
+  "source_times": [
+    114,
+    118,
+    119.5,
+    121
+  ],
+  "viewport": [
+    240,
+    160
+  ],
+  "patches": [
+    "recorded Sia removed with later frames",
+    "gem removed and redrawn as collectible",
+    "sky approximated under channel overlays"
+  ],
+  "poses": [
+    "idle",
+    "jump",
+    "climb",
+    "attack"
+  ],
+  "sprite_size": [
+    48,
+    56
+  ],
+  "ground_surface": "approximate piecewise heightfield",
+  "platforms": [
+    [
+      81,
+      88,
+      70
+    ],
+    [
+      186,
+      40,
+      54
+    ]
+  ],
+  "ladder": {
+    "center_x": 115,
+    "top": 88,
+    "bottom": 154
+  },
+  "gem": {
+    "x": 117,
+    "y": 70
+  },
+  "vertical_camera": {
+    "min": -40,
+    "max": 0,
+    "unseen_sky": "approximate color gradient"
+  },
+  "limits": [
+    "one viewport only",
+    "no full walking cycle",
+    "no enemies or later rooms",
+    "compression/alpha fringes remain"
+  ],
+  "sprite_anchor": [
+    24,
+    56
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "source_times": [
+    123.5,
+    124
+  ],
+  "registration": [
+    -60,
+    8
+  ],
+  "method": "registered temporal patch, shared palette, approximate sprite mask",
+  "platforms": [
+    [
+      33,
+      100,
+      48
+    ],
+    [
+      81,
+      100,
+      125
+    ],
+    [
+      206,
+      100,
+      34
+    ]
+  ],
+  "gem": [
+    141,
+    82
+  ],
+  "transition": "discrete viewport change, not continuous camera reconstruction",
+  "limits": [
+    "no later cliff/crouch sections",
+    "no enemies or combat",
+    "approximate sky fill"
+  ],
+  "sprite_anchor": [
+    24,
+    56
+  ],
+  "shared_island_first_to_bridge": [
+    -152,
+    60
+  ]
+}

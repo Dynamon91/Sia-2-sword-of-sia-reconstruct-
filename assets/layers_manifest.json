@@ -1,0 +1,31 @@
+{
+  "format": "160 rows: uint16 run count, then uint8 x/length and pixel bytes padded to even length",
+  "areas": [
+    {
+      "area": "room",
+      "spans": 126,
+      "stream_bytes": 21224,
+      "byte_identical_at_camera_zero": true,
+      "upper_sky_scroll": "fixed",
+      "remaining_scene_scroll": "camera follows foreground",
+      "limits": [
+        "estimated foreground mask",
+        "sky hidden by scenery approximated from observed colors",
+        "not the full original parallax engine"
+      ]
+    },
+    {
+      "area": "bridge",
+      "spans": 146,
+      "stream_bytes": 21072,
+      "byte_identical_at_camera_zero": true,
+      "upper_sky_scroll": "fixed",
+      "remaining_scene_scroll": "camera follows foreground",
+      "limits": [
+        "estimated foreground mask",
+        "sky hidden by scenery approximated from observed colors",
+        "not the full original parallax engine"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "version": "0.6",
+  "source_images": [
+    "assets/room_background_reference.png",
+    "assets/bridge_background_reference.png"
+  ],
+  "method": "median absolute RGB difference of the left, unobstructed shared-island patch",
+  "first_patch_xyxy": [
+    187,
+    39,
+    234,
+    64
+  ],
+  "comparison_patch_width": 25,
+  "measured_first_to_bridge": [
+    -152,
+    60
+  ],
+  "configured_first_to_bridge": [
+    -152,
+    60
+  ],
+  "median_rgb_error_8bit": 5.666666666666667,
+  "next_best_rgb_error_8bit": 13.333333333333334,
+  "configuration_matches_measurement": true,
+  "corrections": {
+    "forward_portal": "preserve position via registered offset instead of fixed (60,61); nominal correction +13..14 px X, -1 px Y",
+    "return_portal": "preserve inverse registered offset instead of fixed (208,0); nominal correction about -24 px X",
+    "bridge_collision_plane": "101 -> 100, matching shared upper-platform surface after +60 Y transform",
+    "mirrored_sprite_anchor": "add the necessary one-pixel origin correction to keep source anchor fixed"
+  },
+  "ui_positions_unchanged": {
+    "portrait": [
+      0,
+      102
+    ],
+    "gem_icon": [
+      95,
+      11
+    ],
+    "digit": [
+      129,
+      29
+    ],
+    "menu_cursor": [
+      16,
+      44
+    ]
+  },
+  "limits": [
+    "registration measures visible shared foreground only",
+    "original collision map not recovered",
+    "discrete viewport change remains",
+    "later sections not yet implemented",
+    "video-covered sky still approximate"
+  ]
+}

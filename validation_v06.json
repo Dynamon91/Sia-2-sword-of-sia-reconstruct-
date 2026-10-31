@@ -1,0 +1,74 @@
+{
+  "version": "0.6",
+  "date": "2026-10-31",
+  "rom_bytes": 29357440,
+  "rom_sha256": "a7398dca7ea9ae608f2fce68b6a33dc329de3f554740d4001e9bfbdc6639fb2b",
+  "compiler": "GNU Arm Embedded GCC 13.2.1",
+  "build_warnings": 0,
+  "header_checksum": "PASS",
+  "emulator": "mGBA 0.10.2",
+  "emulated_frames": 23800,
+  "frontend_tests": "PASS frontend v0.6: 23800 emulated frames; title/menu/options/credits, 8 story pages, intro playback/pause/resume/end/skip, recorded audio including level audio end, native portrait/captions, OBJ cursor, pickup HUD 1/2 with timeout, arrival, registered portal position continuity, camera-zero backgrounds byte-verified in VRAM, two linked areas, bridge, two gems/persistence/reset, fall respawn, jump/ladder/platform/camera, return trip, sign and pause. Audio samples=13056808 absolute energy=24707635615",
+  "host_tests": "PASS ASan/UBSan; leak detection disabled",
+  "position_fixes": {
+    "registered_first_to_bridge": [
+      -152,
+      60
+    ],
+    "position_and_velocity_preserved": true,
+    "bridge_surface_y": 100,
+    "mirrored_sprite_anchor_preserved": true,
+    "upper_sky_stretch_removed": true
+  },
+  "background_integrity": {
+    "camera_zero_offline_composites": "byte-identical",
+    "camera_zero_vram_except_actor_and_gem": "byte-verified in both areas",
+    "layer_masks_and_hidden_sky": "estimated, not recovered original layers"
+  },
+  "native_ui": {
+    "obj_tile_bytes": 6144,
+    "tiles_verified_in_vram": true,
+    "observed_cursor_portrait_captions_popup": true
+  },
+  "gameplay": {
+    "areas": 2,
+    "gems": 2,
+    "bridge": true,
+    "persistence": true,
+    "fall_respawn": true,
+    "complete_level": false
+  },
+  "intro": {
+    "seconds": 98,
+    "fps": 6,
+    "method": "sampled video frames, overlays remain"
+  },
+  "audio": {
+    "title_seconds": 8,
+    "intro_seconds": 98,
+    "level_seconds": 251,
+    "method": "mixed recorded PCM8 mono 16384Hz, effects not interactive",
+    "previews": {
+      "intro": {
+        "rms_s16": 2451.8666162774757,
+        "seconds": 3.0137939453125
+      },
+      "level": {
+        "rms_s16": 2398.9011101360397,
+        "seconds": 3.013671875
+      }
+    }
+  },
+  "distribution": {
+    "embedded_assets": 18,
+    "extractor": "tools/unpack_assets.py"
+  },
+  "real_hardware_tested": false,
+  "remaining": [
+    "full original map and continuous camera",
+    "later sections/enemies/NPC/combat",
+    "complete original UI/font and unknown indicators",
+    "native cutscene engine and interactive music",
+    "saving and hardware tests"
+  ]
+}

@@ -1,0 +1,6 @@
+PASS frontend v0.6: 23800 emulated frames; title/menu/options/credits, 8 story pages, intro playback/pause/resume/end/skip, recorded audio including level audio end, native portrait/captions, OBJ cursor, pickup HUD 1/2 with timeout, arrival, registered portal position continuity, camera-zero backgrounds byte-verified in VRAM, two linked areas, bridge, two gems/persistence/reset, fall respawn, jump/ladder/platform/camera, return trip, sign and pause. Audio samples=13056808 absolute energy=24707635615
+Host tests PASS (ASan + UBSan): portal world-position/velocity invariants, mirrored anchors, ladder, ground, platforms, collection and resets.
+Backgrounds camera-zero: byte-verified in mGBA VRAM except actor/gem rectangles.
+Foreground registration: (-152,+60), matches configuration.
+Idle benchmark: 180 logic updates in 180 emulated display frames.
+Header and ROM size: PASS. Physical GBA: not tested.

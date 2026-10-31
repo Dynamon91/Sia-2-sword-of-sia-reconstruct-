@@ -1,0 +1,26 @@
+name: Validate GBA reconstruction
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build and audit dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi python3-pil python3-numpy
+      - name: Restore and verify embedded assets
+        run: python3 tools/unpack_assets.py
+      - name: Test gameplay with sanitizers
+        run: ASAN_OPTIONS=detect_leaks=0 make test
+      - name: Verify viewport alignment
+        run: python3 tools/audit_positions.py --output build/position-audit.json
+      - name: Build native GBA ROM
+        run: make
+      - name: Publish build for testing
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lady-Sia2-GBA-build
+          path: |
+            build/sia2_lab.gba
+            build/position-audit.json

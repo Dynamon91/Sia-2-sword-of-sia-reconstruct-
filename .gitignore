@@ -1,0 +1,21 @@
+build/
+__pycache__/
+# Large generated assets are restored from the verified ROM.
+assets/audio_level.pcm
+assets/bridge_spans.bin
+assets/ui_tiles.bin
+assets/ui_dialogs.bin
+assets/room_backdrop.bin
+assets/ui_palette.bin
+assets/font.bin
+assets/bridge_run.bin
+assets/audio_title.pcm
+assets/room_spans.bin
+assets/bridge_sky.bin
+assets/room_sprites.bin
+assets/visuals.bin
+assets/room.bin
+assets/bridge_backdrop.bin
+assets/bridge.bin
+assets/room_sky.bin
+assets/audio_intro.pcm
