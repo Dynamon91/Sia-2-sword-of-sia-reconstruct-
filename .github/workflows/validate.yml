@@ -20,16 +20,16 @@ jobs:
       - name: Run mGBA gameplay and settings integration
         run: |
           gcc -Wall -Wextra -Werror tools/frontend_check.c src/game.c -lmgba -o build/frontend_check
-          ./build/frontend_check build/sia2_lab.gba > build/emulator-report.txt
+          set -o pipefail
+          ./build/frontend_check build/sia2_lab.gba | awk '/^PASS / { print; fflush() }' > build/emulator-report.txt
       - name: Convert emulator screenshots to PNG
         run: |
           python3 tools/export_previews.py build
+      - name: Package verified build
+        run: python3 tools/package_build.py build
       - name: Publish build for testing
         uses: actions/upload-artifact@v4
         with:
           name: Lady-Sia2-GBA-build
-          path: |
-            build/sia2_lab.gba
-            build/position-audit.json
-            build/emulator-report.txt
-            build/*.png
+          path: build/release/
+          if-no-files-found: error
