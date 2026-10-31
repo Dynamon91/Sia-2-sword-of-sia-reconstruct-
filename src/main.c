@@ -1,4 +1,8 @@
 #include "game.h"
+#include "settings.h"
+/* Standard emulator SRAM detection marker. */
+static const char save_type[] __attribute__((used))="SRAM_V113";
+#define SETTINGS_SRAM ((volatile unsigned char *)0x0E000000)
 #include "alignment.h"
 #include "story.h"
 #include "../assets/assets.h"
@@ -235,7 +239,7 @@ static void render(void){
 int main(void){
  REG16(0x04000204)=0x4317;REG16(0x04000000)=0x0404;
  REG16(0x04000088)=0x200;ui_init();
- sound_enabled=1;intro_enabled=1;dirty=1;game_reset(&game);
+ settings_load(SETTINGS_SRAM,&sound_enabled,&intro_enabled);dirty=1;game_reset(&game);
  clock_start();audio_play(audio_title,AUDIO_TITLE_LEN);
  for(;;){
   clock_update();
@@ -285,6 +289,7 @@ int main(void){
    if(pressed&(1|16|32)){
     if(option_index==0){sound_enabled^=1;audio_stop();}
     if(option_index==1)intro_enabled^=1;
+    if(option_index<2)settings_store(SETTINGS_SRAM,sound_enabled,intro_enabled);
     if(option_index==2)enter(MENU);
     dirty=1;
    }break;

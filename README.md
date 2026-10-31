@@ -38,7 +38,7 @@ quello visibile a 00:08. Opzioni SOUND e INTRO, lettore della storia tramite
 Select, schermata di crediti della ricostruzione e menu di pausa.
 
 Le schermate OPTIONS, PAUSE e CREDITS sono nuove: il loro contenuto originale non è
-stato verificato. Le opzioni non vengono ancora salvate dopo la chiusura.
+stato verificato. Nel sorgente successivo alla v0.6, SOUND e INTRO vengono salvati in SRAM con controllo del record. La ROM v0.6 inclusa precede questa modifica: occorre ricompilare. Persistenza in emulatore e su hardware ancora da verificare.
 
 ## Limiti importanti del contenuto
 
@@ -162,3 +162,9 @@ Interfaccia: riferimenti tecnici per OBJ/palette/mapping in https://gbadev.net/t
 ## Distribuzione GitHub
 
 La ROM v0.6 è conservata senza modifiche in quattro parti binarie nella cartella `rom-parts`, per rispettare il limite di caricamento. Dopo aver scaricato ed estratto il repository, eseguire `python3 tools/unpack_assets.py`: ricompone `Lady_Sia2_v06.gba`, ne verifica SHA-256 e ripristina gli asset. Non serve il compilatore per questa operazione. La pipeline Actions pubblica inoltre la ROM ricompilata.
+
+## Aggiornamento sorgenti: opzioni persistenti
+
+Aggiunti salvataggio automatico di SOUND/INTRO e ripristino all’avvio. Record SRAM di 8 byte, versione, controllo dei valori e byte di verifica; dati assenti o non validi ripristinano SOUND ON / INTRO ON. Il marcatore di validità viene scritto per ultimo. È un formato della ricostruzione, non quello del gioco originale. Non salva progressi o gemme.
+
+Test host con ASan/UBSan superati per tutte le quattro combinazioni, memoria vuota, corruzione di ciascun singolo bit e record non completato. Gameplay esistente ancora verificato dai test host. Non è stata eseguita una nuova compilazione ARM né una prova mGBA in questa sessione. Le ROM e le preview v0.6 incluse restano quelle precedenti.

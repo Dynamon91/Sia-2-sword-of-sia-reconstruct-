@@ -8,7 +8,7 @@ build/start.o: src/start.s | build
 	$(CC) -mcpu=arm7tdmi -marm -c $< -o $@
 build/game.o: src/game.c src/game.h src/alignment.h | build
 	$(CC) $(CFLAGS) -c $< -o $@
-build/main.o: src/main.c src/game.h src/alignment.h src/story.h assets/assets.h assets/room.h assets/ui.h | build
+build/main.o: src/main.c src/settings.h src/game.h src/alignment.h src/story.h assets/assets.h assets/room.h assets/ui.h | build
 	$(CC) $(CFLAGS) -c $< -o $@
 build/story.o: src/story.c src/story.h assets/assets.h | build
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -22,6 +22,8 @@ build/sia2_lab.gba: build/sia2_lab.elf tools/fix_header.py
 test: | build
 	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c tests/test_game.c -o build/test_game
 	./build/test_game
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g tests/test_settings.c -o build/test_settings
+	./build/test_settings
 clean:
 	rm -rf build
 .PHONY: all test clean

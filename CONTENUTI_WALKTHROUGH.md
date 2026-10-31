@@ -41,7 +41,7 @@ Conservare le righe ancora da fare nelle versioni successive.
 | Audio del livello | Integrato come registrazione | 251 s da 01:54 a 06:05, effetti non interattivi |
 | Soundtrack e suoni interattivi nativi | Da ricostruire | Separare o trascrivere musica/effetti |
 | Schermata finale dei risultati | Documentata, non implementata | Visibile a circa 06:07; non simulare un completamento inesistente |
-| Salvataggi e ripristino opzioni | Da implementare | Opzioni valide solo nella sessione |
+| Salvataggi e ripristino opzioni | SOUND/INTRO aggiunti nei sorgenti successivi alla v0.6 | Test host superati; build ARM e persistenza in emulatore da verificare; progressi non salvati |
 | Altri mondi/livelli/finali | Fuori da questo video | Servono riferimenti corrispondenti |
 
 Gli elementi già inseriti nel frontend sono mantenuti. Non si sostituisce
