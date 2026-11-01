@@ -28,7 +28,7 @@ static int guard_floor(int x){
 }
 void game_reset(Game *g){
  level_progress_reset(&g->progress,3);
- g->hurt_timer=0;g->game_over=0;g->walk_ticks=0;
+ g->hurt_timer=0;g->game_over=0;g->walk_ticks=0;g->lives=3;
  g->enemy2_x=210*FP;g->enemy2_dir=-1;g->enemy2_hp=2;g->enemy2_flash=0;g->enemy2_last_swing=0;
  g->enemy_x=155*FP;g->enemy_dir=-1;g->enemy_hp=2;g->enemy_flash=0;g->swing_id=0;g->enemy_last_swing=0;
  level_set_checkpoint(&g->progress,0,40*FP,118*FP);
@@ -49,6 +49,15 @@ static void respawn_area(Game *g){
  g->x=(g->area==4?60:g->area==3?10:g->area==2?20:g->area?60:40)*FP;g->y=(g->area==4?66:g->area==3?90:g->area==2?14:g->area?BRIDGE_SURFACE_Y-PLAYER_H:118)*FP;
  g->vx=0;g->vy=0;g->grounded=1;g->climbing=0;g->sign_open=0;
  g->camera=0;camera(g);
+}
+/* A fall or lethal hit consumes one life; run progress survives respawn. */
+static void lose_life(Game *g){
+ if(g->game_over)return;
+ if(g->lives)g->lives--;
+ g->attack=0;g->walk_ticks=0;g->vx=0;g->vy=0;g->climbing=0;
+ if(!g->lives){g->progress.health=0;g->game_over=1;return;}
+ g->progress.health=g->progress.max_health;
+ respawn_area(g);g->hurt_timer=90;
 }
 static void camera(Game *g){
  if(g->area>=2){g->camera_y=0;return;}
@@ -71,7 +80,7 @@ int game_damage(Game *g,unsigned amount){
  if(g->game_over||g->hurt_timer||!amount)return 0;
  if(!level_take_damage(&g->progress,amount))return 0;
  g->climbing=0;g->attack=0;g->hurt_timer=60;
- if(!g->progress.health){g->game_over=1;g->vx=0;g->vy=0;}
+ if(!g->progress.health)lose_life(g);
  return 1;
 }
 static void guard_step(Game *g){
@@ -167,6 +176,6 @@ void game_step(Game *g,unsigned input){
  }else if(g->area==4&&(input&LEFT)&&g->x<=32*FP&&g->grounded){
   g->area=3;g->progress.area=3;g->x+=158*FP;g->y-=18*FP;camera(g);
  }
- else if(g->y>210*FP){g->falls++;g->hurt_timer=0;game_damage(g,1);if(!g->game_over)respawn_area(g);}
+ else if(g->y>210*FP){g->falls++;lose_life(g);return;}
  guard_step(g);
 }

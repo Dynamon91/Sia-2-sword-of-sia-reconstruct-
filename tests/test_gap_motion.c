@@ -31,7 +31,7 @@ int main(void){
  /* Missed jump stops at the cliff's side and falls, never snaps onto its top. */
  g.x=157*FP;g.y=80*FP;g.vy=FP;g.grounded=0;game_step(&g,RIGHT);
  assert(g.x==158*FP&&!g.grounded&&g.y>80*FP&&g.vx==0);
- steps(&g,RIGHT,70);assert(g.falls==1&&g.progress.health==2&&g.gems==1);
+ steps(&g,RIGHT,70);assert(g.falls==1&&g.progress.health==3&&g.lives==2&&g.gems==1);
  /* Independent second guard, with persistent entity ID and reset behavior. */
  game_reset(&g);g.area=4;g.x=180*FP;g.y=58*FP;g.grounded=1;
  game_step(&g,ATTACK);steps(&g,0,4);assert(g.enemy2_hp==1&&g.enemy_hp==2);

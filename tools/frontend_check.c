@@ -59,6 +59,7 @@ static void check_rest_background(struct mCore *c,const char *path,int gem_x,int
  unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
  for(int y=0;y<160;y++)for(int x=0;x<240;x++){
   int expected=fgetc(f);assert(expected>=0);
+  if(x>=3&&x<55&&y>=3&&y<13)continue; /* Live HP/lives HUD replaces these background pixels. */
   if(x>=sx&&x<sx+48&&y>=sy&&y<sy+56)continue;
   if(x>=gem_x&&x<gem_x+16&&y>=gem_y&&y<gem_y+16)continue;
   assert(c->busRead8(c,base+(unsigned)y*240+(unsigned)x)==(unsigned)expected);
@@ -205,13 +206,13 @@ int main(int argc,char **argv){
  c->setKeys(c,0);run(c,4);assert(value(c,17)==1);
  for(unsigned death=0;death<3;death++){
   c->setKeys(c,33);for(int i=0;i<300&&value(c,18)==death;i++)run(c,1);
-  c->setKeys(c,0);run(c,4);assert(value(c,18)==death+1&&value(c,22)==2-death);
+  c->setKeys(c,0);run(c,4);assert(value(c,18)==death+1&&value(c,31)==2-death&&value(c,22)==(death==2?0u:3u));
  }
  state(c,10);assert(value(c,23)==1&&value(c,7)==0);
  capture(c,"build/game_over.ppm");unsigned stopped=value(c,16);run(c,90);assert(value(c,16)==stopped);
- tap(c,1);state(c,7);assert(value(c,22)==3&&value(c,18)==0&&value(c,10)==0);
+ tap(c,1);state(c,7);assert(value(c,22)==3&&value(c,31)==3&&value(c,18)==0&&value(c,10)==0);
  capture(c,"build/retry_after_game_over.ppm");
- puts("PASS defeat integration: three damaging falls, Game Over, frozen simulation, retry resets run");
+ puts("PASS defeat integration: three life-consuming falls, restored HP, Game Over, frozen simulation, retry resets run");
  /* Reach the new native guard area and exercise contact and sword damage. */
  move_to(c,16,107);c->setKeys(c,64);run(c,100);c->setKeys(c,0);run(c,4);
  move_to(c,16,139);c->setKeys(c,17);run(c,45);c->setKeys(c,0);run(c,40);
@@ -224,7 +225,15 @@ int main(int argc,char **argv){
  capture(c,"build/guard_entry.ppm");
  move_to(c,16,160);for(int i=0;i<240&&value(c,22)==3;i++)run(c,1);
  assert(value(c,22)==2&&value(c,24)>0);capture(c,"build/guard_contact.ppm");
- move_to(c,32,120);c->setKeys(c,16);run(c,1);c->setKeys(c,0);run(c,1);
+ /* Keep contact until a lethal enemy hit; respawn must preserve the run. */
+ unsigned lives_before_combat=value(c,31),gems_before_combat=value(c,10);
+ c->setKeys(c,0);
+ for(int i=0;i<1400&&value(c,31)==lives_before_combat;i++)run(c,1);
+ assert(value(c,31)==lives_before_combat-1&&value(c,22)==3&&value(c,24)>0);
+ assert(value(c,17)==3&&value(c,10)==gems_before_combat&&value(c,25)==2);state(c,7);
+ capture(c,"build/combat_respawn.ppm");
+ puts("PASS lethal combat integration: one life consumed, HP restored, same area and gems preserved");
+ move_to(c,16,120);c->setKeys(c,16);run(c,1);c->setKeys(c,0);run(c,1);
  for(int i=0;i<40&&value(c,25)>0;i++){tap(c,2);run(c,8);}
  assert(value(c,25)==0&&value(c,26)==1);state(c,7);
  capture(c,"build/guard_defeated.ppm");
@@ -257,10 +266,10 @@ int main(int argc,char **argv){
  assert((c->busRead16(c,0x0700000c)&1023)==712);capture(c,"build/gap_pickup_four.ppm");
  for(int i=0;i<15&&value(c,30);i++){tap(c,2);run(c,8);}
  assert(value(c,30)==0&&value(c,26)==2);capture(c,"build/gap_guard_defeated.ppm");
- unsigned falls_before=value(c,18),hp_before=value(c,22);
+ unsigned falls_before=value(c,18),lives_before=value(c,31);
  c->setKeys(c,32);for(int i=0;i<240&&value(c,18)==falls_before;i++)run(c,1);
  c->setKeys(c,0);run(c,4);
- assert(value(c,18)==falls_before+1&&value(c,22)==hp_before-1&&value(c,10)==4&&value(c,17)==4);
+ assert(value(c,18)==falls_before+1&&value(c,31)==lives_before-1&&value(c,22)==3&&value(c,10)==4&&value(c,17)==4);
  capture(c,"build/gap_respawn.ppm");
  c->setKeys(c,32);for(int i=0;i<100&&value(c,17)==4;i++)run(c,1);
  c->setKeys(c,0);run(c,4);assert(value(c,17)==3&&value(c,10)==4&&value(c,26)==2);

@@ -200,6 +200,8 @@ static void draw_level(void){
  }else if(!pose&&game.vx)actor=walk_cycle+game_walk_frame(&game)*ROOM_SPRITE_SIZE;
  if(!game.hurt_timer||(game.hurt_timer&4))sprite(aligned_sprite_x(game.x/FP+PLAYER_W/2,width,anchor,game.facing<0),game.y/FP+PLAYER_H-height-game.camera_y,
         width,height,actor,game.facing<0);
+ char status[]={'H','P',':',(char)('0'+game.progress.health),' ','L',':',(char)('0'+game.lives),0};
+ rect(3,3,52,10,240);text(5,5,status,241);
  if(game.pickup_timer>0){
   ui_object(0,95,11,2,UI_GEM_TILE);
   ui_object(1,129,29,1,game.gems==4?712:game.gems==3?704:game.gems==2?UI_DIGIT2_TILE:game.gems?UI_DIGIT1_TILE:UI_DIGIT0_TILE);
@@ -335,6 +337,7 @@ int main(void){
   debug[20]=game.progress.elapsed_frames;debug[21]=game.progress.gems;
   debug[22]=game.progress.health;debug[23]=(unsigned)game.game_over;debug[24]=(unsigned)game.hurt_timer;
   debug[25]=(unsigned)game.enemy_hp;debug[26]=game.progress.defeated;debug[27]=(unsigned)game.enemy_x;
+  debug[31]=game.lives;
   debug[28]=game_walk_frame(&game);debug[29]=game.attack?game_attack_frame(&game):3;debug[30]=(unsigned)game.enemy2_hp;
   if(dirty)render();else wait_frame();
  }

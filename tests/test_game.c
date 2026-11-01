@@ -59,12 +59,15 @@ int main(void){
  g.x=20*FP;g.y=14*FP;g.vy=0;g.grounded=1;step(&g,LEFT,10);assert(g.area==1);
  game_reset(&g);assert(g.progress.health==3);
  assert(game_damage(&g,1)&&g.progress.health==2);assert(!game_damage(&g,1));
- step(&g,0,60);assert(game_damage(&g,99)&&g.game_over&&g.progress.health==0);
+ step(&g,0,60);assert(game_damage(&g,99)&&!g.game_over&&g.progress.health==3&&g.lives==2);
+ assert(!game_damage(&g,99));step(&g,0,90);
+ assert(game_damage(&g,99)&&g.lives==1&&!g.game_over);step(&g,0,90);
+ assert(game_damage(&g,99)&&g.game_over&&g.progress.health==0&&g.lives==0);
  unsigned frozen=g.ticks;step(&g,RIGHT|ATTACK,100);assert(g.ticks==frozen);
  game_step(&g,RESET);assert(!g.game_over&&g.progress.health==3);
  for(int death=0;death<3;death++){
   g.area=2;g.x=60*FP;g.y=211*FP;g.vy=0;g.grounded=0;game_step(&g,0);
-  assert(g.falls==death+1);assert(g.progress.health==(unsigned)(2-death));
+  assert(g.falls==death+1);assert(g.lives==(unsigned)(2-death));assert(g.progress.health==(death==2?0u:3u));
  }
  assert(g.game_over);
  game_reset(&g);g.area=3;g.progress.area=3;g.x=125*FP;g.y=50*FP;g.grounded=1;g.facing=1;
