@@ -3,7 +3,7 @@
 /* Approximate first viewport from the supplied recording, not a recovered ROM map. */
 const Platform platforms[PLATFORM_COUNT]={{81,88,70,8},{186,40,54,8}};
 static const Platform bridge_platforms[3]={{33,BRIDGE_SURFACE_Y,48,8},{81,BRIDGE_SURFACE_Y,125,8},{206,BRIDGE_SURFACE_Y,34,8}};
-static const Platform cliff_platforms[2]={{0,60,89,8},{140,115,100,8}};
+static const Platform cliff_platforms[2]={{0,54,43,8},{96,115,144,8}};
 static const int ground[][2]={{0,151},{24,153},{40,158},{56,158},{72,153},{84,153},
  {100,154},{120,153},{140,145},{156,146},{176,153},{192,157},{216,157},{239,153}};
 int game_floor(int x){
@@ -32,7 +32,7 @@ static void transition_area(Game *g,int area){
  camera(g);
 }
 static void respawn_area(Game *g){
- g->x=(g->area==2?20:g->area?60:40)*FP;g->y=(g->area==2?20:g->area?BRIDGE_SURFACE_Y-PLAYER_H:118)*FP;
+ g->x=(g->area==2?20:g->area?60:40)*FP;g->y=(g->area==2?14:g->area?BRIDGE_SURFACE_Y-PLAYER_H:118)*FP;
  g->vx=0;g->vy=0;g->grounded=1;g->climbing=0;g->sign_open=0;
  g->camera=0;camera(g);
 }
@@ -98,7 +98,7 @@ void game_step(Game *g,unsigned input){
  if(!g->area&&(pressed&DOWN)&&center>=158&&center<=190&&g->grounded)g->sign_open=1;
  if(!g->area&&(input&RIGHT)&&g->x>=225*FP&&g->grounded&&g->y==0)transition_area(g,1);
  else if(g->area==1&&(input&LEFT)&&g->x<=32*FP&&g->grounded)transition_area(g,0);
- else if(g->area==1&&(input&RIGHT)&&g->x>=225*FP&&g->grounded){g->area=2;g->progress.area=2;g->x=20*FP;g->y=20*FP;g->vy=0;camera(g);}
+ else if(g->area==1&&(input&RIGHT)&&g->x>=225*FP&&g->grounded){g->area=2;g->progress.area=2;g->x=20*FP;g->y=14*FP;g->vy=0;camera(g);}
  else if(g->area==2&&(input&LEFT)&&g->x<=8*FP&&g->grounded){g->area=1;g->progress.area=1;g->x=224*FP;g->y=60*FP;g->vy=0;camera(g);}
  else if(g->y>210*FP){g->falls++;respawn_area(g);}
 }

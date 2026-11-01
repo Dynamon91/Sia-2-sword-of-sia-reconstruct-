@@ -53,9 +53,9 @@ int main(void){
   assert(aligned_sprite_x(center,48,SIA_ANCHOR_X,1)+(47-SIA_ANCHOR_X)==center);
  }
  game_reset(&g);g.area=1;g.progress.area=1;g.x=224*FP;g.y=60*FP;g.grounded=1;
- game_step(&g,RIGHT);assert(g.area==2&&g.x==20*FP&&g.y==20*FP);
- step(&g,RIGHT,35);step(&g,JUMP|RIGHT,70);step(&g,0,60);
+ game_step(&g,RIGHT);assert(g.area==2&&g.x==20*FP&&g.y==14*FP);
+ step(&g,RIGHT,5);step(&g,JUMP|RIGHT,90);step(&g,0,60);
  assert(g.area==2&&g.grounded&&g.y==75*FP&&g.falls==0);
- g.x=20*FP;g.y=20*FP;g.vy=0;g.grounded=1;step(&g,LEFT,10);assert(g.area==1);
+ g.x=20*FP;g.y=14*FP;g.vy=0;g.grounded=1;step(&g,LEFT,10);assert(g.area==1);
  puts("PASS v0.6: terrain, jump, ladder, platforms/camera, registered area position/velocity continuity, flip anchors, bridge surface, two gems, round-trip persistence, fall respawn, reset, sign and attack");
 }

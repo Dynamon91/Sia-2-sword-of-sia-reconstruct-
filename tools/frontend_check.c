@@ -151,7 +151,7 @@ int main(int argc,char **argv){
  for(int i=0;i<180&&value(c,17)==1;i++)run(c,1);
  c->setKeys(c,0);run(c,4);assert(value(c,17)==2);
  capture(c,"build/cliff_entry.ppm");
- c->setKeys(c,16);run(c,35);c->setKeys(c,17);run(c,70);c->setKeys(c,0);run(c,60);
+ c->setKeys(c,16);run(c,5);c->setKeys(c,17);run(c,90);c->setKeys(c,0);run(c,60);
  assert(value(c,17)==2&&value(c,14)==1&&(int)value(c,9)==75*256);
  capture(c,"build/cliff_landing.ppm");
  unsigned old_falls=value(c,18);c->setKeys(c,32);
