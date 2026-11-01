@@ -135,9 +135,6 @@ static void audio_play(const unsigned char *p,unsigned length){
  REG16(0x04000100)=0xFC00;REG16(0x04000102)=0x80;audio_active=1;
 }
 static void enter(unsigned next){state=next;dirty=1;}
-static void start_intro(void){
- paused=0;intro_frame=0;clock_start();audio_play(audio_intro,AUDIO_INTRO_LEN);enter(INTRO);
-}
 static void arrival(void){audio_stop();paused=0;arrival_index=0;game_reset(&game);enter(ARRIVAL);}
 static void return_menu(void){audio_stop();paused=0;enter(MENU);}
 static void start_level(void){
@@ -222,10 +219,7 @@ static void render(void){
  case TITLE:blit(FRAME_TITLE);break;
  case MENU:
   blit(FRAME_MENU);
-  ui_object(0,16,44+selection*24,1,UI_CURSOR_TILE);break;
- case INTRO:
-  blit(INTRO_FIRST+intro_frame);
-  rect(0,0,211,12,240);text(3,2,paused?"A RESUME  START SKIP":"A PAUSE   START SKIP",241);break;
+  ui_object(0,16,(44+(int)selection*24-12)*160/148,1,UI_CURSOR_TILE);break;
  case STORY:
   dialog(story_index);footer("A NEXT B BACK START MENU");
   number(148,83,story_index+1,243);break;
@@ -234,8 +228,7 @@ static void render(void){
  case OPTIONS:
   clear();text(18,20,"OPTIONS",242);
   text(24,50,sound_enabled?"SOUND       ON":"SOUND       OFF",241);
-  text(24,72,intro_enabled?"INTRO       ON":"INTRO       OFF",241);
-  text(24,94,"BACK",241);ui_object(0,3,46+option_index*22,1,UI_CURSOR_TILE);
+  text(24,72,"BACK",241);ui_object(0,3,46+option_index*22,1,UI_CURSOR_TILE);
   footer("A CHANGE  B MENU");break;
  case CREDITS:
   clear();text(15,20,"RECONSTRUCTION CREDITS",242);
@@ -259,7 +252,7 @@ static void render(void){
 int main(void){
  REG16(0x04000204)=0x4317;REG16(0x04000000)=0x0404;
  REG16(0x04000088)=0x200;ui_init();
- settings_load(SETTINGS_SRAM,&sound_enabled,&intro_enabled);dirty=1;game_reset(&game);
+ settings_load(SETTINGS_SRAM,&sound_enabled,&intro_enabled);intro_enabled=0;dirty=1;game_reset(&game);
  clock_start();audio_play(audio_title,AUDIO_TITLE_LEN);
  for(;;){
   clock_update();
@@ -275,24 +268,10 @@ int main(void){
    if(pressed&4){audio_stop();story_index=0;enter(STORY);}
    else if(pressed&9){
     audio_stop();
-    if(selection==0){if(intro_enabled)start_intro();else arrival();}
+    if(selection==0)arrival();
     if(selection==1){option_index=0;enter(OPTIONS);}
     if(selection==2)enter(CREDITS);
    }break;
-  case INTRO:
-   if(pressed&8){arrival();break;}
-   if(pressed&1){
-    paused^=1;dirty=1;
-    if(paused)audio_stop();else{
-     unsigned offset=clock_ticks&~3u;
-     if(offset<AUDIO_INTRO_LEN)audio_play(audio_intro+offset,AUDIO_INTRO_LEN-offset);
-    }
-   }
-   if(clock_ticks>=INTRO_TICKS){arrival();break;}
-   {unsigned next=(clock_ticks*INTRO_FPS)>>14;
-    if(next>=INTRO_COUNT)next=INTRO_COUNT-1;
-    if(next!=intro_frame){intro_frame=next;dirty=1;}}
-   break;
   case STORY:
    if(pressed&12){enter(MENU);break;}
    if(pressed&(2|32)){if(story_index)story_index--;else enter(MENU);dirty=1;}
@@ -303,14 +282,13 @@ int main(void){
    else if(pressed&9){if(arrival_index==0){arrival_index=1;dirty=1;}else start_level();}
    break;
   case OPTIONS:
-   if(pressed&64){option_index=(option_index+2)%3;dirty=1;}
-   if(pressed&128){option_index=(option_index+1)%3;dirty=1;}
+   if(pressed&64){option_index=(option_index+1)%2;dirty=1;}
+   if(pressed&128){option_index=(option_index+1)%2;dirty=1;}
    if(pressed&2)enter(MENU);
    if(pressed&(1|16|32)){
     if(option_index==0){sound_enabled^=1;audio_stop();}
-    if(option_index==1)intro_enabled^=1;
-    if(option_index<2)settings_store(SETTINGS_SRAM,sound_enabled,intro_enabled);
-    if(option_index==2)enter(MENU);
+    if(option_index==0)settings_store(SETTINGS_SRAM,sound_enabled,0);
+    if(option_index==1)enter(MENU);
     dirty=1;
    }break;
   case CREDITS:if(pressed&11)enter(MENU);break;

@@ -8,10 +8,6 @@ assets_visuals:
 audio_title:
 .incbin "assets/audio_title.pcm"
 .balign 4
-.global audio_intro
-audio_intro:
-.incbin "assets/audio_intro.pcm"
-.balign 4
 .global audio_level
 audio_level:
 .incbin "assets/audio_level.pcm"

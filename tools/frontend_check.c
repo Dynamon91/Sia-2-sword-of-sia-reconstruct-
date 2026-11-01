@@ -82,13 +82,13 @@ int main(int argc,char **argv){
  tap(c,8);state(c,1);capture(c,"build/menu_v06.ppm");
  assert((c->busRead16(c,0x04000000)&0x1040)==0x1040);
  assert((c->busRead16(c,0x07000004)&1023)==UI_CURSOR_TILE);
- assert((c->busRead16(c,0x07000000)&255)==44);
+ assert((c->busRead16(c,0x07000000)&255)==34);
  tap(c,4);state(c,3);capture(c,"build/story_v06.ppm");
  for(int i=1;i<8;i++){tap(c,1);state(c,3);assert(value(c,2)==(unsigned)i);}
  tap(c,2);assert(value(c,2)==6);tap(c,8);state(c,1);
  tap(c,128);tap(c,1);state(c,4);tap(c,1);assert(value(c,3)==0);
  capture(c,"build/options_v06.ppm");
- tap(c,1);assert(value(c,3)==1);tap(c,128);tap(c,1);assert(value(c,4)==0);
+ tap(c,1);assert(value(c,3)==1);tap(c,128);assert(value(c,4)==0);
  tap(c,2);state(c,1);tap(c,64);tap(c,1);state(c,6);
  capture(c,"build/arrival_v06.ppm");
  assert((c->busRead16(c,0x07000004)&1023)==UI_PORTRAIT_TILE);
@@ -176,21 +176,14 @@ int main(int argc,char **argv){
  move_to(c,16,166);tap(c,128);state(c,9);capture(c,"build/sign_v06.ppm");tap(c,1);state(c,7);
  tap(c,4);state(c,1);assert(value(c,7)==0);
  tap(c,64);tap(c,1);state(c,5);capture(c,"build/credits_v06.ppm");tap(c,2);state(c,1);
- tap(c,64);tap(c,1);state(c,4);tap(c,128);tap(c,1);assert(value(c,4)==1);
- tap(c,2);tap(c,64);tap(c,1);state(c,2);
- audio_file=fopen("build/intro_emulated_s16le.pcm","wb");assert(audio_file);audio_frames=0;
- run(c,180);fclose(audio_file);audio_file=NULL;
- assert(value(c,1)>8);assert(c->busRead16(c,0x04000102)&0x80);
- tap(c,1);assert(value(c,5)==1);unsigned frame=value(c,1);run(c,120);assert(value(c,1)==frame);
- tap(c,1);assert(value(c,5)==0);run(c,1300);capture(c,"build/intro_v06.ppm");
- run(c,4900);state(c,6);assert(value(c,7)==0);
- tap(c,2);state(c,1);tap(c,1);state(c,2);tap(c,8);state(c,6);
- printf("PASS frontend v0.6: %u emulated frames; title/menu/options/credits, 8 story pages, intro playback/pause/resume/end/skip, recorded audio including level audio end, native portrait/captions, OBJ cursor, pickup HUD 1/2 with timeout, arrival, registered portal position continuity, camera-zero backgrounds byte-verified in VRAM, two linked areas, bridge, two gems/persistence/reset, fall respawn, jump/ladder/platform/camera, return trip, sign and pause. Audio samples=%u absolute energy=%llu\n",c->frameCounter(c),samples,(unsigned long long)energy);
+ tap(c,64);tap(c,1);state(c,4);assert(value(c,4)==0);
+ tap(c,2);tap(c,64);tap(c,1);state(c,6);assert(value(c,1)==0);
+ printf("PASS frontend no-intro: %u emulated frames; linked areas, camera, pickups, pause, menus, direct arrival without intro\n",c->frameCounter(c));
  /* Exercise settings through the actual menu before resetting the CPU. */
  tap(c,2);state(c,1);tap(c,128);tap(c,1);state(c,4);
  /* Entering OPTIONS always selects SOUND. */
  tap(c,1);assert(value(c,3)==0);
- tap(c,128);tap(c,1);assert(value(c,4)==0);
+ tap(c,128);assert(value(c,4)==0);
  assert(c->busRead8(c,0x0E000000)=='L');
  assert(c->busRead8(c,0x0E000005)==0);
  c->setKeys(c,0);c->reset(c);run(c,90);state(c,0);
@@ -200,11 +193,11 @@ int main(int argc,char **argv){
  /* A damaged checksum must select documented defaults on the next boot. */
  c->busWrite8(c,0x0E000006,c->busRead8(c,0x0E000006)^1);
  c->setKeys(c,0);c->reset(c);run(c,90);state(c,0);
- assert(value(c,3)==1&&value(c,4)==1);
+ assert(value(c,3)==1&&value(c,4)==0);
  puts("PASS settings integration: menu writes SRAM, soft-reset reload, corrupt-record defaults. Disk save reload and real hardware are not tested.");
  /* Verify actual fall damage, Game Over, frozen state and retry. */
  tap(c,8);tap(c,128);tap(c,1);state(c,4);
- tap(c,128);tap(c,1);tap(c,2);tap(c,64);tap(c,1);state(c,6);
+ tap(c,2);tap(c,64);tap(c,1);state(c,6);
  tap(c,1);tap(c,1);state(c,7);assert(value(c,22)==3);
  move_to(c,16,107);c->setKeys(c,64);run(c,100);c->setKeys(c,0);run(c,4);
  move_to(c,16,139);c->setKeys(c,17);run(c,45);c->setKeys(c,0);run(c,40);

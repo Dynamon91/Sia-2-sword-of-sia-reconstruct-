@@ -1,0 +1,13 @@
+{
+  "banner_removed_rows": 12,
+  "recording_avatar_removed_rect": [
+    209,
+    12,
+    31,
+    18
+  ],
+  "occluded_pixels": "estimated from first uncovered row; NOT original recovered art",
+  "resampling": "nearest, 240x148 to 240x160",
+  "intro_playback_removed": true,
+  "output_sha256": "1f379e8cc1763f137c1f96e05c2d4c1a2b73170f37d91dd99c6570736a62af77"
+}

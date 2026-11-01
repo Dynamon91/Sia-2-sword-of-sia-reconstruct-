@@ -11,6 +11,8 @@ jobs:
           sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi python3-pil python3-numpy libmgba-dev
       - name: Restore and verify embedded assets
         run: python3 tools/unpack_assets.py
+      - name: Remove intro playback and recording overlays
+        run: python3 tools/clean_frontend.py
       - name: Repair captured sprite borders and palette
         run: python3 tools/repair_sprite_edges.py
       - name: Audit animation palette and foot anchors
