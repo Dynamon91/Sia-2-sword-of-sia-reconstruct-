@@ -11,6 +11,8 @@ def clean(image):
     rgb=a[:,:,:3].astype(int);r,g,b=rgb.transpose(2,0,1)
     # Snow and sky were admitted by the old dilated difference mask.
     contamination=((rgb.min(2)>150)&((rgb.max(2)-rgb.min(2))<65))|((b>r+12)&(g>r+8)&(abs(b-g)<55)&(r>65))
+    if image.size==(41,60):
+        contamination |= (r>170)&(g>160)&(b<155)&(abs(r-g)<45)
     for _ in range(2):
         inner=np.asarray(Image.fromarray((mask*255).astype('uint8')).filter(ImageFilter.MinFilter(3)))>0
         mask &= ~(mask&~inner&contamination)
