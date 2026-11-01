@@ -13,7 +13,9 @@ bg.paste(earlier.crop((160,43,207,102)),(44,55)) # (-116,+12)
 bg.paste(later.crop((129,56,170,116)),(137,35)) # (+8,-21)
 # Recording overlays hide the upper sky. Reconstruct only those occlusions,
 # keeping actual trees, rocks and visible cloud pixels.
-for left,top,right,bottom in [(94,14,126,44),(128,26,140,46),(151,47,168,65),(208,14,240,28)]:
+for left,top,right,bottom in [(94,14,140,46),(208,14,240,36)]:
+ bg.paste(later.crop((left-8,top+21,right-8,bottom+21)),(left,top))
+for left,top,right,bottom in [(151,47,168,65)]:
  for y in range(top,bottom):
   lc=bg.getpixel((left-1,y));rc=bg.getpixel((right,y)) if right<240 else bg.getpixel((200,y))
   for x in range(left,right):
