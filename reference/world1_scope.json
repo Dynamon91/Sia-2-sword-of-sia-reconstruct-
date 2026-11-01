@@ -1,0 +1,42 @@
+{
+  "target": "native GBA reconstruction from supplied videos",
+  "stages": [
+    {
+      "id": "w1l1",
+      "reference_available": true,
+      "playable_status": "three_partial_viewports",
+      "next_stage": "w1l2",
+      "route_order": "user_requested_scope_not_implemented_progression"
+    },
+    {
+      "id": "w1l2",
+      "reference_available": true,
+      "playable_status": "not_integrated",
+      "next_stage": "w1l3",
+      "route_order": "user_requested_scope_not_implemented_progression"
+    },
+    {
+      "id": "w1l3",
+      "reference_available": true,
+      "playable_status": "not_integrated",
+      "next_stage": "w1l4",
+      "route_order": "user_requested_scope_not_implemented_progression"
+    },
+    {
+      "id": "w1l4",
+      "reference_available": true,
+      "playable_status": "not_integrated",
+      "next_stage": "w1boss",
+      "route_order": "user_requested_scope_not_implemented_progression"
+    },
+    {
+      "id": "w1boss",
+      "reference_available": true,
+      "playable_status": "not_integrated",
+      "next_stage": null,
+      "route_order": "user_requested_scope_not_implemented_progression"
+    }
+  ],
+  "world_complete_playable": false,
+  "boss_aftermath_in_scope": true
+}
