@@ -6,11 +6,19 @@ from convert_room import extract
 p=argparse.ArgumentParser();p.add_argument('video');a=p.parse_args();out=Path(__file__).resolve().parents[1]/'assets';im=extract(a.video,145)
 actor=im.crop((137,35,178,95)).convert('RGBA');mask=Image.new('L',actor.size);ImageDraw.Draw(mask).polygon([(11,4),(22,4),(29,12),(28,20),(34,21),(33,40),(28,44),(26,55),(12,55),(13,48),(16,44),(13,40),(13,31),(5,27),(1,20),(0,10),(8,9)],fill=255);actor.putalpha(mask)
 bg=im.copy()
-for left,top,right,bottom in [(0,0,240,14),(208,0,240,35),(56,57,94,115),(134,35,179,91),(95,14,114,37)]:
+# Reconstruct occluded sky/terrain conservatively instead of retaining actor trails.
+def surface(x):
+ points=[(0,130),(24,130),(48,120),(72,115),(96,102),(120,94),(144,88),(239,88)]
+ for (x0,y0),(x1,y1) in zip(points,points[1:]):
+  if x<=x1:return round(y0+(y1-y0)*(x-x0)/(x1-x0))
+ return 88
+for left,top,right,bottom in [(0,0,240,14),(208,0,240,35),(44,55,101,126),(126,25,181,96),(94,14,126,42)]:
  for y in range(top,bottom):
-  lc=im.getpixel((max(0,left-1),max(y,14)));rc=im.getpixel((min(239,right),max(y,14)))
   for x in range(left,right):
-   w=(x-left)/max(1,right-left);bg.putpixel((x,y),tuple(round(lc[k]*(1-w)+rc[k]*w) for k in range(3)))
+   floor=surface(x)
+   if y<floor-3:color=im.getpixel((5,max(14,min(105,y))))
+   else:color=im.getpixel((195,min(159,88+max(0,y-floor))))
+   bg.putpixel((x,y),color)
 for y in range(14):
  for x in range(240):bg.putpixel((x,y),(78,123,153))
 header=(out/'room.bin').read_bytes()[:512];colors=[]
