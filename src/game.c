@@ -15,6 +15,8 @@ int game_floor(int x){
  return 153;
 }
 void game_reset(Game *g){
+ level_progress_reset(&g->progress,0);
+ level_set_checkpoint(&g->progress,0,40*FP,118*FP);
  g->x=40*FP;g->y=118*FP;g->vx=0;g->vy=0;
  g->grounded=1;g->facing=1;g->attack=0;g->camera=0;g->previous=0;
  g->climbing=0;g->gems=0;g->collected=0;g->sign_open=0;g->camera_y=0;
@@ -25,7 +27,7 @@ static void transition_area(Game *g,int area){
  int delta=area-g->area;
  g->x-=delta*AREA_OFFSET_X*FP;
  g->y+=delta*AREA_OFFSET_Y*FP;
- g->area=area;g->climbing=0;g->sign_open=0;g->camera=0;
+ g->area=area;g->progress.area=(unsigned)area;g->climbing=0;g->sign_open=0;g->camera=0;
  camera(g);
 }
 static void respawn_area(Game *g){
@@ -41,11 +43,11 @@ static void camera(Game *g){
 static void collect(Game *g){
  int bit=1<<g->area,left=g->area?133:110,top=g->area?74:62;
  if(!(g->collected&bit)&&g->x+PLAYER_W*FP>left*FP&&g->x<(left+16)*FP&&
-    g->y<(top+16)*FP&&g->y+PLAYER_H*FP>top*FP){g->collected|=bit;g->gems++;g->pickup_timer=150;}
+    g->y<(top+16)*FP&&g->y+PLAYER_H*FP>top*FP){if(level_collect_gem(&g->progress,(unsigned)g->area)){g->collected|=bit;g->gems=(int)g->progress.gems;g->pickup_timer=150;}}
 }
 void game_step(Game *g,unsigned input){
  if(input&RESET){game_reset(g);return;}
- unsigned pressed=input&~(unsigned)g->previous;g->previous=(int)input;g->ticks++;
+ unsigned pressed=input&~(unsigned)g->previous;g->previous=(int)input;g->ticks++;level_progress_tick(&g->progress,0);
  if(g->pickup_timer>0)g->pickup_timer--;
  if((pressed&ATTACK)&&!g->attack)g->attack=12;
  else if(g->attack)--g->attack;

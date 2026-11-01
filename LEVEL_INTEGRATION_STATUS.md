@@ -1,7 +1,7 @@
-# Stato integrazione del livello completo
+# Stato integrazione
 
-Aggiunto `src/level_progress.c`: stato condiviso per gemme, avversari sconfitti, vita, cronometro, checkpoint e conclusione. Gli identificatori restano stabili cambiando area, così il ritorno in una zona non può ricontare un oggetto. La capacità di 128 elementi per categoria è un limite tecnico, non il numero di oggetti osservati nel video. Vita iniziale e coordinate vengono passate dal chiamante; nessuna statistica originale è dichiarata recuperata.
+Lo stato condiviso è ora collegato a Game e alla ROM: gemme con identificatori persistenti, area e tempo attivo. Il ripristino azzera raccolte e tempo; pausa e dialoghi sospendono il conteggio perché non eseguono game_step. I campi gemme/collected precedenti restano adattatori per il renderer delle prime due aree.
 
-Test host con ASan/UBSan: raccolta unica di tutti gli identificatori, ritorno fra aree, valori fuori limite, pausa, danno senza underflow, fine partita e reset.
+I campi vita, nemici, checkpoint di recupero e conclusione sono ancora predisposizioni: non sono collegati a combattimento o progressione. La vita è inizializzata a zero e non mostrata; il cronometro è indipendente dalla vita, e il chiamante dovrà sospenderlo nello stato morte futuro. Il punto di recupero esistente usa ancora il comportamento v0.6.
 
-Questo modulo è preparato e testato, ma non è ancora collegato alla ROM. Non introduce ancora nemici visibili, nuove aree, IA, danni del combattimento o schermata risultati. Serve collegarlo alla mappa e alle entità ricostruite dal video; non sostituisce il gameplay attuale. Musica rinviata come richiesto.
+Test host: raccolta e ritorno fra aree, coerenza contatori, reset, limiti. Aggiunte verifiche mGBA per pausa e contatori condivisi. Nuove aree, personaggi e risultati restano da integrare. Musica rinviata.

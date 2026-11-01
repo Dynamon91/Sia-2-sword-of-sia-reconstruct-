@@ -34,6 +34,8 @@ int main(void){
   if(g.area==0){assert(g.x-before_x==-320);assert(g.y==before_y);assert(g.vx==-320);}
  }
  assert(g.area==0&&g.gems==2&&g.collected==3);
+ assert(g.progress.gems==2&&g.progress.gems_taken[0]==3&&g.progress.area==0);
+ assert(g.progress.elapsed_frames==g.ticks);
  g.area=1;g.x=0;g.y=160*FP;g.vy=6*FP;g.grounded=0;
  step(&g,0,80);assert(g.area==1&&g.falls==1&&g.x==60*FP&&g.y==(BRIDGE_SURFACE_Y-PLAYER_H)*FP&&g.gems==2);
  game_reset(&g);step(&g,RIGHT,102);game_step(&g,DOWN);assert(g.sign_open);
@@ -44,6 +46,7 @@ int main(void){
  step(&g,ATTACK,20);assert(g.attack==0);
  game_step(&g,0);game_step(&g,ATTACK);assert(g.attack==12);
  game_step(&g,RESET);assert(g.x==40*FP&&g.y==118*FP&&!g.collected&&!g.sign_open);
+ assert(!g.progress.gems&&!g.progress.elapsed_frames&&!g.progress.gems_taken[0]);
  for(int x=-1;x<=240;x++)assert(game_floor(x)>=145&&game_floor(x)<=158);
  for(int center=0;center<240;center++){
   assert(aligned_sprite_x(center,48,SIA_ANCHOR_X,0)+SIA_ANCHOR_X==center);

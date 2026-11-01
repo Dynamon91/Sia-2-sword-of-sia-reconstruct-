@@ -154,8 +154,10 @@ int main(int argc,char **argv){
   if(value(c,17)==0){assert((int)value(c,8)-before_x==-320);assert((int)value(c,9)==before_y);}
  }
  c->setKeys(c,0);run(c,5);assert(value(c,17)==0&&value(c,10)==2);
+ assert(value(c,21)==2&&value(c,20)==value(c,16));
  capture(c,"build/return_ridge_v06.ppm");
  tap(c,8);state(c,8);unsigned ticks=value(c,6);run(c,60);assert(value(c,6)==ticks);
+ unsigned run_ticks=value(c,20);run(c,60);assert(value(c,20)==run_ticks);
  capture(c,"build/pause_v06.ppm");tap(c,1);state(c,7);
  tap(c,256);state(c,7);assert(value(c,10)==0);player(c,&x,&y);assert(x==40&&y==118);
  run(c,15200);state(c,7);assert(value(c,7)==0);

@@ -329,6 +329,7 @@ int main(void){
   debug[16]=game.ticks;
   debug[17]=(unsigned)game.area;debug[18]=(unsigned)game.falls;
   debug[19]=(unsigned)game.pickup_timer;
+  debug[20]=game.progress.elapsed_frames;debug[21]=game.progress.gems;
   if(dirty)render();else wait_frame();
  }
 }

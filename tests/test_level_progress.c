@@ -10,7 +10,7 @@ int main(void){
  p.area=12;assert(!level_collect_gem(&p,0));
  level_set_checkpoint(&p,12,140,-40);assert(p.checkpoint_area==12&&p.checkpoint_y==-40);
  level_progress_tick(&p,0);level_progress_tick(&p,1);assert(p.elapsed_frames==1);
- assert(level_take_damage(&p,UINT_MAX));assert(p.health==0);level_progress_tick(&p,0);assert(p.elapsed_frames==1);
+ assert(level_take_damage(&p,UINT_MAX));assert(p.health==0);level_progress_tick(&p,1);assert(p.elapsed_frames==1);
  level_finish(&p);assert(!p.completed);
  level_progress_reset(&p,5);assert(level_collect_gem(&p,0));level_finish(&p);
  assert(!level_take_damage(&p,1));assert(!level_collect_gem(&p,1));level_progress_tick(&p,0);assert(p.elapsed_frames==0);

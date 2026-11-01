@@ -20,7 +20,7 @@ int level_defeat_enemy(LevelProgress *p,unsigned id){
  p->defeated++;return 1;
 }
 void level_progress_tick(LevelProgress *p,int paused){
- if(!paused&&!p->completed&&p->health&&p->elapsed_frames<UINT_MAX)p->elapsed_frames++;
+ if(!paused&&!p->completed&&p->elapsed_frames<UINT_MAX)p->elapsed_frames++;
 }
 int level_take_damage(LevelProgress *p,unsigned damage){
  if(p->completed||!p->health||!damage)return 0;
