@@ -24,6 +24,8 @@ test: | build
 	./build/test_game
 	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g tests/test_settings.c -o build/test_settings
 	./build/test_settings
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/level_progress.c tests/test_level_progress.c -o build/test_level_progress
+	./build/test_level_progress
 clean:
 	rm -rf build
 .PHONY: all test clean
