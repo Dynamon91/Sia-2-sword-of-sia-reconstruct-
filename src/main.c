@@ -15,7 +15,7 @@ typedef unsigned short u16;
 #define REG16(a) (*(volatile u16 *)(a))
 #define REG32(a) (*(volatile unsigned *)(a))
 #define RGB(r,g,b) ((r)|((g)<<5)|((b)<<10))
-enum { TITLE,MENU,INTRO,STORY,OPTIONS,CREDITS,ARRIVAL,LAB,PAUSE,TUTORIAL };
+enum { TITLE,MENU,INTRO,STORY,OPTIONS,CREDITS,ARRIVAL,LAB,PAUSE,TUTORIAL,GAME_OVER };
 static volatile u16 *page;
 static const u16 *pending_palette;
 static unsigned front,state,selection,story_index,option_index,dirty;
@@ -227,6 +227,10 @@ static void render(void){
   wrapped(15,44,"Unofficial recreation.\nLady Sia 2: RFX Interactive\nOriginal publisher: TDK\nVideo reference: Papacube\nNative frontend: v0.6\nOriginal staff roll not shown\nin this supplied level video.",241);
   footer("A/B RETURN TO MENU");break;
  case LAB:draw_level();break;
+ case GAME_OVER:
+  draw_level();rect(24,43,192,86,244);text(66,53,"GAME OVER",242);
+  text(40,77,"A / START: RETRY",241);text(40,96,"B: MAIN MENU",241);
+  text(40,115,"RETRY RESETS THE RUN",243);break;
  case PAUSE:
   draw_level();rect(35,53,170,59,244);text(52,62,"PAUSED",242);
   text(48,80,"A RESUME",241);text(48,95,"B MAIN MENU",241);break;
@@ -307,8 +311,13 @@ int main(void){
     if(keys&128)input|=DOWN;
     if(pressed&256)input|=RESET;
     game_step(&game,input);dirty=1;
-    if(game.sign_open){paused=1;audio_stop();enter(TUTORIAL);}
+    if(game.game_over){paused=1;audio_stop();enter(GAME_OVER);}
+    else if(game.sign_open){paused=1;audio_stop();enter(TUTORIAL);}
    }break;
+  case GAME_OVER:
+   if(pressed&9)start_level();
+   else if(pressed&6)return_menu();
+   break;
   case PAUSE:
    if(pressed&9)resume_level();
    else if(pressed&6)return_menu();
@@ -331,6 +340,7 @@ int main(void){
   debug[17]=(unsigned)game.area;debug[18]=(unsigned)game.falls;
   debug[19]=(unsigned)game.pickup_timer;
   debug[20]=game.progress.elapsed_frames;debug[21]=game.progress.gems;
+  debug[22]=game.progress.health;debug[23]=(unsigned)game.game_over;debug[24]=(unsigned)game.hurt_timer;
   if(dirty)render();else wait_frame();
  }
 }

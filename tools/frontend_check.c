@@ -202,5 +202,22 @@ int main(int argc,char **argv){
  c->setKeys(c,0);c->reset(c);run(c,90);state(c,0);
  assert(value(c,3)==1&&value(c,4)==1);
  puts("PASS settings integration: menu writes SRAM, soft-reset reload, corrupt-record defaults. Disk save reload and real hardware are not tested.");
+ /* Verify actual fall damage, Game Over, frozen state and retry. */
+ tap(c,8);tap(c,128);tap(c,1);state(c,4);
+ tap(c,128);tap(c,1);tap(c,2);tap(c,64);tap(c,1);state(c,6);
+ tap(c,1);tap(c,1);state(c,7);assert(value(c,22)==3);
+ move_to(c,16,107);c->setKeys(c,64);run(c,100);c->setKeys(c,0);run(c,4);
+ move_to(c,16,139);c->setKeys(c,17);run(c,45);c->setKeys(c,0);run(c,40);
+ c->setKeys(c,16);for(int i=0;i<160&&value(c,17)==0;i++)run(c,1);
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==1);
+ for(unsigned death=0;death<3;death++){
+  c->setKeys(c,33);for(int i=0;i<300&&value(c,18)==death;i++)run(c,1);
+  c->setKeys(c,0);run(c,4);assert(value(c,18)==death+1&&value(c,22)==2-death);
+ }
+ state(c,10);assert(value(c,23)==1&&value(c,7)==0);
+ capture(c,"build/game_over.ppm");unsigned stopped=value(c,16);run(c,90);assert(value(c,16)==stopped);
+ tap(c,1);state(c,7);assert(value(c,22)==3&&value(c,18)==0&&value(c,10)==0);
+ capture(c,"build/retry_after_game_over.ppm");
+ puts("PASS defeat integration: three damaging falls, Game Over, frozen simulation, retry resets run");
  c->deinit(c);free(pixels);
 }

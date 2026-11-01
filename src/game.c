@@ -16,7 +16,8 @@ int game_floor(int x){
  return 153;
 }
 void game_reset(Game *g){
- level_progress_reset(&g->progress,0);
+ level_progress_reset(&g->progress,3);
+ g->hurt_timer=0;g->game_over=0;
  level_set_checkpoint(&g->progress,0,40*FP,118*FP);
  g->x=40*FP;g->y=118*FP;g->vx=0;g->vy=0;
  g->grounded=1;g->facing=1;g->attack=0;g->camera=0;g->previous=0;
@@ -48,8 +49,17 @@ static void collect(Game *g){
  if(!(g->collected&bit)&&g->x+PLAYER_W*FP>left*FP&&g->x<(left+16)*FP&&
     g->y<(top+16)*FP&&g->y+PLAYER_H*FP>top*FP){if(level_collect_gem(&g->progress,(unsigned)g->area)){g->collected|=bit;g->gems=(int)g->progress.gems;g->pickup_timer=150;}}
 }
+int game_damage(Game *g,unsigned amount){
+ if(g->game_over||g->hurt_timer||!amount)return 0;
+ if(!level_take_damage(&g->progress,amount))return 0;
+ g->climbing=0;g->attack=0;g->hurt_timer=60;
+ if(!g->progress.health){g->game_over=1;g->vx=0;g->vy=0;}
+ return 1;
+}
 void game_step(Game *g,unsigned input){
  if(input&RESET){game_reset(g);return;}
+ if(g->game_over)return;
+ if(g->hurt_timer>0)g->hurt_timer--;
  unsigned pressed=input&~(unsigned)g->previous;g->previous=(int)input;g->ticks++;level_progress_tick(&g->progress,0);
  if(g->pickup_timer>0)g->pickup_timer--;
  if((pressed&ATTACK)&&!g->attack)g->attack=12;
@@ -100,5 +110,5 @@ void game_step(Game *g,unsigned input){
  else if(g->area==1&&(input&LEFT)&&g->x<=32*FP&&g->grounded)transition_area(g,0);
  else if(g->area==1&&(input&RIGHT)&&g->x>=225*FP&&g->grounded){g->area=2;g->progress.area=2;g->x=20*FP;g->y=14*FP;g->vy=0;camera(g);}
  else if(g->area==2&&(input&LEFT)&&g->x<=8*FP&&g->grounded){g->area=1;g->progress.area=1;g->x=224*FP;g->y=60*FP;g->vy=0;camera(g);}
- else if(g->y>210*FP){g->falls++;respawn_area(g);}
+ else if(g->y>210*FP){g->falls++;g->hurt_timer=0;game_damage(g,1);if(!g->game_over)respawn_area(g);}
 }

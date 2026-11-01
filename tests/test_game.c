@@ -57,5 +57,15 @@ int main(void){
  step(&g,RIGHT,5);step(&g,JUMP|RIGHT,90);step(&g,0,60);
  assert(g.area==2&&g.grounded&&g.y==75*FP&&g.falls==0);
  g.x=20*FP;g.y=14*FP;g.vy=0;g.grounded=1;step(&g,LEFT,10);assert(g.area==1);
+ game_reset(&g);assert(g.progress.health==3);
+ assert(game_damage(&g,1)&&g.progress.health==2);assert(!game_damage(&g,1));
+ step(&g,0,60);assert(game_damage(&g,99)&&g.game_over&&g.progress.health==0);
+ unsigned frozen=g.ticks;step(&g,RIGHT|ATTACK,100);assert(g.ticks==frozen);
+ game_step(&g,RESET);assert(!g.game_over&&g.progress.health==3);
+ for(int death=0;death<3;death++){
+  g.area=2;g.x=60*FP;g.y=211*FP;g.vy=0;g.grounded=0;game_step(&g,0);
+  assert(g.falls==death+1);assert(g.progress.health==(unsigned)(2-death));
+ }
+ assert(g.game_over);
  puts("PASS v0.6: terrain, jump, ladder, platforms/camera, registered area position/velocity continuity, flip anchors, bridge surface, two gems, round-trip persistence, fall respawn, reset, sign and attack");
 }
