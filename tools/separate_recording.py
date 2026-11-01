@@ -9,8 +9,8 @@ from scipy.io import wavfile
 SR=16384;NFFT=2048;HOP=512
 
 def main():
- ap=argparse.ArgumentParser();ap.add_argument('pcm',type=Path);ap.add_argument('--out',type=Path,default=Path('music/separation_trial'));a=ap.parse_args();a.out.mkdir(parents=True,exist_ok=True)
- raw=a.pcm.read_bytes();x=np.frombuffer(raw,dtype=np.int8).astype(float)[:251*SR]/128
+ ap=argparse.ArgumentParser();ap.add_argument('pcm',type=Path);ap.add_argument('--out',type=Path,default=Path('music/separation_trial'));ap.add_argument('--video-offset',type=float,default=114);a=ap.parse_args();a.out.mkdir(parents=True,exist_ok=True)
+ raw=a.pcm.read_bytes();x=np.frombuffer(raw,dtype=np.int8).astype(float)/128
  f,t,z=signal.stft(x,SR,nperseg=NFFT,noverlap=NFFT-HOP);mag=np.abs(z)
  # Compare broad spectral shape plus neighboring context, excluding nearby time.
  edges=np.unique(np.round(np.geomspace(1,len(f),97)).astype(int));features=[]
@@ -46,7 +46,7 @@ def main():
  for num,i in enumerate(sorted(peaks),1):
   start=max(0,i*HOP/SR-.15);end=min(len(x)/SR,start+.9);b=round(start*SR);e=round(end*SR)
   name=f'candidate_{num:02d}_residual.wav';write(name,effects[b:e]);write(f'candidate_{num:02d}_source.wav',x[b:e])
-  candidates.append({'file':name,'start_in_level_seconds':round(start,4),'video_seconds':round(start+114,4),'duration_seconds':round(end-start,4),'identified_effect':None,'ready_for_game':False})
+  candidates.append({'file':name,'start_in_level_seconds':round(start,4),'video_seconds':round(start+a.video_offset,4),'duration_seconds':round(end-start,4),'identified_effect':None,'ready_for_game':False})
  # A matching preview around the strongest residual event makes losses audible.
  if len(peaks):
   start=max(0,min(peaks[0]*HOP/SR-5,len(x)/SR-15));b=round(start*SR);e=b+15*SR
