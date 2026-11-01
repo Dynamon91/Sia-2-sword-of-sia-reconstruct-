@@ -15,7 +15,7 @@
     55
   ],
   "mask": "hand traced approximate silhouette",
-  "background": "interpolated occlusions; shared first-area palette",
+  "background": "registered terrain from 144s (-116,+12), 146s (+8,-21); upper overlay sky interpolated",
   "limits": [
     "single pose, no recovered animation",
     "approximate collision and patrol",
