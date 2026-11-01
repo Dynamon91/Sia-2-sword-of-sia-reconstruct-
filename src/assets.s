@@ -71,3 +71,8 @@ bridge_backdrop:
 .global bridge_spans
 bridge_spans:
 .incbin "assets/bridge_spans.bin"
+
+.balign 4
+.global cliff_background
+cliff_background:
+.incbin "assets/cliff.bin"

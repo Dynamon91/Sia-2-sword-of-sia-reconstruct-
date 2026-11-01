@@ -8,6 +8,7 @@ static const char save_type[] __attribute__((used))="SRAM_V113";
 #include "../assets/assets.h"
 #include "../assets/room.h"
 #include "../assets/ui.h"
+extern const unsigned char cliff_background[];
 extern const unsigned char bridge_background[],bridge_sky[],bridge_run[];
 extern const unsigned char room_backdrop[],room_spans[],bridge_backdrop[],bridge_spans[];
 typedef unsigned short u16;
@@ -162,8 +163,8 @@ static void draw_level(void){
  const unsigned char *background=game.area?bridge_backdrop:room_backdrop;
  const unsigned char *spans=game.area?bridge_spans:room_spans;
  int shift=-game.camera_y;
- image(background);
- for(int row=0;row<160-shift;row++){
+ if(game.area==2)image(cliff_background);else image(background);
+ for(int row=0;row<160-shift&&game.area!=2;row++){
   unsigned count=spans[0]|((unsigned)spans[1]<<8);spans+=2;
   for(unsigned run=0;run<count;run++){
    int x=spans[0];unsigned length=spans[1];spans+=2;
@@ -181,7 +182,7 @@ static void draw_level(void){
    }
   }
  }
- if(!(game.collected&(1<<game.area)))sprite(game.area?133:109,(game.area?74:62)-game.camera_y,16,16,room_sprites+ROOM_GEM_OFFSET,0);
+ if(game.area<2&&!(game.collected&(1<<game.area)))sprite(game.area?133:109,(game.area?74:62)-game.camera_y,16,16,room_sprites+ROOM_GEM_OFFSET,0);
  unsigned pose=game.climbing?2:game.attack?3:!game.grounded?1:0;
  const unsigned char *actor=room_sprites+pose*ROOM_SPRITE_SIZE;
  if(!pose&&game.vx&&((game.ticks>>3)&1))actor=bridge_run;

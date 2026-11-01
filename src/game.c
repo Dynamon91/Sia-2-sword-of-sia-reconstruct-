@@ -3,6 +3,7 @@
 /* Approximate first viewport from the supplied recording, not a recovered ROM map. */
 const Platform platforms[PLATFORM_COUNT]={{81,88,70,8},{186,40,54,8}};
 static const Platform bridge_platforms[3]={{33,BRIDGE_SURFACE_Y,48,8},{81,BRIDGE_SURFACE_Y,125,8},{206,BRIDGE_SURFACE_Y,34,8}};
+static const Platform cliff_platforms[2]={{0,60,89,8},{140,115,100,8}};
 static const int ground[][2]={{0,151},{24,153},{40,158},{56,158},{72,153},{84,153},
  {100,154},{120,153},{140,145},{156,146},{176,153},{192,157},{216,157},{239,153}};
 int game_floor(int x){
@@ -31,16 +32,18 @@ static void transition_area(Game *g,int area){
  camera(g);
 }
 static void respawn_area(Game *g){
- g->x=(g->area?60:40)*FP;g->y=(g->area?BRIDGE_SURFACE_Y-PLAYER_H:118)*FP;
+ g->x=(g->area==2?20:g->area?60:40)*FP;g->y=(g->area==2?20:g->area?BRIDGE_SURFACE_Y-PLAYER_H:118)*FP;
  g->vx=0;g->vy=0;g->grounded=1;g->climbing=0;g->sign_open=0;
  g->camera=0;camera(g);
 }
 static void camera(Game *g){
+ if(g->area==2){g->camera_y=0;return;}
  g->camera_y=g->y/FP-48;
  if(g->camera_y>0)g->camera_y=0;
  if(g->camera_y<-40)g->camera_y=-40;
 }
 static void collect(Game *g){
+ if(g->area>=2)return;
  int bit=1<<g->area,left=g->area?133:110,top=g->area?74:62;
  if(!(g->collected&bit)&&g->x+PLAYER_W*FP>left*FP&&g->x<(left+16)*FP&&
     g->y<(top+16)*FP&&g->y+PLAYER_H*FP>top*FP){if(level_collect_gem(&g->progress,(unsigned)g->area)){g->collected|=bit;g->gems=(int)g->progress.gems;g->pickup_timer=150;}}
@@ -80,8 +83,8 @@ void game_step(Game *g,unsigned input){
  g->vy+=32;if(g->vy>6*FP)g->vy=6*FP;
  int next=g->y+g->vy,landing=0x7fffffff;
  g->grounded=0;
- const Platform *list=g->area?bridge_platforms:platforms;
- int count=g->area?3:PLATFORM_COUNT;
+ const Platform *list=g->area==2?cliff_platforms:g->area?bridge_platforms:platforms;
+ int count=g->area==2?2:g->area?3:PLATFORM_COUNT;
  for(int i=0;i<count;i++){
   const Platform *p=&list[i];
   if(g->vy>=0&&g->x+PLAYER_W*FP>p->x*FP&&g->x<(p->x+p->w)*FP&&
@@ -94,6 +97,8 @@ void game_step(Game *g,unsigned input){
  g->y=next;g->camera=0;collect(g);camera(g);
  if(!g->area&&(pressed&DOWN)&&center>=158&&center<=190&&g->grounded)g->sign_open=1;
  if(!g->area&&(input&RIGHT)&&g->x>=225*FP&&g->grounded&&g->y==0)transition_area(g,1);
- else if(g->area&&(input&LEFT)&&g->x<=32*FP&&g->grounded)transition_area(g,0);
+ else if(g->area==1&&(input&LEFT)&&g->x<=32*FP&&g->grounded)transition_area(g,0);
+ else if(g->area==1&&(input&RIGHT)&&g->x>=225*FP&&g->grounded){g->area=2;g->progress.area=2;g->x=20*FP;g->y=20*FP;g->vy=0;camera(g);}
+ else if(g->area==2&&(input&LEFT)&&g->x<=8*FP&&g->grounded){g->area=1;g->progress.area=1;g->x=224*FP;g->y=60*FP;g->vy=0;camera(g);}
  else if(g->y>210*FP){g->falls++;respawn_area(g);}
 }

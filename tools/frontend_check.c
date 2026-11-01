@@ -147,6 +147,18 @@ int main(int argc,char **argv){
  capture(c,"build/bridge_walk_v06.ppm");c->setKeys(c,0);run(c,4);
  c->setKeys(c,1);run(c,12);c->setKeys(c,0);run(c,2);
  capture(c,"build/bridge_jump_v06.ppm");run(c,100);
+ c->setKeys(c,16);
+ for(int i=0;i<180&&value(c,17)==1;i++)run(c,1);
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==2);
+ capture(c,"build/cliff_entry.ppm");
+ c->setKeys(c,16);run(c,35);c->setKeys(c,17);run(c,70);c->setKeys(c,0);run(c,60);
+ assert(value(c,17)==2&&value(c,14)==1&&(int)value(c,9)==75*256);
+ capture(c,"build/cliff_landing.ppm");
+ unsigned old_falls=value(c,18);c->setKeys(c,32);
+ for(int i=0;i<300&&value(c,18)==old_falls;i++)run(c,1);
+ assert(value(c,18)==old_falls+1);c->setKeys(c,0);run(c,4);
+ c->setKeys(c,32);for(int i=0;i<60&&value(c,17)==2;i++)run(c,1);
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==1&&value(c,10)==2);
  c->setKeys(c,32);
  for(int i=0;i<200&&value(c,17)==1;i++){
   int before_x=(int)value(c,8)+AREA_OFFSET_X*256,before_y=(int)value(c,9)-AREA_OFFSET_Y*256;
