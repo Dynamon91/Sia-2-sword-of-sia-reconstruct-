@@ -9,6 +9,7 @@ static const char save_type[] __attribute__((used))="SRAM_V113";
 #include "../assets/room.h"
 #include "../assets/ui.h"
 extern const unsigned char cliff_background[],guard_background[],guard_sprite[];
+extern const unsigned char gap_background[],guard2_sprite[],walk_cycle[],attack_cycle[],ui_more_tiles[];
 extern const unsigned char bridge_background[],bridge_sky[],bridge_run[];
 extern const unsigned char room_backdrop[],room_spans[],bridge_backdrop[],bridge_spans[];
 typedef unsigned short u16;
@@ -94,6 +95,8 @@ static void ui_init(void){
  REG32(0x040000DC)=0x84000000|128;
  REG32(0x040000D4)=(unsigned)ui_tiles;REG32(0x040000D8)=0x06014000;
  REG32(0x040000DC)=0x84000000|(UI_TILE_BYTES/4);
+ REG32(0x040000D4)=(unsigned)ui_more_tiles;REG32(0x040000D8)=0x06014000+UI_TILE_BYTES;
+ REG32(0x040000DC)=0x84000000|128;
 }
 static void ui_hide(void){for(unsigned i=0;i<128;i++)object_shadow[i*4]=0x0200;}
 static void ui_object(unsigned slot,unsigned x,unsigned y,unsigned size,unsigned tile){
@@ -163,7 +166,7 @@ static void draw_level(void){
  const unsigned char *background=game.area?bridge_backdrop:room_backdrop;
  const unsigned char *spans=game.area?bridge_spans:room_spans;
  int shift=-game.camera_y;
- if(game.area==3)image(guard_background);else if(game.area==2)image(cliff_background);else image(background);
+ if(game.area==4)image(gap_background);else if(game.area==3)image(guard_background);else if(game.area==2)image(cliff_background);else image(background);
  for(int row=0;row<160-shift&&game.area<2;row++){
   unsigned count=spans[0]|((unsigned)spans[1]<<8);spans+=2;
   for(unsigned run=0;run<count;run++){
@@ -182,17 +185,26 @@ static void draw_level(void){
    }
   }
  }
- if(game.area<2&&!(game.collected&(1<<game.area)))sprite(game.area?133:109,(game.area?74:62)-game.camera_y,16,16,room_sprites+ROOM_GEM_OFFSET,0);
+ for(unsigned i=0;i<GEM_COUNT;i++){
+  const Gem *gem=&level_gems[i];
+  if(gem->area==game.area&&!(game.collected&(1u<<gem->id)))
+   sprite(gem->x,gem->y-game.camera_y,16,16,room_sprites+ROOM_GEM_OFFSET,0);
+ }
  if(game.area==3&&game.enemy_hp&&(!game.enemy_flash||(game.enemy_flash&2)))
   sprite(game.enemy_x/FP+9-20,88-55,41,60,guard_sprite,game.enemy_dir>0);
- unsigned pose=game.climbing?2:game.attack?3:!game.grounded?1:0;
+ if(game.area==4&&game.enemy2_hp&&(!game.enemy2_flash||(game.enemy2_flash&2)))
+  sprite(game.enemy2_x/FP+9-15,98-51,34,55,guard2_sprite,game.enemy2_dir>0);
+ unsigned pose=game.climbing?2:!game.grounded?1:0;
  const unsigned char *actor=room_sprites+pose*ROOM_SPRITE_SIZE;
- if(!pose&&game.vx&&((game.ticks>>3)&1))actor=bridge_run;
- if(!game.hurt_timer||(game.hurt_timer&4))sprite(aligned_sprite_x(game.x/FP+PLAYER_W/2,ROOM_SPRITE_W,SIA_ANCHOR_X,game.facing<0),game.y/FP+PLAYER_H-SIA_ANCHOR_Y-game.camera_y,
-        ROOM_SPRITE_W,ROOM_SPRITE_H,actor,game.facing<0);
+ int width=48,height=56,anchor=24;
+ if(game.attack&&!game.climbing){
+  width=80;height=64;anchor=39;actor=attack_cycle+game_attack_frame(&game)*80*64;
+ }else if(!pose&&game.vx)actor=walk_cycle+game_walk_frame(&game)*ROOM_SPRITE_SIZE;
+ if(!game.hurt_timer||(game.hurt_timer&4))sprite(aligned_sprite_x(game.x/FP+PLAYER_W/2,width,anchor,game.facing<0),game.y/FP+PLAYER_H-height-game.camera_y,
+        width,height,actor,game.facing<0);
  if(game.pickup_timer>0){
   ui_object(0,95,11,2,UI_GEM_TILE);
-  ui_object(1,129,29,1,game.gems>=2?UI_DIGIT2_TILE:game.gems?UI_DIGIT1_TILE:UI_DIGIT0_TILE);
+  ui_object(1,129,29,1,game.gems==4?712:game.gems==3?704:game.gems==2?UI_DIGIT2_TILE:game.gems?UI_DIGIT1_TILE:UI_DIGIT0_TILE);
  }
 }
 static void draw_arrival(void){
@@ -344,6 +356,7 @@ int main(void){
   debug[20]=game.progress.elapsed_frames;debug[21]=game.progress.gems;
   debug[22]=game.progress.health;debug[23]=(unsigned)game.game_over;debug[24]=(unsigned)game.hurt_timer;
   debug[25]=(unsigned)game.enemy_hp;debug[26]=game.progress.defeated;debug[27]=(unsigned)game.enemy_x;
+  debug[28]=game_walk_frame(&game);debug[29]=game.attack?game_attack_frame(&game):3;debug[30]=(unsigned)game.enemy2_hp;
   if(dirty)render();else wait_frame();
  }
 }

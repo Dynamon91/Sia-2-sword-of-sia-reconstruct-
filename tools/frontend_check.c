@@ -236,5 +236,40 @@ int main(int argc,char **argv){
  assert(value(c,25)==0&&value(c,26)==1);state(c,7);
  capture(c,"build/guard_defeated.ppm");
  puts("PASS combat integration: guard area, contact damage, sword defeat and persistent defeat counter");
+ /* Actual-ROM validation of recorded animation, new gap, pickups and UI. */
+ unsigned motion_seen=0;
+ c->setKeys(c,16);
+ for(int i=0;i<24;i++){
+  run(c,1);unsigned f=value(c,28);
+  if(!(motion_seen&(1u<<f))){char path[64];snprintf(path,sizeof(path),"build/walk_frame_%u.ppm",f);capture(c,path);}
+  motion_seen|=1u<<f;
+ }
+ c->setKeys(c,0);run(c,4);assert(motion_seen==7);
+ assert(value(c,10)==3&&(c->busRead16(c,0x0700000c)&1023)==704);
+ capture(c,"build/pickup_three.ppm");
+ c->setKeys(c,2);run(c,1);assert(value(c,29)==0);capture(c,"build/sword_windup.ppm");
+ run(c,4);assert(value(c,29)==1);capture(c,"build/sword_active.ppm");
+ run(c,5);assert(value(c,29)==2);capture(c,"build/sword_recovery.ppm");
+ c->setKeys(c,0);run(c,8);
+ c->setKeys(c,16);
+ for(int i=0;i<180&&value(c,17)==3;i++){
+  int bx=(int)value(c,8),by=(int)value(c,9);run(c,1);
+  if(value(c,17)==4){assert((int)value(c,8)+158*256-bx==320);assert((int)value(c,9)-18*256==by);}
+ }
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==4);capture(c,"build/gap_entry.ppm");
+ move_to(c,16,94);c->setKeys(c,17);run(c,60);c->setKeys(c,0);run(c,4);
+ assert(value(c,17)==4&&value(c,14)==1&&(int)value(c,9)==58*256);
+ assert(value(c,10)==4&&value(c,12)==15);
+ assert((c->busRead16(c,0x0700000c)&1023)==712);capture(c,"build/gap_pickup_four.ppm");
+ for(int i=0;i<15&&value(c,30);i++){tap(c,2);run(c,8);}
+ assert(value(c,30)==0&&value(c,26)==2);capture(c,"build/gap_guard_defeated.ppm");
+ unsigned falls_before=value(c,18),hp_before=value(c,22);
+ c->setKeys(c,32);for(int i=0;i<240&&value(c,18)==falls_before;i++)run(c,1);
+ c->setKeys(c,0);run(c,4);
+ assert(value(c,18)==falls_before+1&&value(c,22)==hp_before-1&&value(c,10)==4&&value(c,17)==4);
+ capture(c,"build/gap_respawn.ppm");
+ c->setKeys(c,32);for(int i=0;i<100&&value(c,17)==4;i++)run(c,1);
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==3&&value(c,10)==4&&value(c,26)==2);
+ puts("PASS motion/gap integration: three recorded walk frames, three attack phases, registered fifth viewport, gap jump and fall, four persistent gems, OBJ digits 3/4, second guard defeat, return persistence");
  c->deinit(c);free(pixels);
 }

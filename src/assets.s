@@ -85,3 +85,28 @@ guard_background:
 .global guard_sprite
 guard_sprite:
 .incbin "assets/guard_sprite.bin"
+
+.balign 4
+.global gap_background
+gap_background:
+.incbin "assets/gap.bin"
+
+.balign 4
+.global guard2_sprite
+guard2_sprite:
+.incbin "assets/guard2_sprite.bin"
+
+.balign 4
+.global walk_cycle
+walk_cycle:
+.incbin "assets/walk_cycle.bin"
+
+.balign 4
+.global attack_cycle
+attack_cycle:
+.incbin "assets/attack_cycle.bin"
+
+.balign 4
+.global ui_more_tiles
+ui_more_tiles:
+.incbin "assets/ui_more_tiles.bin"

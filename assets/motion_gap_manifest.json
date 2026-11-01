@@ -1,0 +1,57 @@
+{
+  "walk_frames": 3,
+  "walk_sources": [
+    142.9,
+    142.95,
+    143.05
+  ],
+  "walk_size": [
+    48,
+    56
+  ],
+  "walk_anchor": [
+    24,
+    56
+  ],
+  "attack_frames": 3,
+  "attack_sources": [
+    137.9,
+    138,
+    138.2
+  ],
+  "attack_size": [
+    80,
+    64
+  ],
+  "attack_anchor": [
+    39,
+    64
+  ],
+  "gap_source": 155,
+  "guard_to_gap": [
+    -158,
+    18
+  ],
+  "gap_surfaces": [
+    [
+      0,
+      106,
+      98
+    ],
+    [
+      172,
+      98,
+      68
+    ]
+  ],
+  "gem": [
+    126,
+    40
+  ],
+  "limits": [
+    "Manually traced compressed recording poses, not original sprite sheets",
+    "Animation timing estimated",
+    "Enemy firing behavior is not yet reconstructed",
+    "Unseen upper sky estimated; preceding corridor still incomplete"
+  ]
+}

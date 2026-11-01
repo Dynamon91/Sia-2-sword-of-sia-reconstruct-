@@ -68,8 +68,8 @@ int main(void){
  }
  assert(g.game_over);
  game_reset(&g);g.area=3;g.progress.area=3;g.x=125*FP;g.y=50*FP;g.grounded=1;g.facing=1;
- game_step(&g,ATTACK);assert(g.enemy_hp==1);step(&g,ATTACK,20);assert(g.enemy_hp==1);
- game_step(&g,0);game_step(&g,ATTACK);assert(!g.enemy_hp&&g.progress.defeated==1);
+ game_step(&g,ATTACK);assert(g.enemy_hp==2);step(&g,ATTACK,4);assert(g.enemy_hp==1);step(&g,ATTACK,20);assert(g.enemy_hp==1);
+ game_step(&g,0);game_step(&g,ATTACK);step(&g,ATTACK,4);assert(!g.enemy_hp&&g.progress.defeated==1);
  step(&g,0,60);assert(g.progress.defeated==1&&g.progress.health==3);
  g.x=0;g.y=90*FP;g.grounded=1;game_step(&g,LEFT);assert(g.area==2&&!g.enemy_hp);
  game_reset(&g);g.area=3;g.x=150*FP;g.y=48*FP;g.grounded=1;
