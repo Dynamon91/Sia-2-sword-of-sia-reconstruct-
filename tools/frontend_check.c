@@ -219,5 +219,22 @@ int main(int argc,char **argv){
  tap(c,1);state(c,7);assert(value(c,22)==3&&value(c,18)==0&&value(c,10)==0);
  capture(c,"build/retry_after_game_over.ppm");
  puts("PASS defeat integration: three damaging falls, Game Over, frozen simulation, retry resets run");
+ /* Reach the new native guard area and exercise contact and sword damage. */
+ move_to(c,16,107);c->setKeys(c,64);run(c,100);c->setKeys(c,0);run(c,4);
+ move_to(c,16,139);c->setKeys(c,17);run(c,45);c->setKeys(c,0);run(c,40);
+ c->setKeys(c,16);for(int i=0;i<160&&value(c,17)==0;i++)run(c,1);
+ for(int i=0;i<180&&value(c,17)==1;i++)run(c,1);
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==2);
+ c->setKeys(c,16);run(c,5);c->setKeys(c,17);run(c,90);c->setKeys(c,0);run(c,60);
+ c->setKeys(c,16);for(int i=0;i<160&&value(c,17)==2;i++)run(c,1);
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==3);
+ capture(c,"build/guard_entry.ppm");
+ move_to(c,16,160);for(int i=0;i<240&&value(c,22)==3;i++)run(c,1);
+ assert(value(c,22)==2&&value(c,24)>0);capture(c,"build/guard_contact.ppm");
+ move_to(c,32,120);c->setKeys(c,16);run(c,1);c->setKeys(c,0);run(c,1);
+ for(int i=0;i<40&&value(c,25)>0;i++){tap(c,2);run(c,8);}
+ assert(value(c,25)==0&&value(c,26)==1);state(c,7);
+ capture(c,"build/guard_defeated.ppm");
+ puts("PASS combat integration: guard area, contact damage, sword defeat and persistent defeat counter");
  c->deinit(c);free(pixels);
 }

@@ -76,3 +76,12 @@ bridge_spans:
 .global cliff_background
 cliff_background:
 .incbin "assets/cliff.bin"
+
+.balign 4
+.global guard_background
+guard_background:
+.incbin "assets/guard_room.bin"
+.balign 4
+.global guard_sprite
+guard_sprite:
+.incbin "assets/guard_sprite.bin"

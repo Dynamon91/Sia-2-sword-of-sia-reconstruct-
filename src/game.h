@@ -9,7 +9,7 @@
 enum { LEFT=1, RIGHT=2, JUMP=4, ATTACK=8, RESET=16, UP=32, DOWN=64 };
 typedef struct { int x,y,w,h; } Platform;
 typedef struct { int x,y,vx,vy,grounded,facing,attack,camera,previous;
-    int climbing,gems,collected,sign_open,camera_y,area,falls,pickup_timer; int hurt_timer,game_over; unsigned ticks; LevelProgress progress; } Game;
+    int climbing,gems,collected,sign_open,camera_y,area,falls,pickup_timer; int hurt_timer,game_over,enemy_x,enemy_dir,enemy_hp,enemy_flash; unsigned swing_id,enemy_last_swing; unsigned ticks; LevelProgress progress; } Game;
 extern const Platform platforms[PLATFORM_COUNT];
 int game_floor(int x);
 void game_reset(Game *g);

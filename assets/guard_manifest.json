@@ -1,0 +1,24 @@
+{
+  "source_seconds": 145,
+  "sprite_crop": [
+    137,
+    35,
+    178,
+    95
+  ],
+  "sprite_size": [
+    41,
+    60
+  ],
+  "sprite_anchor": [
+    20,
+    55
+  ],
+  "mask": "hand traced approximate silhouette",
+  "background": "interpolated occlusions; shared first-area palette",
+  "limits": [
+    "single pose, no recovered animation",
+    "approximate collision and patrol",
+    "new transition skips unimplemented corridor between video127 and145"
+  ]
+}
