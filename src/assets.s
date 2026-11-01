@@ -110,3 +110,8 @@ attack_cycle:
 .global ui_more_tiles
 ui_more_tiles:
 .incbin "assets/ui_more_tiles.bin"
+
+.balign 4
+.global ambient_gems
+ambient_gems:
+.incbin "assets/ambient_gems.bin"

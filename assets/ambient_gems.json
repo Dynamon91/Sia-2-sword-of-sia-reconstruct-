@@ -1,0 +1,41 @@
+{
+  "frames": [
+    {
+      "seconds": 114,
+      "center": [
+        117,
+        69
+      ]
+    },
+    {
+      "seconds": 114.2,
+      "center": [
+        117,
+        70
+      ]
+    },
+    {
+      "seconds": 114.4,
+      "center": [
+        116,
+        72
+      ]
+    },
+    {
+      "seconds": 114.6,
+      "center": [
+        117,
+        72
+      ]
+    }
+  ],
+  "size": [
+    16,
+    16
+  ],
+  "timing": "estimated eight game ticks per pose",
+  "limits": [
+    "camera motion removed by tracking gem center",
+    "not original sprite sheet; other scenery layers remain pending"
+  ]
+}

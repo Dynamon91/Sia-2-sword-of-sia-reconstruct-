@@ -9,6 +9,7 @@ static const char save_type[] __attribute__((used))="SRAM_V113";
 #include "../assets/room.h"
 #include "../assets/ui.h"
 extern const unsigned char cliff_background[],guard_background[],guard_sprite[];
+extern const unsigned char ambient_gems[];
 extern const unsigned char gap_background[],guard2_sprite[],walk_cycle[],attack_cycle[],ui_more_tiles[];
 extern const unsigned char bridge_background[],bridge_sky[],bridge_run[];
 extern const unsigned char room_backdrop[],room_spans[],bridge_backdrop[],bridge_spans[];
@@ -188,7 +189,7 @@ static void draw_level(void){
  for(unsigned i=0;i<GEM_COUNT;i++){
   const Gem *gem=&level_gems[i];
   if(gem->area==game.area&&!(game.collected&(1u<<gem->id)))
-   sprite(gem->x,gem->y-game.camera_y,16,16,room_sprites+ROOM_GEM_OFFSET,0);
+   sprite(gem->x,gem->y-game.camera_y,16,16,ambient_gems+((game.ticks/8)%4)*256,0);
  }
  if(game.area==3&&game.enemy_hp&&(!game.enemy_flash||(game.enemy_flash&2)))
   sprite(game.enemy_x/FP+9-20,88-55,41,60,guard_sprite,game.enemy_dir>0);
