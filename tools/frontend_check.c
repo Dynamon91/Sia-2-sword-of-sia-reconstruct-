@@ -237,17 +237,18 @@ int main(int argc,char **argv){
  capture(c,"build/guard_defeated.ppm");
  puts("PASS combat integration: guard area, contact damage, sword defeat and persistent defeat counter");
  /* Actual-ROM validation of recorded animation, new gap, pickups and UI. */
- unsigned motion_seen=0;
+ unsigned motion_seen=0,previous_motion=3;
  c->setKeys(c,16);
  for(int i=0;i<24;i++){
   run(c,1);unsigned f=value(c,28);
-  if(!(motion_seen&(1u<<f))){char path[64];snprintf(path,sizeof(path),"build/walk_frame_%u.ppm",f);capture(c,path);}
-  motion_seen|=1u<<f;
+  if(previous_motion==f&&!(motion_seen&(1u<<f))){char path[64];snprintf(path,sizeof(path),"build/walk_frame_%u.ppm",f);capture(c,path);}
+  if(previous_motion==f)motion_seen|=1u<<f;
+  previous_motion=f;
  }
  c->setKeys(c,0);run(c,4);assert(motion_seen==7);
  assert(value(c,10)==3&&(c->busRead16(c,0x0700000c)&1023)==704);
  capture(c,"build/pickup_three.ppm");
- c->setKeys(c,2);run(c,1);assert(value(c,29)==0);capture(c,"build/sword_windup.ppm");
+ c->setKeys(c,2);run(c,2);assert(value(c,29)==0);capture(c,"build/sword_windup.ppm");
  run(c,4);assert(value(c,29)==1);capture(c,"build/sword_active.ppm");
  run(c,5);assert(value(c,29)==2);capture(c,"build/sword_recovery.ppm");
  c->setKeys(c,0);run(c,8);
