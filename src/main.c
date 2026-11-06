@@ -200,8 +200,6 @@ static void draw_level(void){
  }else if(!pose&&game.vx)actor=walk_cycle+game_walk_frame(&game)*ROOM_SPRITE_SIZE;
  if(!game.hurt_timer||(game.hurt_timer&4))sprite(aligned_sprite_x(game.x/FP+PLAYER_W/2,width,anchor,game.facing<0),game.y/FP+PLAYER_H-height-game.camera_y,
         width,height,actor,game.facing<0);
- char status[]={'H','P',':',(char)('0'+game.progress.health),' ','L',':',(char)('0'+game.lives),0};
- rect(3,3,52,10,240);text(5,5,status,241);
  if(game.pickup_timer>0){
   ui_object(0,95,11,2,UI_GEM_TILE);
   ui_object(1,129,29,1,game.gems==4?712:game.gems==3?704:game.gems==2?UI_DIGIT2_TILE:game.gems?UI_DIGIT1_TILE:UI_DIGIT0_TILE);
@@ -242,8 +240,10 @@ static void render(void){
   text(40,77,"A / START: RETRY",241);text(40,96,"B: MAIN MENU",241);
   text(40,115,"RETRY RESETS THE RUN",243);break;
  case PAUSE:
-  draw_level();rect(35,53,170,59,244);text(52,62,"PAUSED",242);
-  text(48,80,"A RESUME",241);text(48,95,"B MAIN MENU",241);break;
+  draw_level();rect(35,42,170,84,244);text(52,51,"PAUSED",242);
+  text(48,69,"HP",241);number(66,69,game.progress.health,241);
+  text(96,69,"LIVES",241);number(132,69,game.lives,241);
+  text(48,90,"A RESUME",241);text(48,107,"B MAIN MENU",241);break;
  case TUTORIAL:
   draw_level();rect(5,87,230,69,244);text(12,94,"CONTROLS",242);
   wrapped(12,108,"UP / DOWN: climb the ladder.\nA: jump. B: attack.\nSTART: pause. SELECT: menu.",241);

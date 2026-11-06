@@ -59,7 +59,6 @@ static void check_rest_background(struct mCore *c,const char *path,int gem_x,int
  unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
  for(int y=0;y<160;y++)for(int x=0;x<240;x++){
   int expected=fgetc(f);assert(expected>=0);
-  if(x>=3&&x<55&&y>=3&&y<13)continue; /* Live HP/lives HUD replaces these background pixels. */
   if(x>=sx&&x<sx+48&&y>=sy&&y<sy+56)continue;
   if(x>=gem_x&&x<gem_x+16&&y>=gem_y&&y<gem_y+16)continue;
   assert(c->busRead8(c,base+(unsigned)y*240+(unsigned)x)==(unsigned)expected);
