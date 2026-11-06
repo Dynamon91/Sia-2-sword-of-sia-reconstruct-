@@ -1,0 +1,18 @@
+{
+  "source": "music_background_trial.wav",
+  "sample_rate": 32768,
+  "start_seconds": 36.0,
+  "end_seconds": 124.51904296875,
+  "duration_seconds": 88.51904296875,
+  "phrase_correlation": 0.762501010932237,
+  "raw_seam_jump_pcm16": 6125,
+  "preview_crossfade_seconds": 0.019989013671875,
+  "approved_by_listening": false,
+  "integrated_in_rom": false,
+  "limits": [
+    "Waveform match may follow repeated effects as well as music.",
+    "A two-second match does not prove complete musical phrase alignment.",
+    "Crossfade preview changes the boundary; raw candidate remains available.",
+    "Music/effects isolation remains experimental."
+  ]
+}
