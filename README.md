@@ -2,6 +2,10 @@
 
 **🚧 WORK IN PROGRESS — Ricostruzione ancora in sviluppo.**
 
+![Avanzamento complessivo stimato: 8%](docs/progress.svg)
+
+**Progetto completo: circa 8%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
+
 ![Anteprima degli asset attualmente integrati](previews/readme_frontend.png)
 
 Anteprima degli asset di titolo, menu e scene attualmente integrati, ripuliti dagli overlay della registrazione. Le zone originariamente coperte sono ricostruite e approssimate.

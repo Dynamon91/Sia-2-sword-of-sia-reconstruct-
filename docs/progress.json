@@ -1,0 +1,12 @@
+{
+  "updated": "2026-11-06",
+  "areas": [
+    {"name":"Motore e sistemi di gioco","weight":15,"earned":6,"evidence":"Build GBA, controlli, raccolta, combattimento, vite e game over testati nel prototipo; fisica e sistemi ancora parziali."},
+    {"name":"Mondo 1 e boss","weight":20,"earned":1,"evidence":"Cinque viewport parziali del primo livello, due guardie e quattro gemme; mondo e boss incompleti."},
+    {"name":"Mondo 2 e boss","weight":15,"earned":0,"evidence":"Riferimenti disponibili; contenuti non integrati."},
+    {"name":"Mondo 3 e boss","weight":15,"earned":0,"evidence":"Video indicizzati; contenuti non integrati."},
+    {"name":"Mondo 4, boss finale, finale e crediti","weight":15,"earned":0,"evidence":"Video indicizzati; contenuti non integrati."},
+    {"name":"Fedeltà visiva, interfaccia, animazioni e audio","weight":15,"earned":0,"evidence":"Asset e animazioni parziali, prove audio separate; nessun insieme completo verificato."},
+    {"name":"Riferimenti, validazione e consegna finale","weight":5,"earned":1,"evidence":"Riferimenti ricevuti fino al finale e test del prototipo; collaudo completo e hardware mancanti."}
+  ]
+}
