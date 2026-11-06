@@ -10,7 +10,21 @@ SR=16384;NFFT=2048;HOP=512
 
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('pcm',type=Path);ap.add_argument('--out',type=Path,default=Path('music/separation_trial'));ap.add_argument('--video-offset',type=float,default=114);a=ap.parse_args();a.out.mkdir(parents=True,exist_ok=True)
- raw=a.pcm.read_bytes();x=np.frombuffer(raw,dtype=np.int8).astype(float)/128
+ global SR,NFFT,HOP
+ raw=a.pcm.read_bytes()
+ if a.pcm.suffix.lower()=='.wav':
+  SR,samples=wavfile.read(a.pcm)
+  if samples.ndim!=1 or samples.dtype!=np.int16:
+   ap.error('WAV input must be mono signed 16-bit PCM')
+  if SR not in (16384,22050,32768,44100,48000):
+   ap.error('Unsupported WAV sample rate')
+  x=samples.astype(float)/32768
+  NFFT=2**round(np.log2(SR/8));HOP=NFFT//4
+  source_format='mono PCM16 WAV'
+ else:
+  x=np.frombuffer(raw,dtype=np.int8).astype(float)/128
+  source_format='mono signed PCM8 at 16384 Hz'
+ if len(x)<6*SR:ap.error('At least six seconds of input required')
  f,t,z=signal.stft(x,SR,nperseg=NFFT,noverlap=NFFT-HOP);mag=np.abs(z)
  # Compare broad spectral shape plus neighboring context, excluding nearby time.
  edges=np.unique(np.round(np.geomspace(1,len(f),97)).astype(int));features=[]
@@ -60,7 +74,7 @@ def main():
   start=max(0,min(peaks[0]*HOP/SR-5,len(x)/SR-15));b=round(start*SR);e=b+15*SR
   for name,y in [('source',x),('music',music),('residual',effects)]:write('event_comparison_'+name+'_15s.wav',y[b:e])
  else:start=None
- report={'source_sha256':hashlib.sha256(raw).hexdigest(),'duration_seconds':len(x)/SR,'sample_rate':SR,'method':'non-local repetition estimate, 12 spectral neighbors at least 5 seconds apart; conservative fallback for unmatched material; soft magnitude mask with original phase',
+ report={'source_sha256':hashlib.sha256(raw).hexdigest(),'duration_seconds':len(x)/SR,'source_format':source_format,'fft_samples':NFFT,'hop_samples':HOP,'sample_rate':SR,'method':'non-local repetition estimate, 12 spectral neighbors at least 5 seconds apart; conservative fallback for unmatched material; soft magnitude mask with original phase',
  'frame_fraction_with_at_least_four_matches':float(np.mean(quality>=4/k)),'waveform_additivity_max_error':float(np.max(np.abs(music+effects-x))),
  'pcm_gain':gain,'exported_stem_sum_max_error_int16':quantization_error,'full_length_stems':['music_background_trial.wav','effects_residual_trial.wav'],'source_rms':float(np.sqrt(np.mean(x*x))),'music_rms':float(np.sqrt(np.mean(music*music))),'residual_rms':float(np.sqrt(np.mean(effects*effects))),
  'event_comparison_start_seconds':start,'candidates':candidates,'integrated_in_rom':False,

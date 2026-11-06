@@ -1,0 +1,89 @@
+{
+  "source_sha256": "7f11f0fb4eecb81fe4c382dd43eb5020014ac6aa353e405ff76bd307a7d0fdef",
+  "duration_seconds": 251.0,
+  "source_format": "mono PCM16 WAV",
+  "fft_samples": 4096,
+  "hop_samples": 1024,
+  "sample_rate": 32768,
+  "method": "non-local repetition estimate, 12 spectral neighbors at least 5 seconds apart; conservative fallback for unmatched material; soft magnitude mask with original phase",
+  "frame_fraction_with_at_least_four_matches": 0.9945225942985186,
+  "waveform_additivity_max_error": 5.551115123125783e-17,
+  "pcm_gain": 30000.0,
+  "exported_stem_sum_max_error_int16": 1,
+  "full_length_stems": [
+    "music_background_trial.wav",
+    "effects_residual_trial.wav"
+  ],
+  "source_rms": 0.12514035785337538,
+  "music_rms": 0.09090182876008113,
+  "residual_rms": 0.05858841416414666,
+  "event_comparison_start_seconds": 232.34375,
+  "candidates": [
+    {
+      "file": "candidate_01_residual.wav",
+      "start_in_level_seconds": 71.2562,
+      "video_seconds": 185.2562,
+      "duration_seconds": 0.9,
+      "identified_effect": null,
+      "ready_for_game": false
+    },
+    {
+      "file": "candidate_02_residual.wav",
+      "start_in_level_seconds": 79.7875,
+      "video_seconds": 193.7875,
+      "duration_seconds": 0.9,
+      "identified_effect": null,
+      "ready_for_game": false
+    },
+    {
+      "file": "candidate_03_residual.wav",
+      "start_in_level_seconds": 83.8188,
+      "video_seconds": 197.8188,
+      "duration_seconds": 0.9,
+      "identified_effect": null,
+      "ready_for_game": false
+    },
+    {
+      "file": "candidate_04_residual.wav",
+      "start_in_level_seconds": 102.4125,
+      "video_seconds": 216.4125,
+      "duration_seconds": 0.9,
+      "identified_effect": null,
+      "ready_for_game": false
+    },
+    {
+      "file": "candidate_05_residual.wav",
+      "start_in_level_seconds": 116.5062,
+      "video_seconds": 230.5062,
+      "duration_seconds": 0.9,
+      "identified_effect": null,
+      "ready_for_game": false
+    },
+    {
+      "file": "candidate_06_residual.wav",
+      "start_in_level_seconds": 237.1938,
+      "video_seconds": 351.1938,
+      "duration_seconds": 0.9,
+      "identified_effect": null,
+      "ready_for_game": false
+    }
+  ],
+  "integrated_in_rom": false,
+  "limitations": [
+    "Background and residual are estimates, not isolated stems.",
+    "Repeated sound effects may remain in background.",
+    "Unique music and drums can leak into residual.",
+    "No candidate has been identified or verified as a reusable effect.",
+    "No automatic quality or fidelity claim; compare by listening."
+  ],
+  "video_segment_seconds": [
+    114,
+    365
+  ],
+  "export_checks": {
+    "same_length": true,
+    "clipping": false,
+    "sum_max_error_pcm16": 1
+  },
+  "video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51"
+}
