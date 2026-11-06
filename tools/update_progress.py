@@ -18,3 +18,24 @@ for r in data['areas']:rows.append(f'| {r["name"]} | {r["earned"]} / {r["weight"
 rows+=['','Aggiornare docs/progress.json solo dopo risultati verificati, poi eseguire `python3 tools/update_progress.py`. Audio sperimentale non integrato e materiali di riferimento non equivalgono a contenuti finiti.']
 (root/'docs/PROGRESS.md').write_text('\n'.join(rows)+'\n')
 print(f'Progress estimate: {value}%')
+
+# Keep README and detailed progress synchronized from the same data.
+readme=root/'README.md'
+text=readme.read_text()
+start=text.index('<!-- PROJECT_PROGRESS -->')
+end=text.index('<!-- /PROJECT_PROGRESS -->',start)+len('<!-- /PROJECT_PROGRESS -->')
+block=f"""<!-- PROJECT_PROGRESS -->
+![Avanzamento complessivo stimato: {value}%](docs/progress.svg)
+
+**Progetto completo: circa {value}%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
+<!-- /PROJECT_PROGRESS -->"""
+readme.write_text(text[:start]+block+text[end:])
+
+# PNG companion for chat clients without inline SVG support.
+from PIL import Image,ImageDraw,ImageFont
+im=Image.new('RGB',(900,114),'#0b1829');draw=ImageDraw.Draw(im)
+font=ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',23)
+draw.text((27,16),f'Lady Sia 2 · WORK IN PROGRESS · {value}% stimato',font=font,fill='white')
+draw.rounded_rectangle((27,60,873,87),radius=13,fill='#314156')
+if value:draw.rounded_rectangle((27,60,27+846*value/100,87),radius=13,fill='#48c78e')
+im.save(root/'docs/progress.png')

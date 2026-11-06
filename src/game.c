@@ -10,6 +10,11 @@ const Gem level_gems[GEM_COUNT]={{0,109,62,0},{1,133,74,1},{3,151,47,2},{4,126,4
 /* Animation and damage share the same attack clock: wind-up, contact, recovery. */
 unsigned game_attack_frame(const Game *g){return g->attack>8?0:g->attack>=4?1:2;}
 unsigned game_walk_frame(const Game *g){return g->walk_ticks/(6u*320u);}
+unsigned game_ledge_frame(const Game *g){
+ if(g->climbing!=LEDGE_PULL)return 0;
+ unsigned frame=1+g->ledge_ticks/4;
+ return frame>3?3:frame;
+}
 static const int guard_ground[][2]={{0,130},{24,130},{48,120},{72,115},{96,102},{120,94},{144,88},{239,88}};
 static const int ground[][2]={{0,151},{24,153},{40,158},{56,158},{72,153},{84,153},
  {100,154},{120,153},{140,145},{156,146},{176,153},{192,157},{216,157},{239,153}};
@@ -36,6 +41,7 @@ void game_reset(Game *g){
  g->x=40*FP;g->y=118*FP;g->vx=0;g->vy=0;
  g->grounded=1;g->facing=1;g->attack=0;g->camera=0;g->previous=0;
  g->climbing=0;g->gems=0;g->collected=0;g->sign_open=0;g->camera_y=0;
+ g->ledge_y=0;g->ledge_ticks=0;g->ledge_cooldown=0;
  g->area=0;g->falls=0;g->pickup_timer=0;g->ticks=0;
 }
 static void camera(Game *g);
@@ -55,7 +61,7 @@ static void respawn_area(Game *g){
 static void lose_life(Game *g){
  if(g->game_over)return;
  if(g->lives)g->lives--;
- g->attack=0;g->walk_ticks=0;g->vx=0;g->vy=0;g->climbing=0;
+ g->attack=0;g->walk_ticks=0;g->vx=0;g->vy=0;g->climbing=0;g->ledge_ticks=0;g->ledge_cooldown=0;
  if(!g->lives){g->progress.health=0;g->game_over=1;return;}
  g->progress.health=g->progress.max_health;
  respawn_area(g);g->hurt_timer=90;
@@ -80,7 +86,7 @@ static void collect(Game *g){
 int game_damage(Game *g,unsigned amount){
  if(g->game_over||g->hurt_timer||!amount)return 0;
  if(!level_take_damage(&g->progress,amount))return 0;
- g->climbing=0;g->attack=0;g->hurt_timer=60;
+ g->climbing=0;g->ledge_ticks=0;g->ledge_cooldown=18;g->attack=0;g->hurt_timer=60;
  if(!g->progress.health)lose_life(g);
  return 1;
 }
@@ -114,6 +120,24 @@ void game_step(Game *g,unsigned input){
  if(g->hurt_timer>0)g->hurt_timer--;
  unsigned pressed=input&~(unsigned)g->previous;g->previous=(int)input;g->ticks++;level_progress_tick(&g->progress,0);
  if(g->pickup_timer>0)g->pickup_timer--;
+ if(g->ledge_cooldown)g->ledge_cooldown--;
+ if(g->climbing){
+  g->attack=0;g->vx=0;g->vy=0;g->walk_ticks=0;g->grounded=0;
+  if(g->climbing==LEDGE_HANG){
+   if(input&(DOWN|LEFT|RIGHT)){
+    g->climbing=LEDGE_NONE;g->ledge_cooldown=18;g->vy=FP;
+   }else if((input&UP)||(pressed&JUMP)){
+    g->climbing=LEDGE_PULL;g->ledge_ticks=0;
+   }
+  }else{
+   g->ledge_ticks++;
+   g->y=(g->ledge_y+10)*FP-(int)g->ledge_ticks*(PLAYER_H+10)*FP/LEDGE_PULL_TICKS;
+   if(g->ledge_ticks>=LEDGE_PULL_TICKS){
+    g->y=(g->ledge_y-PLAYER_H)*FP;g->climbing=LEDGE_NONE;g->grounded=1;
+   }
+  }
+  if(g->climbing||g->grounded){collect(g);camera(g);return;}
+ }
  if((pressed&ATTACK)&&!g->attack){g->attack=12;g->swing_id++;}
  else if(g->attack)--g->attack;
  int old_floor=(g->area==3?guard_floor(g->x/FP+PLAYER_W/2):g->area?4096:game_floor(g->x/FP+PLAYER_W/2))*FP;
@@ -140,23 +164,7 @@ void game_step(Game *g,unsigned input){
  int moved_x=g->x-old_x;
  if(!moved_x)g->vx=0;
  int center=g->x/FP+PLAYER_W/2;
- int bottom=g->y+PLAYER_H*FP;
- if(!g->area&&!g->climbing&&(input&(UP|DOWN))&&center>=104&&center<=126&&
-    bottom>=88*FP&&g->y<158*FP&&((input&DOWN)||bottom>88*FP)){
-  g->climbing=1;g->grounded=0;g->vy=0;g->walk_ticks=0;
-  if(g->y>114*FP)g->y=114*FP;
- }
- if(g->climbing){
-  if(pressed&JUMP){g->climbing=0;g->vy=-960;g->grounded=0;}
-  else if(input&(LEFT|RIGHT)){g->climbing=0;g->vy=0;}
-  else{
-   g->x=108*FP;g->vx=0;g->vy=0;
-   g->y+=((input&DOWN)!=0)*FP-((input&UP)!=0)*FP;
-   if(g->y<=48*FP){g->y=48*FP;g->climbing=0;g->grounded=1;}
-   if(g->y>=114*FP){g->y=114*FP;g->climbing=0;g->grounded=1;}
-   collect(g);camera(g);return;
-  }
- }else if((pressed&JUMP)&&g->grounded){g->vy=-960;g->grounded=0;}
+ if((pressed&JUMP)&&g->grounded){g->vy=-960;g->grounded=0;}
  int old_bottom=g->y+PLAYER_H*FP;
  g->vy+=32;if(g->vy>6*FP)g->vy=6*FP;
  int next=g->y+g->vy,landing=0x7fffffff;
@@ -178,6 +186,18 @@ void game_step(Game *g,unsigned input){
  int floor=(g->area==3?guard_floor(center):g->area?4096:game_floor(center))*FP;
  if((next+PLAYER_H*FP>=floor||(was_floor&&g->vy>=0))&&floor<landing)landing=floor;
  if(landing!=0x7fffffff){next=landing-PLAYER_H*FP;g->vy=0;g->grounded=1;}
+ /* The reference shows a catch from a descending jump, then a pull-up.
+    Only the two measured first-room ledges have authored catch geometry. */
+ if(!g->area&&!g->grounded&&!g->ledge_cooldown&&g->vy>0&&!(input&DOWN)){
+  for(int i=0;i<PLATFORM_COUNT;i++){
+   const Platform *p=&platforms[i];int hang_y=(p->y+10)*FP;
+   if(center>=p->x+12&&center<=p->x+p->w-12&&
+      g->y<=hang_y&&next>=hang_y&&old_bottom>p->y*FP){
+    next=hang_y;g->ledge_y=p->y;g->ledge_ticks=0;g->climbing=LEDGE_HANG;
+    g->vx=0;g->vy=0;g->attack=0;g->walk_ticks=0;break;
+   }
+  }
+ }
  g->y=next;g->camera=0;collect(g);camera(g);
  if(g->grounded&&moved_x&&!g->attack)
   g->walk_ticks=(g->walk_ticks+(unsigned)(moved_x<0?-moved_x:moved_x))%(18u*320u);

@@ -1,0 +1,16 @@
+PASS ledge integration: input-driven jump/catch, stable hang, pause/resume, release, all three pull-up poses pixel-checked in native framebuffer, top landing
+PASS frontend no-intro: 18008 emulated frames; linked areas, camera, pickups, pause, menus, direct arrival without intro
+PASS settings integration: menu writes SRAM, soft-reset reload, corrupt-record defaults. Disk save reload and real hardware are not tested.
+PASS defeat integration: three life-consuming falls, restored HP, Game Over, frozen simulation, retry resets run
+PASS lethal combat integration: one life consumed, HP restored, same area and gems preserved
+PASS combat integration: guard area, contact damage, sword defeat and persistent defeat counter
+PASS motion/gap integration: three recorded walk frames, three attack phases, registered fifth viewport, gap jump and fall, four persistent gems, OBJ digits 3/4, second guard defeat, return persistence
+PASS wall animation: native ROM stops running at blocked left boundary
+PASS cliff collision integration: missed jump hits solid side, falls, loses one life and preserves gems on respawn
+PASS ledges: jump reach, swept catch, idle hold, recorded pull-up phases, release/regrab prevention, damage, top landing and upper ledge
+PASS collision volumes: side faces, clear jumps, swept landing, exact edges, undersides and fall respawn
+PASS lives: lethal-hit respawn in five areas, progress preservation, immunity, pit override, frozen defeat and full retry
+PASS v0.6: terrain, jump, ledge pull-up, platforms/camera, registered area position/velocity continuity, flip anchors, bridge surface, two gems, round-trip persistence, fall respawn, reset, sign and attack
+PASS gap/motion: three walk poses, synchronized sword hit window, registered portals, reachable gap/gem, solid cliff sides, independent guard persistence
+PASS settings: four combinations, erased SRAM, all single-bit corruptions, invalid commit marker
+PASS whole-level progress: stable entity IDs, revisit persistence, bounds, pause, health saturation, completion and reset

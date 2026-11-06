@@ -3,22 +3,23 @@
 #include <assert.h>
 #include <stdio.h>
 static void step(Game *g,unsigned keys,int count){for(int i=0;i<count;i++)game_step(g,keys);}
+static void ascend(Game *g){
+ step(g,RIGHT,54);game_step(g,JUMP);
+ for(int i=0;i<100&&!g->climbing;i++)game_step(g,0);
+ assert(g->climbing==LEDGE_HANG);step(g,UP,LEDGE_PULL_TICKS+1);
+}
 int main(void){
  Game g;game_reset(&g);step(&g,0,120);
  assert(g.x==40*FP&&g.y==118*FP&&g.grounded);
  game_step(&g,JUMP);assert(g.vy<0&&!g.grounded);
  int previous=g.vy;game_step(&g,JUMP);assert(g.vy>previous);
  step(&g,0,120);assert(g.y==118*FP&&g.grounded);
- step(&g,RIGHT,54);assert(g.x/FP>=107&&g.x/FP<=108);
- step(&g,UP,20);assert(g.climbing&&g.y<100*FP&&g.gems==0);
- int y=g.y;step(&g,DOWN,10);assert(g.y>y&&g.climbing);
- game_step(&g,JUMP);assert(!g.climbing&&g.vy<0);
- step(&g,0,120);assert(g.grounded);
- game_reset(&g);step(&g,RIGHT,54);step(&g,UP,90);
- assert(!g.climbing&&g.grounded&&g.y==48*FP&&g.x==108*FP);
+ game_reset(&g);ascend(&g);
+ assert(!g.climbing&&g.grounded&&g.y==48*FP&&g.x/FP==107);
  assert(g.gems==1&&g.collected&&g.pickup_timer>0);step(&g,0,200);assert(g.gems==1&&g.pickup_timer==0);
- step(&g,DOWN,90);assert(g.grounded&&g.y+PLAYER_H*FP==game_floor(115)*FP);
- game_reset(&g);step(&g,RIGHT,54);step(&g,UP,90);step(&g,RIGHT,25);
+ /* DOWN on a completed platform does not create a ladder through the rock. */
+ step(&g,DOWN,90);assert(g.grounded&&g.y==48*FP);
+ game_reset(&g);ascend(&g);step(&g,RIGHT,25);
  step(&g,JUMP|RIGHT,45);step(&g,0,40);
  assert(g.grounded&&g.y==0&&g.camera_y==-40);
  for(int i=0;i<50&&g.area==0;i++){
@@ -78,5 +79,5 @@ int main(void){
  game_reset(&g);g.area=3;g.x=150*FP;g.y=48*FP;g.grounded=1;
  game_step(&g,0);assert(g.progress.health==2&&g.hurt_timer>0);
  step(&g,0,10);assert(g.progress.health==2);
- puts("PASS v0.6: terrain, jump, ladder, platforms/camera, registered area position/velocity continuity, flip anchors, bridge surface, two gems, round-trip persistence, fall respawn, reset, sign and attack");
+ puts("PASS v0.6: terrain, jump, ledge pull-up, platforms/camera, registered area position/velocity continuity, flip anchors, bridge surface, two gems, round-trip persistence, fall respawn, reset, sign and attack");
 }

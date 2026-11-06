@@ -1,0 +1,68 @@
+{
+  "source_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "size": [
+    48,
+    104
+  ],
+  "anchor": [
+    24,
+    44
+  ],
+  "poses": [
+    {
+      "seconds": 120.72,
+      "camera_shift_pixels": [
+        0,
+        7
+      ],
+      "source_ledge_anchor": [
+        115,
+        95
+      ]
+    },
+    {
+      "seconds": 120.88,
+      "camera_shift_pixels": [
+        0,
+        11
+      ],
+      "source_ledge_anchor": [
+        115,
+        99
+      ]
+    },
+    {
+      "seconds": 120.96,
+      "camera_shift_pixels": [
+        0,
+        11
+      ],
+      "source_ledge_anchor": [
+        115,
+        99
+      ]
+    },
+    {
+      "seconds": 121.04,
+      "camera_shift_pixels": [
+        0,
+        11
+      ],
+      "source_ledge_anchor": [
+        115,
+        99
+      ]
+    }
+  ],
+  "states": [
+    "hanging",
+    "pull_start",
+    "pull_middle",
+    "pull_end"
+  ],
+  "limits": [
+    "Hand-traced silhouettes from compressed video, not recovered original sprites.",
+    "The common anchor is the rock ledge, not the character boots.",
+    "Timing and collision catch window are reconstruction estimates."
+  ]
+}

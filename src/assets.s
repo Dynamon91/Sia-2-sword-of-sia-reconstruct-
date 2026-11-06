@@ -111,3 +111,8 @@ ui_more_tiles:
 .global ambient_gems
 ambient_gems:
 .incbin "assets/ambient_gems.bin"
+
+.balign 4
+.global ledge_cycle
+ledge_cycle:
+.incbin "assets/ledge_cycle.bin"

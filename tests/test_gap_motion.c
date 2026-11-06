@@ -17,14 +17,15 @@ int main(void){
  game_reset(&g);g.x=(WORLD_W-PLAYER_W)*FP-64;
  game_step(&g,RIGHT);assert(g.walk_ticks==64);
  game_step(&g,RIGHT);assert(g.walk_ticks==0&&g.vx==0);
- /* Turning mid-stride preserves cadence; ladder entry resets stale running. */
+ /* Turning mid-stride preserves cadence; ledge entry resets stale running. */
  game_reset(&g);steps(&g,RIGHT,5);unsigned stride=g.walk_ticks;
  game_step(&g,LEFT);assert(g.walk_ticks==stride+320&&game_walk_frame(&g)==1);
- game_reset(&g);steps(&g,RIGHT,54);game_step(&g,UP);
- assert(g.climbing&&g.walk_ticks==0);
+ game_reset(&g);steps(&g,RIGHT,54);game_step(&g,JUMP);
+ for(int i=0;i<100&&!g.climbing;i++)game_step(&g,0);
+ assert(g.climbing==LEDGE_HANG&&g.walk_ticks==0);
  for(int i=0;i<20;i++)game_step(&g,0);
- assert(g.climbing&&g.walk_ticks==0);
- game_step(&g,JUMP);assert(!g.climbing&&!g.grounded&&g.walk_ticks==0);
+ assert(g.climbing==LEDGE_HANG&&g.walk_ticks==0);
+ game_step(&g,DOWN);assert(!g.climbing&&!g.grounded&&g.walk_ticks==0);
  /* Attack phases and hit window are driven by the same state counter. */
  game_reset(&g);g.area=3;g.x=125*FP;g.y=48*FP;g.grounded=1;
  game_step(&g,ATTACK);assert(game_attack_frame(&g)==0&&g.enemy_hp==2);

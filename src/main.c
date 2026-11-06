@@ -9,7 +9,7 @@ static const char save_type[] __attribute__((used))="SRAM_V113";
 #include "../assets/room.h"
 #include "../assets/ui.h"
 extern const unsigned char cliff_background[],guard_background[],guard_sprite[];
-extern const unsigned char ambient_gems[];
+extern const unsigned char ambient_gems[],ledge_cycle[];
 extern const unsigned char gap_background[],guard2_sprite[],walk_cycle[],attack_cycle[],ui_more_tiles[];
 extern const unsigned char bridge_background[],bridge_sky[],bridge_run[];
 extern const unsigned char room_backdrop[],room_spans[],bridge_backdrop[],bridge_spans[];
@@ -198,7 +198,10 @@ static void draw_level(void){
  if(game.attack&&!game.climbing){
   width=80;height=64;anchor=39;actor=attack_cycle+game_attack_frame(&game)*80*64;
  }else if(!pose&&game.vx)actor=walk_cycle+game_walk_frame(&game)*ROOM_SPRITE_SIZE;
- if(!game.hurt_timer||(game.hurt_timer&4))sprite(aligned_sprite_x(game.x/FP+PLAYER_W/2,width,anchor,game.facing<0),game.y/FP+PLAYER_H-height-game.camera_y,
+ if(game.climbing){
+  sprite(game.x/FP+PLAYER_W/2-24,game.ledge_y-44-game.camera_y,
+         48,104,ledge_cycle+game_ledge_frame(&game)*48*104,0);
+ }else if(!game.hurt_timer||(game.hurt_timer&4))sprite(aligned_sprite_x(game.x/FP+PLAYER_W/2,width,anchor,game.facing<0),game.y/FP+PLAYER_H-height-game.camera_y,
         width,height,actor,game.facing<0);
  if(game.pickup_timer>0){
   ui_object(0,95,11,2,UI_GEM_TILE);
@@ -246,7 +249,7 @@ static void render(void){
   text(48,90,"A RESUME",241);text(48,107,"B MAIN MENU",241);break;
  case TUTORIAL:
   draw_level();rect(5,87,230,69,244);text(12,94,"CONTROLS",242);
-  wrapped(12,108,"UP / DOWN: climb the ladder.\nA: jump. B: attack.\nSTART: pause. SELECT: menu.",241);
+  wrapped(12,108,"A: jump / pull up. B: attack.\nUP: pull up. DOWN: let go.\nSTART: pause. SELECT: menu.",241);
   text(12,143,"A / B: CONTINUE",243);break;
  }
  present();dirty=0;
@@ -337,7 +340,7 @@ int main(void){
   debug[20]=game.progress.elapsed_frames;debug[21]=game.progress.gems;
   debug[22]=game.progress.health;debug[23]=(unsigned)game.game_over;debug[24]=(unsigned)game.hurt_timer;
   debug[25]=(unsigned)game.enemy_hp;debug[26]=game.progress.defeated;debug[27]=(unsigned)game.enemy_x;
-  debug[31]=game.lives;
+  debug[31]=game.lives;debug[32]=game_ledge_frame(&game);debug[33]=game.ledge_ticks;debug[34]=(unsigned)game.ledge_y;
   debug[28]=game_walk_frame(&game);debug[29]=game.attack?game_attack_frame(&game):3;debug[30]=(unsigned)game.enemy2_hp;
   if(dirty)render();else wait_frame();
  }

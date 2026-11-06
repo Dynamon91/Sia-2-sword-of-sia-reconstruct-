@@ -1,5 +1,8 @@
 #include <mgba/core/core.h>
 #include <mgba/core/blip_buf.h>
+#include <mgba/core/log.h>
+#include <errno.h>
+#include <sys/stat.h>
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,6 +10,14 @@
 #include "../src/game.h"
 #include "../src/alignment.h"
 #include "../assets/ui.h"
+/* Keep diagnostics, but do not bury PASS/error lines in per-DMA debug output. */
+static void emulator_log(struct mLogger *logger,int category,enum mLogLevel level,const char *format,va_list args){
+ (void)logger;
+ if(level&(mLOG_FATAL|mLOG_ERROR|mLOG_WARN|mLOG_GAME_ERROR)){
+  fprintf(stderr,"%s: ",mLogCategoryName(category));vfprintf(stderr,format,args);fputc('\n',stderr);
+ }
+}
+static struct mLogger test_logger={.log=emulator_log,.filter=NULL};
 static uint64_t energy;
 static unsigned samples;
 static FILE *audio_file;
@@ -51,6 +62,30 @@ static void move_to(struct mCore *c,unsigned key,int target){
  }
  c->setKeys(c,0);run(c,4);
 }
+static void catch_first_ledge(struct mCore *c){
+ move_to(c,16,107);c->setKeys(c,1);run(c,4);c->setKeys(c,0);
+ for(int i=0;i<200&&!value(c,11);i++)run(c,1);
+ run(c,4);assert(value(c,11)==LEDGE_HANG&&(int)value(c,9)==98*FP);
+}
+static void ascend_first_ledge(struct mCore *c){
+ catch_first_ledge(c);c->setKeys(c,64);run(c,70);c->setKeys(c,0);run(c,4);
+ assert(!value(c,11)&&value(c,14)&&(int)value(c,9)==48*FP);
+}
+static void check_ledge_sprite(struct mCore *c,unsigned frame){
+ FILE *f=fopen("assets/ledge_cycle.bin","rb");assert(f);
+ assert(!fseek(f,(long)frame*48*104,SEEK_SET));
+ int sx=(int)value(c,8)/FP+PLAYER_W/2-24;
+ int sy=(int)value(c,34)-44-(int)value(c,15);
+ unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
+ unsigned checked=0;
+ for(int y=0;y<104;y++)for(int x=0;x<48;x++){
+  int p=fgetc(f);assert(p>=0);
+  if(p&&sx+x>=0&&sx+x<240&&sy+y>=0&&sy+y<160){
+   assert(c->busRead8(c,base+(unsigned)(sy+y)*240+(unsigned)(sx+x))==(unsigned)p);checked++;
+  }
+ }
+ fclose(f);assert(checked>200);
+}
 static void check_rest_background(struct mCore *c,const char *path,int gem_x,int gem_y){
  assert((int)value(c,15)==0);
  FILE *f=fopen(path,"rb");assert(f);assert(fseek(f,512,SEEK_SET)==0);
@@ -67,6 +102,9 @@ static void check_rest_background(struct mCore *c,const char *path,int gem_x,int
 }
 
 int main(int argc,char **argv){
+ setvbuf(stdout,NULL,_IOLBF,0);
+ assert(!mkdir("build/ledge_sequence",0777)||errno==EEXIST);
+ mLogSetDefaultLogger(&test_logger);
  assert(argc==2);struct mCore *c=mCoreFind(argv[1]);assert(c&&c->init(c));mCoreInitConfig(c,NULL);
  color_t *pixels=calloc(240*160,sizeof(color_t));assert(pixels);c->setVideoBuffer(c,pixels,240);
  blip_set_rates(c->getAudioChannel(c,0),c->frequency(c),32768);
@@ -105,13 +143,38 @@ int main(int argc,char **argv){
  c->setKeys(c,16);run(c,20);c->setKeys(c,1);run(c,8);c->setKeys(c,0);
  player(c,&x,&y);assert(x>40&&y<118);capture(c,"build/room_jump_v06.ppm");run(c,160);
  player(c,&x,&y);assert(y+40==game_floor(x+7));
- move_to(c,16,107);c->setKeys(c,64);run(c,25);c->setKeys(c,0);run(c,3);
- assert(value(c,11)==1);capture(c,"build/room_climb_v06.ppm");
- c->setKeys(c,64);for(int i=0;i<100&&value(c,10)==0;i++)run(c,1);
+ catch_first_ledge(c);
+ check_ledge_sprite(c,0);capture(c,"build/ledge_hang.ppm");capture(c,"build/room_climb_v06.ppm");
  run(c,3);assert(value(c,19)>0);
  assert((c->busRead16(c,0x07000004)&1023)==UI_GEM_TILE);
  assert((c->busRead16(c,0x0700000c)&1023)==UI_DIGIT1_TILE);
  capture(c,"build/pickup_hud_v06.ppm");
+
+ int held_x=(int)value(c,8),held_y=(int)value(c,9);run(c,40);
+ assert((int)value(c,8)==held_x&&(int)value(c,9)==held_y&&value(c,32)==0);
+ tap(c,8);state(c,8);unsigned hang_paused=value(c,16);run(c,30);assert(value(c,16)==hang_paused);
+ capture(c,"build/ledge_pause.ppm");tap(c,8);state(c,7);assert(value(c,11)==LEDGE_HANG);
+ c->setKeys(c,128);run(c,8);c->setKeys(c,0);run(c,140);
+ assert(!value(c,11)&&value(c,14)&&(int)value(c,9)>98*FP);
+ capture(c,"build/ledge_release.ppm");
+ catch_first_ledge(c);
+ unsigned clip_frame=0;
+ for(int i=0;i<24;i++){char path[96];run(c,1);snprintf(path,sizeof(path),"build/ledge_sequence/frame_%03u.ppm",clip_frame++);capture(c,path);}
+ c->setKeys(c,64);
+ unsigned ledge_seen=0,last_ledge_frame=99;
+ for(int i=0;i<100&&value(c,11);i++){
+  run(c,1);unsigned f=value(c,32);
+  if(value(c,11)==LEDGE_PULL&&f==last_ledge_frame&&!(ledge_seen&(1u<<f))){
+   char path[64];check_ledge_sprite(c,f);snprintf(path,sizeof(path),"build/ledge_pull_%u.ppm",f);capture(c,path);ledge_seen|=1u<<f;
+  }
+  last_ledge_frame=f;
+  char clip_path[96];snprintf(clip_path,sizeof(clip_path),"build/ledge_sequence/frame_%03u.ppm",clip_frame++);capture(c,clip_path);
+ }
+ assert(ledge_seen==14&&!value(c,11)&&value(c,14)&&(int)value(c,9)==48*FP);
+ c->setKeys(c,0);
+ for(int i=0;i<24;i++){char path[96];run(c,1);snprintf(path,sizeof(path),"build/ledge_sequence/frame_%03u.ppm",clip_frame++);capture(c,path);}
+ capture(c,"build/ledge_complete.ppm");
+ puts("PASS ledge integration: input-driven jump/catch, stable hang, pause/resume, release, all three pull-up poses pixel-checked in native framebuffer, top landing");
  run(c,200);c->setKeys(c,0);run(c,4);
  assert(value(c,19)==0&&(c->busRead16(c,0x07000000)&0x200));
  assert(value(c,10)==1&&value(c,12)==1&&value(c,11)==0);player(c,&x,&y);assert(y==48);
@@ -199,7 +262,7 @@ int main(int argc,char **argv){
  tap(c,8);tap(c,128);tap(c,1);state(c,4);
  tap(c,2);tap(c,64);tap(c,1);state(c,6);
  tap(c,1);tap(c,1);state(c,7);assert(value(c,22)==3);
- move_to(c,16,107);c->setKeys(c,64);run(c,100);c->setKeys(c,0);run(c,4);
+ ascend_first_ledge(c);
  move_to(c,16,139);c->setKeys(c,17);run(c,45);c->setKeys(c,0);run(c,40);
  c->setKeys(c,16);for(int i=0;i<160&&value(c,17)==0;i++)run(c,1);
  c->setKeys(c,0);run(c,4);assert(value(c,17)==1);
@@ -213,7 +276,7 @@ int main(int argc,char **argv){
  capture(c,"build/retry_after_game_over.ppm");
  puts("PASS defeat integration: three life-consuming falls, restored HP, Game Over, frozen simulation, retry resets run");
  /* Reach the new native guard area and exercise contact and sword damage. */
- move_to(c,16,107);c->setKeys(c,64);run(c,100);c->setKeys(c,0);run(c,4);
+ ascend_first_ledge(c);
  move_to(c,16,139);c->setKeys(c,17);run(c,45);c->setKeys(c,0);run(c,40);
  c->setKeys(c,16);for(int i=0;i<160&&value(c,17)==0;i++)run(c,1);
  for(int i=0;i<180&&value(c,17)==1;i++)run(c,1);
@@ -280,8 +343,9 @@ int main(int argc,char **argv){
  c->setKeys(c,32);run(c,90);assert(value(c,8)==0&&value(c,28)==0);
  c->setKeys(c,0);run(c,4);capture(c,"build/wall_idle.ppm");
  puts("PASS wall animation: native ROM stops running at blocked left boundary");
+ fprintf(stderr,"Beginning final collision route at frame %u\n",c->frameCounter(c));
  /* Deliberately miss the third-area jump using normal controller inputs. */
- move_to(c,16,107);c->setKeys(c,64);run(c,100);c->setKeys(c,0);run(c,4);
+ ascend_first_ledge(c);
  move_to(c,16,139);c->setKeys(c,17);run(c,45);c->setKeys(c,0);run(c,40);
  c->setKeys(c,16);for(int i=0;i<160&&value(c,17)==0;i++)run(c,1);
  for(int i=0;i<180&&value(c,17)==1;i++)run(c,1);
@@ -299,6 +363,7 @@ int main(int argc,char **argv){
  c->setKeys(c,0);run(c,4);
  assert(touched_wall&&value(c,18)==collision_falls+1&&value(c,31)==collision_lives-1);
  assert(value(c,17)==2&&value(c,10)==collision_gems);capture(c,"build/cliff_collision_respawn.ppm");
+ fprintf(stderr,"Completed final collision route at frame %u\n",c->frameCounter(c));
  puts("PASS cliff collision integration: missed jump hits solid side, falls, loses one life and preserves gems on respawn");
  c->deinit(c);free(pixels);
 }
