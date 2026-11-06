@@ -1,0 +1,40 @@
+{
+  "world": 3,
+  "videos": [
+    {
+      "filename": "Lady Sia 2  Sword Of Sia (GBA) Longplay Walkthrough WORLD 3 Boss (Unreleased).mp4",
+      "sha256": "01d31b6075e6fc730845f568d4c3ce598aefb941914d8e04df12fe7e43958264",
+      "bytes": 6621200,
+      "duration_seconds": 46.741769,
+      "status": "reference only; not integrated in ROM"
+    },
+    {
+      "filename": "Lady Sia 2  Sword Of Sia (GBA) Longplay Walkthrough WORLD 3 LEVEL 1 (Unreleased).mp4",
+      "sha256": "d07d55e0cf8ead6135386c63b9e8a479a117f6d49eab15d578b0a3b32c367481",
+      "bytes": 15288273,
+      "duration_seconds": 122.508481,
+      "status": "reference only; not integrated in ROM"
+    },
+    {
+      "filename": "Lady Sia 2  Sword Of Sia (GBA) Longplay Walkthrough WORLD 3 LEVEL 2 (Unreleased).mp4",
+      "sha256": "7f68fa5ca93251d539b20eab8c253f40591b2a0eb95b0fad820d3b5889b0d87c",
+      "bytes": 9929560,
+      "duration_seconds": 77.438549,
+      "status": "reference only; not integrated in ROM"
+    },
+    {
+      "filename": "Lady Sia 2  Sword Of Sia (GBA) Longplay Walkthrough WORLD 3 LEVEL 3 (Unreleased).mp4",
+      "sha256": "15b53df42b0acea03065514314710078b2bb5e40aff7e801930d522e01d39957",
+      "bytes": 18368141,
+      "duration_seconds": 175.867937,
+      "status": "reference only; not integrated in ROM"
+    },
+    {
+      "filename": "Lady Sia 2  Sword Of Sia (GBA) Longplay Walkthrough WORLD 3 LEVEL 4 (Unreleased).mp4",
+      "sha256": "f145e075363fb3b20a9ea6cd28441f4dc8f725a603fdf78d80d1d0abc3e209af",
+      "bytes": 10453815,
+      "duration_seconds": 108.042449,
+      "status": "reference only; not integrated in ROM"
+    }
+  ]
+}
