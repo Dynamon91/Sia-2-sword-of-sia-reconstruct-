@@ -34,10 +34,18 @@ def main():
  music=music[:len(x)];effects=x-music
  assert len(music)==len(x) and np.all(np.isfinite(music))
  assert np.max(np.abs((music+effects)-x))<1e-12
+ # A single gain avoids clipping either stem and preserves their sum.
+ peak=max(float(np.max(np.abs(y))) for y in (x,music,effects))
+ gain=30000/max(1.,peak)
  def write(name,y):
-  # Same gain for all comparison files, preserving relative level.
-  wavfile.write(a.out/name,SR,(np.clip(y,-1,1)*30000).astype(np.int16))
+  wavfile.write(a.out/name,SR,np.rint(y*gain).astype(np.int16))
+ write('source_full.wav',x)
  write('music_background_trial.wav',music)
+ write('effects_residual_trial.wav',effects)
+ encoded=[np.rint(y*gain).astype(np.int32) for y in (x,music,effects)]
+ quantization_error=int(np.max(np.abs(encoded[1]+encoded[2]-encoded[0])))
+ assert quantization_error<=1
+
  for name,y in [('source',x),('music',music),('residual',effects)]:write('preview_'+name+'_30s.wav',y[:30*SR])
  # Strong residual transients are candidates only: they can include percussion.
  rms=np.sqrt(np.maximum(0,ndimage.uniform_filter1d(effects**2,size=round(.06*SR))[::HOP]))
@@ -54,7 +62,7 @@ def main():
  else:start=None
  report={'source_sha256':hashlib.sha256(raw).hexdigest(),'duration_seconds':len(x)/SR,'sample_rate':SR,'method':'non-local repetition estimate, 12 spectral neighbors at least 5 seconds apart; conservative fallback for unmatched material; soft magnitude mask with original phase',
  'frame_fraction_with_at_least_four_matches':float(np.mean(quality>=4/k)),'waveform_additivity_max_error':float(np.max(np.abs(music+effects-x))),
- 'source_rms':float(np.sqrt(np.mean(x*x))),'music_rms':float(np.sqrt(np.mean(music*music))),'residual_rms':float(np.sqrt(np.mean(effects*effects))),
+ 'pcm_gain':gain,'exported_stem_sum_max_error_int16':quantization_error,'full_length_stems':['music_background_trial.wav','effects_residual_trial.wav'],'source_rms':float(np.sqrt(np.mean(x*x))),'music_rms':float(np.sqrt(np.mean(music*music))),'residual_rms':float(np.sqrt(np.mean(effects*effects))),
  'event_comparison_start_seconds':start,'candidates':candidates,'integrated_in_rom':False,
  'limitations':['Background and residual are estimates, not isolated stems.','Repeated sound effects may remain in background.','Unique music and drums can leak into residual.','No candidate has been identified or verified as a reusable effect.','No automatic quality or fidelity claim; compare by listening.']}
  (a.out/'separation_report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
