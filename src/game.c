@@ -8,7 +8,7 @@ static const Platform gap_platforms[2]={{0,106,98,54},{172,98,68,62}};
 const Gem level_gems[GEM_COUNT]={{0,109,62,0},{1,133,74,1},{3,151,47,2},{4,126,40,3}};
 /* Animation and damage share the same attack clock: wind-up, contact, recovery. */
 unsigned game_attack_frame(const Game *g){return g->attack>8?0:g->attack>=4?1:2;}
-unsigned game_walk_frame(const Game *g){return (g->walk_ticks/6)%3;}
+unsigned game_walk_frame(const Game *g){return g->walk_ticks/(6u*320u);}
 static const int guard_ground[][2]={{0,130},{24,130},{48,120},{72,115},{96,102},{120,94},{144,88},{239,88}};
 static const int ground[][2]={{0,151},{24,153},{40,158},{56,158},{72,153},{84,153},
  {100,154},{120,153},{140,145},{156,146},{176,153},{192,157},{216,157},{239,153}};
@@ -129,11 +129,14 @@ void game_step(Game *g,unsigned input){
  }
  if(g->x<0)g->x=0;
  if(g->x>(WORLD_W-PLAYER_W)*FP)g->x=(WORLD_W-PLAYER_W)*FP;
+ /* Drive running from actual movement after collision, not held input. */
+ int moved_x=g->x-old_x;
+ if(!moved_x)g->vx=0;
  int center=g->x/FP+PLAYER_W/2;
  int bottom=g->y+PLAYER_H*FP;
  if(!g->area&&!g->climbing&&(input&(UP|DOWN))&&center>=104&&center<=126&&
     bottom>=88*FP&&g->y<158*FP&&((input&DOWN)||bottom>88*FP)){
-  g->climbing=1;g->grounded=0;g->vy=0;
+  g->climbing=1;g->grounded=0;g->vy=0;g->walk_ticks=0;
   if(g->y>114*FP)g->y=114*FP;
  }
  if(g->climbing){
@@ -163,7 +166,9 @@ void game_step(Game *g,unsigned input){
  if((next+PLAYER_H*FP>=floor||(was_floor&&g->vy>=0))&&floor<landing)landing=floor;
  if(landing!=0x7fffffff){next=landing-PLAYER_H*FP;g->vy=0;g->grounded=1;}
  g->y=next;g->camera=0;collect(g);camera(g);
- if(g->grounded&&g->vx&&!g->attack)g->walk_ticks++;else g->walk_ticks=0;
+ if(g->grounded&&moved_x&&!g->attack)
+  g->walk_ticks=(g->walk_ticks+(unsigned)(moved_x<0?-moved_x:moved_x))%(18u*320u);
+ else g->walk_ticks=0;
  if(!g->area&&(pressed&DOWN)&&center>=158&&center<=190&&g->grounded)g->sign_open=1;
  if(!g->area&&(input&RIGHT)&&g->x>=225*FP&&g->grounded&&g->y==0)transition_area(g,1);
  else if(g->area==1&&(input&LEFT)&&g->x<=32*FP&&g->grounded)transition_area(g,0);

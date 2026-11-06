@@ -19,5 +19,6 @@ void game_reset(Game *g);
 void game_step(Game *g, unsigned input);
 int game_damage(Game *g,unsigned amount);
 unsigned game_attack_frame(const Game *g);
+/* walk_ticks stores subpixel distance modulo one three-pose stride. */
 unsigned game_walk_frame(const Game *g);
 #endif

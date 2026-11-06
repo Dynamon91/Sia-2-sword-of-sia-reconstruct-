@@ -8,6 +8,23 @@ int main(void){
  unsigned seen=0;for(int i=0;i<24;i++){game_step(&g,RIGHT);seen|=1u<<game_walk_frame(&g);}
  assert(seen==7);game_step(&g,0);assert(g.walk_ticks==0);
  game_step(&g,JUMP);assert(!g.grounded&&g.walk_ticks==0);
+ /* Holding into an outer wall must stop the run pose immediately. */
+ game_reset(&g);g.x=0;
+ steps(&g,LEFT,24);assert(g.x==0&&g.vx==0&&g.walk_ticks==0);
+ g.x=(WORLD_W-PLAYER_W)*FP;g.y=118*FP;g.grounded=1;
+ steps(&g,RIGHT,24);assert(g.vx==0&&g.walk_ticks==0);
+ /* A partial final step contributes only its real displacement. */
+ game_reset(&g);g.x=(WORLD_W-PLAYER_W)*FP-64;
+ game_step(&g,RIGHT);assert(g.walk_ticks==64);
+ game_step(&g,RIGHT);assert(g.walk_ticks==0&&g.vx==0);
+ /* Turning mid-stride preserves cadence; ladder entry resets stale running. */
+ game_reset(&g);steps(&g,RIGHT,5);unsigned stride=g.walk_ticks;
+ game_step(&g,LEFT);assert(g.walk_ticks==stride+320&&game_walk_frame(&g)==1);
+ game_reset(&g);steps(&g,RIGHT,54);game_step(&g,UP);
+ assert(g.climbing&&g.walk_ticks==0);
+ for(int i=0;i<20;i++)game_step(&g,0);
+ assert(g.climbing&&g.walk_ticks==0);
+ game_step(&g,JUMP);assert(!g.climbing&&!g.grounded&&g.walk_ticks==0);
  /* Attack phases and hit window are driven by the same state counter. */
  game_reset(&g);g.area=3;g.x=125*FP;g.y=48*FP;g.grounded=1;
  game_step(&g,ATTACK);assert(game_attack_frame(&g)==0&&g.enemy_hp==2);

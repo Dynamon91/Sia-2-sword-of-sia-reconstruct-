@@ -274,5 +274,12 @@ int main(int argc,char **argv){
  c->setKeys(c,32);for(int i=0;i<100&&value(c,17)==4;i++)run(c,1);
  c->setKeys(c,0);run(c,4);assert(value(c,17)==3&&value(c,10)==4&&value(c,26)==2);
  puts("PASS motion/gap integration: three recorded walk frames, three attack phases, registered fifth viewport, gap jump and fall, four persistent gems, OBJ digits 3/4, second guard defeat, return persistence");
+ /* Check wall animation in the compiled ROM, after a fresh run. */
+ tap(c,256); /* R is the development run reset. */
+ c->setKeys(c,32);run(c,160);c->setKeys(c,0);run(c,4);
+ assert(value(c,8)==0&&value(c,28)==0);
+ c->setKeys(c,32);run(c,90);assert(value(c,8)==0&&value(c,28)==0);
+ c->setKeys(c,0);run(c,4);capture(c,"build/wall_idle.ppm");
+ puts("PASS wall animation: native ROM stops running at blocked left boundary");
  c->deinit(c);free(pixels);
 }
