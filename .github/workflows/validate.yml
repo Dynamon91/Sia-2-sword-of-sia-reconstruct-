@@ -8,13 +8,17 @@ jobs:
       - name: Install build and audit dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi python3-pil python3-numpy libmgba-dev
+          sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi python3-pil python3-numpy python3-scipy libmgba-dev
       - name: Restore and verify embedded assets
         run: python3 tools/unpack_assets.py
       - name: Remove intro playback and recording overlays
         run: python3 tools/clean_frontend.py
       - name: Repair captured sprite borders and palette
         run: python3 tools/repair_sprite_edges.py
+      - name: Remove residual actor pixels from first-room scenery
+        run: |
+          python3 tools/clean_room_residue.py
+          python3 tools/convert_layers.py
       - name: Audit animation palette and foot anchors
         run: python3 tools/audit_motion_assets.py
       - name: Test gameplay with sanitizers
