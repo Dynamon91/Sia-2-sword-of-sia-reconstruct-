@@ -281,5 +281,25 @@ int main(int argc,char **argv){
  c->setKeys(c,32);run(c,90);assert(value(c,8)==0&&value(c,28)==0);
  c->setKeys(c,0);run(c,4);capture(c,"build/wall_idle.ppm");
  puts("PASS wall animation: native ROM stops running at blocked left boundary");
+ /* Deliberately miss the third-area jump using normal controller inputs. */
+ move_to(c,16,107);c->setKeys(c,64);run(c,100);c->setKeys(c,0);run(c,4);
+ move_to(c,16,139);c->setKeys(c,17);run(c,45);c->setKeys(c,0);run(c,40);
+ c->setKeys(c,16);for(int i=0;i<160&&value(c,17)==0;i++)run(c,1);
+ for(int i=0;i<180&&value(c,17)==1;i++)run(c,1);
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==2);
+ unsigned collision_gems=value(c,10),collision_falls=value(c,18),collision_lives=value(c,31);
+ int touched_wall=0;c->setKeys(c,16);
+ for(int i=0;i<250&&value(c,18)==collision_falls;i++){
+  run(c,1);int px=(int)value(c,8),py=(int)value(c,9);
+  if(px==82*FP&&py>75*FP&&py<155*FP){
+   if(!touched_wall)capture(c,"build/cliff_side_collision.ppm");
+   touched_wall=1;assert(!value(c,14));
+  }
+  if(py>75*FP&&py<160*FP)assert(px<=82*FP);
+ }
+ c->setKeys(c,0);run(c,4);
+ assert(touched_wall&&value(c,18)==collision_falls+1&&value(c,31)==collision_lives-1);
+ assert(value(c,17)==2&&value(c,10)==collision_gems);capture(c,"build/cliff_collision_respawn.ppm");
+ puts("PASS cliff collision integration: missed jump hits solid side, falls, loses one life and preserves gems on respawn");
  c->deinit(c);free(pixels);
 }

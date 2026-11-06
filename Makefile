@@ -22,6 +22,8 @@ build/sia2_lab.gba: build/sia2_lab.elf tools/fix_header.py
 	$(PREFIX)objcopy -O binary $< $@
 	python3 tools/fix_header.py $@
 test: | build
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_collisions.c -o build/test_collisions
+	./build/test_collisions
 	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_lives.c -o build/test_lives
 	./build/test_lives
 	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_game.c -o build/test_game

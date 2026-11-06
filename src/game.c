@@ -4,6 +4,7 @@
 const Platform platforms[PLATFORM_COUNT]={{81,88,70,8},{186,40,54,8}};
 static const Platform bridge_platforms[3]={{33,BRIDGE_SURFACE_Y,48,8},{81,BRIDGE_SURFACE_Y,125,8},{206,BRIDGE_SURFACE_Y,34,8}};
 static const Platform cliff_platforms[2]={{0,54,43,8},{96,115,144,8}};
+static const Platform cliff_rock={96,115,144,45};
 static const Platform gap_platforms[2]={{0,106,98,54},{172,98,68,62}};
 const Gem level_gems[GEM_COUNT]={{0,109,62,0},{1,133,74,1},{3,151,47,2},{4,126,40,3}};
 /* Animation and damage share the same attack clock: wind-up, contact, recovery. */
@@ -121,11 +122,17 @@ void game_step(Game *g,unsigned input){
  if(g->vx&&!g->attack)g->facing=g->vx>0?1:-1;
  int old_x=g->x;
  g->x+=g->vx;
- /* Solid cliff sides: a missed jump cannot enter the rock below its top. */
- if(g->area==4&&g->y<160*FP){
-  int feet=g->y+PLAYER_H*FP;
-  if(g->vx>0&&old_x+PLAYER_W*FP<=172*FP&&g->x+PLAYER_W*FP>172*FP&&feet>98*FP){g->x=(172-PLAYER_W)*FP;g->vx=0;}
-  if(g->vx<0&&old_x>=98*FP&&g->x<98*FP&&feet>106*FP){g->x=98*FP;g->vx=0;}
+ /* Solid rock volumes: resolve crossed faces without snapping onto the top. */
+ const Platform *solids=g->area==2?&cliff_rock:gap_platforms;
+ int solid_count=g->area==2?1:g->area==4?2:0;
+ for(int i=0;i<solid_count;i++){
+  const Platform *p=&solids[i];
+  if(g->y+PLAYER_H*FP<=p->y*FP||g->y>=(p->y+p->h)*FP)continue;
+  if(g->vx>0&&old_x+PLAYER_W*FP<=p->x*FP&&g->x+PLAYER_W*FP>p->x*FP){
+   g->x=(p->x-PLAYER_W)*FP;g->vx=0;
+  }else if(g->vx<0&&old_x>=(p->x+p->w)*FP&&g->x<(p->x+p->w)*FP){
+   g->x=(p->x+p->w)*FP;g->vx=0;
+  }
  }
  if(g->x<0)g->x=0;
  if(g->x>(WORLD_W-PLAYER_W)*FP)g->x=(WORLD_W-PLAYER_W)*FP;
@@ -153,6 +160,12 @@ void game_step(Game *g,unsigned input){
  int old_bottom=g->y+PLAYER_H*FP;
  g->vy+=32;if(g->vy>6*FP)g->vy=6*FP;
  int next=g->y+g->vy,landing=0x7fffffff;
+ /* Rising into a rock underside stops vertical motion, without grounding. */
+ if(g->vy<0)for(int i=0;i<solid_count;i++){
+  const Platform *p=&solids[i];int underside=(p->y+p->h)*FP;
+  if(g->x+PLAYER_W*FP>p->x*FP&&g->x<(p->x+p->w)*FP&&
+     g->y>=underside&&next<underside){next=underside;g->vy=0;}
+ }
  g->grounded=0;
  const Platform *list=g->area==4?gap_platforms:g->area==2?cliff_platforms:g->area?bridge_platforms:platforms;
  int count=g->area==4?2:g->area==3?0:g->area==2?2:g->area?3:PLATFORM_COUNT;
