@@ -4,7 +4,7 @@ This is sampled video playback, not recovery of the original scene engine.
 Requires ffmpeg, Pillow and the supplied MP4. Output fits in a 32 MiB GBA ROM.
 """
 from pathlib import Path
-import argparse, subprocess, tempfile, struct, json
+import argparse, subprocess, tempfile, struct, json, hashlib
 from PIL import Image, ImageFont, ImageDraw
 
 FRAME_BYTES=512+240*160
@@ -13,6 +13,15 @@ UI += [(0,0,0)]*(16-len(UI))
 STILLS=[('TITLE',5),('MENU',8),('SEA',24),('ELDERS',36),('CHAMBER',60),
         ('SCOPE',72),('BIRD',92),('ARRIVAL',112),('ROOM',114)]
 def run(*args):return subprocess.run(args,check=True,stdout=subprocess.PIPE).stdout
+def clean_recording_overlay(im):
+    """Match the established cleanup; covered artwork remains an estimate."""
+    im = im.convert('RGB').resize((240,160), Image.Resampling.NEAREST)
+    # Remove the channel portrait below the recording banner before cropping it.
+    for y in range(12,30):
+        for x in range(209,240):
+            im.putpixel((x,y), im.getpixel((x,30)))
+    return im.crop((0,12,240,160)).resize((240,160), Image.Resampling.NEAREST)
+
 def encode(im):
     im=im.convert('RGB').resize((240,160),Image.Resampling.LANCZOS)
     q=im.quantize(colors=240,method=Image.Quantize.MEDIANCUT,dither=Image.Dither.NONE)
@@ -24,7 +33,8 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('video');p.add_argument('--out',default='assets');a=p.parse_args()
     out=Path(a.out);out.mkdir(parents=True,exist_ok=True)
     meta={'source':Path(a.video).name,'stills':dict(STILLS),'intro_start':10,'intro_end':108,
-          'intro_fps':6,'audio_rate':16384,'source_overlays_retained':True,
+          'intro_fps':6,'audio_rate':16384,'source_overlays_retained':False,
+          'overlay_cleanup':'top 12 rows removed; channel portrait replaced from row 30; covered art estimated',
           'method':'240x160 indexed frames; sampled playback; mixed recording audio'}
     with tempfile.TemporaryDirectory() as tmp:
         tmp=Path(tmp)
@@ -37,11 +47,19 @@ def main():
                 if name=='MENU':
                     # Remove only the recorded selection arrow; native cursor replaces it.
                     im.paste(im.crop((34,44,53,63)),(15,44))
-                f.write(encode(im))
+                f.write(encode(clean_recording_overlay(im)))
             subprocess.run(['ffmpeg','-loglevel','error','-ss','10','-t','98','-i',a.video,
                             '-map','0:v:0','-vf','fps=6,scale=240:160','-vsync','0',str(tmp/'%04d.png')],check=True)
             frames=sorted(tmp.glob('*.png'));assert len(frames)==588,len(frames)
-            for image in frames:f.write(encode(Image.open(image)))
+            for image in frames:f.write(encode(clean_recording_overlay(Image.open(image))))
+    (out/'frontend_cleanup.json').write_text(json.dumps({
+        'banner_removed_rows':12,
+        'recording_avatar_removed_rect':[209,12,31,18],
+        'occluded_pixels':'estimated from first uncovered row; NOT original recovered art',
+        'resampling':'nearest, 240x148 to 240x160',
+        'intro_playback_removed':False,
+        'output_sha256':hashlib.sha256((out/'visuals.bin').read_bytes()).hexdigest()
+    },indent=2)+'\n')
     lengths={}
     for name,start,duration in [('title',2,8),('intro',10,98),('level',114,251)]:
         pcm=run('ffmpeg','-loglevel','error','-ss',str(start),'-t',str(duration),'-i',a.video,
