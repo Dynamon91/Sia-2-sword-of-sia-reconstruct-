@@ -29,5 +29,5 @@ int main(void){
  for(int n=0;n<200;n++)game_step(&g,RIGHT|ATTACK);
  assert(g.ticks==tick&&g.falls==falls&&!game_damage(&g,99));
  game_step(&g,RESET);assert(g.lives==3&&g.progress.health==3&&!g.game_over&&!g.falls);
- puts("PASS lives: lethal-hit respawn in eight areas, progress preservation, immunity, pit override, frozen defeat and full retry");
+ puts("PASS lives: lethal-hit respawn in nine areas, progress preservation, immunity, pit override, frozen defeat and full retry");
 }

@@ -551,6 +551,18 @@ int main(int argc,char **argv){
  assert(value(c,17)==7&&value(c,14)&&value(c,10)==5&&value(c,31)==upper_lives&&value(c,18)==upper_falls);
  capture(c,"build/upper_return.ppm");
  puts("PASS upper route integration: ninth viewport reached through UP+A, fifth gem and HUD, safe descending camera return; lives and defeats preserved");
+ /* Revisit through real controls: no duplicate gem, guard respawn or life cost. */
+ move_to(c,16,92);c->setKeys(c,0);run(c,2);
+ c->setKeys(c,97);run(c,60);c->setKeys(c,0);run(c,8);
+ assert(value(c,17)==8&&value(c,14));
+ move_to(c,16,58);c->setKeys(c,17);run(c,40);c->setKeys(c,0);
+ assert(value(c,10)==5&&value(c,21)==5);
+ assert((c->busRead16(c,0x0700000C)&1023)==720);
+ capture(c,"build/upper_revisit.ppm");
+ for(int i=0;i<160&&(value(c,17)!=7||!value(c,14));i++)run(c,1);
+ assert(value(c,17)==7&&value(c,14)&&value(c,10)==5&&value(c,21)==5);
+ assert(value(c,31)==upper_lives&&value(c,18)==upper_falls&&value(c,26)==3&&value(c,38)==0);
+ puts("PASS upper revisit integration: second input-only ascent and descent, five gems and HUD retained, no duplicate pickup, defeated guard retained, no life loss");
  c->setKeys(c,32);
  for(int i=0;i<100&&value(c,17)==7;i++){
   int bx=(int)value(c,8),by=(int)value(c,9);run(c,1);

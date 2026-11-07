@@ -14,7 +14,7 @@ def main():
    if line.startswith('PASS '):passed.append(line.rstrip())
  if not any(s.startswith('PASS frontend ') for s in passed) or not any(s.startswith('PASS settings integration:') for s in passed):
   raise SystemExit('Both gameplay and settings emulator PASS reports are required')
- for prefix in ['PASS airborne integration:', 'PASS ledge integration:', 'PASS scenery integration:', 'PASS disk save integration:', 'PASS reset input integration:', 'PASS menu cancel integration:', 'PASS continuation integration:', 'PASS bridge run integration:', 'PASS upper route integration:']:
+ for prefix in ['PASS airborne integration:', 'PASS ledge integration:', 'PASS scenery integration:', 'PASS disk save integration:', 'PASS reset input integration:', 'PASS menu cancel integration:', 'PASS continuation integration:', 'PASS bridge run integration:', 'PASS upper route integration:', 'PASS upper revisit integration:']:
   if not any(s.startswith(prefix) for s in passed):raise SystemExit('Missing '+prefix)
  pictures=[p.with_suffix('.png') for p in sorted(root.glob('*.ppm'))]
  if any(not p.exists() for p in pictures):raise SystemExit('Export every emulator PPM before packaging')
