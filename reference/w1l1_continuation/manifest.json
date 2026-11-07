@@ -179,6 +179,32 @@
       "delta": null
     },
     {
+      "from": 160,
+      "to": 161,
+      "patches": [
+        [
+          150,
+          138,
+          156,
+          146
+        ],
+        [
+          148,
+          148,
+          155,
+          155
+        ]
+      ],
+      "accepted": true,
+      "delta": [
+        -116,
+        -25
+      ],
+      "max_mae_rgb": 6,
+      "min_runner_up_margin_rgb": 3,
+      "method": "Two disjoint patches wholly inside the static stone pillar; sky and moving bridge excluded"
+    },
+    {
       "from": 161,
       "to": 162,
       "patches": [
@@ -251,7 +277,9 @@
   "limits": [
     "Source video is compressed and normalized; one-pixel uncertainty is possible",
     "Patches are manually selected static foreground, excluding actors, sky and HUD",
-    "The 160-to-161 bridge interval is rejected; do not join the two components",
-    "No collision geometry, ladder, enemy, gem, or playable viewport is added by this audit"
-  ]
+    "No collision geometry, ladder, enemy, gem, or playable viewport is added by this audit",
+    "Broad 160-to-161 windows remain rejected; only the separate static-pillar registration connects the references"
+  ],
+  "registration_anchor_seconds": 155,
+  "require_connected": true
 }

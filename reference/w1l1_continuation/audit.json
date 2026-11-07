@@ -40,7 +40,9 @@
             145
           ]
         }
-      ]
+      ],
+      "max_mae_rgb": 5,
+      "min_runner_up_margin_rgb": 0
     },
     {
       "from": 155,
@@ -79,7 +81,9 @@
             145
           ]
         }
-      ]
+      ],
+      "max_mae_rgb": 5,
+      "min_runner_up_margin_rgb": 0
     },
     {
       "from": 158,
@@ -118,7 +122,9 @@
             113
           ]
         }
-      ]
+      ],
+      "max_mae_rgb": 5,
+      "min_runner_up_margin_rgb": 0
     },
     {
       "from": 159,
@@ -157,7 +163,9 @@
             124
           ]
         }
-      ]
+      ],
+      "max_mae_rgb": 5,
+      "min_runner_up_margin_rgb": 0
     },
     {
       "from": 160,
@@ -193,7 +201,50 @@
             156
           ]
         }
-      ]
+      ],
+      "max_mae_rgb": 5,
+      "min_runner_up_margin_rgb": 0
+    },
+    {
+      "from": 160,
+      "to": 161,
+      "accepted": true,
+      "delta": [
+        -116,
+        -25
+      ],
+      "patches": [
+        {
+          "delta": [
+            -116,
+            -25
+          ],
+          "mae_rgb": 5.284722,
+          "runner_up_mae_rgb": 32.659722,
+          "patch": [
+            150,
+            138,
+            156,
+            146
+          ]
+        },
+        {
+          "delta": [
+            -116,
+            -25
+          ],
+          "mae_rgb": 4.482993,
+          "runner_up_mae_rgb": 13.503401,
+          "patch": [
+            148,
+            148,
+            155,
+            155
+          ]
+        }
+      ],
+      "max_mae_rgb": 6,
+      "min_runner_up_margin_rgb": 3
     },
     {
       "from": 161,
@@ -232,7 +283,9 @@
             116
           ]
         }
-      ]
+      ],
+      "max_mae_rgb": 5,
+      "min_runner_up_margin_rgb": 0
     },
     {
       "from": 162,
@@ -271,7 +324,9 @@
             135
           ]
         }
-      ]
+      ],
+      "max_mae_rgb": 5,
+      "min_runner_up_margin_rgb": 0
     },
     {
       "from": 163,
@@ -310,7 +365,49 @@
             120
           ]
         }
-      ]
+      ],
+      "max_mae_rgb": 5,
+      "min_runner_up_margin_rgb": 0
     }
-  ]
+  ],
+  "registration_anchor_seconds": 155,
+  "connected": true,
+  "registered_pixel_offsets_from_anchor": {
+    "155": [
+      0,
+      0
+    ],
+    "157": [
+      -20,
+      0
+    ],
+    "158": [
+      -140,
+      8
+    ],
+    "159": [
+      -188,
+      25
+    ],
+    "160": [
+      -242,
+      59
+    ],
+    "161": [
+      -358,
+      34
+    ],
+    "162": [
+      -382,
+      33
+    ],
+    "163": [
+      -498,
+      40
+    ],
+    "164": [
+      -526,
+      41
+    ]
+  }
 }

@@ -29,6 +29,41 @@ def match(source,target,box,crop_y):
     return {'delta':[dx,dy],'mae_rgb':round(error,6),
             'runner_up_mae_rgb':round(best[1][0],6),'patch':box}
 
+def resolve_offsets(registrations,anchor):
+    """Compose accepted translations; reject inconsistent loops, never use rejected edges."""
+    from collections import deque
+    edges={}
+    for pair in registrations:
+        if not pair['accepted']:continue
+        a,b=pair['from'],pair['to'];dx,dy=pair['delta']
+        edges.setdefault(a,[]).append((b,dx,dy))
+        edges.setdefault(b,[]).append((a,-dx,-dy))
+    offsets={anchor:[0,0]};queue=deque([anchor])
+    while queue:
+        source=queue.popleft()
+        for target,dx,dy in edges.get(source,[]):
+            candidate=[offsets[source][0]+dx,offsets[source][1]+dy]
+            if target in offsets:
+                if offsets[target]!=candidate:raise ValueError('Conflicting terrain registrations')
+            else:offsets[target]=candidate;queue.append(target)
+    return offsets
+
+def bridge_preview(manifest):
+    sheet=Image.new('RGB',(480,160),'#18212d');draw=ImageDraw.Draw(sheet)
+    pair=next(p for p in manifest['registrations'] if p.get('method') and p['accepted'])
+    boxes=pair['patches'];translation=pair['delta'];crop_y=manifest['crop_top_rows']
+    for col,t in enumerate([pair['from'],pair['to']]):
+        x=col*240;draw.text((x+4,4),f'VIDEO {t}s - NOT ROM',fill='white')
+        sheet.paste(Image.open(DATA/f'frames/{t}.png').convert('RGB'),(x,20))
+        for box,color in zip(boxes,['#00ff77','#ffb833']):
+            x0,y0,x1,y1=box;dx,dy=(0,0) if col==0 else translation
+            draw.rectangle((x+x0+dx,20+y0+dy-crop_y,x+x1+dx-1,20+y1+dy-crop_y-1),outline=color,width=1)
+    draw.text((4,148),f'STATIC PILLAR: dx={translation[0]}, dy={translation[1]} px',fill='white')
+    with (DATA/'bridge_alignment.png').open('wb') as f:
+        sheet.resize((1440,480),Image.Resampling.NEAREST).save(f,format='PNG')
+        f.flush()
+        __import__('os').fsync(f.fileno())
+
 def overview(manifest):
     times=[158,159,160,161,162,164]
     sheet=Image.new('RGB',(720,294),'#18212d');draw=ImageDraw.Draw(sheet)
@@ -61,19 +96,26 @@ def main():
     for pair in manifest['registrations']:
         patches=[match(frames[pair['from']],frames[pair['to']],box,crop_y) for box in pair['patches']]
         assert len(patches)>=2
-        accepted=all(p['mae_rgb']<=manifest['max_mae_rgb'] for p in patches) and all(p['delta']==patches[0]['delta'] for p in patches)
+        accepted=all(p['mae_rgb']<=pair.get('max_mae_rgb',manifest['max_mae_rgb']) and p['runner_up_mae_rgb']-p['mae_rgb']>=pair.get('min_runner_up_margin_rgb',0) for p in patches) and all(p['delta']==patches[0]['delta'] for p in patches)
         if pair['accepted']:
             assert accepted and patches[0]['delta']==pair['delta'],(pair,patches)
         else:
             assert not accepted,('Previously rejected registration now needs review',pair,patches)
         results.append({'from':pair['from'],'to':pair['to'],'accepted':accepted,
-                        'delta':patches[0]['delta'] if accepted else None,'patches':patches})
-    # Two disconnected components are deliberate: the bridge interval is unresolved.
+                        'delta':patches[0]['delta'] if accepted else None,'patches':patches,
+                        'max_mae_rgb':pair.get('max_mae_rgb',manifest['max_mae_rgb']),
+                        'min_runner_up_margin_rgb':pair.get('min_runner_up_margin_rgb',0)})
+    anchor=manifest.get('registration_anchor_seconds',manifest['frames'][0]['seconds'])
+    offsets=resolve_offsets(results,anchor)
+    connected=len(offsets)==len(frames)
+    if manifest.get('require_connected') and not connected:raise ValueError('Unresolved reference components')
     args.output.parent.mkdir(parents=True,exist_ok=True)
     report={'reference_only':True,'playable_area_added':False,
-            'coordinate_convention':manifest['coordinate_convention'],'registrations':results}
+            'coordinate_convention':manifest['coordinate_convention'],'registrations':results,
+            'registration_anchor_seconds':anchor,'connected':connected,
+            'registered_pixel_offsets_from_anchor':offsets}
     args.output.write_text(json.dumps(report,indent=2)+'\n')
-    if args.preview:overview(manifest)
+    if args.preview:overview(manifest);bridge_preview(manifest)
     accepted=sum(p['accepted'] for p in results)
-    print(f'PASS route references: {accepted} registrations independently matched by two terrain patches; {len(results)-accepted} bridge registration rejected; no playable map inferred')
+    print(f'PASS route references: {accepted} registrations independently matched by two terrain patches; {len(results)-accepted} context-window registration rejected; connected={connected}; no playable map inferred')
 if __name__=='__main__':main()
