@@ -25,6 +25,8 @@ jobs:
           python3 tools/convert_layers.py
       - name: Verify integrated sixth-view background conversion
         run: python3 tools/convert_continuation_background.py --check
+      - name: Verify integrated bridge and riser prototype backgrounds
+        run: python3 tools/convert_bridge_run.py --check
       - name: Audit animation palette and foot anchors
         run: |
           python3 tools/convert_jump.py

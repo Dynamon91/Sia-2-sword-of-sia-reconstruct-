@@ -1,0 +1,43 @@
+{
+  "palette_sha256": "0f145cfe1ec41897e09f333e75cf9a86eef904a9fe9f2f701ee810eea47693a9",
+  "sources": {
+    "161": "b11a03b3eb6b49978dda6c6e91ad549bfb3f25e4eb0f84dc24a022f9439eb448",
+    "162": "777db4077ff493928384ddacfbb1392efc82fd2e6abb52cadadc1b76abcc64e2",
+    "164": "88090d5f6a69d2ca8acdc5b32ee731a97c3aff924f00cdaf59c9698074b53595"
+  },
+  "rooms": [
+    {
+      "name": "bridge_run",
+      "source_seconds": 161,
+      "integrated_in_rom": true,
+      "collision_geometry": "provisional",
+      "unchanged_rgb_pixels": 28437,
+      "recovered_foreground_pixels": 443,
+      "sky_fill_iterations": 587,
+      "provenance": "Bridge wood from 160s mapped by (-116,-25); upper island from 162s mapped by (+24,+1)",
+      "limits": [
+        "Compressed video colors and estimated occluded sky/top/wall",
+        "Bridge and scenery animation still pending; prototype enemy behavior"
+      ]
+    },
+    {
+      "name": "riser",
+      "source_seconds": 164,
+      "integrated_in_rom": true,
+      "collision_geometry": "provisional",
+      "unchanged_rgb_pixels": 27438,
+      "recovered_foreground_pixels": 3231,
+      "sky_fill_iterations": 1012,
+      "provenance": "Island from 162s mapped by (-144,+8); hidden wall columns estimated from row 60",
+      "limits": [
+        "Compressed video colors and estimated occluded sky/top/wall",
+        "Bridge and scenery animation still pending; prototype enemy behavior"
+      ]
+    }
+  ],
+  "size": [
+    240,
+    160
+  ],
+  "buffer_bytes_with_palette": 38912
+}

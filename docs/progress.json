@@ -4,14 +4,14 @@
     {
       "name": "Motore e sistemi di gioco",
       "weight": 15,
-      "earned": 7.5,
-      "evidence": "Controlli, raccolta, combattimento, vite/game over, presa/risalita e nuova pendenza con urti/fall respawn verificati; fisica ancora provvisoria."
+      "earned": 8,
+      "evidence": "Controlli, raccolta, combattimento, tre guardie persistenti, vite/game over, pendenze e nuovi volumi/portali verificati; fisica e IA ancora provvisorie."
     },
     {
       "name": "Mondo 1 e boss",
       "weight": 20,
-      "earned": 1.5,
-      "evidence": "Sei inquadrature parziali del primo livello collegate, nuova salita/vuoto/ponte e ritorno verificati; due guardie e quattro gemme. Livello, mondo e boss incompleti."
+      "earned": 2,
+      "evidence": "Otto inquadrature parziali del primo livello collegate, ponte con terza guardia, salita e parete; andata/ritorno verificati. Quattro gemme. Livello, mondo e boss incompleti."
     },
     {
       "name": "Mondo 2 e boss",

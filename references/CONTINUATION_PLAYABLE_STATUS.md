@@ -1,5 +1,7 @@
 # Sesta inquadratura giocabile — W1L1
 
+Checkpoint precedente: il percorso è stato poi esteso a otto aree. Stato attuale in `BRIDGE_RUN_PLAYABLE_STATUS.md`.
+
 Aggiornamento del 7 novembre 2026. Il percorso giocabile passa da cinque a **sei inquadrature parziali** del primo livello. La nuova zona usa lo sfondo preparato dal riferimento a 159 s e contiene una salita, il bordo dell'isola, un vuoto e il primo tratto del ponte. Non completa il livello né aggiunge il successivo tratto di combattimento.
 
 ## Comportamento implementato

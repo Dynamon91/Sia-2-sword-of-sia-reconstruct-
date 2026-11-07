@@ -3,9 +3,9 @@
 **🚧 WORK IN PROGRESS — Ricostruzione ancora in sviluppo.**
 
 <!-- PROJECT_PROGRESS -->
-![Avanzamento complessivo stimato: 10%](docs/progress.svg)
+![Avanzamento complessivo stimato: 11%](docs/progress.svg)
 
-**Progetto completo: circa 10%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
+**Progetto completo: circa 11%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
 <!-- /PROJECT_PROGRESS -->
 
 ![Anteprima degli asset attualmente integrati](previews/readme_frontend.png)
@@ -16,9 +16,11 @@ An ongoing reconstruction of Lady Sia 2: Sword of Sia for Game Boy Advance, base
 
 The current build includes a partial reconstruction of World 1 with controllable gameplay, collisions, pickups, damage, falling and game over. Levels, sprite and scenery animations, and the original interface are still being reconstructed and refined. This project is incomplete and does not represent the finished original game.
 
-Latest playable change: a sixth partial viewport is now connected to W1L1, with a walkable slope, a jump to the bridge and a return route. Gems, defeated enemies and lives persist across the new connection. Collision planes are provisional and will be refined. [Implementation, native checks and limits](references/CONTINUATION_PLAYABLE_STATUS.md).
+Latest playable change: W1L1 now has eight linked partial viewports and a third prototype guard. Continue over the bridge, defeat the guard, climb to the rock wall and return with gems and defeated enemies preserved. Collision geometry and enemy behavior remain provisional. [Implementation, checks and remaining work](references/BRIDGE_RUN_PLAYABLE_STATUS.md).
 
-![New sixth viewport recorded continuously from the native ROM](previews/continuation_gameplay.gif)
+![Bridge combat, climb and return recorded from the native ROM](previews/bridge_run_gameplay.gif)
+
+The preceding sixth-view slope and gap remain playable. [Sixth-view milestone](references/CONTINUATION_PLAYABLE_STATUS.md).
 
 B now takes priority over simultaneous confirm or direction buttons in the main menu and options, preventing accidental starts and SOUND changes while backing out. [Native checks](references/MENU_CANCEL_STATUS.md).
 

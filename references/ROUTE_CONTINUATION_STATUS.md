@@ -1,6 +1,6 @@
 # Prosecuzione W1L1: registrazione del terreno fra 155 e 164 secondi
 
-Aggiornamento del 7 novembre 2026. Le misure documentate qui preparavano il prossimo tratto. La sesta area è ora integrata con collisioni provvisorie: vedere `CONTINUATION_PLAYABLE_STATUS.md` (**10%** complessivo stimato).
+Aggiornamento del 7 novembre 2026. Le misure documentate qui preparavano il prossimo tratto. La sesta area è ora integrata con collisioni provvisorie: vedere `CONTINUATION_PLAYABLE_STATUS.md` (**11%** complessivo stimato).
 
 Sono stati analizzati nove fotogrammi del video originale del primo livello. I riferimenti versionati hanno risoluzione 240×125: le prime 35 righe del fotogramma normalizzato 240×160 sono escluse, rimuovendo banner e logo della registrazione. Non sono sfondi pronti per il gioco: contengono ancora Sia, nemici, proiettili e indicatori del gameplay registrato.
 
@@ -40,4 +40,4 @@ L'audit compone solo collegamenti accettati, calcola le traslazioni inverse e ri
 
 `reference/w1l1_continuation/bridge_alignment.png` mostra i due dettagli usati sui fotogrammi reali, con etichetta NOT ROM. L'incertezza dovuta alla compressione e alla normalizzazione rimane indicata nel manifest.
 
-Il prossimo intervento è ricostruire la geometria percorribile e ripulire gli elementi dinamici. Il ponte, la zona coperta dai nemici, la geometria di collisione, le superfici in pendenza, gli oggetti e i comportamenti degli avversari richiedono ulteriori misure e ricostruzione prima dell'integrazione. La ROM contiene ora sei inquadrature parziali, con la prosecuzione integrata in forma provvisoria. Il percorso completo e tutti i mondi restano incompleti.
+Il prossimo intervento è ricostruire la geometria percorribile e ripulire gli elementi dinamici. Il ponte, la zona coperta dai nemici, la geometria di collisione, le superfici in pendenza, gli oggetti e i comportamenti degli avversari richiedono ulteriori misure e ricostruzione prima dell'integrazione. La ROM contiene ora otto inquadrature parziali, con la prosecuzione integrata in forma provvisoria. Il percorso completo e tutti i mondi restano incompleti.

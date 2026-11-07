@@ -131,3 +131,12 @@ cloud_strip:
 .global continuation_background
 continuation_background:
 .incbin "assets/continuation_background.bin"
+
+.balign 4
+.global bridge_run_background
+bridge_run_background:
+.incbin "assets/bridge_run_background.bin"
+.balign 4
+.global riser_background
+riser_background:
+.incbin "assets/riser_background.bin"

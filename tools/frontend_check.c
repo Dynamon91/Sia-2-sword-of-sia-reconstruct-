@@ -218,6 +218,7 @@ int main(int argc,char **argv){
  assert(!mkdir("build/jump_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/scenery_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/continuation_sequence",0777)||errno==EEXIST);
+ assert(!mkdir("build/bridge_run_sequence",0777)||errno==EEXIST);
  mLogSetDefaultLogger(&test_logger);
  assert(argc==2);struct mCore *c=mCoreFind(argv[1]);assert(c&&c->init(c));mCoreInitConfig(c,NULL);
  color_t *pixels=calloc(240*160,sizeof(color_t));assert(pixels);c->setVideoBuffer(c,pixels,240);
@@ -494,8 +495,61 @@ int main(int argc,char **argv){
  fprintf(continuation_count,"%u\n",sequence_frame);fclose(continuation_count);
  tap(c,8);state(c,8);unsigned continuation_ticks=value(c,16);run(c,30);assert(value(c,16)==continuation_ticks);
  capture(c,"build/continuation_pause.ppm");tap(c,1);state(c,7);
+ /* Continue through two more viewports; no gameplay state is injected. */
+ move_to(c,16,125);c->setKeys(c,17);run(c,70);c->setKeys(c,0);run(c,5);
+ c->setKeys(c,16);
+ for(int i=0;i<100&&value(c,17)==5;i++){
+  int bx=(int)value(c,8),by=(int)value(c,9);run(c,1);
+  if(value(c,17)==6){assert((int)value(c,8)+170*FP-bx==320);assert((int)value(c,9)-9*FP==by);}
+ }
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==6&&value(c,14)&&value(c,38)==2);
+ capture(c,"build/bridge_run_entry.ppm");
+ sequence_dir="build/bridge_run_sequence";sequence_frame=0;
+ move_to(c,16,82);
+ for(int i=0;i<8&&value(c,38);i++){tap(c,2);run(c,4);}
+ assert(value(c,38)==0&&value(c,26)==3&&value(c,10)==4);
+ capture(c,"build/bridge_guard_defeated.ppm");
+ c->setKeys(c,16);
+ for(int i=0;i<150&&value(c,17)==6;i++){
+  int bx=(int)value(c,8),by=(int)value(c,9);run(c,1);
+  if(value(c,17)==7){assert((int)value(c,8)+168*FP-bx==320);assert((int)value(c,9)-7*FP==by);}
+ }
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==7&&value(c,14)&&value(c,38)==0);
+ capture(c,"build/riser_entry.ppm");
+ FILE *riser_file=fopen("assets/riser_background.bin","rb");assert(riser_file);
+ unsigned riser_base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
+ for(unsigned i=0;i<3;i++){
+  unsigned offset=sample_pixels[i][1]*240+sample_pixels[i][0];
+  assert(!fseek(riser_file,512+(long)offset,SEEK_SET));int expected=fgetc(riser_file);assert(expected>=0);
+  assert(c->busRead8(c,riser_base+offset)==(unsigned)expected);
+ }
+ fclose(riser_file);
+ move_to(c,16,119);c->setKeys(c,16);run(c,30);
+ assert(value(c,8)==119*FP&&value(c,14)&&value(c,28)==0);capture(c,"build/riser_wall.ppm");
+ c->setKeys(c,0);run(c,4);tap(c,8);state(c,8);unsigned riser_ticks=value(c,16);run(c,30);assert(value(c,16)==riser_ticks);
+ tap(c,1);state(c,7);
+ c->setKeys(c,32);
+ for(int i=0;i<100&&value(c,17)==7;i++){
+  int bx=(int)value(c,8),by=(int)value(c,9);run(c,1);
+  if(value(c,17)==6){assert((int)value(c,8)-168*FP-bx==-320);assert((int)value(c,9)+7*FP==by);}
+ }
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==6&&value(c,38)==0&&value(c,26)==3);
+ capture(c,"build/bridge_run_return.ppm");
+ c->setKeys(c,32);
+ for(int i=0;i<160&&value(c,17)==6;i++){
+  int bx=(int)value(c,8),by=(int)value(c,9);run(c,1);
+  if(value(c,17)==5){assert((int)value(c,8)-170*FP-bx==-320);assert((int)value(c,9)+9*FP==by);}
+ }
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==5&&value(c,26)==3&&value(c,10)==4);
+ sequence_dir=NULL;
+ FILE *bridge_count=fopen("build/bridge_run_sequence/frame_count.txt","w");assert(bridge_count);
+ fprintf(bridge_count,"%u\n",sequence_frame);fclose(bridge_count);
+ move_to(c,32,200);c->setKeys(c,33);run(c,70);c->setKeys(c,0);run(c,5);
+ assert(value(c,17)==5&&value(c,14)&&(int)value(c,9)==61*FP);
+ puts("PASS bridge run integration: eight linked viewports, third guard defeated through input, two registered portals in both directions, native riser pixels, solid wall and pause; gems and defeats persist");
+
  c->setKeys(c,32);for(int i=0;i<100&&value(c,17)==5;i++)run(c,1);
- c->setKeys(c,0);run(c,4);assert(value(c,17)==4&&value(c,10)==4&&value(c,26)==2);
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==4&&value(c,10)==4&&value(c,26)==3);
  puts("PASS continuation integration: input-driven sixth viewport, registered portal, slope, native background pixels, bridge jump both directions, pause and persistent round trip");
  unsigned falls_before=value(c,18),lives_before=value(c,31);
  c->setKeys(c,32);for(int i=0;i<240&&value(c,18)==falls_before;i++)run(c,1);
@@ -503,7 +557,7 @@ int main(int argc,char **argv){
  assert(value(c,18)==falls_before+1&&value(c,31)==lives_before-1&&value(c,22)==3&&value(c,10)==4&&value(c,17)==4);
  capture(c,"build/gap_respawn.ppm");
  c->setKeys(c,32);for(int i=0;i<100&&value(c,17)==4;i++)run(c,1);
- c->setKeys(c,0);run(c,4);assert(value(c,17)==3&&value(c,10)==4&&value(c,26)==2);
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==3&&value(c,10)==4&&value(c,26)==3);
  puts("PASS motion/gap integration: three recorded walk frames, three attack phases, registered fifth viewport, gap jump and fall, four persistent gems, OBJ digits 3/4, second guard defeat, return persistence");
  /* Check wall animation in the compiled ROM, after a fresh run. */
  tap(c,256); /* R is the development run reset. */

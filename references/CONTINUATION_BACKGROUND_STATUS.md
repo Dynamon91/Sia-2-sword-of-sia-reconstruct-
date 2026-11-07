@@ -1,6 +1,6 @@
 # Sfondo della sesta area — integrazione provvisoria
 
-Aggiornamento del 7 novembre 2026. Lo sfondo è ora **integrato nella sesta area giocabile** con collisioni provvisorie. La stima complessiva è **10%** dopo il traguardo descritto in `CONTINUATION_PLAYABLE_STATUS.md`.
+Aggiornamento del 7 novembre 2026. Lo sfondo è ora **integrato nella sesta area giocabile** con collisioni provvisorie. La stima complessiva è **11%** dopo il traguardo descritto in `CONTINUATION_PLAYABLE_STATUS.md`.
 
 ## Contenuto
 
@@ -32,4 +32,4 @@ Richiede Python, Pillow, NumPy e SciPy. Il controllo verifica identità del rita
 
 ## Lavoro restante
 
-Le punte d'erba e i dettagli del ponte non definiscono automaticamente il piano su cui poggiano i piedi. I contorni sono una guida visiva, non una mappa di collisione recuperata. Piani percorribili, volumi solidi, vuoti, ancore dei piedi e passaggi avanti/indietro sono implementati in forma provvisoria e devono essere ulteriormente calibrati. Anche entità e animazioni del tratto restano da ricostruire. La build giocabile contiene ora sei inquadrature parziali.
+Le punte d'erba e i dettagli del ponte non definiscono automaticamente il piano su cui poggiano i piedi. I contorni sono una guida visiva, non una mappa di collisione recuperata. Piani percorribili, volumi solidi, vuoti, ancore dei piedi e passaggi avanti/indietro sono implementati in forma provvisoria e devono essere ulteriormente calibrati. Anche entità e animazioni del tratto restano da ricostruire. La build giocabile contiene ora otto inquadrature parziali.
