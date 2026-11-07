@@ -14,7 +14,7 @@ def main():
    if line.startswith('PASS '):passed.append(line.rstrip())
  if not any(s.startswith('PASS frontend ') for s in passed) or not any(s.startswith('PASS settings integration:') for s in passed):
   raise SystemExit('Both gameplay and settings emulator PASS reports are required')
- for prefix in ['PASS airborne integration:', 'PASS ledge integration:', 'PASS scenery integration:', 'PASS disk save integration:', 'PASS reset input integration:']:
+ for prefix in ['PASS airborne integration:', 'PASS ledge integration:', 'PASS scenery integration:', 'PASS disk save integration:', 'PASS reset input integration:', 'PASS menu cancel integration:']:
   if not any(s.startswith(prefix) for s in passed):raise SystemExit('Missing '+prefix)
  pictures=[p.with_suffix('.png') for p in sorted(root.glob('*.ppm'))]
  if any(not p.exists() for p in pictures):raise SystemExit('Export every emulator PPM before packaging')
@@ -34,7 +34,7 @@ def main():
   report=json.loads((repo/'previews'/f'{name}_preview.json').read_text())
   if report['rom_sha256']!=hashlib.sha256(data).hexdigest() or not report['all_source_pixels_preserved']:
    raise SystemExit('Stale or unverified native animation preview: '+name)
- for source in ['previews/scenery_gameplay.gif','previews/scenery_preview.json','references/SCENERY_STATUS.md','previews/jump_gameplay.gif','previews/jump_preview.json','previews/ledge_gameplay.gif','previews/ledge_preview.json','references/JUMP_STATUS.md','references/LEDGE_STATUS.md','references/SAVE_RELOAD_STATUS.md','references/RESET_INPUT_STATUS.md','docs/progress.svg']:
+ for source in ['previews/scenery_gameplay.gif','previews/scenery_preview.json','references/SCENERY_STATUS.md','previews/jump_gameplay.gif','previews/jump_preview.json','previews/ledge_gameplay.gif','previews/ledge_preview.json','references/JUMP_STATUS.md','references/LEDGE_STATUS.md','references/SAVE_RELOAD_STATUS.md','references/RESET_INPUT_STATUS.md','references/MENU_CANCEL_STATUS.md','docs/progress.svg']:
   shutil.copyfile(repo/source,out/Path(source).name)
  files=sorted(p for p in out.rglob('*') if p.is_file())
  (out/'SHA256SUMS.txt').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.relative_to(out).as_posix()+'\n' for p in files))

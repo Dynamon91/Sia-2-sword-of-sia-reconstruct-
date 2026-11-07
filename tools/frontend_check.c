@@ -230,6 +230,13 @@ int main(int argc,char **argv){
  }
  assert(fgetc(tile_file)==EOF);fclose(tile_file);
  capture(c,"build/title_v06.ppm");assert(energy>10000&&samples>1000);
+ /* Cancel wins over simultaneous confirm: never start a run while backing out. */
+ const unsigned cancel_combos[]={3,10,6,66,130,18,34};
+ for(unsigned i=0;i<sizeof(cancel_combos)/sizeof(cancel_combos[0]);i++){
+  tap(c,8);state(c,1);
+  assert((c->busRead16(c,0x07000000)&255)==34);
+  tap(c,cancel_combos[i]);state(c,0);
+ }
  tap(c,8);state(c,1);capture(c,"build/menu_v06.ppm");
  assert((c->busRead16(c,0x04000000)&0x1040)==0x1040);
  assert((c->busRead16(c,0x07000004)&1023)==UI_CURSOR_TILE);
@@ -372,6 +379,14 @@ int main(int argc,char **argv){
  assert(value(c,3)==0&&value(c,4)==0&&value(c,7)==0);
  tap(c,8);tap(c,128);tap(c,1);state(c,4);
  capture(c,"build/options_saved.ppm");
+ /* B+A must leave OPTIONS without changing SOUND or re-entering another screen. */
+ for(unsigned i=0;i<sizeof(cancel_combos)/sizeof(cancel_combos[0]);i++){
+  tap(c,cancel_combos[i]);state(c,1);assert(value(c,3)==0);
+  assert(c->busRead8(c,0x0E000005)==0);
+  if(i+1<sizeof(cancel_combos)/sizeof(cancel_combos[0])){tap(c,1);state(c,4);}
+ }
+ capture(c,"build/options_cancel.ppm");
+ puts("PASS menu cancel integration: B wins over A/START/SELECT/directions in MENU and OPTIONS; selection, SOUND and SRAM remain unchanged");
  /* A damaged checksum must select documented defaults on the next boot. */
  c->busWrite8(c,0x0E000006,c->busRead8(c,0x0E000006)^1);
  c->setKeys(c,0);c->reset(c);run(c,90);state(c,0);

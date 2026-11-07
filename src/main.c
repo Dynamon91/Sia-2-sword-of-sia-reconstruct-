@@ -294,9 +294,9 @@ int main(void){
   switch(state){
   case TITLE:if(pressed&9)enter(MENU);break;
   case MENU:
+   if(pressed&2){enter(TITLE);break;}
    if(pressed&64){selection=(selection+2)%3;dirty=1;}
    if(pressed&128){selection=(selection+1)%3;dirty=1;}
-   if(pressed&2)enter(TITLE);
    if(pressed&4){audio_stop();story_index=0;enter(STORY);}
    else if(pressed&9){
     audio_stop();
@@ -314,9 +314,9 @@ int main(void){
    else if(pressed&9){if(arrival_index==0){arrival_index=1;dirty=1;}else start_level();}
    break;
   case OPTIONS:
+   if(pressed&2){enter(MENU);break;}
    if(pressed&64){option_index=(option_index+1)%2;dirty=1;}
    if(pressed&128){option_index=(option_index+1)%2;dirty=1;}
-   if(pressed&2)enter(MENU);
    if(pressed&(1|16|32)){
     if(option_index==0){sound_enabled^=1;audio_stop();}
     if(option_index==0)settings_store(SETTINGS_SRAM,sound_enabled,0);
