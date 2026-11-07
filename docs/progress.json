@@ -1,17 +1,17 @@
 {
-  "updated": "2026-11-07",
+  "updated": "2026-11-08",
   "areas": [
     {
       "name": "Motore e sistemi di gioco",
       "weight": 15,
-      "earned": 8,
-      "evidence": "Controlli, raccolta, combattimento, tre guardie persistenti, vite/game over, pendenze e nuovi volumi/portali verificati; fisica e IA ancora provvisorie."
+      "earned": 8.5,
+      "evidence": "Controlli, combattimento, tre guardie persistenti, vite/game over, pendenze, salto alto provvisorio e cambio camera verticale verificati; fisica e IA ancora provvisorie."
     },
     {
       "name": "Mondo 1 e boss",
       "weight": 20,
-      "earned": 2,
-      "evidence": "Otto inquadrature parziali del primo livello collegate, ponte con terza guardia, salita e parete; andata/ritorno verificati. Quattro gemme. Livello, mondo e boss incompleti."
+      "earned": 2.5,
+      "evidence": "Nove inquadrature parziali del primo livello collegate, ponte, parete e piattaforma superiore; quinta gemma e ritorno verificati. Livello, mondo e boss incompleti."
     },
     {
       "name": "Mondo 2 e boss",

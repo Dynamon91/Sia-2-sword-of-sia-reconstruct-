@@ -1,5 +1,7 @@
 # Ponte e parete: settima e ottava area giocabile
 
+Nota storica: il percorso superiore è ora integrato nel [milestone successivo](UPPER_ROUTE_PLAYABLE_STATUS.md). La GIF corrente include anche questo nuovo tratto.
+
 Aggiornamento del 7 novembre 2026. Il primo livello passa da sei a **otto inquadrature parziali collegate**, con una terza guardia prototipo. La stima complessiva passa dal **10% all'11%**: +0,5 punti al motore per la terza entità persistente e i nuovi volumi/collegamenti, +0,5 al Mondo 1 per l'estensione percorribile verificata. I pesi delle categorie non cambiano.
 
 ## Percorso disponibile

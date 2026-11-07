@@ -140,3 +140,12 @@ bridge_run_background:
 .global riser_background
 riser_background:
 .incbin "assets/riser_background.bin"
+
+.balign 4
+.global upper_background
+upper_background:
+.incbin "assets/upper_background.bin"
+.balign 4
+.global ui_digit5_tiles
+ui_digit5_tiles:
+.incbin "assets/ui_digit5_tiles.bin"

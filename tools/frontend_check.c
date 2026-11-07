@@ -528,6 +528,29 @@ int main(int argc,char **argv){
  assert(value(c,8)==119*FP&&value(c,14)&&value(c,28)==0);capture(c,"build/riser_wall.ppm");
  c->setKeys(c,0);run(c,4);tap(c,8);state(c,8);unsigned riser_ticks=value(c,16);run(c,30);assert(value(c,16)==riser_ticks);
  tap(c,1);state(c,7);
+ /* Prototype upper route: high jump, fifth pickup, camera descent, no life loss. */
+ move_to(c,32,92);c->setKeys(c,0);run(c,2);
+ unsigned upper_lives=value(c,31),upper_falls=value(c,18);
+ c->setKeys(c,97);run(c,60);c->setKeys(c,0);run(c,8);
+ assert(value(c,17)==8&&value(c,14));capture(c,"build/upper_entry.ppm");
+ FILE *upper_file=fopen("assets/upper_background.bin","rb");assert(upper_file);
+ unsigned upper_base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
+ for(unsigned i=0;i<3;i++){
+  unsigned offset=sample_pixels[i][1]*240+sample_pixels[i][0];
+  assert(!fseek(upper_file,512+(long)offset,SEEK_SET));int expected=fgetc(upper_file);assert(expected>=0);
+  assert(c->busRead8(c,upper_base+offset)==(unsigned)expected);
+ }
+ fclose(upper_file);
+ move_to(c,16,58);c->setKeys(c,17);run(c,40);c->setKeys(c,0);
+ assert(value(c,10)==5);
+ assert((c->busRead16(c,0x0700000C)&1023)==720);
+ FILE *five_file=fopen("assets/ui_digit5_tiles.bin","rb");assert(five_file);
+ for(unsigned i=0;i<256;i++)assert(c->busRead8(c,0x06010000+720*32+i)==(unsigned)fgetc(five_file));
+ fclose(five_file);capture(c,"build/upper_gem5.ppm");
+ for(int i=0;i<160&&(value(c,17)!=7||!value(c,14));i++)run(c,1);
+ assert(value(c,17)==7&&value(c,14)&&value(c,10)==5&&value(c,31)==upper_lives&&value(c,18)==upper_falls);
+ capture(c,"build/upper_return.ppm");
+ puts("PASS upper route integration: ninth viewport reached through UP+A, fifth gem and HUD, safe descending camera return; lives and defeats preserved");
  c->setKeys(c,32);
  for(int i=0;i<100&&value(c,17)==7;i++){
   int bx=(int)value(c,8),by=(int)value(c,9);run(c,1);
@@ -540,25 +563,25 @@ int main(int argc,char **argv){
   int bx=(int)value(c,8),by=(int)value(c,9);run(c,1);
   if(value(c,17)==5){assert((int)value(c,8)-170*FP-bx==-320);assert((int)value(c,9)+9*FP==by);}
  }
- c->setKeys(c,0);run(c,4);assert(value(c,17)==5&&value(c,26)==3&&value(c,10)==4);
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==5&&value(c,26)==3&&value(c,10)==5);
  sequence_dir=NULL;
  FILE *bridge_count=fopen("build/bridge_run_sequence/frame_count.txt","w");assert(bridge_count);
  fprintf(bridge_count,"%u\n",sequence_frame);fclose(bridge_count);
  move_to(c,32,200);c->setKeys(c,33);run(c,70);c->setKeys(c,0);run(c,5);
  assert(value(c,17)==5&&value(c,14)&&(int)value(c,9)==61*FP);
- puts("PASS bridge run integration: eight linked viewports, third guard defeated through input, two registered portals in both directions, native riser pixels, solid wall and pause; gems and defeats persist");
+ puts("PASS bridge run integration: nine linked viewports, third guard defeated through input, two registered portals in both directions, native riser pixels, solid wall and pause; gems and defeats persist");
 
  c->setKeys(c,32);for(int i=0;i<100&&value(c,17)==5;i++)run(c,1);
- c->setKeys(c,0);run(c,4);assert(value(c,17)==4&&value(c,10)==4&&value(c,26)==3);
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==4&&value(c,10)==5&&value(c,26)==3);
  puts("PASS continuation integration: input-driven sixth viewport, registered portal, slope, native background pixels, bridge jump both directions, pause and persistent round trip");
  unsigned falls_before=value(c,18),lives_before=value(c,31);
  c->setKeys(c,32);for(int i=0;i<240&&value(c,18)==falls_before;i++)run(c,1);
  c->setKeys(c,0);run(c,4);
- assert(value(c,18)==falls_before+1&&value(c,31)==lives_before-1&&value(c,22)==3&&value(c,10)==4&&value(c,17)==4);
+ assert(value(c,18)==falls_before+1&&value(c,31)==lives_before-1&&value(c,22)==3&&value(c,10)==5&&value(c,17)==4);
  capture(c,"build/gap_respawn.ppm");
  c->setKeys(c,32);for(int i=0;i<100&&value(c,17)==4;i++)run(c,1);
- c->setKeys(c,0);run(c,4);assert(value(c,17)==3&&value(c,10)==4&&value(c,26)==3);
- puts("PASS motion/gap integration: three recorded walk frames, three attack phases, registered fifth viewport, gap jump and fall, four persistent gems, OBJ digits 3/4, second guard defeat, return persistence");
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==3&&value(c,10)==5&&value(c,26)==3);
+ puts("PASS motion/gap integration: three recorded walk frames, three attack phases, registered fifth viewport, gap jump and fall, five persistent gems, OBJ digits 3/4/5, second guard defeat, return persistence");
  /* Check wall animation in the compiled ROM, after a fresh run. */
  tap(c,256); /* R is the development run reset. */
  c->setKeys(c,32);run(c,160);c->setKeys(c,0);run(c,4);

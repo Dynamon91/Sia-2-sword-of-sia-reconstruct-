@@ -9,7 +9,7 @@ static const char save_type[] __attribute__((used))="SRAM_V113";
 #include "../assets/assets.h"
 #include "../assets/room.h"
 #include "../assets/ui.h"
-extern const unsigned char continuation_background[],bridge_run_background[],riser_background[];
+extern const unsigned char continuation_background[],bridge_run_background[],riser_background[],upper_background[],ui_digit5_tiles[];
 extern const unsigned char cliff_background[],guard_background[],guard_sprite[];
 extern const unsigned char ambient_gems[],ledge_cycle[],jump_cycle[],cloud_strip[];
 extern const unsigned char gap_background[],guard2_sprite[],walk_cycle[],attack_cycle[],ui_more_tiles[];
@@ -100,6 +100,8 @@ static void ui_init(void){
  REG32(0x040000DC)=0x84000000|(UI_TILE_BYTES/4);
  REG32(0x040000D4)=(unsigned)ui_more_tiles;REG32(0x040000D8)=0x06014000+UI_TILE_BYTES;
  REG32(0x040000DC)=0x84000000|128;
+ REG32(0x040000D4)=(unsigned)ui_digit5_tiles;REG32(0x040000D8)=0x06010000+720*32;
+ REG32(0x040000DC)=0x84000000|64;
 }
 static void ui_hide(void){for(unsigned i=0;i<128;i++)object_shadow[i*4]=0x0200;}
 static void ui_object(unsigned slot,unsigned x,unsigned y,unsigned size,unsigned tile){
@@ -180,7 +182,7 @@ static void draw_level(void){
  const unsigned char *background=game.area?bridge_backdrop:room_backdrop;
  const unsigned char *spans=game.area?bridge_spans:room_spans;
  int shift=-game.camera_y;
- if(game.area==7)image(riser_background);else if(game.area==6)image(bridge_run_background);else if(game.area==5)image(continuation_background);else if(game.area==4)image(gap_background);else if(game.area==3)image(guard_background);else if(game.area==2)image(cliff_background);else image(background);
+ if(game.area==8)image(upper_background);else if(game.area==7)image(riser_background);else if(game.area==6)image(bridge_run_background);else if(game.area==5)image(continuation_background);else if(game.area==4)image(gap_background);else if(game.area==3)image(guard_background);else if(game.area==2)image(cliff_background);else image(background);
  if(game.area<2)draw_clouds(cloud_phase(game.ticks));
  for(int row=0;row<160-shift&&game.area<2;row++){
   unsigned count=spans[0]|((unsigned)spans[1]<<8);spans+=2;
@@ -226,7 +228,7 @@ static void draw_level(void){
         width,height,actor,game.facing<0);
  if(game.pickup_timer>0){
   ui_object(0,95,11,2,UI_GEM_TILE);
-  ui_object(1,129,29,1,game.gems==4?712:game.gems==3?704:game.gems==2?UI_DIGIT2_TILE:game.gems?UI_DIGIT1_TILE:UI_DIGIT0_TILE);
+  ui_object(1,129,29,1,game.gems==5?720:game.gems==4?712:game.gems==3?704:game.gems==2?UI_DIGIT2_TILE:game.gems?UI_DIGIT1_TILE:UI_DIGIT0_TILE);
  }
 }
 static void draw_arrival(void){

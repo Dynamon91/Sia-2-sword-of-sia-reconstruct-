@@ -1,0 +1,21 @@
+{
+  "source_seconds": 166,
+  "camera_translation_from_164": [
+    35,
+    81
+  ],
+  "geometry": "provisional",
+  "unchanged_rgb_pixels": 27671,
+  "sky_fill_iterations": 1443,
+  "sources": {
+    "139": "5fb45fe1c8624458224a8f8b6de66fe28f5b6758aea897c9614b9106019b901c",
+    "164": "88090d5f6a69d2ca8acdc5b32ee731a97c3aff924f00cdaf59c9698074b53595",
+    "166": "915398e5b6f7045ce96b738c0df7c531e44f0c98e211258fc0cd4bb0601f60c0"
+  },
+  "limits": [
+    "Occluded sky, header and wall estimated from visible pixels",
+    "Flying enemy removed from background; behavior pending",
+    "High jump UP+A is a prototype control, original timing not recovered",
+    "Island and ramp geometry provisional"
+  ]
+}

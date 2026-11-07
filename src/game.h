@@ -6,7 +6,7 @@
 #define PLAYER_H 40
 #define WORLD_W 240
 #define PLATFORM_COUNT 2
-#define GEM_COUNT 4
+#define GEM_COUNT 5
 enum { LEDGE_NONE, LEDGE_HANG, LEDGE_PULL };
 enum { AIR_RISE, AIR_APEX, AIR_FALL, AIR_NONE };
 #define LEDGE_PULL_TICKS 12
