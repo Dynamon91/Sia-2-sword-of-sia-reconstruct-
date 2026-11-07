@@ -484,5 +484,14 @@ int main(int argc,char **argv){
  assert(value(c,17)==2&&value(c,10)==collision_gems);capture(c,"build/cliff_collision_respawn.ppm");
  fprintf(stderr,"Completed final collision route at frame %u\n",c->frameCounter(c));
  puts("PASS cliff collision integration: missed jump hits solid side, falls, loses one life and preserves gems on respawn");
+ /* Reset while A/B are held must not synthesize actions on the new run. */
+ c->setKeys(c,259);run(c,20);state(c,7);
+ assert(value(c,8)==40*FP&&value(c,9)==118*FP&&value(c,14)&&value(c,29)==3&&value(c,31)==3);
+ capture(c,"build/reset_held_actions.ppm");
+ c->setKeys(c,0);run(c,4);c->setKeys(c,1);run(c,2);
+ assert(!value(c,14)&&(int)value(c,36)<0);c->setKeys(c,0);run(c,70);
+ c->setKeys(c,2);run(c,2);assert(value(c,29)==0);
+ c->setKeys(c,0);run(c,20);
+ puts("PASS reset input integration: held A/B across R reset remain idle; release and fresh press restore jump and attack");
  c->deinit(c);free(pixels);
 }

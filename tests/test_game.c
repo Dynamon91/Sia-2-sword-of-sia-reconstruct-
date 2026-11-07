@@ -9,7 +9,17 @@ static void ascend(Game *g){
  assert(g->climbing==LEDGE_HANG);step(g,UP,LEDGE_PULL_TICKS+1);
 }
 int main(void){
- Game g;game_reset(&g);step(&g,0,120);
+ Game g;
+ /* Reset consumes held action buttons; only a fresh press may jump/attack. */
+ for(unsigned held=JUMP;held<=(JUMP|ATTACK);held+=4){
+  game_reset(&g);game_step(&g,RESET|held);
+  step(&g,held,20);
+  assert(g.grounded&&g.y==118*FP&&!g.attack&&g.lives==3);
+  game_step(&g,0);game_step(&g,held);
+  if(held&JUMP)assert(g.vy<0&&!g.grounded);
+  if(held&ATTACK)assert(g.attack==12);
+ }
+ game_reset(&g);step(&g,0,120);
  assert(g.x==40*FP&&g.y==118*FP&&g.grounded);
  game_step(&g,JUMP);assert(g.vy<0&&!g.grounded);
  int previous=g.vy;game_step(&g,JUMP);assert(g.vy>previous);

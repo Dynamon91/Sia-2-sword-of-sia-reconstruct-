@@ -121,7 +121,11 @@ static void guard_step(Game *g){
  if(vertical&&px+PLAYER_W>ex&&px<ex+18)game_damage(g,1);
 }
 void game_step(Game *g,unsigned input){
- if(input&RESET){game_reset(g);return;}
+ if(input&RESET){
+  game_reset(g);
+  /* A held action belongs to the old run. Require release before retriggering. */
+  g->previous=(int)(input&~RESET);return;
+ }
  if(g->game_over)return;
  if(g->hurt_timer>0)g->hurt_timer--;
  unsigned pressed=input&~(unsigned)g->previous;g->previous=(int)input;g->ticks++;level_progress_tick(&g->progress,0);
