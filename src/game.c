@@ -122,6 +122,8 @@ static void respawn_area(Game *g){
 static void lose_life(Game *g){
  if(g->game_over)return;
  if(g->lives)g->lives--;
+ /* Pickup feedback belongs to the lost life, while the collected gem survives. */
+ g->pickup_timer=0;
  g->attack=0;g->walk_ticks=0;g->vx=0;g->vy=0;g->climbing=0;g->ledge_ticks=0;g->ledge_cooldown=0;
  if(!g->lives){g->progress.health=0;g->game_over=1;return;}
  g->progress.health=g->progress.max_health;
