@@ -16,6 +16,8 @@ An ongoing reconstruction of Lady Sia 2: Sword of Sia for Game Boy Advance, base
 
 The current build includes a partial reconstruction of World 1 with controllable gameplay, collisions, pickups, damage, falling and game over. Levels, sprite and scenery animations, and the original interface are still being reconstructed and refined. This project is incomplete and does not represent the finished original game.
 
+A cleaned background candidate for the next W1L1 viewport is now prepared in RGB and the project GBA palette, with reproducible terrain recovery and visual contours. It is not yet linked into the ROM; collision planes and entities remain pending. [Asset details and limits](references/CONTINUATION_BACKGROUND_STATUS.md).
+
 The next W1L1 section (155–164 s in the reference video) now has eight checked terrain registrations connected through the static bridge pillar; the earlier sky-contaminated windows remain rejected. This is reference preparation; no new playable area is added. [Measurements and remaining work](references/ROUTE_CONTINUATION_STATUS.md).
 
 B now takes priority over simultaneous confirm or direction buttons in the main menu and options, preventing accidental starts and SOUND changes while backing out. [Native checks](references/MENU_CANCEL_STATUS.md).

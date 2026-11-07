@@ -1,0 +1,68 @@
+{
+  "artifact_type": "background_candidate",
+  "integrated_in_rom": false,
+  "source_seconds": 159,
+  "terrain_patch_seconds": 160,
+  "terrain_delta_159_to_160": [
+    -54,
+    34
+  ],
+  "source_video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "source_full_png_sha256": "b847ba465ee07069cf3882ec5d42c212b1c258b29cdc442fd958d12a7801df4d",
+  "source_160_png_sha256": "227ed60b455bcb735f4ad5935ed2a35c209442fdda733257db784fd4e1b62279",
+  "palette_sha256": "0f145cfe1ec41897e09f333e75cf9a86eef904a9fe9f2f701ee810eea47693a9",
+  "size": [
+    240,
+    160
+  ],
+  "palette_conversion": "Nearest palette on observed pixels and terrain; ordered two-color dithering only on estimated sky",
+  "unchanged_rgb_pixels": 26271,
+  "replaced_or_recovered_pixels": 12129,
+  "estimated_sky_regions": [
+    [
+      0,
+      0,
+      240,
+      14
+    ],
+    [
+      94,
+      13,
+      150,
+      56
+    ],
+    [
+      207,
+      13,
+      240,
+      35
+    ],
+    [
+      54,
+      50,
+      139,
+      113
+    ]
+  ],
+  "terrain_patch_destination": [
+    54,
+    90,
+    134,
+    126
+  ],
+  "terrain_mask_pixels": 1899,
+  "sky_fill_iterations": 2074,
+  "sky_fill_method": "Harmonic boundary interpolation, with warm foreground excluded from sky boundaries",
+  "terrain_patch_source_normalized": [
+    0,
+    124,
+    80,
+    160
+  ],
+  "limits": [
+    "Video-derived compressed colors, not original GBA tiles",
+    "Hidden sky estimated by harmonic fill; top boundary initialized from row 14",
+    "Only connected terrain is copied; parallax sky is not copied from the aligned frame",
+    "Collision geometry, entities, scenery animation and ROM integration remain pending"
+  ]
+}
