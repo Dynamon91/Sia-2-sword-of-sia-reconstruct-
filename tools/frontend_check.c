@@ -22,6 +22,9 @@ static uint64_t energy;
 static unsigned samples;
 static FILE *audio_file;
 static unsigned audio_frames;
+static const char *sequence_dir;
+static unsigned sequence_frame;
+static void capture(struct mCore *c,const char *name);
 static void run(struct mCore *c,unsigned count){
  for(unsigned i=0;i<count;i++){
   c->runFrame(c);
@@ -34,9 +37,13 @@ static void run(struct mCore *c,unsigned count){
    for(int j=0;j<n;j++){fwrite(&left[j],2,1,audio_file);fwrite(&right[j],2,1,audio_file);}
    audio_frames++;
   }
+  if(sequence_dir){
+   char path[128];snprintf(path,sizeof(path),"%s/frame_%03u.ppm",sequence_dir,sequence_frame++);capture(c,path);
+  }
  }
 }
 static unsigned value(struct mCore *c,int offset){return c->busRead32(c,0x0203F000+offset*4);}
+static unsigned shown(struct mCore *c,int offset){return c->busRead32(c,0x0203F100+offset*4);}
 static void state(struct mCore *c,unsigned expected){
  if(value(c,0)!=expected)fprintf(stderr,"Expected state %u, got %u at frame %u\n",expected,value(c,0),c->frameCounter(c));
  assert(value(c,0)==expected);
@@ -86,6 +93,70 @@ static void check_ledge_sprite(struct mCore *c,unsigned frame){
  }
  fclose(f);assert(checked>200);
 }
+static void check_air_sprite(struct mCore *c,const char *path,unsigned frame,int width,int height,int anchor){
+ FILE *f=fopen(path,"rb");assert(f);
+ unsigned char pixels[80*64];assert(width*height<=(int)sizeof(pixels));
+ assert(!fseek(f,(long)frame*width*height,SEEK_SET));
+ assert(fread(pixels,1,(size_t)(width*height),f)==(size_t)(width*height));fclose(f);
+ /* These input-driven jumps stay in the initial viewport, below camera scroll.
+    Compare transparent pixels to the scenery too, catching trails/alpha leaks. */
+ unsigned char background[240*160];f=fopen("assets/room.bin","rb");assert(f);
+ assert(!fseek(f,512,SEEK_SET));assert(fread(background,1,sizeof(background),f)==sizeof(background));fclose(f);
+ assert(shown(c,0)==7&&!shown(c,3)&&!shown(c,7));
+ int flip=(int)shown(c,5)<0;
+ int sx=aligned_sprite_x((int)shown(c,1)/FP+PLAYER_W/2,width,anchor,flip);
+ int sy=(int)shown(c,2)/FP+PLAYER_H-height;
+ unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
+ assert(!!(c->busRead16(c,0x04000000)&16)==shown(c,10));
+ unsigned opaque=0;
+ for(int y=0;y<height;y++)for(int x=0;x<width;x++){
+  int px=sx+x,py=sy+y;
+  if(px<0||px>=240||py<0||py>=160)continue;
+  unsigned p=pixels[y*width+(flip?width-1-x:x)];
+  unsigned expected=p?p:background[py*240+px];
+  unsigned actual=c->busRead8(c,base+(unsigned)py*240+(unsigned)px);
+  if(actual!=expected)fprintf(stderr,"Actor pixel mismatch %s frame %u at (%d,%d): %u != %u (tick %u)\n",path,frame,px,py,actual,expected,shown(c,9));
+  assert(actual==expected);if(p)opaque++;
+ }
+ assert(opaque>400);
+}
+static void check_air_jumps(struct mCore *c){
+ sequence_dir="build/jump_sequence";sequence_frame=0;
+ for(int direction=1;direction>=-1;direction-=2){
+  move_to(c,direction>0?16:32,direction>0?45:40);
+  run(c,12);
+  c->setKeys(c,1);run(c,4);c->setKeys(c,0);
+  unsigned seen=0,last=AIR_RISE;
+  for(int i=0;i<160;i++){
+   run(c,1);unsigned frame=shown(c,4);
+   char path[96];
+   if(frame<AIR_NONE){
+    assert(frame>=last);last=frame;
+    check_air_sprite(c,"assets/jump_cycle.bin",frame,56,56,28);
+    if(!(seen&(1u<<frame))){
+     snprintf(path,sizeof(path),"build/jump_%s_%u.ppm",direction>0?"right":"left",frame);capture(c,path);
+     seen|=1u<<frame;
+    }
+   }else if(seen){assert(shown(c,8));break;}
+  }
+  assert(seen==7&&value(c,14)&&shown(c,8));run(c,12);
+ }
+ sequence_dir=NULL;
+ FILE *count=fopen("build/jump_sequence/frame_count.txt","w");assert(count);fprintf(count,"%u\n",sequence_frame);fclose(count);
+ /* An airborne pause freezes physics, and sword poses override all air poses. */
+ tap(c,1);assert(!value(c,14));tap(c,8);state(c,8);
+ unsigned tick=value(c,16),y=value(c,9),frame=value(c,35);
+ run(c,30);assert(value(c,16)==tick&&value(c,9)==y&&value(c,35)==frame);
+ capture(c,"build/jump_pause.ppm");tap(c,8);state(c,7);
+ c->setKeys(c,2);run(c,3);c->setKeys(c,0);unsigned attacks=0,resumed=0;
+ for(int i=0;i<100&&!shown(c,8);i++){
+  run(c,1);unsigned attack=shown(c,6);
+  if(attack<3){check_air_sprite(c,"assets/attack_cycle.bin",attack,80,64,39);attacks|=1u<<attack;}
+  else if(attacks&&shown(c,4)<AIR_NONE){check_air_sprite(c,"assets/jump_cycle.bin",shown(c,4),56,56,28);resumed=1;}
+ }
+ assert(attacks==7&&resumed&&value(c,14));run(c,8);
+ puts("PASS airborne integration: three velocity-driven poses, both facings pixel-checked including transparent scenery, landing, pause/resume and sword priority");
+}
 static void check_rest_background(struct mCore *c,const char *path,int gem_x,int gem_y){
  assert((int)value(c,15)==0);
  FILE *f=fopen(path,"rb");assert(f);assert(fseek(f,512,SEEK_SET)==0);
@@ -104,6 +175,7 @@ static void check_rest_background(struct mCore *c,const char *path,int gem_x,int
 int main(int argc,char **argv){
  setvbuf(stdout,NULL,_IOLBF,0);
  assert(!mkdir("build/ledge_sequence",0777)||errno==EEXIST);
+ assert(!mkdir("build/jump_sequence",0777)||errno==EEXIST);
  mLogSetDefaultLogger(&test_logger);
  assert(argc==2);struct mCore *c=mCoreFind(argv[1]);assert(c&&c->init(c));mCoreInitConfig(c,NULL);
  color_t *pixels=calloc(240*160,sizeof(color_t));assert(pixels);c->setVideoBuffer(c,pixels,240);
@@ -140,6 +212,7 @@ int main(int argc,char **argv){
  unsigned logic_start=value(c,16);run(c,180);
  fprintf(stderr,"Level performance: %u logic updates in 180 emulated display frames\n",value(c,16)-logic_start);
  fclose(audio_file);audio_file=NULL;
+ check_air_jumps(c);
  c->setKeys(c,16);run(c,20);c->setKeys(c,1);run(c,8);c->setKeys(c,0);
  player(c,&x,&y);assert(x>40&&y<118);capture(c,"build/room_jump_v06.ppm");run(c,160);
  player(c,&x,&y);assert(y+40==game_floor(x+7));
@@ -174,6 +247,7 @@ int main(int argc,char **argv){
  c->setKeys(c,0);
  for(int i=0;i<24;i++){char path[96];run(c,1);snprintf(path,sizeof(path),"build/ledge_sequence/frame_%03u.ppm",clip_frame++);capture(c,path);}
  capture(c,"build/ledge_complete.ppm");
+ FILE *ledge_count=fopen("build/ledge_sequence/frame_count.txt","w");assert(ledge_count);fprintf(ledge_count,"%u\n",clip_frame);fclose(ledge_count);
  puts("PASS ledge integration: input-driven jump/catch, stable hang, pause/resume, release, all three pull-up poses pixel-checked in native framebuffer, top landing");
  run(c,200);c->setKeys(c,0);run(c,4);
  assert(value(c,19)==0&&(c->busRead16(c,0x07000000)&0x200));

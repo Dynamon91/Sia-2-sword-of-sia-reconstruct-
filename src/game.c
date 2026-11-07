@@ -10,6 +10,12 @@ const Gem level_gems[GEM_COUNT]={{0,109,62,0},{1,133,74,1},{3,151,47,2},{4,126,4
 /* Animation and damage share the same attack clock: wind-up, contact, recovery. */
 unsigned game_attack_frame(const Game *g){return g->attack>8?0:g->attack>=4?1:2;}
 unsigned game_walk_frame(const Game *g){return g->walk_ticks/(6u*320u);}
+unsigned game_air_frame(const Game *g){
+ if(g->grounded||g->climbing||g->game_over)return AIR_NONE;
+ /* Estimated near-apex window. Positive velocity always means falling,
+    including walking off a platform or letting go of a ledge. */
+ return g->vy < -FP/2 ? AIR_RISE : g->vy <= 0 ? AIR_APEX : AIR_FALL;
+}
 unsigned game_ledge_frame(const Game *g){
  if(g->climbing!=LEDGE_PULL)return 0;
  unsigned frame=1+g->ledge_ticks/4;

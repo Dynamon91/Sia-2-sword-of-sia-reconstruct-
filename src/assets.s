@@ -116,3 +116,8 @@ ambient_gems:
 .global ledge_cycle
 ledge_cycle:
 .incbin "assets/ledge_cycle.bin"
+
+.balign 4
+.global jump_cycle
+jump_cycle:
+.incbin "assets/jump_cycle.bin"

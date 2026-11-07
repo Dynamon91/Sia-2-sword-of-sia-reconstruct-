@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-06",
+  "updated": "2026-11-07",
   "areas": [
     {
       "name": "Motore e sistemi di gioco",
@@ -35,7 +35,7 @@
       "name": "Fedeltà visiva, interfaccia, animazioni e audio",
       "weight": 15,
       "earned": 0,
-      "evidence": "Quattro pose osservate di presa/risalita integrate; altre animazioni, interfaccia e audio ancora parziali."
+      "evidence": "Tre pose di salto/caduta e quattro di presa/risalita integrate e verificate in emulatore; altre animazioni, interfaccia e audio ancora parziali."
     },
     {
       "name": "Riferimenti, validazione e consegna finale",

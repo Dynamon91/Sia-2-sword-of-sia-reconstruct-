@@ -1,6 +1,6 @@
 # Avanzamento complessivo
 
-**9% — stima editoriale ponderata, aggiornata il 2026-11-06.**
+**9% — stima editoriale ponderata, aggiornata il 2026-11-07.**
 
 Non misura il tempo rimanente né la percentuale di pixel originali recuperati. I pesi sono una convenzione di pianificazione e potranno essere rivisti se cambia lo scopo. Un riferimento video archiviato non conta come livello implementato.
 
@@ -11,7 +11,7 @@ Non misura il tempo rimanente né la percentuale di pixel originali recuperati. 
 | Mondo 2 e boss | 0 / 15 | Riferimenti disponibili; contenuti non integrati. |
 | Mondo 3 e boss | 0 / 15 | Video indicizzati; contenuti non integrati. |
 | Mondo 4, boss finale, finale e crediti | 0 / 15 | Video indicizzati; contenuti non integrati. |
-| Fedeltà visiva, interfaccia, animazioni e audio | 0 / 15 | Quattro pose osservate di presa/risalita integrate; altre animazioni, interfaccia e audio ancora parziali. |
+| Fedeltà visiva, interfaccia, animazioni e audio | 0 / 15 | Tre pose di salto/caduta e quattro di presa/risalita integrate e verificate in emulatore; altre animazioni, interfaccia e audio ancora parziali. |
 | Riferimenti, validazione e consegna finale | 1 / 5 | Riferimenti ricevuti fino al finale e test del prototipo; collaudo completo e hardware mancanti. |
 
 Aggiornare docs/progress.json solo dopo risultati verificati, poi eseguire `python3 tools/update_progress.py`. Audio sperimentale non integrato e materiali di riferimento non equivalgono a contenuti finiti.

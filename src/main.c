@@ -9,7 +9,7 @@ static const char save_type[] __attribute__((used))="SRAM_V113";
 #include "../assets/room.h"
 #include "../assets/ui.h"
 extern const unsigned char cliff_background[],guard_background[],guard_sprite[];
-extern const unsigned char ambient_gems[],ledge_cycle[];
+extern const unsigned char ambient_gems[],ledge_cycle[],jump_cycle[];
 extern const unsigned char gap_background[],guard2_sprite[],walk_cycle[],attack_cycle[],ui_more_tiles[];
 extern const unsigned char bridge_background[],bridge_sky[],bridge_run[];
 extern const unsigned char room_backdrop[],room_spans[],bridge_backdrop[],bridge_spans[];
@@ -192,12 +192,14 @@ static void draw_level(void){
   sprite(game.enemy_x/FP+9-20,88-55,41,60,guard_sprite,game.enemy_dir>0);
  if(game.area==4&&game.enemy2_hp&&(!game.enemy2_flash||(game.enemy2_flash&2)))
   sprite(game.enemy2_x/FP+9-15,98-51,34,55,guard2_sprite,game.enemy2_dir>0);
- unsigned pose=game.climbing?2:!game.grounded?1:0;
- const unsigned char *actor=room_sprites+pose*ROOM_SPRITE_SIZE;
+ unsigned air=game_air_frame(&game);
+ const unsigned char *actor=room_sprites;
  int width=48,height=56,anchor=24;
  if(game.attack&&!game.climbing){
   width=80;height=64;anchor=39;actor=attack_cycle+game_attack_frame(&game)*80*64;
- }else if(!pose&&game.vx)actor=walk_cycle+game_walk_frame(&game)*ROOM_SPRITE_SIZE;
+ }else if(air!=AIR_NONE){
+  width=56;anchor=28;actor=jump_cycle+air*56*56;
+ }else if(game.grounded&&game.vx)actor=walk_cycle+game_walk_frame(&game)*ROOM_SPRITE_SIZE;
  if(game.climbing){
   sprite(game.x/FP+PLAYER_W/2-24,game.ledge_y-44-game.camera_y,
          48,104,ledge_cycle+game_ledge_frame(&game)*48*104,0);
@@ -253,6 +255,14 @@ static void render(void){
   text(12,143,"A / B: CONTINUE",243);break;
  }
  present();dirty=0;
+ /* Snapshot the displayed pose after the page flip, rather than the next
+    physics update. Native-frame tests can then check a moving sprite exactly. */
+ volatile unsigned *shown=(volatile unsigned*)0x0203F100;
+ shown[0]=state;shown[1]=(unsigned)game.x;shown[2]=(unsigned)game.y;
+ shown[3]=(unsigned)game.camera_y;shown[4]=game_air_frame(&game);
+ shown[5]=(unsigned)game.facing;shown[6]=game.attack?game_attack_frame(&game):3;
+ shown[7]=(unsigned)game.climbing;shown[8]=(unsigned)game.grounded;
+ shown[9]=game.ticks;shown[10]=front;
 }
 int main(void){
  REG16(0x04000204)=0x4317;REG16(0x04000000)=0x0404;
@@ -342,6 +352,7 @@ int main(void){
   debug[25]=(unsigned)game.enemy_hp;debug[26]=game.progress.defeated;debug[27]=(unsigned)game.enemy_x;
   debug[31]=game.lives;debug[32]=game_ledge_frame(&game);debug[33]=game.ledge_ticks;debug[34]=(unsigned)game.ledge_y;
   debug[28]=game_walk_frame(&game);debug[29]=game.attack?game_attack_frame(&game):3;debug[30]=(unsigned)game.enemy2_hp;
+  debug[35]=game_air_frame(&game);debug[36]=(unsigned)game.vy;debug[37]=(unsigned)game.facing;
   if(dirty)render();else wait_frame();
  }
 }

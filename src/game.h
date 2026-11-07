@@ -8,6 +8,7 @@
 #define PLATFORM_COUNT 2
 #define GEM_COUNT 4
 enum { LEDGE_NONE, LEDGE_HANG, LEDGE_PULL };
+enum { AIR_RISE, AIR_APEX, AIR_FALL, AIR_NONE };
 #define LEDGE_PULL_TICKS 12
 enum { LEFT=1, RIGHT=2, JUMP=4, ATTACK=8, RESET=16, UP=32, DOWN=64 };
 typedef struct { int x,y,w,h; } Platform;
@@ -24,4 +25,6 @@ unsigned game_attack_frame(const Game *g);
 /* walk_ticks stores subpixel distance modulo one three-pose stride. */
 unsigned game_walk_frame(const Game *g);
 unsigned game_ledge_frame(const Game *g);
+/* Pose follows vertical motion; AIR_NONE is never a sprite-buffer offset. */
+unsigned game_air_frame(const Game *g);
 #endif
