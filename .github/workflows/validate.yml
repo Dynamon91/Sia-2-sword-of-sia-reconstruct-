@@ -9,6 +9,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi python3-pil python3-numpy python3-scipy libmgba-dev
+      - name: Audit next-route references without inventing a playable map
+        run: python3 tools/audit_route_continuation.py --output build/route-registration.json
       - name: Restore and verify embedded assets
         run: python3 tools/unpack_assets.py
       - name: Remove intro playback and recording overlays

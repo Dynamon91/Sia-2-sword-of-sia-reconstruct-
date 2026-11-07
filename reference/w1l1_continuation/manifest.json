@@ -1,0 +1,257 @@
+{
+  "video_name": "Lady Sia 2  Sword Of Sia (GBA) Longplay Walkthrough  WORLD 1 LEVEL 1 (Unreleased).mp4",
+  "video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "reference_only": true,
+  "crop_top_rows": 35,
+  "normalized_video_size": [
+    240,
+    160
+  ],
+  "max_mae_rgb": 5,
+  "coordinate_convention": "target_pixel = source_pixel + delta; positive y points down; these are camera registrations, not player displacements",
+  "frames": [
+    {
+      "seconds": 155,
+      "file": "frames/155.png",
+      "sha256": "c95955f91317d856a36d47d50451cce7c52c6f88ec6684be82ec2fafbebb0b57",
+      "rgb_sha256": "0c49b5c2bcf8b396ef95dee442bc4ec65351d52dd8b0c8dd361d98079b007869"
+    },
+    {
+      "seconds": 157,
+      "file": "frames/157.png",
+      "sha256": "20d4a2b80c1d8831d4acdeb2985890bbdea48b7da6c9f3e24309721b66a048a0",
+      "rgb_sha256": "223f964c7d2706807764e5e6cad4ce7922ae5a50de9ca683444ad45f0dff64ea"
+    },
+    {
+      "seconds": 158,
+      "file": "frames/158.png",
+      "sha256": "8a87f8973ee9dc9f1057345d49991f500e83d62155b776430665c22e3d318f37",
+      "rgb_sha256": "10f7466960ede4dc8256e2ec5c5051c981d310c8832564e0211e28b1976d119b"
+    },
+    {
+      "seconds": 159,
+      "file": "frames/159.png",
+      "sha256": "dd415e0e22f6abe0350aab402d9df5bca6ca01f28835be2fd6ed8051665021de",
+      "rgb_sha256": "0d0fead726855914df9614a3820ff6eb305448360e115e9ca326540cf6a4f43e"
+    },
+    {
+      "seconds": 160,
+      "file": "frames/160.png",
+      "sha256": "227ed60b455bcb735f4ad5935ed2a35c209442fdda733257db784fd4e1b62279",
+      "rgb_sha256": "710c3e59597b701396bb91c68586e5388de39cd72815221b18b276884b7cea81"
+    },
+    {
+      "seconds": 161,
+      "file": "frames/161.png",
+      "sha256": "1818a154c5141568c898085e28d0cb9438a42a626563f4610ae0d387171e8ace",
+      "rgb_sha256": "d1c4f151d52467686989eeb76934e9e1f6ed8429084c120bd3fcb23c80f07bc1"
+    },
+    {
+      "seconds": 162,
+      "file": "frames/162.png",
+      "sha256": "416420524809946ef4976702465ff33a48ff1899a7687ed2ca370536673940d5",
+      "rgb_sha256": "292eed67ef851612be023a19b04d1d4dbc585d0e6607dd4fb4c0e1e6a8c0c913"
+    },
+    {
+      "seconds": 163,
+      "file": "frames/163.png",
+      "sha256": "ac11ee799671e001fa328d40721220116ce944b3f25db14f6a93723d63bed737",
+      "rgb_sha256": "c3f377a7332104c4583f27d5908033d9d71f3550f9facc9921cdd225ae57d60a"
+    },
+    {
+      "seconds": 164,
+      "file": "frames/164.png",
+      "sha256": "52cd3e6ea8b204553697bfc5e7e921ff325017106750917b78c5acc03a25e49c",
+      "rgb_sha256": "863b0622a8c083e556dde2346b2c9ad9f4abbef6a80733d4dd49832c1eea37f0"
+    }
+  ],
+  "registrations": [
+    {
+      "from": 155,
+      "to": 157,
+      "patches": [
+        [
+          187,
+          106,
+          202,
+          124
+        ],
+        [
+          190,
+          115,
+          210,
+          145
+        ]
+      ],
+      "accepted": true,
+      "delta": [
+        -20,
+        0
+      ]
+    },
+    {
+      "from": 155,
+      "to": 158,
+      "patches": [
+        [
+          187,
+          106,
+          202,
+          124
+        ],
+        [
+          190,
+          115,
+          210,
+          145
+        ]
+      ],
+      "accepted": true,
+      "delta": [
+        -140,
+        8
+      ]
+    },
+    {
+      "from": 158,
+      "to": 159,
+      "patches": [
+        [
+          110,
+          108,
+          128,
+          124
+        ],
+        [
+          135,
+          98,
+          150,
+          113
+        ]
+      ],
+      "accepted": true,
+      "delta": [
+        -48,
+        17
+      ]
+    },
+    {
+      "from": 159,
+      "to": 160,
+      "patches": [
+        [
+          90,
+          105,
+          110,
+          115
+        ],
+        [
+          82,
+          113,
+          97,
+          124
+        ]
+      ],
+      "accepted": true,
+      "delta": [
+        -54,
+        34
+      ]
+    },
+    {
+      "from": 160,
+      "to": 161,
+      "patches": [
+        [
+          173,
+          127,
+          192,
+          139
+        ],
+        [
+          155,
+          140,
+          167,
+          156
+        ]
+      ],
+      "accepted": false,
+      "delta": null
+    },
+    {
+      "from": 161,
+      "to": 162,
+      "patches": [
+        [
+          210,
+          101,
+          226,
+          111
+        ],
+        [
+          220,
+          105,
+          235,
+          116
+        ]
+      ],
+      "accepted": true,
+      "delta": [
+        -24,
+        -1
+      ]
+    },
+    {
+      "from": 162,
+      "to": 163,
+      "patches": [
+        [
+          162,
+          119,
+          177,
+          134
+        ],
+        [
+          180,
+          120,
+          195,
+          135
+        ]
+      ],
+      "accepted": true,
+      "delta": [
+        -116,
+        7
+      ]
+    },
+    {
+      "from": 163,
+      "to": 164,
+      "patches": [
+        [
+          130,
+          103,
+          145,
+          113
+        ],
+        [
+          180,
+          106,
+          196,
+          120
+        ]
+      ],
+      "accepted": true,
+      "delta": [
+        -28,
+        1
+      ]
+    }
+  ],
+  "limits": [
+    "Source video is compressed and normalized; one-pixel uncertainty is possible",
+    "Patches are manually selected static foreground, excluding actors, sky and HUD",
+    "The 160-to-161 bridge interval is rejected; do not join the two components",
+    "No collision geometry, ladder, enemy, gem, or playable viewport is added by this audit"
+  ]
+}
