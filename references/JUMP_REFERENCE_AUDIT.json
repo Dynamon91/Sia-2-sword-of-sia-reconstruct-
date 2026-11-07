@@ -1,0 +1,54 @@
+{
+  "video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "frames": [
+    {
+      "seconds": 119.5,
+      "file": "frame_00.png"
+    },
+    {
+      "seconds": 119.6,
+      "file": "frame_01.png"
+    },
+    {
+      "seconds": 119.68,
+      "file": "frame_02.png"
+    },
+    {
+      "seconds": 119.76,
+      "file": "frame_03.png"
+    },
+    {
+      "seconds": 120,
+      "file": "frame_04.png"
+    },
+    {
+      "seconds": 120.08,
+      "file": "frame_05.png"
+    },
+    {
+      "seconds": 120.16,
+      "file": "frame_06.png"
+    },
+    {
+      "seconds": 120.24,
+      "file": "frame_07.png"
+    },
+    {
+      "seconds": 120.32,
+      "file": "frame_08.png"
+    },
+    {
+      "seconds": 120.4,
+      "file": "frame_09.png"
+    }
+  ],
+  "integrated_in_rom": false,
+  "status": "unmasked reference frames; candidate masks rejected for scenery contamination",
+  "next_checks": [
+    "trace full silhouette and sword",
+    "compensate camera shift",
+    "preserve boot anchor",
+    "select poses from actual vertical motion",
+    "verify rendered sprite in emulator"
+  ]
+}
