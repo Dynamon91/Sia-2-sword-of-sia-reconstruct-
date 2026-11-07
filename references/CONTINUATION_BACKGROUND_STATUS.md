@@ -1,6 +1,6 @@
-# Sfondo candidato per la prosecuzione del primo livello
+# Sfondo della sesta area — integrazione provvisoria
 
-Aggiornamento del 7 novembre 2026. **9% complessivo stimato**, invariato. Questo asset è preparato e verificato come conversione; **non è integrato nella ROM** e non aggiunge una nuova area giocabile.
+Aggiornamento del 7 novembre 2026. Lo sfondo è ora **integrato nella sesta area giocabile** con collisioni provvisorie. La stima complessiva è **10%** dopo il traguardo descritto in `CONTINUATION_PLAYABLE_STATUS.md`.
 
 ## Contenuto
 
@@ -12,7 +12,7 @@ Sono conservati esattamente **26271 pixel RGB** del riferimento al di fuori dell
 
 - `assets/continuation_background.png`: RGB ripulito, 240×160.
 - `assets/continuation_palette.bin`: copia tracciata della palette usata per il candidato; viene confrontata con la palette della stanza se disponibile.
-- `assets/continuation_background.bin`: palette di 512 byte e 38.400 indici, formato previsto dal renderer; nessun collegamento aggiunto a `src/assets.s`.
+- `assets/continuation_background.bin`: palette di 512 byte e 38.400 indici, formato previsto dal renderer; collegato da `src/assets.s` come `continuation_background`.
 - `assets/continuation_background_gba.png`: decodifica degli indici con la palette del progetto, non una cattura dell'emulatore.
 - `assets/continuation_background_preview.png`: la stessa decodifica ingrandita 3× senza interpolazione.
 - `assets/continuation_visual_terrain.json`: contorni visivi della componente calda connessa dell'isola e del ponte/pilastro. Include esplicitamente `not_collision_geometry: true`.
@@ -32,4 +32,4 @@ Richiede Python, Pillow, NumPy e SciPy. Il controllo verifica identità del rita
 
 ## Lavoro restante
 
-Le punte d'erba e i dettagli del ponte non definiscono automaticamente il piano su cui poggiano i piedi. I contorni sono una guida visiva, non una mappa di collisione recuperata. Piani percorribili, volumi solidi, vuoti, ancore dei piedi e passaggi avanti/indietro devono essere calibrati e provati prima dell'integrazione. Anche entità e animazioni del tratto restano da ricostruire. La build giocabile continua a contenere le cinque inquadrature parziali precedenti.
+Le punte d'erba e i dettagli del ponte non definiscono automaticamente il piano su cui poggiano i piedi. I contorni sono una guida visiva, non una mappa di collisione recuperata. Piani percorribili, volumi solidi, vuoti, ancore dei piedi e passaggi avanti/indietro sono implementati in forma provvisoria e devono essere ulteriormente calibrati. Anche entità e animazioni del tratto restano da ricostruire. La build giocabile contiene ora sei inquadrature parziali.

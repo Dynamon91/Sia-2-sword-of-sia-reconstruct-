@@ -8,9 +8,9 @@ Gli intervalli seguenti servono a navigare il riferimento: non sono confini dell
 
 | Riferimento video approssimativo | Contenuti visibili | Stato della build |
 | --- | --- | --- |
-| 00:00–01:54 | Titolo, menu, storia, intro e arrivo | Parziale, già presente; intro da fotogrammi |
+| 00:00–01:54 | Titolo, menu, storia e arrivo | Parziale; filmato INTRO rimosso su richiesta |
 | 01:54–02:10 | Prima stanza, scala, gemme, piattaforma alta e primo ponte | Due aree già giocabili; geometria parziale |
-| 02:10–02:45 | Dislivelli, combattenti armati, gemme, scale e altri ponti | Da ricostruire e collegare |
+| 02:10–02:45 | Dislivelli, combattenti armati, gemme, scale e altri ponti | Sei inquadrature parziali collegate, nuova salita/vuoto/avvio del ponte; percorso intermedio e scale da completare |
 | 02:45–03:25 | Percorso verticale, sporgenze, indicazioni contestuali e combattimento | Da ricostruire e collegare |
 | 03:25–03:55 | Scale, passaggi sotto piattaforme, oggetti e combattenti | Da ricostruire e collegare |
 | 03:55–04:20 | Istruzioni per Water/Air/Fire e incontro con creatura quadrupede | Da trascrivere e implementare; non attribuire effetti senza verifica |

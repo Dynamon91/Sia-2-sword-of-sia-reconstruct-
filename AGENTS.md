@@ -7,3 +7,5 @@
 - User-facing progress updates and final delivery should include the overall completion estimate and an actual build screenshot or animation when available. Clearly label reused previews.
 - Maintain visual and gameplay fidelity to supplied references. Intro playback and recording overlays must remain removed; generated approximations must be identified in status notes.
 - End each milestone with a recoverable source commit and state what remains unfinished. Do not imply unattended work continues after the session ends.
+
+- User priority: advance the contiguous playable route in larger milestones. Provisional collision geometry is authorized when clearly labeled; fix blocking errors immediately, then refine fidelity. Raise the weighted estimate only for implemented and verified work.

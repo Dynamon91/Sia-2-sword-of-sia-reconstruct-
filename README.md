@@ -3,9 +3,9 @@
 **🚧 WORK IN PROGRESS — Ricostruzione ancora in sviluppo.**
 
 <!-- PROJECT_PROGRESS -->
-![Avanzamento complessivo stimato: 9%](docs/progress.svg)
+![Avanzamento complessivo stimato: 10%](docs/progress.svg)
 
-**Progetto completo: circa 9%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
+**Progetto completo: circa 10%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
 <!-- /PROJECT_PROGRESS -->
 
 ![Anteprima degli asset attualmente integrati](previews/readme_frontend.png)
@@ -16,9 +16,9 @@ An ongoing reconstruction of Lady Sia 2: Sword of Sia for Game Boy Advance, base
 
 The current build includes a partial reconstruction of World 1 with controllable gameplay, collisions, pickups, damage, falling and game over. Levels, sprite and scenery animations, and the original interface are still being reconstructed and refined. This project is incomplete and does not represent the finished original game.
 
-A cleaned background candidate for the next W1L1 viewport is now prepared in RGB and the project GBA palette, with reproducible terrain recovery and visual contours. It is not yet linked into the ROM; collision planes and entities remain pending. [Asset details and limits](references/CONTINUATION_BACKGROUND_STATUS.md).
+Latest playable change: a sixth partial viewport is now connected to W1L1, with a walkable slope, a jump to the bridge and a return route. Gems, defeated enemies and lives persist across the new connection. Collision planes are provisional and will be refined. [Implementation, native checks and limits](references/CONTINUATION_PLAYABLE_STATUS.md).
 
-The next W1L1 section (155–164 s in the reference video) now has eight checked terrain registrations connected through the static bridge pillar; the earlier sky-contaminated windows remain rejected. This is reference preparation; no new playable area is added. [Measurements and remaining work](references/ROUTE_CONTINUATION_STATUS.md).
+![New sixth viewport recorded continuously from the native ROM](previews/continuation_gameplay.gif)
 
 B now takes priority over simultaneous confirm or direction buttons in the main menu and options, preventing accidental starts and SOUND changes while backing out. [Native checks](references/MENU_CANCEL_STATUS.md).
 
@@ -26,7 +26,7 @@ Holding A/B while resetting the run with R no longer triggers an unintended jump
 
 SOUND persistence is also checked through a real 32 KiB SRAM file: fresh mGBA cores reload both settings, reject a corrupt checksum and keep intro playback disabled. [Validation and recovery notes](references/SAVE_RELOAD_STATUS.md).
 
-Latest playable change: the upper clouds now drift behind the first two viewports, using the speed and dialogue stops measured in the video. All 320 scroll positions are checked in mGBA. The full original cloud period is not yet known; the texture loop and video-covered sky remain estimates. [Details and limits](references/SCENERY_STATUS.md).
+The upper clouds also drift behind the first two viewports, using the speed and dialogue stops measured in the video. All 320 scroll positions are checked in mGBA. The full original cloud period is not yet known; the texture loop and video-covered sky remain estimates. [Details and limits](references/SCENERY_STATUS.md).
 
 ![Animated upper sky recorded from the native ROM](previews/scenery_gameplay.gif)
 

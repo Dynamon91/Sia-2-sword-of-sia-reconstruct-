@@ -6,6 +6,7 @@ data=json.loads((root/'docs/progress.json').read_text())
 assert sum(r['weight'] for r in data['areas'])==100
 assert all(0<=r['earned']<=r['weight'] for r in data['areas'])
 value=sum(r['earned'] for r in data['areas'])
+value=int(value) if float(value).is_integer() else value
 svg=f'''<svg xmlns="http://www.w3.org/2000/svg" width="600" height="76" viewBox="0 0 600 76" role="img" aria-label="Avanzamento stimato del progetto: {value}%">
 <rect width="600" height="76" rx="10" fill="#0b1829"/>
 <text x="18" y="25" fill="#ffffff" font-family="sans-serif" font-size="16">Lady Sia 2 · WORK IN PROGRESS · {value}% stimato</text>

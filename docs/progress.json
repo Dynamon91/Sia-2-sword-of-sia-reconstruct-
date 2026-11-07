@@ -4,14 +4,14 @@
     {
       "name": "Motore e sistemi di gioco",
       "weight": 15,
-      "earned": 7,
-      "evidence": "Build GBA, controlli, raccolta, combattimento, vite, game over e presa/risalita dei bordi della prima area testati; fisica e sistemi ancora parziali."
+      "earned": 7.5,
+      "evidence": "Controlli, raccolta, combattimento, vite/game over, presa/risalita e nuova pendenza con urti/fall respawn verificati; fisica ancora provvisoria."
     },
     {
       "name": "Mondo 1 e boss",
       "weight": 20,
-      "earned": 1,
-      "evidence": "Cinque viewport parziali del primo livello, due guardie e quattro gemme; mondo e boss incompleti."
+      "earned": 1.5,
+      "evidence": "Sei inquadrature parziali del primo livello collegate, nuova salita/vuoto/ponte e ritorno verificati; due guardie e quattro gemme. Livello, mondo e boss incompleti."
     },
     {
       "name": "Mondo 2 e boss",

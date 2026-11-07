@@ -1,4 +1,4 @@
-"""Prepare a video-derived background; not yet linked into the playable ROM.
+"""Prepare the video-derived sixth-view background with provisional gameplay geometry.
 Occluded sky is estimated. Terrain is recovered with a checked camera transform.
 """
 from pathlib import Path
@@ -86,7 +86,7 @@ def compose():
         indices[y[use_second],x[use_second]]=second_id[use_second]
     preview=Image.fromarray(palette[indices])
     untouched=int((~changed).sum());assert untouched>26000
-    info={'artifact_type':'background_candidate','integrated_in_rom':False,
+    info={'artifact_type':'prototype_background','integrated_in_rom':True,
           'source_seconds':159,'terrain_patch_seconds':160,'terrain_delta_159_to_160':[-54,34],
           'source_video_sha256':manifest['video_sha256'],
           'source_full_png_sha256':sha((REF/'frames/159_full.png').read_bytes()),
@@ -102,7 +102,7 @@ def compose():
           'limits':['Video-derived compressed colors, not original GBA tiles',
                     'Hidden sky estimated by harmonic fill; top boundary initialized from row 14',
                     'Only connected terrain is copied; parallax sky is not copied from the aligned frame',
-                    'Collision geometry, entities, scenery animation and ROM integration remain pending']}
+                    'Sixth-view collision geometry is provisional; additional entities, scenery animation and final fidelity remain pending']}
     r,g,b=a.astype(np.int16).transpose(2,0,1)
     warm=(r>b+8)&(g>b+3)
     contours=[]
@@ -140,5 +140,5 @@ def main():
                 assert Image.open(path).convert('RGB').tobytes()==Image.open(io.BytesIO(data)).convert('RGB').tobytes(),name
             else:assert path.read_bytes()==data,name
         else:write(path,data)
-    print(f'PASS continuation background: {info["unchanged_rgb_pixels"]} original RGB pixels preserved; registered terrain patch; 1..239 palette; candidate not integrated in ROM')
+    print(f'PASS continuation background: {info["unchanged_rgb_pixels"]} original RGB pixels preserved; registered terrain patch; 1..239 palette; integrated sixth-view background; collision geometry provisional')
 if __name__=='__main__':main()

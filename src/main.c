@@ -9,6 +9,7 @@ static const char save_type[] __attribute__((used))="SRAM_V113";
 #include "../assets/assets.h"
 #include "../assets/room.h"
 #include "../assets/ui.h"
+extern const unsigned char continuation_background[];
 extern const unsigned char cliff_background[],guard_background[],guard_sprite[];
 extern const unsigned char ambient_gems[],ledge_cycle[],jump_cycle[],cloud_strip[];
 extern const unsigned char gap_background[],guard2_sprite[],walk_cycle[],attack_cycle[],ui_more_tiles[];
@@ -179,7 +180,7 @@ static void draw_level(void){
  const unsigned char *background=game.area?bridge_backdrop:room_backdrop;
  const unsigned char *spans=game.area?bridge_spans:room_spans;
  int shift=-game.camera_y;
- if(game.area==4)image(gap_background);else if(game.area==3)image(guard_background);else if(game.area==2)image(cliff_background);else image(background);
+ if(game.area==5)image(continuation_background);else if(game.area==4)image(gap_background);else if(game.area==3)image(guard_background);else if(game.area==2)image(cliff_background);else image(background);
  if(game.area<2)draw_clouds(cloud_phase(game.ticks));
  for(int row=0;row<160-shift&&game.area<2;row++){
   unsigned count=spans[0]|((unsigned)spans[1]<<8);spans+=2;
@@ -206,8 +207,8 @@ static void draw_level(void){
  }
  if(game.area==3&&game.enemy_hp&&(!game.enemy_flash||(game.enemy_flash&2)))
   sprite(game.enemy_x/FP+9-20,88-55,41,60,guard_sprite,game.enemy_dir>0);
- if(game.area==4&&game.enemy2_hp&&(!game.enemy2_flash||(game.enemy2_flash&2)))
-  sprite(game.enemy2_x/FP+9-15,98-51,34,55,guard2_sprite,game.enemy2_dir>0);
+ if((game.area==4||game.area==5)&&game.enemy2_hp&&(!game.enemy2_flash||(game.enemy2_flash&2)))
+  sprite(game.enemy2_x/FP+9-15-(game.area==5?188:0),98-51+(game.area==5?25:0),34,55,guard2_sprite,game.enemy2_dir>0);
  unsigned air=game_air_frame(&game);
  const unsigned char *actor=room_sprites;
  int width=48,height=56,anchor=24;

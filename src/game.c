@@ -6,6 +6,22 @@ static const Platform bridge_platforms[3]={{33,BRIDGE_SURFACE_Y,48,8},{81,BRIDGE
 static const Platform cliff_platforms[2]={{0,54,43,8},{96,115,144,8}};
 static const Platform cliff_rock={96,115,144,45};
 static const Platform gap_platforms[2]={{0,106,98,54},{172,98,68,62}};
+/* Provisional walk planes for the registered 159s viewport. */
+static const Platform continuation_solids[2]={{0,101,134,59},{202,95,12,65}};
+static const int continuation_ground[][2]={{0,123},{48,123},{64,113},{80,105},{104,101},{133,101}};
+int game_continuation_floor(int player_x){
+ if(player_x<134&&player_x+PLAYER_W>0){
+  int x=player_x+PLAYER_W/2;if(x<0)x=0;if(x>133)x=133;
+  for(unsigned i=1;i<sizeof(continuation_ground)/sizeof(continuation_ground[0]);i++){
+   if(x<=continuation_ground[i][0]){
+    int x0=continuation_ground[i-1][0],y0=continuation_ground[i-1][1];
+    return y0+(continuation_ground[i][1]-y0)*(x-x0)/(continuation_ground[i][0]-x0);
+   }
+  }
+ }
+ if(player_x+PLAYER_W>202&&player_x<240)return 95;
+ return 4096;
+}
 const Gem level_gems[GEM_COUNT]={{0,109,62,0},{1,133,74,1},{3,151,47,2},{4,126,40,3}};
 /* Animation and damage share the same attack clock: wind-up, contact, recovery. */
 unsigned game_attack_frame(const Game *g){return g->attack>8?0:g->attack>=4?1:2;}
@@ -60,6 +76,7 @@ static void transition_area(Game *g,int area){
 }
 static void respawn_area(Game *g){
  g->x=(g->area==4?60:g->area==3?10:g->area==2?20:g->area?60:40)*FP;g->y=(g->area==4?66:g->area==3?90:g->area==2?14:g->area?BRIDGE_SURFACE_Y-PLAYER_H:118)*FP;
+ if(g->area==5){g->x=40*FP;g->y=(game_continuation_floor(40)-PLAYER_H)*FP;}
  g->vx=0;g->vy=0;g->grounded=1;g->climbing=0;g->sign_open=0;
  g->camera=0;camera(g);
 }
@@ -97,8 +114,8 @@ int game_damage(Game *g,unsigned amount){
  return 1;
 }
 static void guard_step(Game *g){
- if(g->area!=3&&g->area!=4)return;
- int second=g->area==4;
+ if(g->area!=3&&g->area!=4&&g->area!=5)return;
+ int second=g->area>=4;
  int *hp=second?&g->enemy2_hp:&g->enemy_hp;
  int *position=second?&g->enemy2_x:&g->enemy_x;
  int *direction=second?&g->enemy2_dir:&g->enemy_dir;
@@ -110,7 +127,7 @@ static void guard_step(Game *g){
  int left=second?188:140,right=second?218:210;
  if(*position<left*FP){*position=left*FP;*direction=1;}
  if(*position>right*FP){*position=right*FP;*direction=-1;}
- int ex=*position/FP,ey=(second?98:guard_floor(ex+7))-40;
+ int ex=*position/FP-(g->area==5?188:0),ey=(second?98+(g->area==5?25:0):guard_floor(ex+7))-40;
  int px=g->x/FP,py=g->y/FP;
  int vertical=py+PLAYER_H>ey&&py<ey+40;
  int sword_left=g->facing>0?px+PLAYER_W:px-30;
@@ -150,15 +167,15 @@ void game_step(Game *g,unsigned input){
  }
  if((pressed&ATTACK)&&!g->attack){g->attack=12;g->swing_id++;}
  else if(g->attack)--g->attack;
- int old_floor=(g->area==3?guard_floor(g->x/FP+PLAYER_W/2):g->area?4096:game_floor(g->x/FP+PLAYER_W/2))*FP;
+ int old_floor=(g->area==5?game_continuation_floor(g->x/FP):g->area==3?guard_floor(g->x/FP+PLAYER_W/2):g->area?4096:game_floor(g->x/FP+PLAYER_W/2))*FP;
  int was_floor=g->grounded&&g->y+PLAYER_H*FP==old_floor;
  g->vx=((input&RIGHT)!=0)*320-((input&LEFT)!=0)*320;
  if(g->vx&&!g->attack)g->facing=g->vx>0?1:-1;
  int old_x=g->x;
  g->x+=g->vx;
  /* Solid rock volumes: resolve crossed faces without snapping onto the top. */
- const Platform *solids=g->area==2?&cliff_rock:gap_platforms;
- int solid_count=g->area==2?1:g->area==4?2:0;
+ const Platform *solids=g->area==5?continuation_solids:g->area==2?&cliff_rock:gap_platforms;
+ int solid_count=g->area==2?1:(g->area==4||g->area==5)?2:0;
  for(int i=0;i<solid_count;i++){
   const Platform *p=&solids[i];
   if(g->y+PLAYER_H*FP<=p->y*FP||g->y>=(p->y+p->h)*FP)continue;
@@ -186,15 +203,18 @@ void game_step(Game *g,unsigned input){
  }
  g->grounded=0;
  const Platform *list=g->area==4?gap_platforms:g->area==2?cliff_platforms:g->area?bridge_platforms:platforms;
- int count=g->area==4?2:g->area==3?0:g->area==2?2:g->area?3:PLATFORM_COUNT;
+ int count=g->area==5?0:g->area==4?2:g->area==3?0:g->area==2?2:g->area?3:PLATFORM_COUNT;
  for(int i=0;i<count;i++){
   const Platform *p=&list[i];
   if(g->vy>=0&&g->x+PLAYER_W*FP>p->x*FP&&g->x<(p->x+p->w)*FP&&
      old_bottom<=p->y*FP&&next+PLAYER_H*FP>=p->y*FP&&p->y*FP<landing)
    landing=p->y*FP;
  }
- int floor=(g->area==3?guard_floor(center):g->area?4096:game_floor(center))*FP;
- if((next+PLAYER_H*FP>=floor||(was_floor&&g->vy>=0))&&floor<landing)landing=floor;
+ int floor=(g->area==5?game_continuation_floor(g->x/FP):g->area==3?guard_floor(center):g->area?4096:game_floor(center))*FP;
+ if(g->area==5){
+  /* Follow the authored slope while grounded; never snap up through rock. */
+  if(floor<4096*FP&&g->vy>=0&&((was_floor)||(old_bottom<=floor&&next+PLAYER_H*FP>=floor))&&floor<landing)landing=floor;
+ }else if((next+PLAYER_H*FP>=floor||(was_floor&&g->vy>=0))&&floor<landing)landing=floor;
  if(landing!=0x7fffffff){next=landing-PLAYER_H*FP;g->vy=0;g->grounded=1;}
  /* The reference shows a catch from a descending jump, then a pull-up.
     Only the two measured first-room ledges have authored catch geometry. */
@@ -223,6 +243,11 @@ void game_step(Game *g,unsigned input){
   g->area=4;g->progress.area=4;g->x-=158*FP;g->y+=18*FP;camera(g);
  }else if(g->area==4&&(input&LEFT)&&g->x<=32*FP&&g->grounded){
   g->area=3;g->progress.area=3;g->x+=158*FP;g->y-=18*FP;camera(g);
+ }
+ else if(g->area==4&&(input&RIGHT)&&g->x>=225*FP&&g->grounded){
+  g->area=5;g->progress.area=5;g->x-=188*FP;g->y+=25*FP;camera(g);
+ }else if(g->area==5&&(input&LEFT)&&g->x<=32*FP&&g->grounded){
+  g->area=4;g->progress.area=4;g->x+=188*FP;g->y-=25*FP;camera(g);
  }
  else if(g->y>210*FP){g->falls++;lose_life(g);return;}
  guard_step(g);

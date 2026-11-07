@@ -217,6 +217,7 @@ int main(int argc,char **argv){
  assert(!mkdir("build/ledge_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/jump_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/scenery_sequence",0777)||errno==EEXIST);
+ assert(!mkdir("build/continuation_sequence",0777)||errno==EEXIST);
  mLogSetDefaultLogger(&test_logger);
  assert(argc==2);struct mCore *c=mCoreFind(argv[1]);assert(c&&c->init(c));mCoreInitConfig(c,NULL);
  color_t *pixels=calloc(240*160,sizeof(color_t));assert(pixels);c->setVideoBuffer(c,pixels,240);
@@ -462,6 +463,40 @@ int main(int argc,char **argv){
  assert((c->busRead16(c,0x0700000c)&1023)==712);capture(c,"build/gap_pickup_four.ppm");
  for(int i=0;i<15&&value(c,30);i++){tap(c,2);run(c,8);}
  assert(value(c,30)==0&&value(c,26)==2);capture(c,"build/gap_guard_defeated.ppm");
+ /* Enter the new viewport through its registered portal using only input. */
+ c->setKeys(c,16);
+ for(int i=0;i<120&&value(c,17)==4;i++){
+  int before_x=(int)value(c,8),before_y=(int)value(c,9);run(c,1);
+  if(value(c,17)==5){assert((int)value(c,8)+188*FP-before_x==320);assert((int)value(c,9)-25*FP==before_y);}
+ }
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==5&&value(c,14)&&value(c,10)==4&&value(c,26)==2);
+ capture(c,"build/continuation_entry.ppm");
+ FILE *continuation_file=fopen("assets/continuation_background.bin","rb");assert(continuation_file);
+ unsigned continuation_base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
+ const unsigned sample_pixels[][2]={{10,45},{180,50},{190,130}};
+ for(unsigned i=0;i<3;i++){
+  unsigned offset=sample_pixels[i][1]*240+sample_pixels[i][0];
+  assert(!fseek(continuation_file,512+(long)offset,SEEK_SET));int expected=fgetc(continuation_file);assert(expected>=0);
+  assert(c->busRead8(c,continuation_base+offset)==(unsigned)expected);
+ }
+ fclose(continuation_file);
+ move_to(c,16,125);assert(value(c,17)==5&&value(c,14)&&(int)value(c,9)==61*FP);
+ capture(c,"build/continuation_slope.ppm");
+ sequence_dir="build/continuation_sequence";sequence_frame=0;
+ c->setKeys(c,17);run(c,70);c->setKeys(c,0);run(c,5);
+ assert(value(c,17)==5&&value(c,14)&&(int)value(c,9)==55*FP);
+ capture(c,"build/continuation_bridge.ppm");
+ move_to(c,32,200);
+ c->setKeys(c,33);run(c,70);c->setKeys(c,0);run(c,5);
+ assert(value(c,17)==5&&value(c,14)&&(int)value(c,9)==61*FP);
+ sequence_dir=NULL;
+ FILE *continuation_count=fopen("build/continuation_sequence/frame_count.txt","w");assert(continuation_count);
+ fprintf(continuation_count,"%u\n",sequence_frame);fclose(continuation_count);
+ tap(c,8);state(c,8);unsigned continuation_ticks=value(c,16);run(c,30);assert(value(c,16)==continuation_ticks);
+ capture(c,"build/continuation_pause.ppm");tap(c,1);state(c,7);
+ c->setKeys(c,32);for(int i=0;i<100&&value(c,17)==5;i++)run(c,1);
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==4&&value(c,10)==4&&value(c,26)==2);
+ puts("PASS continuation integration: input-driven sixth viewport, registered portal, slope, native background pixels, bridge jump both directions, pause and persistent round trip");
  unsigned falls_before=value(c,18),lives_before=value(c,31);
  c->setKeys(c,32);for(int i=0;i<240&&value(c,18)==falls_before;i++)run(c,1);
  c->setKeys(c,0);run(c,4);

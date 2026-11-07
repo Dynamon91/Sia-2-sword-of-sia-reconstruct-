@@ -126,3 +126,8 @@ jump_cycle:
 .global cloud_strip
 cloud_strip:
 .incbin "assets/cloud_strip.bin"
+
+.balign 4
+.global continuation_background
+continuation_background:
+.incbin "assets/continuation_background.bin"

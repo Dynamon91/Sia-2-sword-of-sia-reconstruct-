@@ -1,6 +1,6 @@
 {
-  "artifact_type": "background_candidate",
-  "integrated_in_rom": false,
+  "artifact_type": "prototype_background",
+  "integrated_in_rom": true,
   "source_seconds": 159,
   "terrain_patch_seconds": 160,
   "terrain_delta_159_to_160": [
@@ -63,6 +63,6 @@
     "Video-derived compressed colors, not original GBA tiles",
     "Hidden sky estimated by harmonic fill; top boundary initialized from row 14",
     "Only connected terrain is copied; parallax sky is not copied from the aligned frame",
-    "Collision geometry, entities, scenery animation and ROM integration remain pending"
+    "Sixth-view collision geometry is provisional; additional entities, scenery animation and final fidelity remain pending"
   ]
 }

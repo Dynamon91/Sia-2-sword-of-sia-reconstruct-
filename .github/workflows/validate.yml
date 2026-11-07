@@ -23,7 +23,7 @@ jobs:
         run: |
           python3 tools/clean_room_residue.py
           python3 tools/convert_layers.py
-      - name: Verify next-background candidate without linking it into the ROM
+      - name: Verify integrated sixth-view background conversion
         run: python3 tools/convert_continuation_background.py --check
       - name: Audit animation palette and foot anchors
         run: |
