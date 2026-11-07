@@ -9,6 +9,7 @@
 #include <stdint.h>
 #include "../src/game.h"
 #include "../src/alignment.h"
+#include "../src/scenery.h"
 #include "../assets/ui.h"
 /* Keep diagnostics, but do not bury PASS/error lines in per-DMA debug output. */
 static void emulator_log(struct mLogger *logger,int category,enum mLogLevel level,const char *format,va_list args){
@@ -93,6 +94,30 @@ static void check_ledge_sprite(struct mCore *c,unsigned frame){
  }
  fclose(f);assert(checked>200);
 }
+static void scenery_reference(struct mCore *c,unsigned char *background){
+ unsigned area=shown(c,11);assert(area<2);
+ const char *name=area?"bridge":"room";char path[80];
+ snprintf(path,sizeof(path),"assets/%s_backdrop.bin",name);FILE *f=fopen(path,"rb");assert(f);
+ assert(!fseek(f,512,SEEK_SET));assert(fread(background,1,240*160,f)==240*160);fclose(f);
+ unsigned char clouds[CLOUD_BANK_BYTES];f=fopen("assets/cloud_strip.bin","rb");assert(f);
+ assert(fread(clouds,1,sizeof(clouds),f)==sizeof(clouds));fclose(f);
+ unsigned phase=shown(c,12);assert(phase==cloud_phase(shown(c,9)));
+ /* Independent slow compositor: direct modulo addressing of bank zero,
+    unlike the ROM's pre-shifted odd bank and split DMA transfers. */
+ for(unsigned y=0;y<CLOUD_HEIGHT;y++)for(unsigned x=0;x<240;x++)
+  background[y*240+x]=clouds[y*CLOUD_WIDTH+(x+phase)%CLOUD_WIDTH];
+ snprintf(path,sizeof(path),"assets/%s_spans.bin",name);f=fopen(path,"rb");assert(f);
+ int shift=-(int)shown(c,3);
+ for(int y=0;y<160;y++){
+  int low=fgetc(f),high=fgetc(f);assert(low>=0&&high>=0);unsigned runs=(unsigned)(low|(high<<8));
+  for(unsigned i=0;i<runs;i++){
+   int x=fgetc(f),n=fgetc(f);assert(x>=0&&n>0&&x+n<=240);
+   for(int j=0;j<n;j++){int p=fgetc(f);assert(p>=0);if(y+shift>=0&&y+shift<160)background[(y+shift)*240+x+j]=(unsigned char)p;}
+   if(n&1)assert(fgetc(f)>=0);
+  }
+ }
+ assert(fgetc(f)==EOF);fclose(f);
+}
 static void check_air_sprite(struct mCore *c,const char *path,unsigned frame,int width,int height,int anchor){
  FILE *f=fopen(path,"rb");assert(f);
  unsigned char pixels[80*64];assert(width*height<=(int)sizeof(pixels));
@@ -100,8 +125,7 @@ static void check_air_sprite(struct mCore *c,const char *path,unsigned frame,int
  assert(fread(pixels,1,(size_t)(width*height),f)==(size_t)(width*height));fclose(f);
  /* These input-driven jumps stay in the initial viewport, below camera scroll.
     Compare transparent pixels to the scenery too, catching trails/alpha leaks. */
- unsigned char background[240*160];f=fopen("assets/room.bin","rb");assert(f);
- assert(!fseek(f,512,SEEK_SET));assert(fread(background,1,sizeof(background),f)==sizeof(background));fclose(f);
+ unsigned char background[240*160];scenery_reference(c,background);
  assert(shown(c,0)==7&&!shown(c,3)&&!shown(c,7));
  int flip=(int)shown(c,5)<0;
  int sx=aligned_sprite_x((int)shown(c,1)/FP+PLAYER_W/2,width,anchor,flip);
@@ -158,24 +182,41 @@ static void check_air_jumps(struct mCore *c){
  puts("PASS airborne integration: three velocity-driven poses, both facings pixel-checked including transparent scenery, landing, pause/resume and sword priority");
 }
 static void check_rest_background(struct mCore *c,const char *path,int gem_x,int gem_y){
- assert((int)value(c,15)==0);
- FILE *f=fopen(path,"rb");assert(f);assert(fseek(f,512,SEEK_SET)==0);
- int sx=(int)value(c,8)/256+PLAYER_W/2-SIA_ANCHOR_X;
- int sy=(int)value(c,9)/256+PLAYER_H-SIA_ANCHOR_Y;
+ (void)path;
+ unsigned char background[240*160];scenery_reference(c,background);
+ int camera_y=(int)shown(c,3);gem_y-=camera_y;
+ int sx=aligned_sprite_x((int)shown(c,1)/FP+PLAYER_W/2,48,SIA_ANCHOR_X,(int)shown(c,5)<0);
+ int sy=(int)shown(c,2)/FP+PLAYER_H-SIA_ANCHOR_Y-camera_y;
  unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
  for(int y=0;y<160;y++)for(int x=0;x<240;x++){
-  int expected=fgetc(f);assert(expected>=0);
+  int expected=background[y*240+x];
   if(x>=sx&&x<sx+48&&y>=sy&&y<sy+56)continue;
   if(x>=gem_x&&x<gem_x+16&&y>=gem_y&&y<gem_y+16)continue;
   assert(c->busRead8(c,base+(unsigned)y*240+(unsigned)x)==(unsigned)expected);
  }
- assert(fgetc(f)==EOF);fclose(f);
+}
+static void check_cloud_animation(struct mCore *c){
+ unsigned char seen[CLOUD_WIDTH]={0};unsigned total=0;int started=0;
+ for(int i=0;i<650;i++){
+  if(!started&&shown(c,12)==0){sequence_dir="build/scenery_sequence";sequence_frame=0;started=1;}
+  run(c,1);unsigned phase=shown(c,12);
+  if(!seen[phase]){check_rest_background(c,"assets/room.bin",109,62);seen[phase]=1;total++;}
+  if(sequence_dir&&sequence_frame==180)sequence_dir=NULL;
+ }
+ assert(total==CLOUD_WIDTH&&started&&sequence_frame==180&&!sequence_dir);
+ FILE *count=fopen("build/scenery_sequence/frame_count.txt","w");assert(count);fprintf(count,"%u\n",sequence_frame);fclose(count);
+ capture(c,"build/scenery_clouds.ppm");
+ tap(c,8);state(c,8);unsigned tick=value(c,16),phase=shown(c,12);run(c,60);
+ assert(value(c,16)==tick&&shown(c,12)==phase);capture(c,"build/scenery_pause.ppm");
+ tap(c,8);state(c,7);run(c,8);assert(value(c,16)>tick&&shown(c,12)!=phase);
+ puts("PASS scenery integration: all 320 cloud phases including odd/even DMA and wrap match an independent compositor; foreground stays fixed; pause freezes and resumes the active clock");
 }
 
 int main(int argc,char **argv){
  setvbuf(stdout,NULL,_IOLBF,0);
  assert(!mkdir("build/ledge_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/jump_sequence",0777)||errno==EEXIST);
+ assert(!mkdir("build/scenery_sequence",0777)||errno==EEXIST);
  mLogSetDefaultLogger(&test_logger);
  assert(argc==2);struct mCore *c=mCoreFind(argv[1]);assert(c&&c->init(c));mCoreInitConfig(c,NULL);
  color_t *pixels=calloc(240*160,sizeof(color_t));assert(pixels);c->setVideoBuffer(c,pixels,240);
@@ -201,6 +242,8 @@ int main(int argc,char **argv){
  tap(c,1);assert(value(c,3)==1);tap(c,128);assert(value(c,4)==0);
  tap(c,2);state(c,1);tap(c,64);tap(c,1);state(c,6);
  capture(c,"build/arrival_v06.ppm");
+ unsigned arrival_tick=value(c,16),arrival_cloud=shown(c,12);run(c,30);
+ assert(value(c,16)==arrival_tick&&shown(c,12)==arrival_cloud);
  assert((c->busRead16(c,0x07000004)&1023)==UI_PORTRAIT_TILE);
  assert((c->busRead16(c,0x07000000)&255)==102);
  tap(c,1);state(c,6);assert(value(c,13)==1);
@@ -212,6 +255,7 @@ int main(int argc,char **argv){
  unsigned logic_start=value(c,16);run(c,180);
  fprintf(stderr,"Level performance: %u logic updates in 180 emulated display frames\n",value(c,16)-logic_start);
  fclose(audio_file);audio_file=NULL;
+ check_cloud_animation(c);
  check_air_jumps(c);
  c->setKeys(c,16);run(c,20);c->setKeys(c,1);run(c,8);c->setKeys(c,0);
  player(c,&x,&y);assert(x>40&&y<118);capture(c,"build/room_jump_v06.ppm");run(c,160);
@@ -261,6 +305,7 @@ int main(int argc,char **argv){
  c->setKeys(c,0);run(c,10);
  player(c,&x,&y);assert(y==0&&value(c,14)==1);assert((int)value(c,15)==-40);
  capture(c,"build/room_upper_v06.ppm");
+ check_rest_background(c,"assets/room.bin",109,62);
  c->setKeys(c,16);
  for(int i=0;i<200&&value(c,17)==0;i++){
   int before_x=(int)value(c,8),before_y=(int)value(c,9);

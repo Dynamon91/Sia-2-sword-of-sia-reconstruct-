@@ -22,7 +22,8 @@ jobs:
       - name: Audit animation palette and foot anchors
         run: |
           python3 tools/convert_jump.py
-          git diff --exit-code -- assets/jump_cycle.bin
+          python3 tools/convert_clouds.py
+          git diff --exit-code -- assets/jump_cycle.bin assets/cloud_strip.bin
           python3 tools/audit_motion_assets.py
       - name: Test gameplay with sanitizers
         run: ASAN_OPTIONS=detect_leaks=0 make test

@@ -1,0 +1,11 @@
+PASS scenery integration: all 320 cloud phases including odd/even DMA and wrap match an independent compositor; foreground stays fixed; pause freezes and resumes the active clock
+PASS airborne integration: three velocity-driven poses, both facings pixel-checked including transparent scenery, landing, pause/resume and sword priority
+PASS ledge integration: input-driven jump/catch, stable hang, pause/resume, release, all three pull-up poses pixel-checked in native framebuffer, top landing
+PASS frontend no-intro: 19096 emulated frames; linked areas, camera, pickups, pause, menus, direct arrival without intro
+PASS settings integration: menu writes SRAM, soft-reset reload, corrupt-record defaults. Disk save reload and real hardware are not tested.
+PASS defeat integration: three life-consuming falls, restored HP, Game Over, frozen simulation, retry resets run
+PASS lethal combat integration: one life consumed, HP restored, same area and gems preserved
+PASS combat integration: guard area, contact damage, sword defeat and persistent defeat counter
+PASS motion/gap integration: three recorded walk frames, three attack phases, registered fifth viewport, gap jump and fall, four persistent gems, OBJ digits 3/4, second guard defeat, return persistence
+PASS wall animation: native ROM stops running at blocked left boundary
+PASS cliff collision integration: missed jump hits solid side, falls, loses one life and preserves gems on respawn

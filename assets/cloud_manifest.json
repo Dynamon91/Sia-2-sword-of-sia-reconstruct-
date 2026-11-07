@@ -1,0 +1,188 @@
+{
+  "source_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "samples": [
+    {
+      "seconds": 114.0,
+      "registered_x": 0,
+      "mean_rgb_error": 0.0
+    },
+    {
+      "seconds": 114.2,
+      "registered_x": 6,
+      "mean_rgb_error": 0.9426
+    },
+    {
+      "seconds": 114.4,
+      "registered_x": 12,
+      "mean_rgb_error": 0.3719
+    },
+    {
+      "seconds": 114.6,
+      "registered_x": 18,
+      "mean_rgb_error": 0.3433
+    },
+    {
+      "seconds": 114.8,
+      "registered_x": 24,
+      "mean_rgb_error": 0.813
+    },
+    {
+      "seconds": 115.0,
+      "registered_x": 30,
+      "mean_rgb_error": 0.5246
+    },
+    {
+      "seconds": 115.2,
+      "registered_x": 35,
+      "mean_rgb_error": 0.6232
+    },
+    {
+      "seconds": 115.4,
+      "registered_x": 35,
+      "mean_rgb_error": 0.0927
+    },
+    {
+      "seconds": 115.6,
+      "registered_x": 35,
+      "mean_rgb_error": 0.1271
+    },
+    {
+      "seconds": 115.8,
+      "registered_x": 35,
+      "mean_rgb_error": 0.0231
+    },
+    {
+      "seconds": 116.0,
+      "registered_x": 35,
+      "mean_rgb_error": 0.0039
+    },
+    {
+      "seconds": 116.2,
+      "registered_x": 35,
+      "mean_rgb_error": 0.4263
+    },
+    {
+      "seconds": 116.4,
+      "registered_x": 35,
+      "mean_rgb_error": 0.3124
+    },
+    {
+      "seconds": 116.6,
+      "registered_x": 35,
+      "mean_rgb_error": 0.1096
+    },
+    {
+      "seconds": 116.8,
+      "registered_x": 35,
+      "mean_rgb_error": 0.0731
+    },
+    {
+      "seconds": 117.0,
+      "registered_x": 41,
+      "mean_rgb_error": 0.495
+    },
+    {
+      "seconds": 117.2,
+      "registered_x": 47,
+      "mean_rgb_error": 0.4113
+    },
+    {
+      "seconds": 117.4,
+      "registered_x": 53,
+      "mean_rgb_error": 1.4545
+    },
+    {
+      "seconds": 117.6,
+      "registered_x": 59,
+      "mean_rgb_error": 0.5919
+    },
+    {
+      "seconds": 117.8,
+      "registered_x": 65,
+      "mean_rgb_error": 0.5151
+    },
+    {
+      "seconds": 118.0,
+      "registered_x": 71,
+      "mean_rgb_error": 0.3746
+    },
+    {
+      "seconds": 118.2,
+      "registered_x": 77,
+      "mean_rgb_error": 0.54
+    },
+    {
+      "seconds": 118.4,
+      "registered_x": 83,
+      "mean_rgb_error": 0.4283
+    },
+    {
+      "seconds": 118.6,
+      "registered_x": 89,
+      "mean_rgb_error": 0.2851
+    },
+    {
+      "seconds": 118.8,
+      "registered_x": 95,
+      "mean_rgb_error": 0.7865
+    },
+    {
+      "seconds": 119.0,
+      "registered_x": 101,
+      "mean_rgb_error": 0.6196
+    },
+    {
+      "seconds": 119.2,
+      "registered_x": 107,
+      "mean_rgb_error": 0.5033
+    },
+    {
+      "seconds": 119.4,
+      "registered_x": 113,
+      "mean_rgb_error": 0.4564
+    },
+    {
+      "seconds": 119.6,
+      "registered_x": 119,
+      "mean_rgb_error": 0.2681
+    },
+    {
+      "seconds": 119.8,
+      "registered_x": 125,
+      "mean_rgb_error": 0.2538
+    },
+    {
+      "seconds": 120.0,
+      "registered_x": 131,
+      "mean_rgb_error": 0.3324
+    },
+    {
+      "seconds": 120.2,
+      "registered_x": 137,
+      "mean_rgb_error": 0.4414
+    },
+    {
+      "seconds": 120.4,
+      "registered_x": 143,
+      "mean_rgb_error": 0.3656
+    }
+  ],
+  "observed_speed_pixels_per_second": 30,
+  "runtime_pixels_per_tick": 0.5,
+  "size": [
+    320,
+    80
+  ],
+  "observed_cells": 18158,
+  "total_cells": 25600,
+  "runtime_areas": [
+    0,
+    1
+  ],
+  "limits": [
+    "320px repetition is authored; original complete cloud cycle not measured.",
+    "Top 13 rows hidden by the banner plus 3 compression-fringe rows use an estimated smooth continuation.",
+    "Unobserved cells use nearest observed sky; loop join and lower blend are estimated.",
+    "Only the upper sky in the first two viewports is animated; full original parallax and later scenery remain pending."
+  ]
+}

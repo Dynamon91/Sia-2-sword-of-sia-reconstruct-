@@ -121,3 +121,8 @@ ledge_cycle:
 .global jump_cycle
 jump_cycle:
 .incbin "assets/jump_cycle.bin"
+
+.balign 4
+.global cloud_strip
+cloud_strip:
+.incbin "assets/cloud_strip.bin"

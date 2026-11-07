@@ -14,7 +14,7 @@ def main():
    if line.startswith('PASS '):passed.append(line.rstrip())
  if not any(s.startswith('PASS frontend ') for s in passed) or not any(s.startswith('PASS settings integration:') for s in passed):
   raise SystemExit('Both gameplay and settings emulator PASS reports are required')
- for prefix in ['PASS airborne integration:', 'PASS ledge integration:']:
+ for prefix in ['PASS airborne integration:', 'PASS ledge integration:', 'PASS scenery integration:']:
   if not any(s.startswith(prefix) for s in passed):raise SystemExit('Missing '+prefix)
  pictures=[p.with_suffix('.png') for p in sorted(root.glob('*.ppm'))]
  if any(not p.exists() for p in pictures):raise SystemExit('Export every emulator PPM before packaging')
@@ -30,11 +30,11 @@ def main():
  (out/'BUILD_INFO.json').write_text(json.dumps(info,indent=2)+'\n')
  (out/'LEGGIMI.txt').write_text('''LADY SIA 2 - BUILD DI TEST\n\nApri Lady_Sia2_GBA_test.gba in un emulatore GBA.\nÈ una ricostruzione parziale: cinque inquadrature parziali del livello 1, due guardie prototipo e quattro gemme.\nIl percorso completo e gli altri livelli non sono ancora giocabili.\n\nA: conferma/salto. B: indietro/attacco.\nFrecce: movimento. Salta sotto il bordo per aggrapparti; Su/A: risali; Giu: lascia la presa. Start: pausa.\nSelect: menu. R: ripristino delle aree e delle gemme.\nTre vite e tre HP (provvisori). Colpi nemici consumano HP; colpi letali e cadute consumano una vita.\nRespawn: HP pieni, gemme e nemici sconfitti conservati. Zero vite: Game Over.\nHP e vite consultabili nella pausa; nessun riquadro HP/L sovrapposto allo scenario.\nPLAY apre direttamente i dialoghi iniziali: il filmato INTRO e la relativa opzione sono stati rimossi.\n\nSOUND viene salvato in SRAM; il vecchio flag INTRO non abilita più il filmato. Il reset del core è verificato;\nriapertura del file .sav e hardware reale non ancora verificati.\nLa musica usa ancora la registrazione precedente.\nNon è stato integrato il tentativo di separazione degli effetti.\n\nTEST_REPORT.txt: prove mGBA superate.\nBUILD_INFO.json: commit, hash ROM e limiti.\nSHA256SUMS.txt: integrità di tutti gli altri file del pacchetto.\nscreenshots/: acquisizioni reali della ROM compilata.\n''')
  repo=Path(__file__).resolve().parents[1]
- for name in ['jump','ledge']:
+ for name in ['jump','ledge','scenery']:
   report=json.loads((repo/'previews'/f'{name}_preview.json').read_text())
   if report['rom_sha256']!=hashlib.sha256(data).hexdigest() or not report['all_source_pixels_preserved']:
    raise SystemExit('Stale or unverified native animation preview: '+name)
- for source in ['previews/jump_gameplay.gif','previews/jump_preview.json','previews/ledge_gameplay.gif','previews/ledge_preview.json','references/JUMP_STATUS.md','references/LEDGE_STATUS.md','docs/progress.svg']:
+ for source in ['previews/scenery_gameplay.gif','previews/scenery_preview.json','references/SCENERY_STATUS.md','previews/jump_gameplay.gif','previews/jump_preview.json','previews/ledge_gameplay.gif','previews/ledge_preview.json','references/JUMP_STATUS.md','references/LEDGE_STATUS.md','docs/progress.svg']:
   shutil.copyfile(repo/source,out/Path(source).name)
  files=sorted(p for p in out.rglob('*') if p.is_file())
  (out/'SHA256SUMS.txt').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.relative_to(out).as_posix()+'\n' for p in files))

@@ -25,6 +25,6 @@ Le soglie sono stimate. Gli attacchi mantengono la propria animazione; presa e r
 - Test con sanitizzatori: salita → apice → caduta in salti reali, entrambe le direzioni, atterraggio, uscita dalla piattaforma, rilascio del bordo, reset e game over.
 - mGBA: tutte le pose aeree confrontate pixel per pixel nel framebuffer, compresi i pixel trasparenti contro lo scenario; controllo anche della spada durante il salto e del ritorno alla posa aerea.
 - Ripetute le prove di collisioni, presa/risalita, danni, cadute, tre vite, game over, gemme, menu e impostazioni.
-- `previews/jump_gameplay.gif` registra due salti consecutivi comandati con gli input del gioco. Tutti i fotogrammi acquisiti sono conservati, con gli stessi colori; solo ingrandimento nearest-neighbor 3× e arrotondamento temporale imposto dal formato GIF. Nessuna interpolazione.
+- `previews/jump_gameplay.gif` registra due salti consecutivi comandati con gli input del gioco. Tutti i fotogrammi acquisiti sono conservati, con gli stessi colori; solo ingrandimento intero nearest-neighbor e arrotondamento temporale imposto dal formato GIF. Nessuna interpolazione.
 
 Questo aggiornamento completa un piccolo ciclo di animazione. Restano cinque inquadrature parziali del primo livello: i quattro mondi, i boss, l'interfaccia completa, le altre animazioni e l'audio separato non sono completati. **Avanzamento complessivo invariato al 9%**, stima ponderata e non misura del tempo rimanente.

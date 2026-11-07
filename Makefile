@@ -8,7 +8,7 @@ build/start.o: src/start.s | build
 	$(CC) -mcpu=arm7tdmi -marm -c $< -o $@
 build/game.o: src/game.c src/game.h src/level_progress.h src/alignment.h | build
 	$(CC) $(CFLAGS) -c $< -o $@
-build/main.o: src/main.c src/settings.h src/game.h src/alignment.h src/story.h assets/assets.h assets/room.h assets/ui.h | build
+build/main.o: src/main.c src/settings.h src/game.h src/alignment.h src/scenery.h src/story.h assets/assets.h assets/room.h assets/ui.h | build
 	$(CC) $(CFLAGS) -c $< -o $@
 build/level_progress.o: src/level_progress.c src/level_progress.h | build
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -16,6 +16,7 @@ build/story.o: src/story.c src/story.h assets/assets.h | build
 	$(CC) $(CFLAGS) -c $< -o $@
 build/assets.o: src/assets.s assets/jump_cycle.bin assets/ledge_cycle.bin assets/ambient_gems.bin assets/gap.bin assets/guard2_sprite.bin assets/walk_cycle.bin assets/attack_cycle.bin assets/ui_more_tiles.bin assets/guard_room.bin assets/guard_sprite.bin assets/cliff.bin assets/visuals.bin assets/audio_title.pcm assets/audio_level.pcm assets/font.bin assets/room.bin assets/room_sprites.bin assets/room_sky.bin assets/bridge.bin assets/bridge_sky.bin assets/bridge_run.bin assets/ui_palette.bin assets/ui_tiles.bin assets/ui_dialogs.bin assets/room_backdrop.bin assets/room_spans.bin assets/bridge_backdrop.bin assets/bridge_spans.bin | build
 	$(CC) -mcpu=arm7tdmi -marm -c $< -o $@
+build/assets.o: assets/cloud_strip.bin
 build/sia2_lab.elf: build/start.o build/game.o build/main.o build/story.o build/level_progress.o build/assets.o link.ld
 	$(CC) -mcpu=arm7tdmi -mthumb-interwork -nostdlib -T link.ld -Wl,-Map,build/sia2_lab.map build/start.o build/game.o build/main.o build/story.o build/level_progress.o build/assets.o -lgcc -o $@
 build/sia2_lab.gba: build/sia2_lab.elf tools/fix_header.py

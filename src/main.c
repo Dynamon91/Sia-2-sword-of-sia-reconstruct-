@@ -4,12 +4,13 @@
 static const char save_type[] __attribute__((used))="SRAM_V113";
 #define SETTINGS_SRAM ((volatile unsigned char *)0x0E000000)
 #include "alignment.h"
+#include "scenery.h"
 #include "story.h"
 #include "../assets/assets.h"
 #include "../assets/room.h"
 #include "../assets/ui.h"
 extern const unsigned char cliff_background[],guard_background[],guard_sprite[];
-extern const unsigned char ambient_gems[],ledge_cycle[],jump_cycle[];
+extern const unsigned char ambient_gems[],ledge_cycle[],jump_cycle[],cloud_strip[];
 extern const unsigned char gap_background[],guard2_sprite[],walk_cycle[],attack_cycle[],ui_more_tiles[];
 extern const unsigned char bridge_background[],bridge_sky[],bridge_run[];
 extern const unsigned char room_backdrop[],room_spans[],bridge_backdrop[],bridge_spans[];
@@ -160,11 +161,26 @@ static void sprite(int x,int y,int w,int h,const unsigned char *pixels,int flip)
   if(p)pixel(x+col,y+row,p);
  }
 }
+static void draw_clouds(unsigned phase){
+ const unsigned char *bank=cloud_strip+(phase&1u)*CLOUD_BANK_BYTES;
+ unsigned offset=phase&~1u;
+ unsigned first=CLOUD_WIDTH-offset;if(first>240)first=240;
+ for(unsigned y=0;y<CLOUD_HEIGHT;y++){
+  const unsigned char *row=bank+y*CLOUD_WIDTH;
+  REG32(0x040000D4)=(unsigned)(row+offset);REG32(0x040000D8)=(unsigned)(page+y*120);
+  REG32(0x040000DC)=0x80000000|(first/2);
+  if(first<240){
+   REG32(0x040000D4)=(unsigned)row;REG32(0x040000D8)=(unsigned)(page+y*120+first/2);
+   REG32(0x040000DC)=0x80000000|((240-first)/2);
+  }
+ }
+}
 static void draw_level(void){
  const unsigned char *background=game.area?bridge_backdrop:room_backdrop;
  const unsigned char *spans=game.area?bridge_spans:room_spans;
  int shift=-game.camera_y;
  if(game.area==4)image(gap_background);else if(game.area==3)image(guard_background);else if(game.area==2)image(cliff_background);else image(background);
+ if(game.area<2)draw_clouds(cloud_phase(game.ticks));
  for(int row=0;row<160-shift&&game.area<2;row++){
   unsigned count=spans[0]|((unsigned)spans[1]<<8);spans+=2;
   for(unsigned run=0;run<count;run++){
@@ -263,6 +279,7 @@ static void render(void){
  shown[5]=(unsigned)game.facing;shown[6]=game.attack?game_attack_frame(&game):3;
  shown[7]=(unsigned)game.climbing;shown[8]=(unsigned)game.grounded;
  shown[9]=game.ticks;shown[10]=front;
+ shown[11]=(unsigned)game.area;shown[12]=cloud_phase(game.ticks);
 }
 int main(void){
  REG16(0x04000204)=0x4317;REG16(0x04000000)=0x0404;
