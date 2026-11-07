@@ -376,7 +376,7 @@ int main(int argc,char **argv){
  c->busWrite8(c,0x0E000006,c->busRead8(c,0x0E000006)^1);
  c->setKeys(c,0);c->reset(c);run(c,90);state(c,0);
  assert(value(c,3)==1&&value(c,4)==0);
- puts("PASS settings integration: menu writes SRAM, soft-reset reload, corrupt-record defaults. Disk save reload and real hardware are not tested.");
+ puts("PASS settings integration: menu writes SRAM, soft-reset reload, corrupt-record defaults. Disk persistence is checked separately; real hardware is not tested.");
  /* Verify actual fall damage, Game Over, frozen state and retry. */
  tap(c,8);tap(c,128);tap(c,1);state(c,4);
  tap(c,2);tap(c,64);tap(c,1);state(c,6);

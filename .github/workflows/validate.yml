@@ -36,6 +36,11 @@ jobs:
           gcc -Wall -Wextra -Werror tools/frontend_check.c src/game.c src/level_progress.c -lmgba -o build/frontend_check
           set -o pipefail
           ./build/frontend_check build/sia2_lab.gba | awk '/^PASS / { print; fflush() }' > build/emulator-report.txt
+      - name: Verify settings after closing and reopening a cartridge save
+        run: |
+          gcc -Wall -Wextra -Werror tools/save_reload_check.c -lmgba -o build/save_reload_check
+          set -o pipefail
+          ./build/save_reload_check build/sia2_lab.gba | tee -a build/emulator-report.txt
       - name: Convert emulator screenshots to PNG
         run: |
           python3 tools/export_previews.py build
