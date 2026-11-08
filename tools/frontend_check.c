@@ -658,7 +658,13 @@ int main(int argc,char **argv){
   if(value(c,17)!=area){
    assert((int)value(c,8)-x==(area==11?118:44)*FP-320);
    assert((int)value(c,9)-y==(area==11?3:86)*FP);lever_crossed++;
-   if(value(c,17)==12)capture(c,"build/lever_entry.ppm");
+   if(value(c,17)==12){
+    capture(c,"build/lever_entry.ppm");
+    /* Closed gate is reached using input, then B opens the provisional switch. */
+    c->setKeys(c,32);run(c,16);
+    assert(value(c,17)==12&&(int)value(c,8)==130*FP);
+    c->setKeys(c,0);run(c,2);tap(c,2);c->setKeys(c,32);
+   }
   }
  }
  c->setKeys(c,0);run(c,4);assert(value(c,17)==13&&lever_crossed==2&&value(c,14));

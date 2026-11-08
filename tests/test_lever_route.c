@@ -2,6 +2,17 @@
 #include <assert.h>
 #include <stdio.h>
 static void at(Game *g,int area,int x,int y){game_reset(g);g->area=area;g->progress.area=(unsigned)area;g->x=x*FP;g->y=y*FP;}
+static void test_lever_input_edges(void){
+ Game g;at(&g,12,142,23);g.grounded=1;g.previous=ATTACK;
+ game_step(&g,ATTACK);assert(!g.progress.barrier_open);
+ game_step(&g,0);game_step(&g,UP);assert(!g.progress.barrier_open);
+ game_step(&g,0);game_step(&g,JUMP);assert(!g.progress.barrier_open);
+ at(&g,12,180,23);g.grounded=1;game_step(&g,ATTACK);assert(!g.progress.barrier_open);
+ at(&g,12,142,0);game_step(&g,ATTACK);assert(!g.progress.barrier_open);
+ at(&g,12,142,23);g.grounded=1;game_step(&g,ATTACK);assert(g.progress.barrier_open);
+ game_step(&g,ATTACK);assert(g.progress.barrier_open);
+ at(&g,12,100,23);g.grounded=1;game_step(&g,LEFT);assert(g.x<100*FP);
+}
 static void test_lever_barrier(void){
  Game g;at(&g,12,142,23);
  assert(!g.progress.lever_activated&&!g.progress.barrier_open);
@@ -27,6 +38,7 @@ static void test_lever_barrier(void){
  assert(!g.progress.lever_activated&&!g.progress.barrier_open);
 }
 int main(void){
+ test_lever_input_edges();
  test_lever_barrier();
  Game g;at(&g,11,30,20);assert(level_set_lever_state(&g.progress,1));
  assert(level_collect_gem(&g.progress,4));g.gems=1;g.collected=16;
