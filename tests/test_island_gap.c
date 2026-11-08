@@ -22,7 +22,8 @@ int main(void){
  assert(g.lives==3&&!g.falls&&g.gems==1&&g.collected==16);
  /* The observed upper-left ledge can be reached with the existing high jump. */
  game_step(&g,0);game_step(&g,UP|JUMP);
- for(int i=0;i<120&&!g.grounded;i++)game_step(&g,LEFT);
+ for(int i=0;i<30;i++)game_step(&g,LEFT);
+ for(int i=0;i<100&&!g.grounded;i++)game_step(&g,0);
  assert(g.grounded&&g.y==20*FP&&g.lives==3);
  /* Return from the lower island across the same gap, without a forced teleport. */
  at(&g,11,65,104);game_step(&g,RIGHT|JUMP);

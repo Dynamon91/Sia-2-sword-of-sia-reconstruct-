@@ -1,13 +1,13 @@
 # Avanzamento complessivo
 
-**13.5% — stima editoriale ponderata, aggiornata il 2026-11-08.**
+**14.5% — stima editoriale ponderata, aggiornata il 2026-11-08.**
 
 Non misura il tempo rimanente né la percentuale di pixel originali recuperati. I pesi sono una convenzione di pianificazione e potranno essere rivisti se cambia lo scopo. Un riferimento video archiviato non conta come livello implementato.
 
 | Parte | Punti acquisiti / peso | Stato verificato |
 |---|---:|---|
-| Motore e sistemi di gioco | 8.75 / 15 | Controlli, combattimento, tre guardie persistenti, vite/game over, pendenze, salto alto e quattro portali della rampa verificati; fisica e IA ancora provvisorie. |
-| Mondo 1 e boss | 3.75 / 20 | Dodici inquadrature parziali collegate: ponte, parete, piattaforma superiore, rampa e nuovo salto fra isole; andata, ritorno, ripiano alto e respawn verificati. Livello, mondo e boss incompleti. |
+| Motore e sistemi di gioco | 9.0 / 15 | Controlli, combattimento, quattro guardie indipendenti e persistenti, vite/game over, pendenze e portali della rampa e della zona della leva verificati; fisica e IA ancora provvisorie. |
+| Mondo 1 e boss | 4.5 / 20 | Quattordici inquadrature parziali collegate: ponte, parete, rampa, isole e due viste della zona della leva; quarta guardia, ritorno e rivisita verificati. Leva, barriera, livello, mondo e boss incompleti. |
 | Mondo 2 e boss | 0 / 15 | Riferimenti disponibili; contenuti non integrati. |
 | Mondo 3 e boss | 0 / 15 | Video indicizzati; contenuti non integrati. |
 | Mondo 4, boss finale, finale e crediti | 0 / 15 | Video indicizzati; contenuti non integrati. |

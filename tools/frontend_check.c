@@ -221,6 +221,7 @@ int main(int argc,char **argv){
  assert(!mkdir("build/bridge_run_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/ramp_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/island_gap_sequence",0777)||errno==EEXIST);
+ assert(!mkdir("build/lever_route_sequence",0777)||errno==EEXIST);
  mLogSetDefaultLogger(&test_logger);
  assert(argc==2);struct mCore *c=mCoreFind(argv[1]);assert(c&&c->init(c));mCoreInitConfig(c,NULL);
  color_t *pixels=calloc(240*160,sizeof(color_t));assert(pixels);c->setVideoBuffer(c,pixels,240);
@@ -614,8 +615,44 @@ int main(int argc,char **argv){
  move_to(c,32,140);c->setKeys(c,33);run(c,58);c->setKeys(c,0);run(c,6);
  assert(value(c,17)==11&&value(c,14)&&(int)value(c,8)<84*FP&&(int)value(c,9)==104*FP);
  capture(c,"build/island_gap_left_landing.ppm");
- c->setKeys(c,97);run(c,90);c->setKeys(c,0);run(c,4);
+ c->setKeys(c,97);run(c,30);c->setKeys(c,0);run(c,64);
  assert(value(c,14)&&(int)value(c,9)==20*FP);capture(c,"build/island_gap_high_ledge.ppm");
+ /* Branch from the high ledge, explore the lever area and restore the old regression route. */
+ void *lever_before=malloc(c->stateSize(c));assert(lever_before&&c->saveState(c,lever_before));
+ const char *lever_previous_sequence=sequence_dir;unsigned lever_previous_frame=sequence_frame;
+ sequence_dir="build/lever_route_sequence";sequence_frame=0;
+ c->setKeys(c,32);unsigned lever_crossed=0;
+ for(int i=0;i<60&&value(c,17)!=13;i++){
+  unsigned area=value(c,17);int x=(int)value(c,8),y=(int)value(c,9);run(c,1);
+  if(value(c,17)!=area){
+   assert((int)value(c,8)-x==(area==11?118:44)*FP-320);
+   assert((int)value(c,9)-y==(area==11?3:86)*FP);lever_crossed++;
+   if(value(c,17)==12)capture(c,"build/lever_entry.ppm");
+  }
+ }
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==13&&lever_crossed==2&&value(c,14));
+ capture(c,"build/lever_room.ppm");
+ move_to(c,32,150);
+ for(int i=0;i<240&&value(c,40);i++){c->setKeys(c,i%16==0?2:0);run(c,1);}
+ c->setKeys(c,0);run(c,4);
+ assert(!value(c,40)&&value(c,26)==4&&value(c,10)==5&&value(c,31)==upper_lives);
+ capture(c,"build/lever_guard_defeated.ppm");
+ tap(c,8);state(c,8);unsigned lever_tick=value(c,16);run(c,30);assert(value(c,16)==lever_tick);
+ capture(c,"build/lever_pause.ppm");tap(c,1);state(c,7);
+ c->setKeys(c,16);
+ for(int i=0;i<100&&value(c,17)!=11;i++)run(c,1);
+ c->setKeys(c,0);run(c,4);
+ assert(value(c,17)==11&&value(c,14)&&!value(c,40)&&value(c,26)==4&&value(c,10)==5);
+ assert(value(c,31)==upper_lives&&value(c,18)==upper_falls);capture(c,"build/lever_return.ppm");
+ c->setKeys(c,32);for(int i=0;i<80&&value(c,17)!=13;i++)run(c,1);
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==13&&!value(c,40)&&value(c,26)==4);
+ capture(c,"build/lever_revisit.ppm");
+ FILE *lever_count=fopen("build/lever_route_sequence/frame_count.txt","w");assert(lever_count);
+ fprintf(lever_count,"%u\n",sequence_frame);fclose(lever_count);
+ sequence_dir=NULL;
+ assert(c->loadState(c,lever_before));free(lever_before);
+ sequence_dir=lever_previous_sequence;sequence_frame=lever_previous_frame;
+ puts("PASS lever route integration: two new registered views, input-only fourth guard combat, persistent defeat and gems across return/revisit, pause and no life loss; isolated branch restored before existing regression");
  move_to(c,16,65);c->setKeys(c,0);run(c,100);
  assert(value(c,14)&&(int)value(c,9)==104*FP);
  c->setKeys(c,17);

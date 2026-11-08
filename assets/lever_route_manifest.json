@@ -1,0 +1,92 @@
+{
+  "video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "sources": {
+    "175": "e60a0e79e8045638fd19163fb6242446597dd6ab95e5e907f7592bebfce71167",
+    "178": "efda28f3a8dbce88bf2190035134469e0d0157521aa7f22bc096ef09c65e952d",
+    "180": "c9106101e7a5ca503b8dff4e6b2ef6d82b6685f8d5c41643a02677ca68f8aa9f"
+  },
+  "registrations": [
+    {
+      "from": 175,
+      "to": 178,
+      "delta": [
+        118,
+        3
+      ],
+      "patches": [
+        {
+          "delta": [
+            118,
+            3
+          ],
+          "mae_rgb": 4.307292,
+          "runner_up_mae_rgb": 14.744792,
+          "patch": [
+            23,
+            67,
+            31,
+            75
+          ]
+        },
+        {
+          "delta": [
+            118,
+            3
+          ],
+          "mae_rgb": 5.52381,
+          "runner_up_mae_rgb": 19.809524,
+          "patch": [
+            38,
+            78,
+            45,
+            85
+          ]
+        }
+      ]
+    },
+    {
+      "from": 178,
+      "to": 180,
+      "delta": [
+        44,
+        86
+      ],
+      "patches": [
+        {
+          "delta": [
+            44,
+            86
+          ],
+          "mae_rgb": 4.380208,
+          "runner_up_mae_rgb": 13.338542,
+          "patch": [
+            25,
+            60,
+            33,
+            68
+          ]
+        },
+        {
+          "delta": [
+            44,
+            86
+          ],
+          "mae_rgb": 3.054422,
+          "runner_up_mae_rgb": 13.653061,
+          "patch": [
+            27,
+            49,
+            34,
+            56
+          ]
+        }
+      ]
+    }
+  ],
+  "geometry": "provisional",
+  "limits": [
+    "Covered sky and recording header estimated; terrain restored through measured transforms",
+    "Fourth guard uses the existing video-derived guard sprite and provisional patrol/combat",
+    "Lever remains scenery; its activation, thorn barrier and following route are pending"
+  ]
+}

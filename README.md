@@ -3,9 +3,9 @@
 **🚧 WORK IN PROGRESS — Ricostruzione ancora in sviluppo.**
 
 <!-- PROJECT_PROGRESS -->
-![Avanzamento complessivo stimato: 13.5%](docs/progress.svg)
+![Avanzamento complessivo stimato: 14.5%](docs/progress.svg)
 
-**Progetto completo: circa 13.5%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
+**Progetto completo: circa 14.5%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
 <!-- /PROJECT_PROGRESS -->
 
 ![Anteprima degli asset attualmente integrati](previews/readme_frontend.png)
@@ -16,7 +16,9 @@ An ongoing reconstruction of Lady Sia 2: Sword of Sia for Game Boy Advance, base
 
 The current build includes a partial reconstruction of World 1 with controllable gameplay, collisions, pickups, damage, falling and game over. Levels, sprite and scenery animations, and the original interface are still being reconstructed and refined. This project is incomplete and does not represent the finished original game.
 
-Latest playable change: W1L1 now has twelve linked partial viewports, three prototype guards and five gems. Continue LEFT past the ramp island, jump the next gap to the opposite island, and use UP+A for its provisional high ledge. Jump RIGHT to return to the ramp. Island geometry and covered sky remain provisional; the visible gems, flying enemy and next lever view remain unfinished. [Implementation and local checks](references/ISLAND_GAP_STATUS.md).
+Latest playable change: W1L1 now has fourteen linked partial viewports, four independent prototype guards and five gems. From the high ledge after the island gap, continue LEFT into two new views of the lever area. Fight the fourth guard, return RIGHT and revisit without respawning defeated guards or collected gems. The lever remains inactive; the thorn barrier and following route are pending. Geometry, patrols and covered scenery remain provisional. [Implementation and local checks](references/LEVER_ROUTE_STATUS.md).
+
+![Native ROM: lever area, fourth guard, return and revisit](previews/lever_route_gameplay.gif)
 
 ![Native ROM: next island gap, high ledge and return](previews/island_gap_gameplay.gif)
 

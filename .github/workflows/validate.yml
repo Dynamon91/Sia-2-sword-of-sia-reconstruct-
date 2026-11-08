@@ -33,6 +33,8 @@ jobs:
         run: python3 tools/convert_ramp_route.py --check
       - name: Verify connected island gap background and registration
         run: python3 tools/convert_island_gap.py --check
+      - name: Verify lever-area backgrounds and measured portals
+        run: python3 tools/convert_lever_route.py --check
       - name: Audit animation palette and foot anchors
         run: |
           python3 tools/convert_jump.py

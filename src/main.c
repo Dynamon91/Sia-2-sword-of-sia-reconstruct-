@@ -9,7 +9,7 @@ static const char save_type[] __attribute__((used))="SRAM_V113";
 #include "../assets/assets.h"
 #include "../assets/room.h"
 #include "../assets/ui.h"
-extern const unsigned char island_gap_background[];
+extern const unsigned char island_gap_background[],lever_entry_background[],lever_room_background[];
 extern const unsigned char continuation_background[],bridge_run_background[],riser_background[],upper_background[],ui_digit5_tiles[];
 extern const unsigned char ramp_lower_background[],ramp_upper_background[];
 extern const unsigned char cliff_background[],guard_background[],guard_sprite[];
@@ -184,7 +184,7 @@ static void draw_level(void){
  const unsigned char *background=game.area?bridge_backdrop:room_backdrop;
  const unsigned char *spans=game.area?bridge_spans:room_spans;
  int shift=-game.camera_y;
- if(game.area==11)image(island_gap_background);else if(game.area==10)image(ramp_upper_background);else if(game.area==9)image(ramp_lower_background);else if(game.area==8)image(upper_background);else if(game.area==7)image(riser_background);else if(game.area==6)image(bridge_run_background);else if(game.area==5)image(continuation_background);else if(game.area==4)image(gap_background);else if(game.area==3)image(guard_background);else if(game.area==2)image(cliff_background);else image(background);
+ if(game.area==13)image(lever_room_background);else if(game.area==12)image(lever_entry_background);else if(game.area==11)image(island_gap_background);else if(game.area==10)image(ramp_upper_background);else if(game.area==9)image(ramp_lower_background);else if(game.area==8)image(upper_background);else if(game.area==7)image(riser_background);else if(game.area==6)image(bridge_run_background);else if(game.area==5)image(continuation_background);else if(game.area==4)image(gap_background);else if(game.area==3)image(guard_background);else if(game.area==2)image(cliff_background);else image(background);
  if(game.area<2)draw_clouds(cloud_phase(game.ticks));
  for(int row=0;row<160-shift&&game.area<2;row++){
   unsigned count=spans[0]|((unsigned)spans[1]<<8);spans+=2;
@@ -215,6 +215,8 @@ static void draw_level(void){
   sprite(game.enemy2_x/FP+9-15-(game.area==5?188:0),98-51+(game.area==5?25:0),34,55,guard2_sprite,game.enemy2_dir>0);
  if((game.area==6||game.area==7)&&game.enemy3_hp&&(!game.enemy3_flash||(game.enemy3_flash&2)))
   sprite(game.enemy3_x/FP+9-20-(game.area==7?168:0),104-55+(game.area==7?7:0),41,60,guard_sprite,game.enemy3_dir>0);
+ if((game.area==12||game.area==13)&&game.enemy4_hp&&(!game.enemy4_flash||(game.enemy4_flash&2)))
+  sprite(game.enemy4_x/FP+9-15+(game.area==13?44:0),63-51+(game.area==13?86:0),34,55,guard2_sprite,game.enemy4_dir>0);
  unsigned air=game_air_frame(&game);
  const unsigned char *actor=room_sprites;
  int width=48,height=56,anchor=24;
@@ -378,6 +380,7 @@ int main(void){
   debug[28]=game_walk_frame(&game);debug[29]=game.attack?game_attack_frame(&game):3;debug[30]=(unsigned)game.enemy2_hp;
   debug[35]=game_air_frame(&game);debug[36]=(unsigned)game.vy;debug[37]=(unsigned)game.facing;
   debug[38]=(unsigned)game.enemy3_hp;debug[39]=(unsigned)game.enemy3_x;
+  debug[40]=(unsigned)game.enemy4_hp;debug[41]=(unsigned)game.enemy4_x;
   if(dirty)render();else wait_frame();
  }
 }
