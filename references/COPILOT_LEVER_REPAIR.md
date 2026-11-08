@@ -1,37 +1,49 @@
-# Ripristino del motore e prototipo leva/barriera
+# Leva: ripristino del motore e allineamento al riferimento
+
+## Stato attuale
+
+Il motore completo è ripristinato. B attiva lo stato della leva soltanto a
+terra e vicino alla leva visibile, non più nella zona vuota d'ingresso.
+Il punto osservato è approssimativamente (29,63) nella vista 12 e (73,149)
+nella vista 13. Le due proiezioni concordano con la traslazione misurata
+(+44,+86) di assets/lever_route_manifest.json. Le coordinate sono una scelta
+manuale sul riferimento; il raggio di interazione di 24 pixel è provvisorio.
+I fotogrammi originali sono reference/w1l1_next/178.png e 180.png.
+
+Viene rimosso il limite invisibile a x=130 dell'area 12 introdotto dal prototipo
+Copilot: impediva di raggiungere la leva prima dell'apertura e non deriva
+dal terreno osservato. Il portale 12→13 è nuovamente percorribile senza
+attivazione. La parete rocciosa sinistra dell'area 13 resta solida.
+
+Lo stato lever_activated/barrier_open sopravvive a morte e rivisita, mentre R
+lo cancella insieme alla partita. barrier_open rappresenta soltanto lo stato
+logico futuro: non dimostra una barriera fisica originale integrata.
+Non sono implementati animazione originale, barriera mobile di spine e
+percorso successivo. I pixel della leva nel fondale restano statici.
+Nessun nuovo livello è completo e la stima resta al 14,5%.
+
+## Verifiche
+
+I test controllano la raggiungibilità prima dell'attivazione, entrambe le
+proiezioni della leva, pressione nuova di B, pulsante già mantenuto, azioni
+lontane o aeree, ritorni, morte/reset, guardia e gemme persistenti.
+La regressione mGBA raggiunge le due viste con i pulsanti, sconfigge la guardia,
+si avvicina alla leva visibile e preme B. Legge telemetria di sola osservazione
+per verificare attivazione e conservazione dopo il ritorno; non scrive coordinate.
+
+## Cronologia
 
 Il commit eadca9a aveva sostituito src/game.c con sole due funzioni statiche.
-Il motore completo viene ripristinato dal suo genitore, mantenendo lo stato
-persistente aggiunto al ramo di lavoro.
+Il ripristino f76b989 ha riabilitato il motore e corretto la pressione di B.
+Il checkpoint a9ce7fd superava i test ma manteneva una zona di interazione
+e un limite d'ingresso provvisori non allineati alla leva originale.
+Questo aggiornamento sostituisce quel comportamento e i relativi test.
+I risultati GitHub di quel checkpoint non vengono attribuiti alla nuova ROM.
 
-La pressione di B viene calcolata una sola volta in game_step e passata alla
-leva. Un pulsante già tenuto premuto non attiva la leva quando si entra nella
-zona; salto e direzioni non la attivano. Il limite chiuso dell'area 12 risolve
-l'attraversamento a x=130 in coordinate subpixel, senza riportare indietro
-un personaggio già dall'altro lato. La leva è raggiungibile prima del limite.
-Attivazione e apertura sopravvivono alla morte e alla rivisita; R cancella
-lo stato insieme al resto della partita.
+## Risultati locali dell'allineamento
 
-Questa è una riparazione del prototipo del ramo Copilot: posizione della zona
-d'interazione e limite della barriera sono provvisori. Non sono stati recuperati
-animazione della leva, grafica mobile della barriera o comportamento originale.
-I fondali restano statici in questi elementi. Non viene aggiunto un livello né
-incrementata la stima complessiva del 14,5%.
-
-I test C coprono limite chiuso, attivazione, apertura, ritorno, rivisita,
-morte/reset, pulsanti mantenuti, azioni fuori zona e assenza di riposizionamento
-dal lato opposto. La regressione mGBA usa i pulsanti per raggiungere il limite
-chiuso, premere B e attraversare prima di verificare guardia e ritorni.
-I risultati eseguiti sono riportati nel messaggio di consegna; nessun collaudo
-hardware viene dichiarato.
-
-## Risultati locali
-
-Quindici programmi C passano con AddressSanitizer e UndefinedBehaviorSanitizer;
-quattro test Python passano. Atlante riproducibile verificato. ROM compilata
-con GCC ARM 13.2.1; suite mGBA 0.10.2 e riapertura SRAM superate.
-Sono osservati 5.060 aggiornamenti presentati su 5.060 fotogrammi attivi
-nelle aree 1–13 della sequenza provata. Le otto animazioni sono riesportate
-dai framebuffer nativi senza alterarne i pixel.
-SHA-256 ROM: 3e8d63c3a05d0f3250666136b58b61ca1fc512c5c6b202fc9d021394f7ad6711.
-Questi risultati sono locali, non risultati GitHub CI.
+Quindici test C con ASan/UBSan e quattro test Python superati. Atlante
+riproducibile verificato e ROM compilata con GCC ARM 13.2.1. La regressione
+mGBA 0.10.2 termina con successo: 5.176 aggiornamenti presentati in 5.176
+fotogrammi attivi delle aree 1–13. Anche la riapertura SRAM con nuovi core passa.
+Nessuna verifica su hardware reale viene dichiarata.

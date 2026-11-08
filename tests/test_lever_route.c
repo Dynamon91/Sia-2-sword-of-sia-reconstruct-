@@ -3,33 +3,34 @@
 #include <stdio.h>
 static void at(Game *g,int area,int x,int y){game_reset(g);g->area=area;g->progress.area=(unsigned)area;g->x=x*FP;g->y=y*FP;}
 static void test_lever_input_edges(void){
- Game g;at(&g,12,142,23);g.grounded=1;g.previous=ATTACK;
- game_step(&g,ATTACK);assert(!g.progress.barrier_open);
- game_step(&g,0);game_step(&g,UP);assert(!g.progress.barrier_open);
- game_step(&g,0);game_step(&g,JUMP);assert(!g.progress.barrier_open);
- at(&g,12,180,23);g.grounded=1;game_step(&g,ATTACK);assert(!g.progress.barrier_open);
- at(&g,12,142,0);game_step(&g,ATTACK);assert(!g.progress.barrier_open);
- at(&g,12,142,23);g.grounded=1;game_step(&g,ATTACK);assert(g.progress.barrier_open);
- game_step(&g,ATTACK);assert(g.progress.barrier_open);
- at(&g,12,100,23);g.grounded=1;game_step(&g,LEFT);assert(g.x<100*FP);
+ Game g;at(&g,13,73,109);g.grounded=1;g.previous=ATTACK;
+ game_step(&g,ATTACK);assert(!g.progress.lever_activated);
+ game_step(&g,0);game_step(&g,UP);assert(!g.progress.lever_activated);
+ game_step(&g,0);game_step(&g,JUMP);assert(!g.progress.lever_activated);
+ at(&g,13,130,109);g.grounded=1;game_step(&g,ATTACK);assert(!g.progress.lever_activated);
+ at(&g,13,73,70);game_step(&g,ATTACK);assert(!g.progress.lever_activated);
+ /* The former invisible entry trigger must no longer activate anything. */
+ at(&g,12,142,23);g.grounded=1;game_step(&g,ATTACK);assert(!g.progress.lever_activated);
+ at(&g,13,73,109);g.grounded=1;game_step(&g,ATTACK);assert(g.progress.lever_activated);
+ game_step(&g,ATTACK);assert(g.progress.lever_activated);
+ /* Both captured projections identify the same switch in shared coordinates. */
+ at(&g,12,29,23);g.grounded=1;game_step(&g,ATTACK);assert(g.progress.lever_activated);
 }
 static void test_lever_barrier(void){
  Game g;at(&g,12,142,23);
  assert(!g.progress.lever_activated&&!g.progress.barrier_open);
- /* The closed barrier stops the area-12 portal from being crossed. */
- for(int i=0;i<32&&g.x>130*FP;i++)game_step(&g,LEFT);
- assert(g.area==12&&g.x>=130*FP);
- /* The reachable lever is just before the barrier; B interacts once per press. */
+ /* Reach the original switch before opening anything; no invented entry gate. */
+ for(int i=0;i<40&&g.area!=13;i++)game_step(&g,LEFT);
+ assert(g.area==13&&!g.progress.lever_activated);
+ /* Neutralize only the guard in this interaction fixture; combat is checked below. */
+ g.enemy4_hp=0;
+ while(g.x>80*FP)game_step(&g,LEFT);
  game_step(&g,0);game_step(&g,ATTACK);
  assert(g.progress.lever_activated&&g.progress.barrier_open);
- for(int i=0;i<40&&g.area!=13;i++)game_step(&g,LEFT);
- assert(g.area==13);
- /* Return, revisit, and cross again without losing the run state. */
- for(int i=0;i<40&&g.area!=12;i++)game_step(&g,RIGHT);
+ for(int i=0;i<100&&g.area!=12;i++)game_step(&g,RIGHT);
  assert(g.area==12&&g.progress.lever_activated&&g.progress.barrier_open);
  for(int i=0;i<40&&g.area!=13;i++)game_step(&g,LEFT);
- assert(g.area==13);
- /* Death/respawn keeps the switch state; run reset deliberately clears it. */
+ assert(g.area==13&&g.progress.lever_activated);
  g.x=210*FP;g.y=109*FP;g.grounded=1;game_step(&g,0);game_step(&g,RIGHT|JUMP);
  for(int i=0;i<200&&!g.falls;i++)game_step(&g,RIGHT);
  assert(g.falls==1&&g.area==13&&g.lives==2);
@@ -68,5 +69,5 @@ int main(void){
  at(&g,12,151,23);game_step(&g,LEFT|RIGHT);assert(g.area==12);
  at(&g,13,177,109);game_step(&g,LEFT|RIGHT);assert(g.area==13);
  game_step(&g,RESET);assert(g.area==0&&g.enemy4_hp==2&&g.progress.defeated==0);
- puts("PASS lever route and barrier: closed gate, interaction, open traversal, revisits, death persistence, reset, fourth guard and gem persistence");
+ puts("PASS lever route and barrier: reference-aligned switch, accessible approach, logical gate state, revisits, death persistence, reset, fourth guard and gem persistence");
 }

@@ -658,13 +658,7 @@ int main(int argc,char **argv){
   if(value(c,17)!=area){
    assert((int)value(c,8)-x==(area==11?118:44)*FP-320);
    assert((int)value(c,9)-y==(area==11?3:86)*FP);lever_crossed++;
-   if(value(c,17)==12){
-    capture(c,"build/lever_entry.ppm");
-    /* Closed gate is reached using input, then B opens the provisional switch. */
-    c->setKeys(c,32);run(c,16);
-    assert(value(c,17)==12&&(int)value(c,8)==130*FP);
-    c->setKeys(c,0);run(c,2);tap(c,2);c->setKeys(c,32);
-   }
+   if(value(c,17)==12)capture(c,"build/lever_entry.ppm");
   }
  }
  c->setKeys(c,0);run(c,4);assert(value(c,17)==13&&lever_crossed==2&&value(c,14));
@@ -674,6 +668,12 @@ int main(int argc,char **argv){
  c->setKeys(c,0);run(c,4);
  assert(!value(c,40)&&value(c,26)==4&&value(c,10)==5&&value(c,31)==upper_lives);
  capture(c,"build/lever_guard_defeated.ppm");
+ assert(!value(c,42)&&!value(c,43));
+ move_to(c,32,80);c->setKeys(c,0);run(c,2);tap(c,2);
+ assert(value(c,17)==13&&value(c,42)&&value(c,43));
+ capture(c,"build/lever_activated.ppm");
+ /* Preserve the existing return-route timing after checking the actual switch. */
+ move_to(c,16,150);c->setKeys(c,0);run(c,2);
  tap(c,8);state(c,8);unsigned lever_tick=value(c,16);run(c,30);assert(value(c,16)==lever_tick);
  capture(c,"build/lever_pause.ppm");tap(c,1);state(c,7);
  c->setKeys(c,16);
@@ -683,7 +683,7 @@ int main(int argc,char **argv){
  assert(value(c,31)==upper_lives&&value(c,18)==upper_falls);capture(c,"build/lever_return.ppm");
  c->setKeys(c,32);for(int i=0;i<80&&value(c,17)!=13;i++)run(c,1);
  c->setKeys(c,0);run(c,4);assert(value(c,17)==13&&!value(c,40)&&value(c,26)==4);
- capture(c,"build/lever_revisit.ppm");
+ assert(value(c,42)&&value(c,43));capture(c,"build/lever_revisit.ppm");
  FILE *lever_count=fopen("build/lever_route_sequence/frame_count.txt","w");assert(lever_count);
  fprintf(lever_count,"%u\n",sequence_frame);fclose(lever_count);
  sequence_dir=NULL;

@@ -201,16 +201,14 @@ static void guard_step(Game *g){
   }
   if(vertical&&px+PLAYER_W>ex&&px<ex+18)game_damage(g,1);
 }
-/* Provisional entry-view interaction; original switch animation is not recovered. */
+/* The same observed switch is (29,63) in view 12 and (73,149) in view 13.
+   Interaction radius is provisional; the captured switch pixels are unchanged. */
 static void lever_step(Game *g,unsigned pressed){
- if(g->area==12 && !g->progress.lever_activated && g->grounded &&
-    g->x>=130*FP && g->x<=170*FP && g->y>=18*FP && g->y<=40*FP &&
-    (pressed&ATTACK))level_set_lever_state(&g->progress,1);
-}
-static void barrier_step(Game *g,int old_x){
- if(g->area!=12 || g->progress.barrier_open)return;
- /* Resolve the crossed face in subpixels; do not teleport from the other side. */
- if(old_x>=130*FP && g->x<130*FP){g->x=130*FP;g->vx=0;}
+ if((g->area!=12&&g->area!=13)||!g->grounded||!(pressed&ATTACK))return;
+ int cx=g->x+PLAYER_W*FP/2,feet=g->y+PLAYER_H*FP;
+ if(g->area==12){cx+=44*FP;feet+=86*FP;}
+ if(cx>=49*FP&&cx<=97*FP&&feet>=141*FP&&feet<=157*FP)
+  level_set_lever_state(&g->progress,1);
 }
 void game_step(Game *g,unsigned input){
   if(input&RESET){
@@ -261,7 +259,6 @@ void game_step(Game *g,unsigned input){
     g->x=(p->x+p->w)*FP;g->vx=0;
    }
   }
-  barrier_step(g,old_x);
   if(g->x<0)g->x=0;
   if(g->x>(WORLD_W-PLAYER_W)*FP)g->x=(WORLD_W-PLAYER_W)*FP;
   /* Drive running from actual movement after collision, not held input. */
@@ -351,7 +348,7 @@ void game_step(Game *g,unsigned input){
    g->area=12;g->progress.area=12;g->x+=118*FP;g->y+=3*FP;camera(g);
   }else if(g->area==12&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=150*FP&&g->grounded){
    g->area=11;g->progress.area=11;g->x-=118*FP;g->y-=3*FP;camera(g);
-  }else if(g->area==12&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=130*FP&&g->grounded&&g->progress.barrier_open){
+  }else if(g->area==12&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=130*FP&&g->grounded){
    g->area=13;g->progress.area=13;g->x+=44*FP;g->y+=86*FP;camera(g);
   }else if(g->area==13&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=176*FP&&g->grounded){
    g->area=12;g->progress.area=12;g->x-=44*FP;g->y-=86*FP;camera(g);

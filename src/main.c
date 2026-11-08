@@ -449,6 +449,7 @@ int main(void){
   debug[35]=game_air_frame(&game);debug[36]=(unsigned)game.vy;debug[37]=(unsigned)game.facing;
   debug[38]=(unsigned)game.enemy3_hp;debug[39]=(unsigned)game.enemy3_x;
   debug[40]=(unsigned)game.enemy4_hp;debug[41]=(unsigned)game.enemy4_x;
+  debug[42]=game.progress.lever_activated;debug[43]=game.progress.barrier_open;
   if(dirty)render();else wait_frame();
  }
 }
