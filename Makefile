@@ -61,3 +61,5 @@ test: | build
 clean:
 	rm -rf build
 .PHONY: all test clean
+
+build/assets.o: assets/lever_lowered.bin

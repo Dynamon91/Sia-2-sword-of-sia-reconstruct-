@@ -1,0 +1,55 @@
+{
+  "video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "source_seconds": 182,
+  "source_sha256": "2a65218cae5e124fad0d3b1ca5406b33821a85bd6a1b055013bfc040a1eb54a3",
+  "atlas_sha256": "057e8b0e496181d6e5a9c9825402d89da3fb0b4f3ee25f3614fb61ddf2ace50f",
+  "registrations": [
+    {
+      "delta": [
+        -1,
+        0
+      ],
+      "mae_rgb": 8.529167,
+      "runner_up_mae_rgb": 34.333333,
+      "patch": [
+        65,
+        139,
+        73,
+        149
+      ]
+    },
+    {
+      "delta": [
+        -1,
+        0
+      ],
+      "mae_rgb": 6.945578,
+      "runner_up_mae_rgb": 18.972789,
+      "patch": [
+        107,
+        132,
+        114,
+        139
+      ]
+    }
+  ],
+  "area": 13,
+  "destination": [
+    64,
+    104,
+    40,
+    44
+  ],
+  "source_crop": [
+    63,
+    104,
+    103,
+    148
+  ],
+  "opaque_pixels": 362,
+  "limits": [
+    "Two visual states only; original intermediate rotation timing is not recovered",
+    "Manual handle masks; hidden sky is interpolated from the current atlas edges to avoid cloud-frame seams",
+    "Palette quantization and one-pixel registration; physical thorn barrier remains pending"
+  ]
+}

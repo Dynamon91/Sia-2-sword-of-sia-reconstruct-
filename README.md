@@ -3,9 +3,9 @@
 **🚧 WORK IN PROGRESS — Ricostruzione ancora in sviluppo.**
 
 <!-- PROJECT_PROGRESS -->
-![Avanzamento complessivo stimato: 14.5%](docs/progress.svg)
+![Avanzamento complessivo stimato: 14.75%](docs/progress.svg)
 
-**Progetto completo: circa 14.5%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
+**Progetto completo: circa 14.75%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
 <!-- /PROJECT_PROGRESS -->
 
 ![Anteprima degli asset attualmente integrati](previews/readme_frontend.png)
@@ -47,3 +47,11 @@ Three observed jump poses follow rising, the apex and falling. The complete swor
 Jump to catch the first-room rock ledges, then press Up/A to pull up or Down to let go. Four video-derived poses are integrated and tested. [Details and limits](references/LEDGE_STATUS.md).
 
 ![Ledge catch and pull-up recorded in mGBA](previews/ledge_gameplay.gif)
+
+### Leva: riscontro visivo recuperato
+
+B vicino alla leva visibile cambia tra le pose alzata e abbassata. La posa
+abbassata deriva dal video originale a 182 s; la rotazione intermedia e
+la barriera mobile restano incomplete. [Provenienza e verifiche](references/LEVER_VISUAL_STATUS.md).
+
+![Posa abbassata nella ROM](previews/lever_lowered.png)

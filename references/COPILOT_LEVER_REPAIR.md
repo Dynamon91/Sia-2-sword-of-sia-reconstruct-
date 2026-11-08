@@ -18,9 +18,10 @@ attivazione. La parete rocciosa sinistra dell'area 13 resta solida.
 Lo stato lever_activated/barrier_open sopravvive a morte e rivisita, mentre R
 lo cancella insieme alla partita. barrier_open rappresenta soltanto lo stato
 logico futuro: non dimostra una barriera fisica originale integrata.
-Non sono implementati animazione originale, barriera mobile di spine e
-percorso successivo. I pixel della leva nel fondale restano statici.
-Nessun nuovo livello è completo e la stima resta al 14,5%.
+La posa abbassata osservata nel video è ora sovrapposta al fondale quando
+la leva è attiva: vedere LEVER_VISUAL_STATUS.md. Rotazione intermedia,
+barriera mobile di spine e percorso successivo restano incompleti.
+Nessun nuovo livello è completo; stima complessiva aggiornata al 14,75%.
 
 ## Verifiche
 

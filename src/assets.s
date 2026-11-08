@@ -186,3 +186,8 @@ scroll_world_sky:
 .global scroll_cloud
 scroll_cloud:
 .incbin "assets/scroll_cloud.bin"
+
+.balign 4
+.global lever_lowered
+lever_lowered:
+.incbin "assets/lever_lowered.bin"

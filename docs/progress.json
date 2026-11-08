@@ -34,8 +34,8 @@
     {
       "name": "Fedeltà visiva, interfaccia, animazioni e audio",
       "weight": 15,
-      "earned": 0,
-      "evidence": "Tre pose aeree, quattro di presa/risalita e scorrimento delle nuvole nelle prime due aree integrati e verificati; ciclo originale delle nuvole, altre animazioni, interfaccia e audio ancora parziali."
+      "earned": 0.25,
+      "evidence": "Pose aeree/risalita e nuvole già integrate; posa abbassata della leva recuperata dal video a 182 s e verificata pixel per pixel nella ROM. Rotazione intermedia, barriera mobile, altre animazioni, interfaccia e audio ancora incompleti."
     },
     {
       "name": "Riferimenti, validazione e consegna finale",

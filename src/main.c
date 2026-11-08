@@ -33,6 +33,7 @@ static u16 object_shadow[128*4];
 static Game game;
 static ViewCamera view_camera;
 static int sprite_dx,sprite_dy;
+extern const unsigned char lever_lowered[];
 extern const unsigned char scroll_world[],scroll_world_sky[],scroll_cloud[];
 static const u16 lab_palette[256]={
  RGB(3,5,10),RGB(8,12,18),RGB(10,18,19),RGB(25,21,12),RGB(23,10,15),RGB(30,29,24),
@@ -261,6 +262,7 @@ static void entity_origin(unsigned area){sprite_dx=view_camera.x/FP-view_origin[
 static void draw_level(void){
  unsigned profile_start=REG16(0x0400010C);
  draw_world();
+ if(game.progress.lever_activated){entity_origin(13);sprite(64,104,40,44,lever_lowered,0);}
  (*(volatile unsigned*)0x0203F0C8)=(u16)(REG16(0x0400010C)-profile_start);
  for(unsigned i=0;i<GEM_COUNT;i++){
   const Gem *gem=&level_gems[i];

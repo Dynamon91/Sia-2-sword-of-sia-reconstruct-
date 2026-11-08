@@ -100,6 +100,18 @@ static void check_world_background(struct mCore *c){
  }
  assert(checked>10000);
 }
+static void check_lowered_lever(struct mCore *c){
+ unsigned char patch[40*44];FILE *f=fopen("assets/lever_lowered.bin","rb");assert(f);
+ assert(fread(patch,1,sizeof(patch),f)==sizeof(patch));fclose(f);
+ int dx=(int)shown(c,15)/FP-view_origin[13][0],dy=(int)shown(c,16)/FP-view_origin[13][1];
+ unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000,checked=0;
+ for(int y=0;y<44;y++)for(int x=0;x<40;x++){
+  int sx=64+x+dx,sy=104+y+dy;unsigned p=patch[y*40+x];
+  if(!p||sx<0||sx>=240||sy<0||sy>=160)continue;
+  assert(c->busRead8(c,base+(unsigned)sy*240+(unsigned)sx)==p);checked++;
+ }
+ assert(checked>50);
+}
 static void tap(struct mCore *c,unsigned key){c->setKeys(c,key);run(c,8);c->setKeys(c,0);run(c,8);}
 static void capture(struct mCore *c,const char *name){
  const void *pixels;size_t stride;c->getPixels(c,&pixels,&stride);
@@ -674,6 +686,8 @@ int main(int argc,char **argv){
  capture(c,"build/lever_activated.ppm");
  /* Preserve the existing return-route timing after checking the actual switch. */
  move_to(c,16,150);c->setKeys(c,0);run(c,2);
+ check_lowered_lever(c);capture(c,"build/lever_lowered.ppm");
+ puts("PASS lever visual integration: observed lowered handle matches ROM framebuffer after B and shared-world projection");
  tap(c,8);state(c,8);unsigned lever_tick=value(c,16);run(c,30);assert(value(c,16)==lever_tick);
  capture(c,"build/lever_pause.ppm");tap(c,1);state(c,7);
  c->setKeys(c,16);
