@@ -41,3 +41,7 @@ attribuito preventivamente al nuovo checkpoint.
 L'anteprima è una tavola di riferimenti video, non una cattura di nuova build.
 Mostra solo le righe 46–159 per escludere banner e avatar della registrazione.
 I riferimenti integrali restano immutati per conservare misure e provenienza.
+
+Aggiornamento successivo: il raccordo verificato 180→183 è ora usato per
+la prima vista parziale giocabile del bordo. Vedere POST_LEVER_EDGE_STATUS.md.
+Il raccordo respinto verso 185 s non viene usato per inventare il seguito.

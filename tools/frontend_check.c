@@ -62,7 +62,7 @@ static void state(struct mCore *c,unsigned expected){
  assert(value(c,0)==expected);
 }
 static void check_world_background(struct mCore *c){
- static unsigned char world[810000],clouds[25600],sky[2][80][240];static int loaded;
+ static unsigned char world[810000],clouds[25600],sky[2][80][240],lever_patch[40*44];static int loaded;
  if(!loaded){
   FILE *atlas=fopen("assets/scroll_world.bin","rb");assert(atlas);assert(fread(world,1,sizeof(world),atlas)==sizeof(world));fclose(atlas);
   FILE *f=fopen("assets/cloud_strip.bin","rb");assert(f);assert(fread(clouds,1,25600,f)==25600);fclose(f);
@@ -70,7 +70,7 @@ static void check_world_background(struct mCore *c){
   for(unsigned a=0;a<2;a++)for(unsigned y=0;y<80;y++){
    fseek(f,(a*80+y)*2,SEEK_SET);unsigned off=(unsigned)fgetc(f);off|=(unsigned)fgetc(f)<<8;fseek(f,(long)off,SEEK_SET);int count=fgetc(f);
    for(int i=0;i<count;i++){int x=fgetc(f),n=fgetc(f);while(n--)sky[a][y][x++]=1;}
-  }fclose(f);loaded=1;
+  }fclose(f);f=fopen("assets/lever_lowered.bin","rb");assert(f);assert(fread(lever_patch,1,sizeof(lever_patch),f)==sizeof(lever_patch));fclose(f);loaded=1;
  }
  int cx=(int)shown(c,15)/FP,cy=(int)shown(c,16)/FP,px=(int)shown(c,1)/FP,py=(int)shown(c,2)/FP-(int)shown(c,3);
  unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000,checked=0;
@@ -93,6 +93,10 @@ static void check_world_background(struct mCore *c){
    if(sx<0||sx>=240||sy<0||sy>=160)continue;
    if(a<2&&sy<80&&sky[a][sy][sx])expected=clouds[sy*320+(shown(c,12)+(unsigned)sx)%320];
    break;
+  }
+  int lx=x-cx+view_origin[13][0],ly=y-cy+view_origin[13][1];
+  if(value(c,42)&&lx>=64&&lx<104&&ly>=104&&ly<148){
+   unsigned p=lever_patch[(ly-104)*40+lx-64];if(p)expected=(int)p;
   }
   unsigned actual=c->busRead8(c,base+(unsigned)y*240+(unsigned)x);
   if(actual!=(unsigned)expected)fprintf(stderr,"World pixel mismatch at %d,%d camera %d,%d: %u != %d\n",x,y,cx,cy,actual,expected);
@@ -287,6 +291,7 @@ int main(int argc,char **argv){
  assert(!mkdir("build/ramp_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/island_gap_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/lever_route_sequence",0777)||errno==EEXIST);
+ assert(!mkdir("build/post_lever_sequence",0777)||errno==EEXIST);
  mLogSetDefaultLogger(&test_logger);
  assert(argc==2);struct mCore *c=mCoreFind(argv[1]);assert(c&&c->init(c));mCoreInitConfig(c,NULL);
  color_t *pixels=calloc(240*160,sizeof(color_t));assert(pixels);c->setVideoBuffer(c,pixels,240);
@@ -688,6 +693,30 @@ int main(int argc,char **argv){
  move_to(c,16,150);c->setKeys(c,0);run(c,2);
  check_lowered_lever(c);capture(c,"build/lever_lowered.ppm");
  puts("PASS lever visual integration: observed lowered handle matches ROM framebuffer after B and shared-world projection");
+ void *edge_before=malloc(c->stateSize(c));assert(edge_before&&c->saveState(c,edge_before));
+ const char *edge_previous_sequence=sequence_dir;unsigned edge_previous_frame=sequence_frame;
+ sequence_dir="build/post_lever_sequence";sequence_frame=0;
+ move_to(c,16,170);c->setKeys(c,0);run(c,2);
+ c->setKeys(c,17);for(int i=0;i<80&&value(c,17)!=14;i++)run(c,1);
+ assert(value(c,17)==14);c->setKeys(c,0);run(c,100);
+ assert(value(c,17)==14&&value(c,14)&&(int)value(c,9)==(game_extension_floor(14,(int)value(c,8)/FP)-PLAYER_H)*FP);
+ assert(value(c,31)==upper_lives&&value(c,18)==upper_falls&&value(c,42));
+ check_world_background(c);capture(c,"build/post_lever_entry.ppm");
+ tap(c,8);state(c,8);unsigned edge_tick=value(c,16);run(c,20);assert(value(c,16)==edge_tick);
+ tap(c,1);state(c,7);
+ c->setKeys(c,16);for(int i=0;i<160&&value(c,18)==upper_falls;i++)run(c,1);
+ c->setKeys(c,0);run(c,4);
+ assert(value(c,17)==14&&value(c,31)==upper_lives-1&&value(c,18)==upper_falls+1);
+ assert(value(c,42)&&value(c,43)&&value(c,10)==5&&!value(c,40)&&value(c,26)==4);
+ capture(c,"build/post_lever_respawn.ppm");
+ c->setKeys(c,32);for(int i=0;i<80&&value(c,17)!=13;i++)run(c,1);
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==13&&value(c,14)&&value(c,42));
+ capture(c,"build/post_lever_return.ppm");
+ FILE *edge_count=fopen("build/post_lever_sequence/frame_count.txt","w");assert(edge_count);
+ fprintf(edge_count,"%u\n",sequence_frame);fclose(edge_count);
+ sequence_dir=NULL;assert(c->loadState(c,edge_before));free(edge_before);
+ sequence_dir=edge_previous_sequence;sequence_frame=edge_previous_frame;
+ puts("PASS post-lever edge integration: fifteenth partial view reached by jumping, world-pixel check, pause, input-only pit respawn, return and persistent switch/gems/defeats");
  tap(c,8);state(c,8);unsigned lever_tick=value(c,16);run(c,30);assert(value(c,16)==lever_tick);
  capture(c,"build/lever_pause.ppm");tap(c,1);state(c,7);
  c->setKeys(c,16);
@@ -809,7 +838,7 @@ int main(int argc,char **argv){
  c->setKeys(c,2);run(c,2);assert(value(c,29)==0);
  c->setKeys(c,0);run(c,20);
  puts("PASS reset input integration: held A/B across R reset remain idle; release and fresh press restore jump and attack");
- assert((scroll_portals&0x3F80u)==0x3F80u);
+ assert((scroll_portals&0x7F80u)==0x7F80u);
  fprintf(stderr,"Scrolling performance: %u displayed updates in %u active scrolling frames\n",scroll_updates,scroll_frames);
  for(unsigned a=1;a<VIEW_COUNT;a++){
   assert(area_frames[a]>0);
@@ -817,6 +846,6 @@ int main(int argc,char **argv){
   assert(area_updates[a]*100u>=area_frames[a]*90u);
  }
  assert(scroll_updates*100u>=scroll_frames*90u);
- puts("PASS continuous camera integration: bounded six-pixel camera steps across areas 1-13, world-aligned background checks, live controls and pause; no portal-driven camera reset");
+ puts("PASS continuous camera integration: bounded six-pixel camera steps across areas 1-14, world-aligned background checks, live controls and pause; no portal-driven camera reset");
  c->deinit(c);free(pixels);
 }

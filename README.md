@@ -3,9 +3,9 @@
 **🚧 WORK IN PROGRESS — Ricostruzione ancora in sviluppo.**
 
 <!-- PROJECT_PROGRESS -->
-![Avanzamento complessivo stimato: 14.75%](docs/progress.svg)
+![Avanzamento complessivo stimato: 15%](docs/progress.svg)
 
-**Progetto completo: circa 14.75%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
+**Progetto completo: circa 15%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
 <!-- /PROJECT_PROGRESS -->
 
 ![Anteprima degli asset attualmente integrati](previews/readme_frontend.png)
@@ -59,5 +59,15 @@ la barriera mobile restano incomplete. [Provenienza e verifiche](references/LEVE
 ### Preparazione del tratto dopo la leva
 
 [Audit dei raccordi video](references/POST_LEVER_ROUTE_AUDIT.md): quattro
-registrazioni concordi e un raccordo respinto. Nessuna nuova area giocabile
-è dichiarata; la stima resta al 14,75%.
+registrazioni concordi e un raccordo respinto. Il checkpoint di audit non aggiungeva aree. Ora la prima vista del bordo è
+collegata al percorso: vedere [stato giocabile](references/POST_LEVER_EDGE_STATUS.md).
+
+### Primo bordo dopo la leva giocabile
+
+Dalla seconda vista della leva, salta a destra vicino al bordo per raggiungere
+la quindicesima inquadratura parziale. Fermati per atterrare e vai a sinistra
+per tornare. Il vuoto oltre il bordo causa una caduta; il nuovo respawn conserva
+leva, gemme e nemici sconfitti. Soffitto e piano di cammino sono provvisori.
+La striscia con le spine non è ancora integrata.
+
+![Nuovo bordo nella ROM](previews/post_lever_entry.png)

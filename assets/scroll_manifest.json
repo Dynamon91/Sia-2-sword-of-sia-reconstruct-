@@ -13,7 +13,8 @@
     "ramp_upper_background",
     "island_gap_background",
     "lever_entry_background",
-    "lever_room_background"
+    "lever_room_background",
+    "post_lever_background"
   ],
   "origins": [
     [
@@ -71,6 +72,10 @@
     [
       -819,
       380
+    ],
+    [
+      -963,
+      372
     ]
   ],
   "width": 1500,
@@ -90,9 +95,10 @@
     "ramp_upper_background": "7def88b6a43865aed71975cc774c2a912d9416f79c61b3b4f32e146aa078db6f",
     "island_gap_background": "3f33e09753835aaac5c8c7b94bb6ff668588d4a7fab4545a6f224ce646c7e164",
     "lever_entry_background": "7c0686c0ee0c3825880b929eb35caf795df0e058979f940ef3af9157514383e5",
-    "lever_room_background": "f7c1c9f06eb3e221f7f5b8ba43c6a962921a4cb4d71910c6b1ace1d66c7e70f4"
+    "lever_room_background": "f7c1c9f06eb3e221f7f5b8ba43c6a962921a4cb4d71910c6b1ace1d66c7e70f4",
+    "post_lever_background": "1685972d4989ca3ce34afcda7cf646202937b2047eafa01e2bb8ba1c3c715f76"
   },
-  "sky_repaired_pixels": 130187,
+  "sky_repaired_pixels": 136457,
   "foreground_pixels_preserved": true,
   "method": "Fixed viewport priority independent of gameplay area; foreground source pixels preserved; four aligned atlas/cloud banks; animated sky spans.",
   "limits": [

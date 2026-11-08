@@ -5,6 +5,7 @@ const Platform platforms[PLATFORM_COUNT]={{81,88,70,8},{186,40,54,8}};
 static const Platform bridge_platforms[3]={{33,BRIDGE_SURFACE_Y,48,8},{81,BRIDGE_SURFACE_Y,125,8},{206,BRIDGE_SURFACE_Y,34,8}};
 static const Platform cliff_platforms[2]={{0,54,43,8},{96,115,144,8}};
 static const Platform cliff_rock={96,115,144,45};
+static const Platform post_lever_roof={128,-80,112,140};
 static const Platform lever_wall={0,-80,44,240};
 static const Platform island_upper_ledge={0,60,56,8};
 static const Platform gap_platforms[2]={{0,106,98,54},{172,98,68,62}};
@@ -38,11 +39,18 @@ static int profile_height(const int points[][2],unsigned count,int x){
   }
   return points[count-1][1];
 }
+static int lever_edge_floor(int player_x){
+ static const int surface[][2]={{44,149},{184,149},{200,153},{216,155},{219,157}};
+ if(player_x+PLAYER_W<=44||player_x>=220)return 4096;
+ int center=player_x+PLAYER_W/2;if(center<44)center=44;if(center>219)center=219;
+ return profile_height(surface,5,center);
+}
 int game_extension_floor(int area,int player_x){
   if(area==5)return game_continuation_floor(player_x);
   int center=player_x+PLAYER_W/2,floor=4096;
+  if(area==14){int floor=lever_edge_floor(player_x+144);return floor==4096?4096:floor-8;}
   if(area==12)return player_x+PLAYER_W>0&&player_x<174?63:4096;
-  if(area==13)return player_x+PLAYER_W>44&&player_x<220?149:4096;
+  if(area==13)return lever_edge_floor(player_x);
   if(area==11){
    if((player_x+PLAYER_W>0&&player_x<84)||(player_x+PLAYER_W>140&&player_x<192))return 144;
    return 4096;
@@ -137,6 +145,7 @@ static void respawn_area(Game *g){
   if(g->area==11){g->x=154*FP;g->y=104*FP;}
   if(g->area==12){g->x=142*FP;g->y=23*FP;}
   if(g->area==13){g->x=174*FP;g->y=109*FP;}
+  if(g->area==14){g->x=42*FP;g->y=(game_extension_floor(14,42)-PLAYER_H)*FP;}
   g->vx=0;g->vy=0;g->grounded=1;g->climbing=0;g->sign_open=0;
   g->camera=0;camera(g);
 }
@@ -248,8 +257,8 @@ void game_step(Game *g,unsigned input){
   int old_x=g->x;
   g->x+=g->vx;
   /* Solid rock volumes: resolve crossed faces without snapping onto the top. */
-  const Platform *solids=g->area==13?&lever_wall:g->area==8?upper_solids:g->area==7?riser_solids:g->area==6?bridge_run_solids:g->area==5?continuation_solids:g->area==2?&cliff_rock:gap_platforms;
-  int solid_count=(g->area==2||g->area==13)?1:g->area>=9?0:g->area>=4?2:0;
+  const Platform *solids=g->area==14?&post_lever_roof:g->area==13?&lever_wall:g->area==8?upper_solids:g->area==7?riser_solids:g->area==6?bridge_run_solids:g->area==5?continuation_solids:g->area==2?&cliff_rock:gap_platforms;
+  int solid_count=(g->area==2||g->area==13||g->area==14)?1:g->area>=9?0:g->area>=4?2:0;
   for(int i=0;i<solid_count;i++){
    const Platform *p=&solids[i];
    if(g->y+PLAYER_H*FP<=p->y*FP||g->y>=(p->y+p->h)*FP)continue;
@@ -352,6 +361,10 @@ void game_step(Game *g,unsigned input){
    g->area=13;g->progress.area=13;g->x+=44*FP;g->y+=86*FP;camera(g);
   }else if(g->area==13&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=176*FP&&g->grounded){
    g->area=12;g->progress.area=12;g->x-=44*FP;g->y-=86*FP;camera(g);
+  }else if(g->area==13&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=210*FP&&!g->grounded){
+   g->area=14;g->progress.area=14;g->x-=144*FP;g->y-=8*FP;camera(g);
+  }else if(g->area==14&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=32*FP&&g->grounded){
+   g->area=13;g->progress.area=13;g->x+=144*FP;g->y+=8*FP;camera(g);
   }else if(g->area==7&&g->x<90*FP&&g->y<=-8*FP&&g->vy<0){
    g->area=8;g->progress.area=8;g->x+=35*FP;g->y+=81*FP;camera(g);
   }else if(g->area==8&&g->y>=110*FP&&!g->grounded){

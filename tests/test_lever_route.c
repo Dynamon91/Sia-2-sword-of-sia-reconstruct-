@@ -31,9 +31,9 @@ static void test_lever_barrier(void){
  assert(g.area==12&&g.progress.lever_activated&&g.progress.barrier_open);
  for(int i=0;i<40&&g.area!=13;i++)game_step(&g,LEFT);
  assert(g.area==13&&g.progress.lever_activated);
- g.x=210*FP;g.y=109*FP;g.grounded=1;game_step(&g,0);game_step(&g,RIGHT|JUMP);
+ g.x=210*FP;g.y=(game_extension_floor(13,210)-PLAYER_H)*FP;g.grounded=1;game_step(&g,0);game_step(&g,RIGHT|JUMP);
  for(int i=0;i<200&&!g.falls;i++)game_step(&g,RIGHT);
- assert(g.falls==1&&g.area==13&&g.lives==2);
+ assert(g.falls==1&&g.area==14&&g.lives==2);
  assert(g.progress.lever_activated&&g.progress.barrier_open);
  game_step(&g,RESET);
  assert(!g.progress.lever_activated&&!g.progress.barrier_open);
@@ -62,7 +62,7 @@ int main(void){
  /* An airborne miss to the right bypasses the ground portal and falls. */
  g.x=210*FP;game_step(&g,0);game_step(&g,RIGHT|JUMP);
  for(int i=0;i<200&&!g.falls;i++)game_step(&g,RIGHT);
- assert(g.area==13&&g.falls==1&&g.lives==2&&g.x==174*FP&&g.y==109*FP);
+ assert(g.area==14&&g.falls==1&&g.lives==2&&g.x==42*FP&&g.y==(game_extension_floor(14,42)-PLAYER_H)*FP);
  assert(!g.enemy4_hp&&g.progress.defeated==1&&g.gems==1&&g.progress.health==3);
  at(&g,11,23,20);game_step(&g,LEFT|RIGHT);assert(g.area==11);
  at(&g,12,129,23);game_step(&g,LEFT|RIGHT);assert(g.area==12);

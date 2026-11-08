@@ -21,7 +21,7 @@ logico futuro: non dimostra una barriera fisica originale integrata.
 La posa abbassata osservata nel video è ora sovrapposta al fondale quando
 la leva è attiva: vedere LEVER_VISUAL_STATUS.md. Rotazione intermedia,
 barriera mobile di spine e percorso successivo restano incompleti.
-Nessun nuovo livello è completo; stima complessiva aggiornata al 14,75%.
+Nessun nuovo livello è completo; stima complessiva aggiornata al 15% con la prima vista del bordo collegata.
 
 ## Verifiche
 
