@@ -462,6 +462,25 @@ int main(int argc,char **argv){
  assert(value(c,17)==4&&value(c,14)==1&&(int)value(c,9)==58*256);
  assert(value(c,10)==4&&value(c,12)==15);
  assert((c->busRead16(c,0x0700000c)&1023)==712);capture(c,"build/gap_pickup_four.ppm");
+ /* Branch from a complete emulator snapshot; exercise death through input only. */
+ assert(value(c,19)>0);
+ size_t pickup_state_size=c->stateSize(c);void *pickup_state=malloc(pickup_state_size);
+ assert(pickup_state&&c->saveState(c,pickup_state));
+ unsigned pickup_lives=value(c,31),pickup_falls=value(c,18),pickup_defeats=value(c,26);
+ c->setKeys(c,32);
+ for(int i=0;i<150&&value(c,18)==pickup_falls;i++){
+  assert(value(c,19)>0);run(c,1);
+ }
+ c->setKeys(c,0);run(c,4);state(c,7);
+ assert(value(c,18)==pickup_falls+1&&value(c,31)==pickup_lives-1);
+ assert(value(c,19)==0&&value(c,10)==4&&value(c,21)==4&&value(c,12)==15);
+ assert(value(c,26)==pickup_defeats&&value(c,22)==3);
+ assert((c->busRead16(c,0x07000000)&0x0300)==0x0200);
+ assert((c->busRead16(c,0x07000008)&0x0300)==0x0200);
+ capture(c,"build/pickup_death_respawn.ppm");
+ assert(c->loadState(c,pickup_state));free(pickup_state);c->setKeys(c,0);
+ assert(value(c,19)>0&&value(c,31)==pickup_lives&&value(c,18)==pickup_falls);
+ puts("PASS pickup death integration: input-only fall during active notification, hidden gem and digit OBJ on respawn, four gems and defeated enemies preserved; snapshot restored for route regression");
  for(int i=0;i<15&&value(c,30);i++){tap(c,2);run(c,8);}
  assert(value(c,30)==0&&value(c,26)==2);capture(c,"build/gap_guard_defeated.ppm");
  /* Enter the new viewport through its registered portal using only input. */

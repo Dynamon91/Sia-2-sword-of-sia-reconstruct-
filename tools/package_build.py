@@ -17,6 +17,8 @@ def main():
  for prefix in ['PASS airborne integration:', 'PASS ledge integration:', 'PASS scenery integration:', 'PASS disk save integration:', 'PASS reset input integration:', 'PASS menu cancel integration:', 'PASS continuation integration:', 'PASS bridge run integration:', 'PASS upper route integration:', 'PASS upper revisit integration:']:
   if not any(s.startswith(prefix) for s in passed):raise SystemExit('Missing '+prefix)
  pictures=[p.with_suffix('.png') for p in sorted(root.glob('*.ppm'))]
+ if not any(s.startswith('PASS pickup death integration:') for s in passed):
+  raise SystemExit('Missing PASS pickup death integration:')
  if any(not p.exists() for p in pictures):raise SystemExit('Export every emulator PPM before packaging')
  if not pictures:raise SystemExit('Missing actual emulator captures')
  out=root/'release'
@@ -30,8 +32,12 @@ def main():
  (out/'BUILD_INFO.json').write_text(json.dumps(info,indent=2)+'\n')
  (out/'LEGGIMI.txt').write_text('''LADY SIA 2 - BUILD DI TEST\n\nApri Lady_Sia2_GBA_test.gba in un emulatore GBA.\nÈ una ricostruzione parziale: nove inquadrature parziali del livello 1, tre guardie prototipo e cinque gemme.\nLe nuove aree aggiungono salita, vuoto, ponte, terza guardia, parete e piattaforma superiore con collisioni provvisorie.\nIl percorso completo e gli altri livelli non sono ancora giocabili.\n\nSu+A+sinistra dalla parete: salto alto provvisorio verso la piattaforma superiore.\nA: conferma/salto. B: indietro/attacco.\nFrecce: movimento. Salta sotto il bordo per aggrapparti; Su/A: risali; Giu: lascia la presa. Start: pausa.\nSelect: menu. R: ripristino delle aree e delle gemme.\nTre vite e tre HP (provvisori). Colpi nemici consumano HP; colpi letali e cadute consumano una vita.\nRespawn: HP pieni, gemme e nemici sconfitti conservati. Zero vite: Game Over.\nHP e vite consultabili nella pausa; nessun riquadro HP/L sovrapposto allo scenario.\nPLAY apre direttamente i dialoghi iniziali: il filmato INTRO e la relativa opzione sono stati rimossi.\n\nSOUND viene salvato in SRAM; il vecchio flag INTRO non abilita più il filmato. Il reset del core è verificato;\nriapertura del file SRAM verificata con nuove istanze mGBA, SOUND spento/acceso e checksum corrotto.\nHardware reale non ancora verificato.\nLa musica usa ancora la registrazione precedente.\nNon è stato integrato il tentativo di separazione degli effetti.\n\nTEST_REPORT.txt: prove mGBA superate.\nBUILD_INFO.json: commit, hash ROM e limiti.\nSHA256SUMS.txt: integrità di tutti gli altri file del pacchetto.\nscreenshots/: acquisizioni reali della ROM compilata.\n''')
  repo=Path(__file__).resolve().parents[1]
+ shutil.copyfile(repo/'references/LIFE_FEEDBACK_STATUS.md',out/'LIFE_FEEDBACK_STATUS.md')
  for name in ['jump','ledge','scenery','continuation','bridge_run']:
   report=json.loads((repo/'previews'/f'{name}_preview.json').read_text())
+  preview=(repo/'previews'/f'{name}_gameplay.gif').read_bytes()
+  if len(preview)!=report.get('gif_bytes') or hashlib.sha256(preview).hexdigest()!=report.get('gif_sha256'):
+   raise SystemExit('Corrupt or stale animation bytes: '+name)
   if report['rom_sha256']!=hashlib.sha256(data).hexdigest() or not report['all_source_pixels_preserved']:
    raise SystemExit('Stale or unverified native animation preview: '+name)
  for source in ['references/UPPER_ROUTE_PLAYABLE_STATUS.md','previews/upper_entry.png','previews/upper_gem5.png','previews/upper_return.png','previews/bridge_run_gameplay.gif','previews/bridge_run_preview.json','references/BRIDGE_RUN_PLAYABLE_STATUS.md','previews/continuation_gameplay.gif','previews/continuation_preview.json','references/CONTINUATION_PLAYABLE_STATUS.md','previews/scenery_gameplay.gif','previews/scenery_preview.json','references/SCENERY_STATUS.md','previews/jump_gameplay.gif','previews/jump_preview.json','previews/ledge_gameplay.gif','previews/ledge_preview.json','references/JUMP_STATUS.md','references/LEDGE_STATUS.md','references/SAVE_RELOAD_STATUS.md','references/RESET_INPUT_STATUS.md','references/MENU_CANCEL_STATUS.md','docs/progress.svg','docs/progress.png','docs/progress.json','docs/PROGRESS.md']:

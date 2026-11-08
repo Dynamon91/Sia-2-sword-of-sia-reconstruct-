@@ -7,6 +7,8 @@ from pathlib import Path
 import argparse
 import hashlib
 import json
+import io
+import os
 
 import numpy as np
 from PIL import Image
@@ -32,8 +34,20 @@ def export(build, name, out, scale=2):
     times = [round(i * 280896 / 16777216 * 100) * 10 for i in range(count + 1)]
     durations = [b-a for a,b in zip(times,times[1:])]
     target = out / f'{name}_gameplay.gif'
-    encoded[0].save(target, save_all=True, append_images=encoded[1:], loop=0,
+    output = io.BytesIO()
+    encoded[0].save(output, format='GIF', save_all=True, append_images=encoded[1:], loop=0,
                     duration=durations, optimize=False, disposal=1)
+    payload = output.getvalue()
+    temporary = target.with_suffix('.gif.tmp')
+    with temporary.open('wb') as stream:
+        view = memoryview(payload)
+        while view:
+            written = stream.write(view[:65536])
+            if not written:raise OSError('Incomplete GIF write')
+            view = view[written:]
+        stream.flush();os.fsync(stream.fileno())
+    temporary.replace(target)
+    assert target.read_bytes() == payload, 'Incomplete GIF on disk'
     # GIF may coalesce identical frames. Verify every decoded interval against
     # its corresponding native source, including exact RGB and total duration.
     gif = Image.open(target);offset=0
@@ -49,6 +63,7 @@ def export(build, name, out, scale=2):
     assert offset == count
     report = {'rom_sha256':hashlib.sha256((build/'sia2_lab.gba').read_bytes()).hexdigest(),
               'native_frames':count,'gif_frames':gif.n_frames,'duration_ms':times[-1],
+              'gif_sha256':hashlib.sha256(payload).hexdigest(),'gif_bytes':len(payload),
               'source_resolution':[240,160],'preview_resolution':list(size),
               'palette_colors':len(colors),'all_source_pixels_preserved':True,
               'interpolated':False,'timing':'Cumulative native GBA time rounded to GIF 10 ms units'}
