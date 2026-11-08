@@ -39,6 +39,14 @@ static int profile_height(const int points[][2],unsigned count,int x){
 int game_extension_floor(int area,int player_x){
  if(area==5)return game_continuation_floor(player_x);
  int center=player_x+PLAYER_W/2,floor=4096;
+ if(area==9&&player_x+PLAYER_W>0&&player_x<136){
+  int x=center;if(x<0)x=0;if(x>135)x=135;
+  return x<86?x-1:85;
+ }
+ if(area==10&&player_x+PLAYER_W>64&&player_x<200){
+  int x=center;if(x<64)x=64;
+  return x<116?100:x-16;
+ }
  if(area==6){
   if(player_x+PLAYER_W>32&&player_x<177)floor=104;
   if(player_x+PLAYER_W>177&&player_x<240){
@@ -115,6 +123,8 @@ static void respawn_area(Game *g){
  if(g->area==6){g->x=60*FP;g->y=(game_extension_floor(6,60)-PLAYER_H)*FP;}
  if(g->area==7){g->x=60*FP;g->y=(game_extension_floor(7,60)-PLAYER_H)*FP;}
  if(g->area==8){g->x=50*FP;g->y=(game_extension_floor(8,50)-PLAYER_H)*FP;}
+ if(g->area==9){g->x=65*FP;g->y=(game_extension_floor(9,65)-PLAYER_H)*FP;}
+ if(g->area==10){g->x=85*FP;g->y=(game_extension_floor(10,85)-PLAYER_H)*FP;}
  g->vx=0;g->vy=0;g->grounded=1;g->climbing=0;g->sign_open=0;
  g->camera=0;camera(g);
 }
@@ -217,7 +227,7 @@ void game_step(Game *g,unsigned input){
  g->x+=g->vx;
  /* Solid rock volumes: resolve crossed faces without snapping onto the top. */
  const Platform *solids=g->area==8?upper_solids:g->area==7?riser_solids:g->area==6?bridge_run_solids:g->area==5?continuation_solids:g->area==2?&cliff_rock:gap_platforms;
- int solid_count=g->area==2?1:g->area>=4?2:0;
+ int solid_count=g->area==2?1:g->area>=9?0:g->area>=4?2:0;
  for(int i=0;i<solid_count;i++){
   const Platform *p=&solids[i];
   if(g->y+PLAYER_H*FP<=p->y*FP||g->y>=(p->y+p->h)*FP)continue;
@@ -300,7 +310,15 @@ void game_step(Game *g,unsigned input){
  }else if(g->area==7&&(input&LEFT)&&g->x<=32*FP&&g->grounded){
   g->area=6;g->progress.area=6;g->x+=168*FP;g->y-=7*FP;camera(g);
  }
- else if(g->area==7&&g->x<90*FP&&g->y<=-8*FP&&g->vy<0){
+ else if(g->area==8&&(input&LEFT)&&g->x<=12*FP&&g->grounded){
+  g->area=9;g->progress.area=9;g->x+=58*FP;g->y-=15*FP;camera(g);
+ }else if(g->area==9&&(input&RIGHT)&&g->x>=75*FP&&g->grounded){
+  g->area=8;g->progress.area=8;g->x-=58*FP;g->y+=15*FP;camera(g);
+ }else if(g->area==9&&(input&LEFT)&&g->x<=42*FP&&g->grounded){
+  g->area=10;g->progress.area=10;g->x+=108*FP;g->y+=93*FP;camera(g);
+ }else if(g->area==10&&(input&RIGHT)&&g->x>=151*FP&&g->grounded){
+  g->area=9;g->progress.area=9;g->x-=108*FP;g->y-=93*FP;camera(g);
+ }else if(g->area==7&&g->x<90*FP&&g->y<=-8*FP&&g->vy<0){
   g->area=8;g->progress.area=8;g->x+=35*FP;g->y+=81*FP;camera(g);
  }else if(g->area==8&&g->y>=110*FP&&!g->grounded){
   g->area=7;g->progress.area=7;g->x-=35*FP;g->y-=81*FP;

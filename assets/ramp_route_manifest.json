@@ -1,0 +1,92 @@
+{
+  "video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "sources": {
+    "173": "bfab257827186b48602bb644c25fd3e8bcb895e40a0bf93ae6d7c274a4026490",
+    "174": "75435459d587d8c371dcd9cec2d2c6e6cdecec6c2bae0106e8a6d08922c92acf"
+  },
+  "registrations": [
+    {
+      "from": 166,
+      "to": 173,
+      "delta": [
+        58,
+        -15
+      ],
+      "patches": [
+        {
+          "delta": [
+            58,
+            -15
+          ],
+          "mae_rgb": 2.147619,
+          "runner_up_mae_rgb": 8.72381,
+          "patch": [
+            45,
+            112,
+            52,
+            122
+          ]
+        },
+        {
+          "delta": [
+            58,
+            -15
+          ],
+          "mae_rgb": 4.441358,
+          "runner_up_mae_rgb": 12.441358,
+          "patch": [
+            169,
+            88,
+            178,
+            100
+          ]
+        }
+      ]
+    },
+    {
+      "from": 173,
+      "to": 174,
+      "delta": [
+        108,
+        93
+      ],
+      "patches": [
+        {
+          "delta": [
+            108,
+            93
+          ],
+          "mae_rgb": 7.240741,
+          "runner_up_mae_rgb": 11.361111,
+          "patch": [
+            10,
+            18,
+            16,
+            24
+          ]
+        },
+        {
+          "delta": [
+            108,
+            93
+          ],
+          "mae_rgb": 4.884354,
+          "runner_up_mae_rgb": 14.22449,
+          "patch": [
+            22,
+            28,
+            29,
+            35
+          ]
+        }
+      ]
+    }
+  ],
+  "geometry": "provisional",
+  "limits": [
+    "Hidden sky and island pixels estimated or restored from adjacent views",
+    "Wooden ramp is a provisional one-way slope; original collision timing not recovered",
+    "Small gem visible at 174 seconds removed; next gap and collectible not yet integrated",
+    "Recording header and logo removed; no source actor baked into gameplay background"
+  ]
+}

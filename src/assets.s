@@ -149,3 +149,12 @@ upper_background:
 .global ui_digit5_tiles
 ui_digit5_tiles:
 .incbin "assets/ui_digit5_tiles.bin"
+
+.balign 4
+.global ramp_lower_background
+ramp_lower_background:
+.incbin "assets/ramp_lower_background.bin"
+.balign 4
+.global ramp_upper_background
+ramp_upper_background:
+.incbin "assets/ramp_upper_background.bin"

@@ -219,6 +219,7 @@ int main(int argc,char **argv){
  assert(!mkdir("build/scenery_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/continuation_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/bridge_run_sequence",0777)||errno==EEXIST);
+ assert(!mkdir("build/ramp_sequence",0777)||errno==EEXIST);
  mLogSetDefaultLogger(&test_logger);
  assert(argc==2);struct mCore *c=mCoreFind(argv[1]);assert(c&&c->init(c));mCoreInitConfig(c,NULL);
  color_t *pixels=calloc(240*160,sizeof(color_t));assert(pixels);c->setVideoBuffer(c,pixels,240);
@@ -582,6 +583,47 @@ int main(int argc,char **argv){
  assert(value(c,17)==7&&value(c,14)&&value(c,10)==5&&value(c,21)==5);
  assert(value(c,31)==upper_lives&&value(c,18)==upper_falls&&value(c,26)==3&&value(c,38)==0);
  puts("PASS upper revisit integration: second input-only ascent and descent, five gems and HUD retained, no duplicate pickup, defeated guard retained, no life loss");
+ /* Climb the two new ramp views and return using only controller input. */
+ unsigned previous_frame=sequence_frame;sequence_dir=NULL;
+ move_to(c,16,92);c->setKeys(c,0);run(c,2);c->setKeys(c,97);run(c,60);c->setKeys(c,0);run(c,8);
+ assert(value(c,17)==8&&value(c,14));
+ sequence_dir="build/ramp_sequence";sequence_frame=0;
+ c->setKeys(c,32);unsigned ramp_crossed=0,ramp_captured=0;
+ for(int i=0;i<180&&value(c,17)!=10;i++){
+  unsigned area=value(c,17);int x=(int)value(c,8);run(c,1);
+  if(value(c,17)!=area){
+   assert((int)value(c,8)-x==(area==8?58:108)*FP-320);
+   assert(value(c,14));ramp_crossed++;
+  }
+  if(shown(c,11)==9&&!ramp_captured){capture(c,"build/ramp_lower_entry.ppm");ramp_captured=1;}
+ }
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==10&&ramp_crossed==2&&ramp_captured);
+ move_to(c,32,85);assert(value(c,14)&&(int)value(c,9)==60*FP);
+ capture(c,"build/ramp_upper_landing.ppm");
+ tap(c,8);state(c,8);unsigned ramp_tick=value(c,16);run(c,30);assert(value(c,16)==ramp_tick);
+ capture(c,"build/ramp_pause.ppm");tap(c,1);state(c,7);
+ /* Isolated fall branch restores a complete emulator state before the return. */
+ void *ramp_state=malloc(c->stateSize(c));assert(ramp_state&&c->saveState(c,ramp_state));
+ const char *ramp_sequence=sequence_dir;sequence_dir=NULL;
+ c->setKeys(c,32);for(int i=0;i<220&&value(c,18)==upper_falls;i++)run(c,1);
+ c->setKeys(c,0);run(c,4);
+ assert(value(c,17)==10&&value(c,18)==upper_falls+1&&value(c,31)==upper_lives-1);
+ assert(value(c,10)==5&&value(c,26)==3&&value(c,22)==3&&value(c,14));
+ capture(c,"build/ramp_upper_respawn.ppm");
+ assert(c->loadState(c,ramp_state));free(ramp_state);sequence_dir=ramp_sequence;
+ c->setKeys(c,16);
+ for(int i=0;i<200&&value(c,17)!=8;i++){
+  unsigned area=value(c,17);int x=(int)value(c,8);run(c,1);
+  if(value(c,17)!=area)assert((int)value(c,8)-x==320-(area==10?108:58)*FP);
+ }
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==8&&value(c,14));capture(c,"build/ramp_return.ppm");
+ move_to(c,16,58);c->setKeys(c,17);run(c,40);c->setKeys(c,0);
+ for(int i=0;i<160&&(value(c,17)!=7||!value(c,14));i++)run(c,1);
+ assert(value(c,17)==7&&value(c,14)&&value(c,31)==upper_lives&&value(c,18)==upper_falls&&value(c,10)==5&&value(c,26)==3);
+ sequence_dir=NULL;FILE *ramp_count=fopen("build/ramp_sequence/frame_count.txt","w");assert(ramp_count);
+ fprintf(ramp_count,"%u\n",sequence_frame);fclose(ramp_count);
+ sequence_dir=NULL;sequence_frame=previous_frame;
+ puts("PASS ramp route integration: eleven connected views, two measured portals each way, upper island landing, pause, input-only pit respawn and persistent five gems/three defeats; return to lower route without life loss");
  c->setKeys(c,32);
  for(int i=0;i<100&&value(c,17)==7;i++){
   int bx=(int)value(c,8),by=(int)value(c,9);run(c,1);

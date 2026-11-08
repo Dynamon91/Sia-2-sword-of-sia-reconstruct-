@@ -3,9 +3,9 @@
 **🚧 WORK IN PROGRESS — Ricostruzione ancora in sviluppo.**
 
 <!-- PROJECT_PROGRESS -->
-![Avanzamento complessivo stimato: 12%](docs/progress.svg)
+![Avanzamento complessivo stimato: 13%](docs/progress.svg)
 
-**Progetto completo: circa 12%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
+**Progetto completo: circa 13%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
 <!-- /PROJECT_PROGRESS -->
 
 ![Anteprima degli asset attualmente integrati](previews/readme_frontend.png)
@@ -16,7 +16,9 @@ An ongoing reconstruction of Lady Sia 2: Sword of Sia for Game Boy Advance, base
 
 The current build includes a partial reconstruction of World 1 with controllable gameplay, collisions, pickups, damage, falling and game over. Levels, sprite and scenery animations, and the original interface are still being reconstructed and refined. This project is incomplete and does not represent the finished original game.
 
-Latest playable change: W1L1 now has nine linked partial viewports, three prototype guards and five gems. From the rock wall, step back and use UP+A with LEFT to reach the upper island. Jump right with A to collect the fifth gem; descending returns to the lower view without consuming a life. High-jump controls and collision geometry remain provisional. [Implementation, checks and remaining work](references/UPPER_ROUTE_PLAYABLE_STATUS.md).
+Latest playable change: W1L1 now has eleven linked partial viewports, three prototype guards and five gems. From the upper island, continue LEFT to climb the wooden ramp across two new camera views and reach the next island; RIGHT returns to the preceding route. Ramp geometry and hidden background details remain provisional. The next gap, flying enemy and complete level remain unfinished. [Implementation and verified checks](references/RAMP_ROUTE_STATUS.md).
+
+![Native ROM: climb the new ramp, reach the island and return](previews/ramp_gameplay.gif)
 
 ![Bridge combat, upper route, fifth gem and return recorded from the native ROM](previews/bridge_run_gameplay.gif)
 
