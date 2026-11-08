@@ -220,6 +220,7 @@ int main(int argc,char **argv){
  assert(!mkdir("build/continuation_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/bridge_run_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/ramp_sequence",0777)||errno==EEXIST);
+ assert(!mkdir("build/island_gap_sequence",0777)||errno==EEXIST);
  mLogSetDefaultLogger(&test_logger);
  assert(argc==2);struct mCore *c=mCoreFind(argv[1]);assert(c&&c->init(c));mCoreInitConfig(c,NULL);
  color_t *pixels=calloc(240*160,sizeof(color_t));assert(pixels);c->setVideoBuffer(c,pixels,240);
@@ -600,6 +601,32 @@ int main(int argc,char **argv){
  c->setKeys(c,0);run(c,4);assert(value(c,17)==10&&ramp_crossed==2&&ramp_captured);
  move_to(c,32,85);assert(value(c,14)&&(int)value(c,9)==60*FP);
  capture(c,"build/ramp_upper_landing.ppm");
+ /* Explore the next gap with controller input; keep its film separate. */
+ const char *before_gap_sequence=sequence_dir;unsigned before_gap_frame=sequence_frame;
+ sequence_dir="build/island_gap_sequence";sequence_frame=0;
+ c->setKeys(c,32);
+ for(int i=0;i<30&&value(c,17)==10;i++){
+  int x=(int)value(c,8),y=(int)value(c,9);run(c,1);
+  if(value(c,17)==11){assert((int)value(c,8)-x==76*FP-320);assert((int)value(c,9)-y==44*FP);}
+ }
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==11&&value(c,14));
+ capture(c,"build/island_gap_entry.ppm");
+ move_to(c,32,140);c->setKeys(c,33);run(c,58);c->setKeys(c,0);run(c,6);
+ assert(value(c,17)==11&&value(c,14)&&(int)value(c,8)<84*FP&&(int)value(c,9)==104*FP);
+ capture(c,"build/island_gap_left_landing.ppm");
+ c->setKeys(c,97);run(c,90);c->setKeys(c,0);run(c,4);
+ assert(value(c,14)&&(int)value(c,9)==20*FP);capture(c,"build/island_gap_high_ledge.ppm");
+ move_to(c,16,65);c->setKeys(c,0);run(c,100);
+ assert(value(c,14)&&(int)value(c,9)==104*FP);
+ c->setKeys(c,17);
+ for(int i=0;i<120&&value(c,17)==11;i++)run(c,1);
+ c->setKeys(c,0);run(c,4);
+ assert(value(c,17)==10&&value(c,14)&&value(c,31)==upper_lives&&value(c,18)==upper_falls);
+ assert(value(c,10)==5&&value(c,26)==3);capture(c,"build/island_gap_return.ppm");
+ FILE *gap_count=fopen("build/island_gap_sequence/frame_count.txt","w");assert(gap_count);
+ fprintf(gap_count,"%u\n",sequence_frame);fclose(gap_count);
+ sequence_dir=before_gap_sequence;sequence_frame=before_gap_frame;
+ puts("PASS island gap integration: twelfth view, registered portal, gap jumps both ways, high ledge and return using controller input; five gems, three defeats and lives preserved");
  tap(c,8);state(c,8);unsigned ramp_tick=value(c,16);run(c,30);assert(value(c,16)==ramp_tick);
  capture(c,"build/ramp_pause.ppm");tap(c,1);state(c,7);
  /* Isolated fall branch restores a complete emulator state before the return. */
@@ -607,7 +634,7 @@ int main(int argc,char **argv){
  const char *ramp_sequence=sequence_dir;sequence_dir=NULL;
  c->setKeys(c,32);for(int i=0;i<220&&value(c,18)==upper_falls;i++)run(c,1);
  c->setKeys(c,0);run(c,4);
- assert(value(c,17)==10&&value(c,18)==upper_falls+1&&value(c,31)==upper_lives-1);
+ assert(value(c,17)==11&&value(c,18)==upper_falls+1&&value(c,31)==upper_lives-1);
  assert(value(c,10)==5&&value(c,26)==3&&value(c,22)==3&&value(c,14));
  capture(c,"build/ramp_upper_respawn.ppm");
  assert(c->loadState(c,ramp_state));free(ramp_state);sequence_dir=ramp_sequence;
@@ -627,7 +654,8 @@ int main(int argc,char **argv){
  c->setKeys(c,32);
  for(int i=0;i<100&&value(c,17)==7;i++){
   int bx=(int)value(c,8),by=(int)value(c,9);run(c,1);
-  if(value(c,17)==6){assert((int)value(c,8)-168*FP-bx==-320);assert((int)value(c,9)+7*FP==by);}
+  if(value(c,17)==6){assert((int)value(c,8)-168*FP-bx==-320);assert(abs((int)value(c,9)+7*FP-by)<=FP);
+   assert((int)value(c,9)==(game_extension_floor(7,(int)value(c,8)/FP-168)-PLAYER_H-7)*FP);}
  }
  c->setKeys(c,0);run(c,4);assert(value(c,17)==6&&value(c,38)==0&&value(c,26)==3);
  capture(c,"build/bridge_run_return.ppm");

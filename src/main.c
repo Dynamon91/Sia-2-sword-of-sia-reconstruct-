@@ -9,6 +9,7 @@ static const char save_type[] __attribute__((used))="SRAM_V113";
 #include "../assets/assets.h"
 #include "../assets/room.h"
 #include "../assets/ui.h"
+extern const unsigned char island_gap_background[];
 extern const unsigned char continuation_background[],bridge_run_background[],riser_background[],upper_background[],ui_digit5_tiles[];
 extern const unsigned char ramp_lower_background[],ramp_upper_background[];
 extern const unsigned char cliff_background[],guard_background[],guard_sprite[];
@@ -183,7 +184,7 @@ static void draw_level(void){
  const unsigned char *background=game.area?bridge_backdrop:room_backdrop;
  const unsigned char *spans=game.area?bridge_spans:room_spans;
  int shift=-game.camera_y;
- if(game.area==10)image(ramp_upper_background);else if(game.area==9)image(ramp_lower_background);else if(game.area==8)image(upper_background);else if(game.area==7)image(riser_background);else if(game.area==6)image(bridge_run_background);else if(game.area==5)image(continuation_background);else if(game.area==4)image(gap_background);else if(game.area==3)image(guard_background);else if(game.area==2)image(cliff_background);else image(background);
+ if(game.area==11)image(island_gap_background);else if(game.area==10)image(ramp_upper_background);else if(game.area==9)image(ramp_lower_background);else if(game.area==8)image(upper_background);else if(game.area==7)image(riser_background);else if(game.area==6)image(bridge_run_background);else if(game.area==5)image(continuation_background);else if(game.area==4)image(gap_background);else if(game.area==3)image(guard_background);else if(game.area==2)image(cliff_background);else image(background);
  if(game.area<2)draw_clouds(cloud_phase(game.ticks));
  for(int row=0;row<160-shift&&game.area<2;row++){
   unsigned count=spans[0]|((unsigned)spans[1]<<8);spans+=2;

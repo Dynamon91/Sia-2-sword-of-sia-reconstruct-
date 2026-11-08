@@ -37,7 +37,7 @@ int main(void){
  for(int i=0;i<240&&g.area!=8;i++)game_step(&g,RIGHT);
  assert(g.area==8&&g.grounded&&g.gems==1&&g.collected==16&&g.lives==3&&!g.falls);
  for(int i=0;i<300&&!g.falls;i++)game_step(&g,LEFT);
- assert(g.area==10&&g.falls==1&&g.lives==2&&g.x==85*FP&&g.y==60*FP&&g.grounded);
+ assert(g.area==11&&g.falls==1&&g.lives==2&&g.x==154*FP&&g.y==104*FP&&g.grounded);
  assert(g.gems==1&&g.collected==16&&g.progress.gems==1);
  game_step(&g,RESET);assert(g.area==0&&g.gems==0&&g.lives==3);
  puts("PASS ramp route: opposite directions never trigger portals, two registered slope portals each way, upper landing and jump, persistent gem, pit life loss and upper respawn, reset");

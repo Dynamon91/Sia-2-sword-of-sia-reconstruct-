@@ -5,6 +5,7 @@ const Platform platforms[PLATFORM_COUNT]={{81,88,70,8},{186,40,54,8}};
 static const Platform bridge_platforms[3]={{33,BRIDGE_SURFACE_Y,48,8},{81,BRIDGE_SURFACE_Y,125,8},{206,BRIDGE_SURFACE_Y,34,8}};
 static const Platform cliff_platforms[2]={{0,54,43,8},{96,115,144,8}};
 static const Platform cliff_rock={96,115,144,45};
+static const Platform island_upper_ledge={0,60,56,8};
 static const Platform gap_platforms[2]={{0,106,98,54},{172,98,68,62}};
 /* Provisional walk planes for the registered 159s viewport. */
 static const Platform continuation_solids[2]={{0,101,134,59},{202,95,12,65}};
@@ -39,6 +40,10 @@ static int profile_height(const int points[][2],unsigned count,int x){
 int game_extension_floor(int area,int player_x){
  if(area==5)return game_continuation_floor(player_x);
  int center=player_x+PLAYER_W/2,floor=4096;
+ if(area==11){
+  if((player_x+PLAYER_W>0&&player_x<84)||(player_x+PLAYER_W>140&&player_x<192))return 144;
+  return 4096;
+ }
  if(area==9&&player_x+PLAYER_W>0&&player_x<136){
   int x=center;if(x<0)x=0;if(x>135)x=135;
   return x<86?x-1:85;
@@ -125,6 +130,7 @@ static void respawn_area(Game *g){
  if(g->area==8){g->x=50*FP;g->y=(game_extension_floor(8,50)-PLAYER_H)*FP;}
  if(g->area==9){g->x=65*FP;g->y=(game_extension_floor(9,65)-PLAYER_H)*FP;}
  if(g->area==10){g->x=85*FP;g->y=(game_extension_floor(10,85)-PLAYER_H)*FP;}
+ if(g->area==11){g->x=154*FP;g->y=104*FP;}
  g->vx=0;g->vy=0;g->grounded=1;g->climbing=0;g->sign_open=0;
  g->camera=0;camera(g);
 }
@@ -254,8 +260,8 @@ void game_step(Game *g,unsigned input){
      g->y>=underside&&next<underside){next=underside;g->vy=0;}
  }
  g->grounded=0;
- const Platform *list=g->area==4?gap_platforms:g->area==2?cliff_platforms:g->area?bridge_platforms:platforms;
- int count=g->area>=5?0:g->area==4?2:g->area==3?0:g->area==2?2:g->area?3:PLATFORM_COUNT;
+ const Platform *list=g->area==11?&island_upper_ledge:g->area==4?gap_platforms:g->area==2?cliff_platforms:g->area?bridge_platforms:platforms;
+ int count=g->area==11?1:g->area>=5?0:g->area==4?2:g->area==3?0:g->area==2?2:g->area?3:PLATFORM_COUNT;
  for(int i=0;i<count;i++){
   const Platform *p=&list[i];
   if(g->vy>=0&&g->x+PLAYER_W*FP>p->x*FP&&g->x<(p->x+p->w)*FP&&
@@ -318,6 +324,10 @@ void game_step(Game *g,unsigned input){
   g->area=10;g->progress.area=10;g->x+=108*FP;g->y+=93*FP;camera(g);
  }else if(g->area==10&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=151*FP&&g->grounded){
   g->area=9;g->progress.area=9;g->x-=108*FP;g->y-=93*FP;camera(g);
+ }else if(g->area==10&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=78*FP&&g->grounded){
+  g->area=11;g->progress.area=11;g->x+=76*FP;g->y+=44*FP;camera(g);
+ }else if(g->area==11&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=160*FP&&g->grounded){
+  g->area=10;g->progress.area=10;g->x-=76*FP;g->y-=44*FP;camera(g);
  }else if(g->area==7&&g->x<90*FP&&g->y<=-8*FP&&g->vy<0){
   g->area=8;g->progress.area=8;g->x+=35*FP;g->y+=81*FP;camera(g);
  }else if(g->area==8&&g->y>=110*FP&&!g->grounded){

@@ -158,3 +158,8 @@ ramp_lower_background:
 .global ramp_upper_background
 ramp_upper_background:
 .incbin "assets/ramp_upper_background.bin"
+
+.balign 4
+.global island_gap_background
+island_gap_background:
+.incbin "assets/island_gap_background.bin"

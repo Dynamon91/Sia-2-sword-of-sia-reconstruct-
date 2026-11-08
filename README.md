@@ -3,9 +3,9 @@
 **🚧 WORK IN PROGRESS — Ricostruzione ancora in sviluppo.**
 
 <!-- PROJECT_PROGRESS -->
-![Avanzamento complessivo stimato: 13%](docs/progress.svg)
+![Avanzamento complessivo stimato: 13.5%](docs/progress.svg)
 
-**Progetto completo: circa 13%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
+**Progetto completo: circa 13.5%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
 <!-- /PROJECT_PROGRESS -->
 
 ![Anteprima degli asset attualmente integrati](previews/readme_frontend.png)
@@ -16,7 +16,9 @@ An ongoing reconstruction of Lady Sia 2: Sword of Sia for Game Boy Advance, base
 
 The current build includes a partial reconstruction of World 1 with controllable gameplay, collisions, pickups, damage, falling and game over. Levels, sprite and scenery animations, and the original interface are still being reconstructed and refined. This project is incomplete and does not represent the finished original game.
 
-Latest playable change: W1L1 now has eleven linked partial viewports, three prototype guards and five gems. From the upper island, continue LEFT to climb the wooden ramp across two new camera views and reach the next island; RIGHT returns to the preceding route. Ramp geometry and hidden background details remain provisional. The next gap, flying enemy and complete level remain unfinished. [Implementation and verified checks](references/RAMP_ROUTE_STATUS.md).
+Latest playable change: W1L1 now has twelve linked partial viewports, three prototype guards and five gems. Continue LEFT past the ramp island, jump the next gap to the opposite island, and use UP+A for its provisional high ledge. Jump RIGHT to return to the ramp. Island geometry and covered sky remain provisional; the visible gems, flying enemy and next lever view remain unfinished. [Implementation and local checks](references/ISLAND_GAP_STATUS.md).
+
+![Native ROM: next island gap, high ledge and return](previews/island_gap_gameplay.gif)
 
 ![Native ROM: climb the new ramp, reach the island and return](previews/ramp_gameplay.gif)
 
