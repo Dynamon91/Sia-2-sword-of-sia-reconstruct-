@@ -2,8 +2,33 @@
 #include <assert.h>
 #include <stdio.h>
 static void at(Game *g,int area,int x,int y){game_reset(g);g->area=area;g->progress.area=(unsigned)area;g->x=x*FP;g->y=y*FP;}
+static void test_lever_barrier(void){
+ Game g;at(&g,12,142,23);
+ assert(!g.progress.lever_activated&&!g.progress.barrier_open);
+ /* The closed barrier stops the area-12 portal from being crossed. */
+ for(int i=0;i<32&&g.x>130*FP;i++)game_step(&g,LEFT);
+ assert(g.area==12&&g.x>=130*FP);
+ /* The reachable lever is just before the barrier; B interacts once per press. */
+ game_step(&g,0);game_step(&g,ATTACK);
+ assert(g.progress.lever_activated&&g.progress.barrier_open);
+ for(int i=0;i<40&&g.area!=13;i++)game_step(&g,LEFT);
+ assert(g.area==13);
+ /* Return, revisit, and cross again without losing the run state. */
+ for(int i=0;i<40&&g.area!=12;i++)game_step(&g,RIGHT);
+ assert(g.area==12&&g.progress.lever_activated&&g.progress.barrier_open);
+ for(int i=0;i<40&&g.area!=13;i++)game_step(&g,LEFT);
+ assert(g.area==13);
+ /* Death/respawn keeps the switch state; run reset deliberately clears it. */
+ g.x=210*FP;g.y=109*FP;g.grounded=1;game_step(&g,0);game_step(&g,RIGHT|JUMP);
+ for(int i=0;i<200&&!g.falls;i++)game_step(&g,RIGHT);
+ assert(g.falls==1&&g.area==13&&g.lives==2);
+ assert(g.progress.lever_activated&&g.progress.barrier_open);
+ game_step(&g,RESET);
+ assert(!g.progress.lever_activated&&!g.progress.barrier_open);
+}
 int main(void){
- Game g;at(&g,11,30,20);
+ test_lever_barrier();
+ Game g;at(&g,11,30,20);assert(level_set_lever_state(&g.progress,1));
  assert(level_collect_gem(&g.progress,4));g.gems=1;g.collected=16;
  for(int i=0;i<40&&g.area!=13;i++){
   int area=g.area,x=g.x,y=g.y;game_step(&g,LEFT);
@@ -31,5 +56,5 @@ int main(void){
  at(&g,12,151,23);game_step(&g,LEFT|RIGHT);assert(g.area==12);
  at(&g,13,177,109);game_step(&g,LEFT|RIGHT);assert(g.area==13);
  game_step(&g,RESET);assert(g.area==0&&g.enemy4_hp==2&&g.progress.defeated==0);
- puts("PASS lever route: measured portals both ways, fourth independent guard, persistent defeat/gem, solid wall, pit respawn, opposing input and reset");
+ puts("PASS lever route and barrier: closed gate, interaction, open traversal, revisits, death persistence, reset, fourth guard and gem persistence");
 }
