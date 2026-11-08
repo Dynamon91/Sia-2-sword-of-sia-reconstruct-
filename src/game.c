@@ -285,38 +285,38 @@ void game_step(Game *g,unsigned input){
   g->walk_ticks=(g->walk_ticks+(unsigned)(moved_x<0?-moved_x:moved_x))%(18u*320u);
  else g->walk_ticks=0;
  if(!g->area&&(pressed&DOWN)&&center>=158&&center<=190&&g->grounded)g->sign_open=1;
- if(!g->area&&(input&RIGHT)&&g->x>=225*FP&&g->grounded&&g->y==0)transition_area(g,1);
- else if(g->area==1&&(input&LEFT)&&g->x<=32*FP&&g->grounded)transition_area(g,0);
- else if(g->area==1&&(input&RIGHT)&&g->x>=225*FP&&g->grounded){g->area=2;g->progress.area=2;g->x=20*FP;g->y=14*FP;g->vy=0;camera(g);}
- else if(g->area==2&&(input&LEFT)&&g->x<=8*FP&&g->grounded){g->area=1;g->progress.area=1;g->x=224*FP;g->y=60*FP;g->vy=0;camera(g);}
- else if(g->area==2&&(input&RIGHT)&&g->x>=225*FP&&g->grounded){g->area=3;g->progress.area=3;g->x=10*FP;g->y=90*FP;g->vy=0;camera(g);}
- else if(g->area==3&&(input&LEFT)&&g->x<=1*FP&&g->grounded){g->area=2;g->progress.area=2;g->x=224*FP;g->y=75*FP;g->vy=0;camera(g);}
- else if(g->area==3&&(input&RIGHT)&&g->x>=225*FP&&g->grounded){
+ if(!g->area&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=225*FP&&g->grounded&&g->y==0)transition_area(g,1);
+ else if(g->area==1&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=32*FP&&g->grounded)transition_area(g,0);
+ else if(g->area==1&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=225*FP&&g->grounded){g->area=2;g->progress.area=2;g->x=20*FP;g->y=14*FP;g->vy=0;camera(g);}
+ else if(g->area==2&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=8*FP&&g->grounded){g->area=1;g->progress.area=1;g->x=224*FP;g->y=60*FP;g->vy=0;camera(g);}
+ else if(g->area==2&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=225*FP&&g->grounded){g->area=3;g->progress.area=3;g->x=10*FP;g->y=90*FP;g->vy=0;camera(g);}
+ else if(g->area==3&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=1*FP&&g->grounded){g->area=2;g->progress.area=2;g->x=224*FP;g->y=75*FP;g->vy=0;camera(g);}
+ else if(g->area==3&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=225*FP&&g->grounded){
   g->area=4;g->progress.area=4;g->x-=158*FP;g->y+=18*FP;camera(g);
- }else if(g->area==4&&(input&LEFT)&&g->x<=32*FP&&g->grounded){
+ }else if(g->area==4&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=32*FP&&g->grounded){
   g->area=3;g->progress.area=3;g->x+=158*FP;g->y-=18*FP;camera(g);
  }
- else if(g->area==4&&(input&RIGHT)&&g->x>=225*FP&&g->grounded){
+ else if(g->area==4&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=225*FP&&g->grounded){
   g->area=5;g->progress.area=5;g->x-=188*FP;g->y+=25*FP;camera(g);
- }else if(g->area==5&&(input&LEFT)&&g->x<=32*FP&&g->grounded){
+ }else if(g->area==5&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=32*FP&&g->grounded){
   g->area=4;g->progress.area=4;g->x+=188*FP;g->y-=25*FP;camera(g);
  }
- else if(g->area==5&&(input&RIGHT)&&g->x>=225*FP&&g->grounded){
+ else if(g->area==5&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=225*FP&&g->grounded){
   g->area=6;g->progress.area=6;g->x-=170*FP;g->y+=9*FP;camera(g);
- }else if(g->area==6&&(input&LEFT)&&g->x<=32*FP&&g->grounded){
+ }else if(g->area==6&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=32*FP&&g->grounded){
   g->area=5;g->progress.area=5;g->x+=170*FP;g->y-=9*FP;camera(g);
- }else if(g->area==6&&(input&RIGHT)&&g->x>=225*FP&&g->grounded){
+ }else if(g->area==6&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=225*FP&&g->grounded){
   g->area=7;g->progress.area=7;g->x-=168*FP;g->y+=7*FP;camera(g);
- }else if(g->area==7&&(input&LEFT)&&g->x<=32*FP&&g->grounded){
+ }else if(g->area==7&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=32*FP&&g->grounded){
   g->area=6;g->progress.area=6;g->x+=168*FP;g->y-=7*FP;camera(g);
  }
- else if(g->area==8&&(input&LEFT)&&g->x<=12*FP&&g->grounded){
+ else if(g->area==8&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=12*FP&&g->grounded){
   g->area=9;g->progress.area=9;g->x+=58*FP;g->y-=15*FP;camera(g);
- }else if(g->area==9&&(input&RIGHT)&&g->x>=75*FP&&g->grounded){
+ }else if(g->area==9&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=75*FP&&g->grounded){
   g->area=8;g->progress.area=8;g->x-=58*FP;g->y+=15*FP;camera(g);
- }else if(g->area==9&&(input&LEFT)&&g->x<=42*FP&&g->grounded){
+ }else if(g->area==9&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=42*FP&&g->grounded){
   g->area=10;g->progress.area=10;g->x+=108*FP;g->y+=93*FP;camera(g);
- }else if(g->area==10&&(input&RIGHT)&&g->x>=151*FP&&g->grounded){
+ }else if(g->area==10&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=151*FP&&g->grounded){
   g->area=9;g->progress.area=9;g->x-=108*FP;g->y-=93*FP;camera(g);
  }else if(g->area==7&&g->x<90*FP&&g->y<=-8*FP&&g->vy<0){
   g->area=8;g->progress.area=8;g->x+=35*FP;g->y+=81*FP;camera(g);

@@ -4,6 +4,19 @@
 int main(void){
  Game g;game_reset(&g);g.area=8;g.progress.area=8;g.x=50*FP;g.y=60*FP;g.enemy3_hp=0;
  assert(level_collect_gem(&g.progress,4));g.gems=1;g.collected=16;
+ /* Opposite directions cancel movement and must not cross either ramp portal. */
+ for(int area=8;area<=10;area++){
+  Game idle;game_reset(&idle);idle.area=area;idle.progress.area=(unsigned)area;
+  int positions[2]={area==8?10:area==9?40:85,area==8?50:area==9?76:152};
+  for(int side=0;side<2;side++){
+   idle.x=positions[side]*FP;idle.y=(game_extension_floor(area,positions[side])-PLAYER_H)*FP;
+   idle.grounded=1;idle.vy=0;
+   int x=idle.x,y=idle.y;
+   for(int tick=0;tick<10;tick++)game_step(&idle,LEFT|RIGHT);
+   assert(idle.area==area&&idle.progress.area==(unsigned)area);
+   assert(idle.x==x&&idle.y==y&&idle.grounded&&!idle.vx);
+  }
+ }
  unsigned crossed=0;
  for(int i=0;i<200&&g.area!=10;i++){
   int a=g.area,x=g.x,y=g.y;game_step(&g,LEFT);
@@ -27,5 +40,5 @@ int main(void){
  assert(g.area==10&&g.falls==1&&g.lives==2&&g.x==85*FP&&g.y==60*FP&&g.grounded);
  assert(g.gems==1&&g.collected==16&&g.progress.gems==1);
  game_step(&g,RESET);assert(g.area==0&&g.gems==0&&g.lives==3);
- puts("PASS ramp route: two registered slope portals each way, upper landing and jump, persistent gem, pit life loss and upper respawn, reset");
+ puts("PASS ramp route: opposite directions never trigger portals, two registered slope portals each way, upper landing and jump, persistent gem, pit life loss and upper respawn, reset");
 }
