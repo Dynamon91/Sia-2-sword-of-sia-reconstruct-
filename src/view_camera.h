@@ -14,7 +14,10 @@ static inline int view_limit(int n,int lo,int hi){return n<lo?lo:n>hi?hi:n;}
 static inline void view_camera_step(ViewCamera *v,const Game *g){
  int px=g->x+PLAYER_W*FP/2-view_origin[g->area][0]*FP+v->x;
  int py=g->y+PLAYER_H*FP/2-view_origin[g->area][1]*FP+v->y;
- int dx=px<80*FP?80*FP-px:px>160*FP?160*FP-px:0;
+ /* Directional framing: leave room ahead of actual movement. Idle and blocked
+    movement do not swing the camera just because facing/input changed. */
+ int dx=g->vx>0?80*FP-px:g->vx<0?128*FP-px:0;
+ if(!g->vx)dx=px<16*FP?16*FP-px:px>224*FP?224*FP-px:0;
  int dy=py<48*FP?48*FP-py:py>136*FP?136*FP-py:0;
  v->x=view_limit(v->x+view_limit(dx,-6*FP,6*FP),-1258*FP,0);
  v->y=view_limit(v->y+view_limit(dy,-6*FP,6*FP),0,380*FP);

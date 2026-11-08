@@ -1,0 +1,36 @@
+{
+  "source_video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "coordinate_space": "normalized 240x160 reference frames",
+  "annotation_method": "manual visual framing estimates; not recovered original camera code",
+  "right_target_x": 80,
+  "left_target_x": 128,
+  "samples": [
+    {
+      "seconds": 183,
+      "path": "reference/w1l1_postlever/183.png",
+      "estimated_framing_x": 80,
+      "tolerance_pixels": 8,
+      "movement_evidence": "rightward world movement from registered 183 to 184 frame pair"
+    },
+    {
+      "seconds": 184,
+      "path": "reference/w1l1_postlever/184.png",
+      "estimated_framing_x": 80,
+      "tolerance_pixels": 8,
+      "movement_evidence": "rightward world movement from registered 183 to 184 frame pair"
+    },
+    {
+      "seconds": 185,
+      "path": "reference/w1l1_postlever/185.png",
+      "estimated_framing_x": 128,
+      "tolerance_pixels": 16,
+      "movement_evidence": "provisional leftward framing estimate from crouched pose; standing walk still requires calibration"
+    }
+  ],
+  "limits": [
+    "Six-pixel maximum camera step is retained as a prototype smoothing bound, not claimed as original timing",
+    "Vertical follow thresholds remain provisional",
+    "No fake-loading interval has yet been localized and implemented in the current fifteen partial views",
+    "Idle horizontal camera holds within safety margins; short movements may stop before reaching an anchor"
+  ]
+}

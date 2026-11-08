@@ -71,3 +71,10 @@ leva, gemme e nemici sconfitti. Soffitto e piano di cammino sono provvisori.
 La striscia con le spine non è ancora integrata.
 
 ![Nuovo bordo nella ROM](previews/post_lever_entry.png)
+
+### Seguito direzionale della telecamera
+
+La camera lascia spazio davanti a Sia durante il movimento e mantiene la
+posizione orizzontale quando si ferma. I portali delle collisioni non impongono
+stacchi visivi. Taratura iniziale e limiti: [stato della camera](references/CAMERA_FOLLOW_STATUS.md).
+I punti originali di finto loading devono ancora essere annotati dal video.

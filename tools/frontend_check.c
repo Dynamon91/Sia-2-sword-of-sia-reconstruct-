@@ -29,7 +29,8 @@ static unsigned sequence_frame;
 static void capture(struct mCore *c,const char *name);
 static unsigned scroll_portals,scroll_frames,scroll_updates,scroll_last_tick,scroll_last_area,scroll_last_lives;
 static unsigned area_frames[VIEW_COUNT],area_updates[VIEW_COUNT];
-static int scroll_last_x,scroll_last_y,scroll_ready;
+static int scroll_last_x,scroll_last_y,scroll_ready,camera_last_world_x;
+static unsigned camera_right_frames,camera_left_frames,camera_idle_frames;
 static void run(struct mCore *c,unsigned count){
  for(unsigned i=0;i<count;i++){
   c->runFrame(c);
@@ -37,9 +38,19 @@ static void run(struct mCore *c,unsigned count){
   int camera_x=(int)c->busRead32(c,0x0203F13C),camera_y=(int)c->busRead32(c,0x0203F140);
   if(display_state==7&&area>=1&&scroll_ready&&tick>=scroll_last_tick&&tick-scroll_last_tick<=1&&lives==scroll_last_lives){
    assert(abs(camera_x-scroll_last_x)<=6*FP&&abs(camera_y-scroll_last_y)<=6*FP);
+   if(tick==scroll_last_tick+1&&c->busRead32(c,0x0203F000)==7){
+    int shown_x=(int)c->busRead32(c,0x0203F104),world_x=shown_x-(camera_x/FP)*FP;
+    int movement=world_x-camera_last_world_x,center=shown_x+PLAYER_W*FP/2;
+    if(movement==320&&abs(center-80*FP)<=FP)camera_right_frames++;
+    if(movement==-320&&abs(center-128*FP)<=FP)camera_left_frames++;
+    if(!movement&&center>=16*FP&&center<=224*FP){
+     assert(camera_x==scroll_last_x);camera_idle_frames++;
+    }
+   }
    if(c->busRead32(c,0x0203F000)==7){scroll_frames++;area_frames[area]++;if(tick!=scroll_last_tick){scroll_updates++;area_updates[area]++;}}
    if(area!=scroll_last_area)scroll_portals|=(1u<<area)|(1u<<scroll_last_area);
   }
+  camera_last_world_x=(int)c->busRead32(c,0x0203F104)-(camera_x/FP)*FP;
   scroll_ready=display_state==7&&area>=1;scroll_last_tick=tick;scroll_last_area=area;scroll_last_lives=lives;scroll_last_x=camera_x;scroll_last_y=camera_y;
   short left[2048],right[2048];
   int n=blip_read_samples(c->getAudioChannel(c,0),left,2048,0);
@@ -846,6 +857,9 @@ int main(int argc,char **argv){
   assert(area_updates[a]*100u>=area_frames[a]*90u);
  }
  assert(scroll_updates*100u>=scroll_frames*90u);
+ assert(camera_right_frames>30&&camera_left_frames>30&&camera_idle_frames>30);
+ fprintf(stderr,"Directional framing: %u right-anchor, %u left-anchor, %u idle frames\n",camera_right_frames,camera_left_frames,camera_idle_frames);
+ puts("PASS directional camera integration: native right/left framing, idle horizontal hold and bounded continuous following");
  puts("PASS continuous camera integration: bounded six-pixel camera steps across areas 1-14, world-aligned background checks, live controls and pause; no portal-driven camera reset");
  c->deinit(c);free(pixels);
 }
