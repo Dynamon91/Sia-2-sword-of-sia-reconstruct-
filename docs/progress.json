@@ -5,7 +5,7 @@
       "name": "Motore e sistemi di gioco",
       "weight": 15,
       "earned": 9.0,
-      "evidence": "Controlli, combattimento, quattro guardie indipendenti e persistenti, vite/game over, pendenze e portali della rampa e della zona della leva verificati; fisica e IA ancora provvisorie."
+      "evidence": "Controlli, combattimento, quattro guardie persistenti, vite/game over, pendenze e camera continua con raccordi verificati; geometria, fisica e IA ancora provvisorie."
     },
     {
       "name": "Mondo 1 e boss",

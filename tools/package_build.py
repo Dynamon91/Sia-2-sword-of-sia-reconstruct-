@@ -14,7 +14,7 @@ def main():
    if line.startswith('PASS '):passed.append(line.rstrip())
  if not any(s.startswith('PASS frontend ') for s in passed) or not any(s.startswith('PASS settings integration:') for s in passed):
   raise SystemExit('Both gameplay and settings emulator PASS reports are required')
- for prefix in ['PASS airborne integration:', 'PASS ledge integration:', 'PASS scenery integration:', 'PASS disk save integration:', 'PASS reset input integration:', 'PASS menu cancel integration:', 'PASS continuation integration:', 'PASS bridge run integration:', 'PASS upper route integration:', 'PASS upper revisit integration:']:
+ for prefix in ['PASS continuous camera integration:', 'PASS airborne integration:', 'PASS ledge integration:', 'PASS scenery integration:', 'PASS disk save integration:', 'PASS reset input integration:', 'PASS menu cancel integration:', 'PASS continuation integration:', 'PASS bridge run integration:', 'PASS upper route integration:', 'PASS upper revisit integration:']:
   if not any(s.startswith(prefix) for s in passed):raise SystemExit('Missing '+prefix)
  pictures=[p.with_suffix('.png') for p in sorted(root.glob('*.ppm'))]
  if not any(s.startswith('PASS pickup death integration:') for s in passed):
@@ -36,17 +36,23 @@ def main():
  for path in pictures:shutil.copyfile(path,out/'screenshots'/path.name)
  info={'source_commit':os.environ.get('GITHUB_SHA','not-specified'),'rom_sha256':hashlib.sha256(data).hexdigest(),'rom_bytes':len(data),'screenshots':len(pictures),'overall_completion_estimate_percent':sum(r['earned'] for r in json.loads((Path(__file__).resolve().parents[1]/'docs/progress.json').read_text())['areas']),'playable_viewports':14,'collision_geometry':'provisional','hardware_tested':False,'disk_save_reload_tested':True,'music':'Existing mixed recording; separation trials are not integrated.'}
  (out/'BUILD_INFO.json').write_text(json.dumps(info,indent=2)+'\n')
- (out/'LEGGIMI.txt').write_text('''LADY SIA 2 - BUILD DI TEST\n\nApri Lady_Sia2_GBA_test.gba in un emulatore GBA.\nÈ una ricostruzione parziale: quattordici inquadrature parziali del livello 1, quattro guardie prototipo e cinque gemme.\nLe nuove aree aggiungono salita, vuoto, ponte, terza guardia, parete, piattaforma superiore due viste della rampa, il salto fra le isole e due viste della zona della leva con collisioni provvisorie.\nIl percorso completo e gli altri livelli non sono ancora giocabili.\n\nSu+A+sinistra dalla parete: salto alto provvisorio verso la piattaforma superiore.\nSulla piattaforma superiore prosegui a sinistra: risali la rampa fino alla nuova isola. Prosegui a sinistra e salta il vuoto verso l'isola successiva; Su+A raggiunge il ripiano alto provvisorio. Da qui prosegui a sinistra per raggiungere la quarta guardia e la zona della leva. La leva resta inattiva; barriera e percorso seguente sono da implementare.
+ (out/'LEGGIMI.txt').write_text('''LADY SIA 2 - BUILD DI TEST\n\nApri Lady_Sia2_GBA_test.gba in un emulatore GBA.\nÈ una ricostruzione parziale: quattordici inquadrature parziali del livello 1, quattro guardie prototipo e cinque gemme.\nLe nuove aree aggiungono salita, vuoto, ponte, terza guardia, parete, piattaforma superiore due viste della rampa, il salto fra le isole e due viste della zona della leva con collisioni provvisorie.\nIl percorso completo e gli altri livelli non sono ancora giocabili.\n\nSu+A+sinistra dalla parete: salto alto provvisorio verso la piattaforma superiore.\nSulla piattaforma superiore prosegui a sinistra: risali la rampa fino alla nuova isola. Prosegui a sinistra e salta il vuoto verso l'isola successiva; Su+A raggiunge il ripiano alto provvisorio. Da qui prosegui a sinistra per raggiungere la quarta guardia e la zona della leva. La leva resta inattiva; barriera e percorso seguente sono da implementare. La camera segue Sia nello spazio comune alle viste, senza reimpostarsi ai portali.
 A: conferma/salto. B: indietro/attacco.\nFrecce: movimento. Salta sotto il bordo per aggrapparti; Su/A: risali; Giu: lascia la presa. Start: pausa.\nSelect: menu. R: ripristino delle aree e delle gemme.\nTre vite e tre HP (provvisori). Colpi nemici consumano HP; colpi letali e cadute consumano una vita.\nRespawn: HP pieni, gemme e nemici sconfitti conservati. Zero vite: Game Over.\nHP e vite consultabili nella pausa; nessun riquadro HP/L sovrapposto allo scenario.\nPLAY apre direttamente i dialoghi iniziali: il filmato INTRO e la relativa opzione sono stati rimossi.\n\nSOUND viene salvato in SRAM; il vecchio flag INTRO non abilita più il filmato. Il reset del core è verificato;\nriapertura del file SRAM verificata con nuove istanze mGBA, SOUND spento/acceso e checksum corrotto.\nHardware reale non ancora verificato.\nLa musica usa ancora la registrazione precedente.\nNon è stato integrato il tentativo di separazione degli effetti.\n\nTEST_REPORT.txt: prove mGBA superate.\nBUILD_INFO.json: commit, hash ROM e limiti.\nSHA256SUMS.txt: integrità di tutti gli altri file del pacchetto.\nscreenshots/: acquisizioni reali della ROM compilata.\n''')
  repo=Path(__file__).resolve().parents[1]
  shutil.copyfile(repo/'references/LIFE_FEEDBACK_STATUS.md',out/'LIFE_FEEDBACK_STATUS.md')
  shutil.copyfile(repo/'references/RAMP_ROUTE_STATUS.md',out/'RAMP_ROUTE_STATUS.md')
  for source in ['previews/ramp_gameplay.gif','previews/ramp_preview.json','previews/ramp_upper_landing.png','previews/ramp_lower_entry.png','assets/ramp_route_manifest.json']:
-  shutil.copyfile(repo/source,out/Path(source).name)
+  source_file=root/Path(source).name if source.startswith('previews/') and source.endswith('.png') else repo/source
+  shutil.copyfile(source_file,out/Path(source).name)
  for source in ['references/ISLAND_GAP_STATUS.md','previews/island_gap_gameplay.gif','previews/island_gap_preview.json','previews/island_gap_left_landing.png','previews/island_gap_high_ledge.png','assets/island_gap_manifest.json']:
-  shutil.copyfile(repo/source,out/Path(source).name)
+  source_file=root/Path(source).name if source.startswith('previews/') and source.endswith('.png') else repo/source
+  shutil.copyfile(source_file,out/Path(source).name)
  for source in ['references/LEVER_ROUTE_STATUS.md','previews/lever_route_gameplay.gif','previews/lever_route_preview.json','previews/lever_entry.png','previews/lever_guard_defeated.png','previews/lever_return.png','assets/lever_route_manifest.json']:
-  shutil.copyfile(repo/source,out/Path(source).name)
+  source_file=root/Path(source).name if source.startswith('previews/') and source.endswith('.png') else repo/source
+  shutil.copyfile(source_file,out/Path(source).name)
+ for source in ['references/CONTINUOUS_CAMERA_STATUS.md','assets/scroll_manifest.json']:
+  source_file=root/Path(source).name if source.startswith('previews/') and source.endswith('.png') else repo/source
+  shutil.copyfile(source_file,out/Path(source).name)
  for name in ['jump','ledge','scenery','continuation','bridge_run','ramp','island_gap','lever_route']:
   report=json.loads((repo/'previews'/f'{name}_preview.json').read_text())
   preview=(repo/'previews'/f'{name}_gameplay.gif').read_bytes()
@@ -55,7 +61,8 @@ A: conferma/salto. B: indietro/attacco.\nFrecce: movimento. Salta sotto il bordo
   if report['rom_sha256']!=hashlib.sha256(data).hexdigest() or not report['all_source_pixels_preserved']:
    raise SystemExit('Stale or unverified native animation preview: '+name)
  for source in ['references/UPPER_ROUTE_PLAYABLE_STATUS.md','previews/upper_entry.png','previews/upper_gem5.png','previews/upper_return.png','previews/bridge_run_gameplay.gif','previews/bridge_run_preview.json','references/BRIDGE_RUN_PLAYABLE_STATUS.md','previews/continuation_gameplay.gif','previews/continuation_preview.json','references/CONTINUATION_PLAYABLE_STATUS.md','previews/scenery_gameplay.gif','previews/scenery_preview.json','references/SCENERY_STATUS.md','previews/jump_gameplay.gif','previews/jump_preview.json','previews/ledge_gameplay.gif','previews/ledge_preview.json','references/JUMP_STATUS.md','references/LEDGE_STATUS.md','references/SAVE_RELOAD_STATUS.md','references/RESET_INPUT_STATUS.md','references/MENU_CANCEL_STATUS.md','docs/progress.svg','docs/progress.png','docs/progress.json','docs/PROGRESS.md']:
-  shutil.copyfile(repo/source,out/Path(source).name)
+  source_file=root/Path(source).name if source.startswith('previews/') and source.endswith('.png') else repo/source
+  shutil.copyfile(source_file,out/Path(source).name)
  files=sorted(p for p in out.rglob('*') if p.is_file())
  (out/'SHA256SUMS.txt').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.relative_to(out).as_posix()+'\n' for p in files))
  print('Packaged',len(data),'ROM bytes and',len(pictures),'real captures in',out)

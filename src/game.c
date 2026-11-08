@@ -299,10 +299,10 @@ void game_step(Game *g,unsigned input){
  if(!g->area&&(pressed&DOWN)&&center>=158&&center<=190&&g->grounded)g->sign_open=1;
  if(!g->area&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=225*FP&&g->grounded&&g->y==0)transition_area(g,1);
  else if(g->area==1&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=32*FP&&g->grounded)transition_area(g,0);
- else if(g->area==1&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=225*FP&&g->grounded){g->area=2;g->progress.area=2;g->x=20*FP;g->y=14*FP;g->vy=0;camera(g);}
- else if(g->area==2&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=8*FP&&g->grounded){g->area=1;g->progress.area=1;g->x=224*FP;g->y=60*FP;g->vy=0;camera(g);}
- else if(g->area==2&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=225*FP&&g->grounded){g->area=3;g->progress.area=3;g->x=10*FP;g->y=90*FP;g->vy=0;camera(g);}
- else if(g->area==3&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=1*FP&&g->grounded){g->area=2;g->progress.area=2;g->x=224*FP;g->y=75*FP;g->vy=0;camera(g);}
+ else if(g->area==1&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=225*FP&&g->grounded){g->area=2;g->progress.area=2;g->x-=206*FP;g->y-=46*FP;g->vy=0;camera(g);}
+ else if(g->area==2&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=8*FP&&g->grounded){g->area=1;g->progress.area=1;g->x+=206*FP;g->y+=46*FP;g->vy=0;camera(g);}
+ else if(g->area==2&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=225*FP&&g->grounded){g->area=3;g->progress.area=3;g->x-=216*FP;g->y+=15*FP;g->vy=0;camera(g);}
+ else if(g->area==3&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=1*FP&&g->grounded){g->area=2;g->progress.area=2;g->x+=216*FP;g->y-=15*FP;g->vy=0;camera(g);}
  else if(g->area==3&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=225*FP&&g->grounded){
   g->area=4;g->progress.area=4;g->x-=158*FP;g->y+=18*FP;camera(g);
  }else if(g->area==4&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=32*FP&&g->grounded){

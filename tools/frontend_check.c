@@ -10,6 +10,7 @@
 #include "../src/game.h"
 #include "../src/alignment.h"
 #include "../src/scenery.h"
+#include "../src/view_camera.h"
 #include "../assets/ui.h"
 /* Keep diagnostics, but do not bury PASS/error lines in per-DMA debug output. */
 static void emulator_log(struct mLogger *logger,int category,enum mLogLevel level,const char *format,va_list args){
@@ -26,9 +27,19 @@ static unsigned audio_frames;
 static const char *sequence_dir;
 static unsigned sequence_frame;
 static void capture(struct mCore *c,const char *name);
+static unsigned scroll_portals,scroll_frames,scroll_updates,scroll_last_tick,scroll_last_area,scroll_last_lives;
+static int scroll_last_x,scroll_last_y,scroll_ready;
 static void run(struct mCore *c,unsigned count){
  for(unsigned i=0;i<count;i++){
   c->runFrame(c);
+  unsigned display_state=c->busRead32(c,0x0203F100),tick=c->busRead32(c,0x0203F124),area=c->busRead32(c,0x0203F12C),lives=c->busRead32(c,0x0203F14C);
+  int camera_x=(int)c->busRead32(c,0x0203F13C),camera_y=(int)c->busRead32(c,0x0203F140);
+  if(display_state==7&&area>=7&&scroll_ready&&tick>=scroll_last_tick&&tick-scroll_last_tick<=1&&lives==scroll_last_lives){
+   assert(abs(camera_x-scroll_last_x)<=6*FP&&abs(camera_y-scroll_last_y)<=6*FP);
+   if(c->busRead32(c,0x0203F000)==7){scroll_frames++;if(tick!=scroll_last_tick)scroll_updates++;}
+   if(area!=scroll_last_area)scroll_portals|=(1u<<area)|(1u<<scroll_last_area);
+  }
+  scroll_ready=display_state==7&&area>=7;scroll_last_tick=tick;scroll_last_area=area;scroll_last_lives=lives;scroll_last_x=camera_x;scroll_last_y=camera_y;
   short left[2048],right[2048];
   int n=blip_read_samples(c->getAudioChannel(c,0),left,2048,0);
   int m=blip_read_samples(c->getAudioChannel(c,1),right,2048,0);
@@ -48,6 +59,45 @@ static unsigned shown(struct mCore *c,int offset){return c->busRead32(c,0x0203F1
 static void state(struct mCore *c,unsigned expected){
  if(value(c,0)!=expected)fprintf(stderr,"Expected state %u, got %u at frame %u\n",expected,value(c,0),c->frameCounter(c));
  assert(value(c,0)==expected);
+}
+static void check_world_background(struct mCore *c){
+ static unsigned char world[810000],clouds[25600],sky[2][80][240];static int loaded;
+ if(!loaded){
+  FILE *atlas=fopen("assets/scroll_world.bin","rb");assert(atlas);assert(fread(world,1,sizeof(world),atlas)==sizeof(world));fclose(atlas);
+  FILE *f=fopen("assets/cloud_strip.bin","rb");assert(f);assert(fread(clouds,1,25600,f)==25600);fclose(f);
+  f=fopen("assets/scroll_sky.bin","rb");assert(f);
+  for(unsigned a=0;a<2;a++)for(unsigned y=0;y<80;y++){
+   fseek(f,(a*80+y)*2,SEEK_SET);unsigned off=(unsigned)fgetc(f);off|=(unsigned)fgetc(f)<<8;fseek(f,(long)off,SEEK_SET);int count=fgetc(f);
+   for(int i=0;i<count;i++){int x=fgetc(f),n=fgetc(f);while(n--)sky[a][y][x++]=1;}
+  }fclose(f);loaded=1;
+ }
+ int cx=(int)shown(c,15)/FP,cy=(int)shown(c,16)/FP,px=(int)shown(c,1)/FP,py=(int)shown(c,2)/FP-(int)shown(c,3);
+ unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000,checked=0;
+ for(int y=0;y<160;y++)for(int x=0;x<240;x++){
+  if(x>px-42&&x<px+72&&y>py-65&&y<py+75)continue;
+  int actor=0;
+  for(unsigned i=0;i<GEM_COUNT;i++){
+   int a=level_gems[i].area,gx=level_gems[i].x+cx-view_origin[a][0],gy=level_gems[i].y+cy-view_origin[a][1];
+   if(x>=gx&&x<gx+16&&y>=gy&&y<gy+16)actor=1;
+  }
+  const int guards[4][5]={{3,140,210,88,25},{4,188,218,98,30},{6,85,145,104,38},{12,65,100,63,40}};
+  for(int i=0;i<4;i++)if(value(c,guards[i][4])){
+   int gx=cx-view_origin[guards[i][0]][0],gy=cy-view_origin[guards[i][0]][1]+guards[i][3];
+   if(x>=gx+guards[i][1]-22&&x<gx+guards[i][2]+45&&y>=gy-60&&y<gy+12)actor=1;
+  }
+  if(actor)continue;
+  int expected=world[(380-cy+y)*1500+x-cx];
+  for(unsigned a=0;a<VIEW_COUNT;a++){
+   int sx=x-cx+view_origin[a][0],sy=y-cy+view_origin[a][1];
+   if(sx<0||sx>=240||sy<0||sy>=160)continue;
+   if(a<2&&sy<80&&sky[a][sy][sx])expected=clouds[sy*320+(shown(c,12)+(unsigned)sx)%320];
+   break;
+  }
+  unsigned actual=c->busRead8(c,base+(unsigned)y*240+(unsigned)x);
+  if(actual!=(unsigned)expected)fprintf(stderr,"World pixel mismatch at %d,%d camera %d,%d: %u != %d\n",x,y,cx,cy,actual,expected);
+  assert(actual==(unsigned)expected);checked++;
+ }
+ assert(checked>10000);
 }
 static void tap(struct mCore *c,unsigned key){c->setKeys(c,key);run(c,8);c->setKeys(c,0);run(c,8);}
 static void capture(struct mCore *c,const char *name){
@@ -82,14 +132,16 @@ static void ascend_first_ledge(struct mCore *c){
 static void check_ledge_sprite(struct mCore *c,unsigned frame){
  FILE *f=fopen("assets/ledge_cycle.bin","rb");assert(f);
  assert(!fseek(f,(long)frame*48*104,SEEK_SET));
- int sx=(int)value(c,8)/FP+PLAYER_W/2-24;
- int sy=(int)value(c,34)-44-(int)value(c,15);
+ int sx=(int)shown(c,1)/FP+PLAYER_W/2-24;
+ int sy=(int)value(c,34)-44-(int)shown(c,3);
  unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
  unsigned checked=0;
  for(int y=0;y<104;y++)for(int x=0;x<48;x++){
   int p=fgetc(f);assert(p>=0);
   if(p&&sx+x>=0&&sx+x<240&&sy+y>=0&&sy+y<160){
-   assert(c->busRead8(c,base+(unsigned)(sy+y)*240+(unsigned)(sx+x))==(unsigned)p);checked++;
+   unsigned actual=c->busRead8(c,base+(unsigned)(sy+y)*240+(unsigned)(sx+x));
+   if(actual!=(unsigned)p){fprintf(stderr,"Ledge frame %u local %d,%d at %d,%d actual %u expected %d shown x %d cy %d offsets %d,%d state %u\n",frame,x,y,sx,sy,actual,p,(int)shown(c,1)/FP,(int)shown(c,3),(int)shown(c,13),(int)shown(c,14),shown(c,7));capture(c,"build/scroll_ledge_fail.ppm");}
+   assert(actual==(unsigned)p);checked++;
   }
  }
  fclose(f);assert(checked>200);
@@ -292,8 +344,8 @@ int main(int argc,char **argv){
  c->setKeys(c,64);
  unsigned ledge_seen=0,last_ledge_frame=99;
  for(int i=0;i<100&&value(c,11);i++){
-  run(c,1);unsigned f=value(c,32);
-  if(value(c,11)==LEDGE_PULL&&f==last_ledge_frame&&!(ledge_seen&(1u<<f))){
+  run(c,1);unsigned f=shown(c,17);
+  if(shown(c,7)==LEDGE_PULL&&f==last_ledge_frame&&!(ledge_seen&(1u<<f))){
    char path[64];check_ledge_sprite(c,f);snprintf(path,sizeof(path),"build/ledge_pull_%u.ppm",f);capture(c,path);ledge_seen|=1u<<f;
   }
   last_ledge_frame=f;
@@ -317,7 +369,7 @@ int main(int argc,char **argv){
  c->setKeys(c,0);run(c,10);
  player(c,&x,&y);assert(y==0&&value(c,14)==1);assert((int)value(c,15)==-40);
  capture(c,"build/room_upper_v06.ppm");
- check_rest_background(c,"assets/room.bin",109,62);
+ check_world_background(c);
  c->setKeys(c,16);
  for(int i=0;i<200&&value(c,17)==0;i++){
   int before_x=(int)value(c,8),before_y=(int)value(c,9);
@@ -329,7 +381,7 @@ int main(int argc,char **argv){
  }
  c->setKeys(c,0);run(c,5);assert(value(c,17)==1);state(c,7);
  capture(c,"build/bridge_entry_v06.ppm");
- check_rest_background(c,"assets/bridge.bin",133,74);
+ check_world_background(c);
  c->setKeys(c,33);for(int i=0;i<300&&value(c,18)==0;i++)run(c,1);
  c->setKeys(c,0);run(c,5);assert(value(c,17)==1&&value(c,18)==1&&value(c,10)==1);
  capture(c,"build/bridge_respawn_v06.ppm");
@@ -494,15 +546,7 @@ int main(int argc,char **argv){
  }
  c->setKeys(c,0);run(c,4);assert(value(c,17)==5&&value(c,14)&&value(c,10)==4&&value(c,26)==2);
  capture(c,"build/continuation_entry.ppm");
- FILE *continuation_file=fopen("assets/continuation_background.bin","rb");assert(continuation_file);
- unsigned continuation_base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
- const unsigned sample_pixels[][2]={{10,45},{180,50},{190,130}};
- for(unsigned i=0;i<3;i++){
-  unsigned offset=sample_pixels[i][1]*240+sample_pixels[i][0];
-  assert(!fseek(continuation_file,512+(long)offset,SEEK_SET));int expected=fgetc(continuation_file);assert(expected>=0);
-  assert(c->busRead8(c,continuation_base+offset)==(unsigned)expected);
- }
- fclose(continuation_file);
+ check_world_background(c);
  move_to(c,16,125);assert(value(c,17)==5&&value(c,14)&&(int)value(c,9)==61*FP);
  capture(c,"build/continuation_slope.ppm");
  sequence_dir="build/continuation_sequence";sequence_frame=0;
@@ -538,14 +582,7 @@ int main(int argc,char **argv){
  }
  c->setKeys(c,0);run(c,4);assert(value(c,17)==7&&value(c,14)&&value(c,38)==0);
  capture(c,"build/riser_entry.ppm");
- FILE *riser_file=fopen("assets/riser_background.bin","rb");assert(riser_file);
- unsigned riser_base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
- for(unsigned i=0;i<3;i++){
-  unsigned offset=sample_pixels[i][1]*240+sample_pixels[i][0];
-  assert(!fseek(riser_file,512+(long)offset,SEEK_SET));int expected=fgetc(riser_file);assert(expected>=0);
-  assert(c->busRead8(c,riser_base+offset)==(unsigned)expected);
- }
- fclose(riser_file);
+ check_world_background(c);
  move_to(c,16,119);c->setKeys(c,16);run(c,30);
  assert(value(c,8)==119*FP&&value(c,14)&&value(c,28)==0);capture(c,"build/riser_wall.ppm");
  c->setKeys(c,0);run(c,4);tap(c,8);state(c,8);unsigned riser_ticks=value(c,16);run(c,30);assert(value(c,16)==riser_ticks);
@@ -555,14 +592,7 @@ int main(int argc,char **argv){
  unsigned upper_lives=value(c,31),upper_falls=value(c,18);
  c->setKeys(c,97);run(c,60);c->setKeys(c,0);run(c,8);
  assert(value(c,17)==8&&value(c,14));capture(c,"build/upper_entry.ppm");
- FILE *upper_file=fopen("assets/upper_background.bin","rb");assert(upper_file);
- unsigned upper_base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
- for(unsigned i=0;i<3;i++){
-  unsigned offset=sample_pixels[i][1]*240+sample_pixels[i][0];
-  assert(!fseek(upper_file,512+(long)offset,SEEK_SET));int expected=fgetc(upper_file);assert(expected>=0);
-  assert(c->busRead8(c,upper_base+offset)==(unsigned)expected);
- }
- fclose(upper_file);
+ check_world_background(c);
  move_to(c,16,58);c->setKeys(c,17);run(c,40);c->setKeys(c,0);
  assert(value(c,10)==5);
  assert((c->busRead16(c,0x0700000C)&1023)==720);
@@ -758,5 +788,9 @@ int main(int argc,char **argv){
  c->setKeys(c,2);run(c,2);assert(value(c,29)==0);
  c->setKeys(c,0);run(c,20);
  puts("PASS reset input integration: held A/B across R reset remain idle; release and fresh press restore jump and attack");
+ assert((scroll_portals&0x3F80u)==0x3F80u);
+ fprintf(stderr,"Scrolling performance: %u displayed updates in %u active late-route frames\n",scroll_updates,scroll_frames);
+ assert(scroll_updates*100u>=scroll_frames*90u);
+ puts("PASS continuous camera integration: bounded six-pixel camera steps across areas 7-13, world-aligned background checks, live controls and pause; no portal-driven camera reset");
  c->deinit(c);free(pixels);
 }

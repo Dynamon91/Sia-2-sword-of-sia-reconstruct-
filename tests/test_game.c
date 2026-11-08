@@ -64,7 +64,7 @@ int main(void){
   assert(aligned_sprite_x(center,48,SIA_ANCHOR_X,1)+(47-SIA_ANCHOR_X)==center);
  }
  game_reset(&g);g.area=1;g.progress.area=1;g.x=224*FP;g.y=60*FP;g.grounded=1;
- game_step(&g,RIGHT);assert(g.area==2&&g.x==20*FP&&g.y==14*FP);
+ game_step(&g,RIGHT);assert(g.area==2&&g.x==224*FP+320-206*FP&&g.y==14*FP);
  step(&g,RIGHT,5);step(&g,JUMP|RIGHT,90);step(&g,0,60);
  assert(g.area==2&&g.grounded&&g.y==75*FP&&g.falls==0);
  g.x=20*FP;g.y=14*FP;g.vy=0;g.grounded=1;step(&g,LEFT,10);assert(g.area==1);

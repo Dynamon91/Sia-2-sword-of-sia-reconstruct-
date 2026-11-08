@@ -173,3 +173,16 @@ lever_entry_background:
 .global lever_room_background
 lever_room_background:
 .incbin "assets/lever_room_background.bin"
+
+.balign 4
+.global scroll_world
+scroll_world:
+.incbin "assets/scroll_world.bin"
+.balign 4
+.global scroll_world_sky
+scroll_world_sky:
+.incbin "assets/scroll_world_sky.bin"
+.balign 4
+.global scroll_cloud
+scroll_cloud:
+.incbin "assets/scroll_cloud.bin"

@@ -6,6 +6,7 @@ static const char save_type[] __attribute__((used))="SRAM_V113";
 #include "alignment.h"
 #include "scenery.h"
 #include "story.h"
+#include "view_camera.h"
 #include "../assets/assets.h"
 #include "../assets/room.h"
 #include "../assets/ui.h"
@@ -30,6 +31,9 @@ static unsigned clock_ticks,clock_last,audio_end,audio_active,intro_frame;
 static unsigned arrival_index;
 static u16 object_shadow[128*4];
 static Game game;
+static ViewCamera view_camera;
+static int sprite_dx,sprite_dy;
+extern const unsigned char scroll_world[],scroll_world_sky[],scroll_cloud[];
 static const u16 lab_palette[256]={
  RGB(3,5,10),RGB(8,12,18),RGB(10,18,19),RGB(25,21,12),RGB(23,10,15),RGB(30,29,24),
  [240]=0,[241]=RGB(31,31,31),[242]=RGB(31,26,10),[243]=RGB(10,27,30),[244]=RGB(1,3,6),[245]=RGB(27,12,17)
@@ -141,10 +145,10 @@ static void audio_play(const unsigned char *p,unsigned length){
  REG16(0x04000100)=0xFC00;REG16(0x04000102)=0x80;audio_active=1;
 }
 static void enter(unsigned next){state=next;dirty=1;}
-static void arrival(void){audio_stop();paused=0;arrival_index=0;game_reset(&game);enter(ARRIVAL);}
+static void arrival(void){audio_stop();paused=0;arrival_index=0;game_reset(&game);view_camera_reset(&view_camera,&game);enter(ARRIVAL);}
 static void return_menu(void){audio_stop();paused=0;enter(MENU);}
 static void start_level(void){
- paused=0;game_reset(&game);game.previous=JUMP|ATTACK;
+ paused=0;game_reset(&game);view_camera_reset(&view_camera,&game);game.previous=JUMP|ATTACK;
  clock_start();audio_play(audio_level,AUDIO_LEVEL_LEN);enter(LAB);
 }
 static void resume_level(void){
@@ -161,9 +165,22 @@ static void dialog(unsigned index){
  wrapped(10,98,p->text,241);
 }
 static void sprite(int x,int y,int w,int h,const unsigned char *pixels,int flip){
- for(int row=0;row<h;row++)for(int col=0;col<w;col++){
-  unsigned p=pixels[row*w+(flip?w-col-1:col)];
-  if(p)pixel(x+col,y+row,p);
+ x+=sprite_dx;y+=sprite_dy;
+ int left=x<0?-x:0,right=x+w>240?240-x:w,top=y<0?-y:0,bottom=y+h>160?160-y:h;
+ if(left>=right||top>=bottom)return;
+ int step=flip?-1:1;
+ for(int row=top;row<bottom;row++){
+  int col=left,screen=x+left;const unsigned char *source=pixels+row*w+(flip?w-1-left:left);
+  if(screen&1){unsigned p=*source;source+=step;if(p)pixel(screen,y+row,p);col++;screen++;}
+  volatile u16 *dst=page+(y+row)*120+screen/2;
+  for(;col+1<right;col+=2){
+   unsigned a=*source;source+=step;unsigned b=*source;source+=step;
+   if(a&&b)*dst=(u16)(a|(b<<8));
+   else if(a)*dst=(u16)((*dst&0xFF00)|a);
+   else if(b)*dst=(u16)((*dst&255)|(b<<8));
+   dst++;
+  }
+  if(col<right&&*source)pixel(x+col,y+row,*source);
  }
 }
 static void draw_clouds(unsigned phase){
@@ -180,7 +197,23 @@ static void draw_clouds(unsigned phase){
   }
  }
 }
-static void draw_level(void){
+static void cloud_span(int y,int x,int stop,int column,int row){
+ const unsigned char *even=scroll_cloud+row*CLOUD_WIDTH;
+ while(x<stop){
+  if((x&3)||(stop-x<4)){
+   pixel(x++,y,even[column]);if(++column==(int)CLOUD_WIDTH)column=0;continue;
+  }
+  int n=stop-x,available=(int)CLOUD_WIDTH-column;if(n>available)n=available;
+  if(n>=4){
+   unsigned shift=(unsigned)column&3;
+   const unsigned char *source=scroll_cloud+shift*CLOUD_BANK_BYTES+row*CLOUD_WIDTH+column-(int)shift;
+   REG32(0x040000D4)=(unsigned)source;REG32(0x040000D8)=(unsigned)(page+y*120+x/2);
+   REG32(0x040000DC)=0x84000000|(unsigned)(n/4);
+   int copied=n&~3;x+=copied;column+=copied;if(column==(int)CLOUD_WIDTH)column=0;
+  }else{pixel(x++,y,even[column]);if(++column==(int)CLOUD_WIDTH)column=0;}
+ }
+}
+static void draw_initial_background(void){
  const unsigned char *background=game.area?bridge_backdrop:room_backdrop;
  const unsigned char *spans=game.area?bridge_spans:room_spans;
  int shift=-game.camera_y;
@@ -204,19 +237,46 @@ static void draw_level(void){
    }
   }
  }
+}
+static void draw_world(void){
+ if(!game.area&&!view_camera.x&&!view_camera.y&&!game.camera_y){draw_initial_background();return;}
+ int sx=-view_camera.x/FP,sy=380-view_camera.y/FP;unsigned shift=(unsigned)sx&3;
+ pending_palette=(const u16*)room_background;
+ for(int y=0;y<160;y++){
+  int row=sy+y;
+  const unsigned char *source=scroll_world+shift*810000+row*1500+sx-(int)shift;
+  REG32(0x040000D4)=(unsigned)source;REG32(0x040000D8)=(unsigned)(page+y*120);
+  REG32(0x040000DC)=0x84000000|60;
+  unsigned offset=(unsigned)row*2;
+  const unsigned char *runs=scroll_world_sky+(scroll_world_sky[offset]|((unsigned)scroll_world_sky[offset+1]<<8));
+  unsigned count=*runs++;
+  for(unsigned i=0;i<count;i++){
+   int start=runs[0]|((int)runs[1]<<8),n=runs[2]|((int)runs[3]<<8),sky_y=runs[4],sky_x=runs[5]|((int)runs[6]<<8);runs+=7;
+   int a=start>sx?start:sx,b=start+n<sx+240?start+n:sx+240;
+   if(a<b)cloud_span(y,a-sx,b-sx,(int)(cloud_phase(game.ticks)+(unsigned)(sky_x+a-start))%(int)CLOUD_WIDTH,sky_y);
+  }
+ }
+}
+static void entity_origin(unsigned area){sprite_dx=view_camera.x/FP-view_origin[area][0];sprite_dy=view_camera.y/FP-view_origin[area][1];}
+static void draw_level(void){
+ unsigned profile_start=REG16(0x0400010C);
+ draw_world();
+ (*(volatile unsigned*)0x0203F0C8)=(u16)(REG16(0x0400010C)-profile_start);
  for(unsigned i=0;i<GEM_COUNT;i++){
   const Gem *gem=&level_gems[i];
-  if(gem->area==game.area&&!(game.collected&(1u<<gem->id)))
-   sprite(gem->x,gem->y-game.camera_y,16,16,ambient_gems+((game.ticks/8)%4)*256,0);
+  entity_origin((unsigned)gem->area);
+  if(!(game.collected&(1u<<gem->id)))
+   sprite(gem->x,gem->y,16,16,ambient_gems+((game.ticks/8)%4)*256,0);
  }
- if(game.area==3&&game.enemy_hp&&(!game.enemy_flash||(game.enemy_flash&2)))
-  sprite(game.enemy_x/FP+9-20,88-55,41,60,guard_sprite,game.enemy_dir>0);
- if((game.area==4||game.area==5)&&game.enemy2_hp&&(!game.enemy2_flash||(game.enemy2_flash&2)))
-  sprite(game.enemy2_x/FP+9-15-(game.area==5?188:0),98-51+(game.area==5?25:0),34,55,guard2_sprite,game.enemy2_dir>0);
- if((game.area==6||game.area==7)&&game.enemy3_hp&&(!game.enemy3_flash||(game.enemy3_flash&2)))
-  sprite(game.enemy3_x/FP+9-20-(game.area==7?168:0),104-55+(game.area==7?7:0),41,60,guard_sprite,game.enemy3_dir>0);
- if((game.area==12||game.area==13)&&game.enemy4_hp&&(!game.enemy4_flash||(game.enemy4_flash&2)))
-  sprite(game.enemy4_x/FP+9-15+(game.area==13?44:0),63-51+(game.area==13?86:0),34,55,guard2_sprite,game.enemy4_dir>0);
+ entity_origin(3);
+ if(game.enemy_hp&&(!game.enemy_flash||(game.enemy_flash&2)))sprite(game.enemy_x/FP+9-20,88-55,41,60,guard_sprite,game.enemy_dir>0);
+ entity_origin(4);
+ if(game.enemy2_hp&&(!game.enemy2_flash||(game.enemy2_flash&2)))sprite(game.enemy2_x/FP+9-15,98-51,34,55,guard2_sprite,game.enemy2_dir>0);
+ entity_origin(6);
+ if(game.enemy3_hp&&(!game.enemy3_flash||(game.enemy3_flash&2)))sprite(game.enemy3_x/FP+9-20,104-55,41,60,guard_sprite,game.enemy3_dir>0);
+ entity_origin(12);
+ if(game.enemy4_hp&&(!game.enemy4_flash||(game.enemy4_flash&2)))sprite(game.enemy4_x/FP+9-15,63-51,34,55,guard2_sprite,game.enemy4_dir>0);
+ entity_origin((unsigned)game.area);sprite_dy+=game.camera_y;
  unsigned air=game_air_frame(&game);
  const unsigned char *actor=room_sprites;
  int width=48,height=56,anchor=24;
@@ -230,6 +290,7 @@ static void draw_level(void){
          48,104,ledge_cycle+game_ledge_frame(&game)*48*104,0);
  }else if(!game.hurt_timer||(game.hurt_timer&4))sprite(aligned_sprite_x(game.x/FP+PLAYER_W/2,width,anchor,game.facing<0),game.y/FP+PLAYER_H-height-game.camera_y,
         width,height,actor,game.facing<0);
+ (*(volatile unsigned*)0x0203F0CC)=(u16)(REG16(0x0400010C)-profile_start);
  if(game.pickup_timer>0){
   ui_object(0,95,11,2,UI_GEM_TILE);
   ui_object(1,129,29,1,game.gems==5?720:game.gems==4?712:game.gems==3?704:game.gems==2?UI_DIGIT2_TILE:game.gems?UI_DIGIT1_TILE:UI_DIGIT0_TILE);
@@ -283,17 +344,20 @@ static void render(void){
  /* Snapshot the displayed pose after the page flip, rather than the next
     physics update. Native-frame tests can then check a moving sprite exactly. */
  volatile unsigned *shown=(volatile unsigned*)0x0203F100;
- shown[0]=state;shown[1]=(unsigned)game.x;shown[2]=(unsigned)game.y;
- shown[3]=(unsigned)game.camera_y;shown[4]=game_air_frame(&game);
+ shown[0]=state;shown[1]=(unsigned)(game.x+(view_camera.x/FP-view_origin[game.area][0])*FP);shown[2]=(unsigned)game.y;
+ shown[3]=(unsigned)(view_origin[game.area][1]-view_camera.y/FP);shown[4]=game_air_frame(&game);
  shown[5]=(unsigned)game.facing;shown[6]=game.attack?game_attack_frame(&game):3;
  shown[7]=(unsigned)game.climbing;shown[8]=(unsigned)game.grounded;
  shown[9]=game.ticks;shown[10]=front;
  shown[11]=(unsigned)game.area;shown[12]=cloud_phase(game.ticks);
+ shown[13]=(unsigned)(view_camera.x/FP-view_origin[game.area][0]);shown[14]=(unsigned)(view_camera.y/FP-view_origin[game.area][1]);
+ shown[15]=(unsigned)view_camera.x;shown[16]=(unsigned)view_camera.y;
+ shown[17]=game_ledge_frame(&game);shown[18]=(unsigned)game.ledge_y;shown[19]=game.lives;
 }
 int main(void){
  REG16(0x04000204)=0x4317;REG16(0x04000000)=0x0404;
- REG16(0x04000088)=0x200;ui_init();
- settings_load(SETTINGS_SRAM,&sound_enabled,&intro_enabled);intro_enabled=0;dirty=1;game_reset(&game);
+ REG16(0x04000088)=0x200;REG16(0x0400010E)=0x81;ui_init();
+ settings_load(SETTINGS_SRAM,&sound_enabled,&intro_enabled);intro_enabled=0;dirty=1;game_reset(&game);view_camera_reset(&view_camera,&game);
  clock_start();audio_play(audio_title,AUDIO_TITLE_LEN);
  for(;;){
   clock_update();
@@ -344,7 +408,11 @@ int main(void){
     if(keys&64)input|=UP;
     if(keys&128)input|=DOWN;
     if(pressed&256)input|=RESET;
-    game_step(&game,input);dirty=1;
+    unsigned old_lives=game.lives;
+    game_step(&game,input);
+    if((input&RESET)||game.lives!=old_lives)view_camera_reset(&view_camera,&game);
+    else view_camera_step(&view_camera,&game);
+    dirty=1;
     if(game.game_over){paused=1;audio_stop();enter(GAME_OVER);}
     else if(game.sign_open){paused=1;audio_stop();enter(TUTORIAL);}
    }break;

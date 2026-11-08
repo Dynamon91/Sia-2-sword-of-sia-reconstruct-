@@ -12,8 +12,8 @@ build/start.o: src/start.s | build
 	$(CC) -mcpu=arm7tdmi -marm -c $< -o $@
 build/game.o: src/game.c src/game.h src/level_progress.h src/alignment.h | build
 	$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
-build/main.o: src/main.c src/settings.h src/game.h src/alignment.h src/scenery.h src/story.h assets/assets.h assets/room.h assets/ui.h | build
-	$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
+build/main.o: src/main.c src/view_camera.h src/settings.h src/game.h src/alignment.h src/scenery.h src/story.h assets/assets.h assets/room.h assets/ui.h | build
+	$(CC) $(CFLAGS) -O3 -marm $(DEPFLAGS) -c $< -o $@
 build/level_progress.o: src/level_progress.c src/level_progress.h | build
 	$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
 build/story.o: src/story.c src/story.h assets/assets.h | build
@@ -21,13 +21,15 @@ build/story.o: src/story.c src/story.h assets/assets.h | build
 build/assets.o: src/assets.s assets/jump_cycle.bin assets/ledge_cycle.bin assets/ambient_gems.bin assets/gap.bin assets/guard2_sprite.bin assets/walk_cycle.bin assets/attack_cycle.bin assets/ui_more_tiles.bin assets/guard_room.bin assets/guard_sprite.bin assets/cliff.bin assets/visuals.bin assets/audio_title.pcm assets/audio_level.pcm assets/font.bin assets/room.bin assets/room_sprites.bin assets/room_sky.bin assets/bridge.bin assets/bridge_sky.bin assets/bridge_run.bin assets/ui_palette.bin assets/ui_tiles.bin assets/ui_dialogs.bin assets/room_backdrop.bin assets/room_spans.bin assets/bridge_backdrop.bin assets/bridge_spans.bin | build
 	$(CC) -mcpu=arm7tdmi -marm -c $< -o $@
 build/assets.o: assets/upper_background.bin assets/ui_digit5_tiles.bin assets/cloud_strip.bin assets/continuation_background.bin assets/bridge_run_background.bin assets/riser_background.bin
-build/assets.o: assets/ramp_lower_background.bin assets/ramp_upper_background.bin assets/island_gap_background.bin assets/lever_entry_background.bin assets/lever_room_background.bin
+build/assets.o: assets/ramp_lower_background.bin assets/ramp_upper_background.bin assets/island_gap_background.bin assets/lever_entry_background.bin assets/lever_room_background.bin assets/scroll_world.bin assets/scroll_world_sky.bin assets/scroll_cloud.bin
 build/sia2_lab.elf: build/start.o build/game.o build/main.o build/story.o build/level_progress.o build/assets.o link.ld
 	$(CC) -mcpu=arm7tdmi -mthumb-interwork -nostdlib -T link.ld -Wl,-Map,build/sia2_lab.map build/start.o build/game.o build/main.o build/story.o build/level_progress.o build/assets.o -lgcc -o $@
 build/sia2_lab.gba: build/sia2_lab.elf tools/fix_header.py
 	$(PREFIX)objcopy -O binary $< $@
 	python3 tools/fix_header.py $@
 test: | build
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_view_camera.c -o build/test_view_camera
+	./build/test_view_camera
 	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_lever_route.c -o build/test_lever_route
 	./build/test_lever_route
 	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_island_gap.c -o build/test_island_gap

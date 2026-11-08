@@ -16,6 +16,8 @@ An ongoing reconstruction of Lady Sia 2: Sword of Sia for Game Boy Advance, base
 
 The current build includes a partial reconstruction of World 1 with controllable gameplay, collisions, pickups, damage, falling and game over. Levels, sprite and scenery animations, and the original interface are still being reconstructed and refined. This project is incomplete and does not represent the finished original game.
 
+Latest visual fix: the camera now follows a common world across viewports, preserving player and scenery positions instead of switching entire screens. Horizontal and vertical transitions, return portals and live controls are checked in mGBA. Sky seams are reconstructed and remain provisional. [Implementation, local checks and limitations](references/CONTINUOUS_CAMERA_STATUS.md).
+
 Latest playable change: W1L1 now has fourteen linked partial viewports, four independent prototype guards and five gems. From the high ledge after the island gap, continue LEFT into two new views of the lever area. Fight the fourth guard, return RIGHT and revisit without respawning defeated guards or collected gems. The lever remains inactive; the thorn barrier and following route are pending. Geometry, patrols and covered scenery remain provisional. [Implementation and local checks](references/LEVER_ROUTE_STATUS.md).
 
 ![Native ROM: lever area, fourth guard, return and revisit](previews/lever_route_gameplay.gif)

@@ -1,0 +1,104 @@
+{
+  "order": [
+    "room",
+    "bridge",
+    "cliff",
+    "guard_room",
+    "gap",
+    "continuation_background",
+    "bridge_run_background",
+    "riser_background",
+    "upper_background",
+    "ramp_lower_background",
+    "ramp_upper_background",
+    "island_gap_background",
+    "lever_entry_background",
+    "lever_room_background"
+  ],
+  "origins": [
+    [
+      0,
+      0
+    ],
+    [
+      -152,
+      60
+    ],
+    [
+      -358,
+      14
+    ],
+    [
+      -574,
+      29
+    ],
+    [
+      -732,
+      47
+    ],
+    [
+      -920,
+      72
+    ],
+    [
+      -1090,
+      81
+    ],
+    [
+      -1258,
+      88
+    ],
+    [
+      -1223,
+      169
+    ],
+    [
+      -1165,
+      154
+    ],
+    [
+      -1057,
+      247
+    ],
+    [
+      -981,
+      291
+    ],
+    [
+      -863,
+      294
+    ],
+    [
+      -819,
+      380
+    ]
+  ],
+  "width": 1500,
+  "height": 540,
+  "world_top": -380,
+  "sources": {
+    "room": "ff68d753d174e3083e31fed088aee8d386ece9b2f83b97b2411bae2e58799e7a",
+    "bridge": "52d272ffda5d2a4b6a438a0022e073631f8f4c5f739fcceb06ea869bb27fe9fb",
+    "cliff": "99dbe6e2ae8251d16214234dab78f82f568d76c2887dcd183dfbb3cea138141c",
+    "guard_room": "7af072a3c16266efd4e17f93b4b6940ff52cf5beeb9408a17b1a788a7b90d423",
+    "gap": "91a2586ef092957cb7e842026b72284c3b48355e0f28221a1b566fd7587cf1f2",
+    "continuation_background": "b9a45c44e74dc8d20f0aff40f63ec530c9d66192c89f78a064137065e16714ef",
+    "bridge_run_background": "cfd5a55ca7c387672c3c329a9616dfbfdea4bdfc5fc8a508ab2fa73e221698fe",
+    "riser_background": "4ed62d1b9ffd5e1d3c4bdbf395080c53d6d18a2dcb90dc87829d2d505ff8b33d",
+    "upper_background": "4e2402ad2f4e7929684d210a972c491b6897dbc30de4bcba953b5f6d9a334fd0",
+    "ramp_lower_background": "1ed7e0813cc2bc4cee6f6d8c3b9e4f187337b4f6109b56ec42180d724bea5122",
+    "ramp_upper_background": "7def88b6a43865aed71975cc774c2a912d9416f79c61b3b4f32e146aa078db6f",
+    "island_gap_background": "3f33e09753835aaac5c8c7b94bb6ff668588d4a7fab4545a6f224ce646c7e164",
+    "lever_entry_background": "7c0686c0ee0c3825880b929eb35caf795df0e058979f940ef3af9157514383e5",
+    "lever_room_background": "f7c1c9f06eb3e221f7f5b8ba43c6a962921a4cb4d71910c6b1ace1d66c7e70f4"
+  },
+  "sky_repaired_pixels": 130187,
+  "foreground_pixels_preserved": true,
+  "method": "Fixed viewport priority independent of gameplay area; foreground source pixels preserved; four aligned atlas/cloud banks; animated sky spans.",
+  "limits": [
+    "Sky at recorded viewport borders is feathered as an approximation; terrain pixels remain unchanged",
+    "Unrecorded atlas corners extend a fixed observed sky profile",
+    "Early cliff registrations and collision geometry remain provisional",
+    "Video-derived overlap seams remain subject to visual refinement"
+  ]
+}

@@ -6,7 +6,7 @@ Non misura il tempo rimanente né la percentuale di pixel originali recuperati. 
 
 | Parte | Punti acquisiti / peso | Stato verificato |
 |---|---:|---|
-| Motore e sistemi di gioco | 9.0 / 15 | Controlli, combattimento, quattro guardie indipendenti e persistenti, vite/game over, pendenze e portali della rampa e della zona della leva verificati; fisica e IA ancora provvisorie. |
+| Motore e sistemi di gioco | 9.0 / 15 | Controlli, combattimento, quattro guardie persistenti, vite/game over, pendenze e camera continua con raccordi verificati; geometria, fisica e IA ancora provvisorie. |
 | Mondo 1 e boss | 4.5 / 20 | Quattordici inquadrature parziali collegate: ponte, parete, rampa, isole e due viste della zona della leva; quarta guardia, ritorno e rivisita verificati. Leva, barriera, livello, mondo e boss incompleti. |
 | Mondo 2 e boss | 0 / 15 | Riferimenti disponibili; contenuti non integrati. |
 | Mondo 3 e boss | 0 / 15 | Video indicizzati; contenuti non integrati. |
