@@ -55,3 +55,9 @@ abbassata deriva dal video originale a 182 s; la rotazione intermedia e
 la barriera mobile restano incomplete. [Provenienza e verifiche](references/LEVER_VISUAL_STATUS.md).
 
 ![Posa abbassata nella ROM](previews/lever_lowered.png)
+
+### Preparazione del tratto dopo la leva
+
+[Audit dei raccordi video](references/POST_LEVER_ROUTE_AUDIT.md): quattro
+registrazioni concordi e un raccordo respinto. Nessuna nuova area giocabile
+è dichiarata; la stima resta al 14,75%.

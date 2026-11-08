@@ -1,0 +1,25 @@
+{
+  "video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "frames": {
+    "180": {
+      "path": "reference/w1l1_next/180.png",
+      "sha256": "c9106101e7a5ca503b8dff4e6b2ef6d82b6685f8d5c41643a02677ca68f8aa9f"
+    },
+    "182": {
+      "path": "reference/w1l1_next/182.png",
+      "sha256": "2a65218cae5e124fad0d3b1ca5406b33821a85bd6a1b055013bfc040a1eb54a3"
+    },
+    "183": {
+      "path": "reference/w1l1_postlever/183.png",
+      "sha256": "f67be7fc2202b5d3bb053f055339a98e7c3707da01ec236f9eef8098726e42bf"
+    },
+    "184": {
+      "path": "reference/w1l1_postlever/184.png",
+      "sha256": "123a8dc5141e8062adcc4fc1033b40510de6cf67080cc3ed1ef706c3c2c8e5d4"
+    },
+    "185": {
+      "path": "reference/w1l1_postlever/185.png",
+      "sha256": "e7b41df2ba03aa052267fd61e74ccbfc3fa69dc5586cddb2180d8e0c13ae3798"
+    }
+  }
+}
