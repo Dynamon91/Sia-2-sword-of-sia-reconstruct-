@@ -63,3 +63,15 @@ incompleti; audio, animazioni e fedeltà visiva richiedono ancora lavoro.
 Le GIF collegate documentano questa correzione; alcune PNG storiche restano
 come riferimenti dei milestone precedenti. Il pacchetto usa le PNG generate
 dal collaudo corrente, evitando di riutilizzare catture storiche.
+
+## Estensione del collaudo alle prime viste
+
+La regressione della camera ora include anche le aree 1–6 e registra separatamente
+gli aggiornamenti presentati per ogni area. Nella sequenza locale sono stati
+misurati 5.036 aggiornamenti su 5.036 fotogrammi attivi nelle aree 1–13:
+1.014, 574, 734, 375, 504, 322, 278, 455, 48, 142, 466, 34 e 90 rispettivamente.
+La prima vista ferma registra inoltre 180 aggiornamenti su 180 fotogrammi.
+Questi campioni non dimostrano le prestazioni in ogni percorso possibile.
+La ROM e il comportamento di gioco restano quelli della correzione camera
+5715dd7; questo checkpoint estende la verifica e aggiorna le anteprime.
+La stima resta al 14,5%; leva e barriera non sono ancora attive.

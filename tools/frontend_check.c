@@ -28,18 +28,19 @@ static const char *sequence_dir;
 static unsigned sequence_frame;
 static void capture(struct mCore *c,const char *name);
 static unsigned scroll_portals,scroll_frames,scroll_updates,scroll_last_tick,scroll_last_area,scroll_last_lives;
+static unsigned area_frames[VIEW_COUNT],area_updates[VIEW_COUNT];
 static int scroll_last_x,scroll_last_y,scroll_ready;
 static void run(struct mCore *c,unsigned count){
  for(unsigned i=0;i<count;i++){
   c->runFrame(c);
   unsigned display_state=c->busRead32(c,0x0203F100),tick=c->busRead32(c,0x0203F124),area=c->busRead32(c,0x0203F12C),lives=c->busRead32(c,0x0203F14C);
   int camera_x=(int)c->busRead32(c,0x0203F13C),camera_y=(int)c->busRead32(c,0x0203F140);
-  if(display_state==7&&area>=7&&scroll_ready&&tick>=scroll_last_tick&&tick-scroll_last_tick<=1&&lives==scroll_last_lives){
+  if(display_state==7&&area>=1&&scroll_ready&&tick>=scroll_last_tick&&tick-scroll_last_tick<=1&&lives==scroll_last_lives){
    assert(abs(camera_x-scroll_last_x)<=6*FP&&abs(camera_y-scroll_last_y)<=6*FP);
-   if(c->busRead32(c,0x0203F000)==7){scroll_frames++;if(tick!=scroll_last_tick)scroll_updates++;}
+   if(c->busRead32(c,0x0203F000)==7){scroll_frames++;area_frames[area]++;if(tick!=scroll_last_tick){scroll_updates++;area_updates[area]++;}}
    if(area!=scroll_last_area)scroll_portals|=(1u<<area)|(1u<<scroll_last_area);
   }
-  scroll_ready=display_state==7&&area>=7;scroll_last_tick=tick;scroll_last_area=area;scroll_last_lives=lives;scroll_last_x=camera_x;scroll_last_y=camera_y;
+  scroll_ready=display_state==7&&area>=1;scroll_last_tick=tick;scroll_last_area=area;scroll_last_lives=lives;scroll_last_x=camera_x;scroll_last_y=camera_y;
   short left[2048],right[2048];
   int n=blip_read_samples(c->getAudioChannel(c,0),left,2048,0);
   int m=blip_read_samples(c->getAudioChannel(c,1),right,2048,0);
@@ -789,8 +790,13 @@ int main(int argc,char **argv){
  c->setKeys(c,0);run(c,20);
  puts("PASS reset input integration: held A/B across R reset remain idle; release and fresh press restore jump and attack");
  assert((scroll_portals&0x3F80u)==0x3F80u);
- fprintf(stderr,"Scrolling performance: %u displayed updates in %u active late-route frames\n",scroll_updates,scroll_frames);
+ fprintf(stderr,"Scrolling performance: %u displayed updates in %u active scrolling frames\n",scroll_updates,scroll_frames);
+ for(unsigned a=1;a<VIEW_COUNT;a++){
+  assert(area_frames[a]>0);
+  fprintf(stderr,"Area %u performance: %u updates in %u active frames\n",a,area_updates[a],area_frames[a]);
+  assert(area_updates[a]*100u>=area_frames[a]*90u);
+ }
  assert(scroll_updates*100u>=scroll_frames*90u);
- puts("PASS continuous camera integration: bounded six-pixel camera steps across areas 7-13, world-aligned background checks, live controls and pause; no portal-driven camera reset");
+ puts("PASS continuous camera integration: bounded six-pixel camera steps across areas 1-13, world-aligned background checks, live controls and pause; no portal-driven camera reset");
  c->deinit(c);free(pixels);
 }
