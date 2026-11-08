@@ -4,10 +4,10 @@
 #define LEVEL_ENTITY_CAPACITY 128
 #define LEVEL_ENTITY_BYTES (LEVEL_ENTITY_CAPACITY/8)
 typedef struct {
- unsigned char gems_taken[LEVEL_ENTITY_BYTES], enemies_defeated[LEVEL_ENTITY_BYTES];
- unsigned gems, defeated, health, max_health, elapsed_frames;
- unsigned area, checkpoint_area; int checkpoint_x,checkpoint_y;
- unsigned completed;
+  unsigned char gems_taken[LEVEL_ENTITY_BYTES], enemies_defeated[LEVEL_ENTITY_BYTES];
+  unsigned gems, defeated, health, max_health, elapsed_frames;
+  unsigned area, checkpoint_area; int checkpoint_x,checkpoint_y;
+  unsigned completed, lever_activated, barrier_open;
 } LevelProgress;
 void level_progress_reset(LevelProgress *p,unsigned health);
 int level_collect_gem(LevelProgress *p,unsigned id);
@@ -16,4 +16,5 @@ void level_progress_tick(LevelProgress *p,int paused);
 int level_take_damage(LevelProgress *p,unsigned damage);
 void level_set_checkpoint(LevelProgress *p,unsigned area,int x,int y);
 void level_finish(LevelProgress *p);
+int level_set_lever_state(LevelProgress *p,unsigned active);
 #endif
