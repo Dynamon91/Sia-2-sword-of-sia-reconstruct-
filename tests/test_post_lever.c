@@ -30,6 +30,13 @@ int main(void){
  at(&g,14,31,101);g.grounded=1;game_step(&g,LEFT|RIGHT);assert(g.area==14);
  at(&g,15,165,78);g.grounded=1;
  game_step(&g,LEFT);assert(g.x==164*FP&&!g.vx&&g.grounded);
+ /* A leftward miss must not project the body inside the lower rock. */
+ at(&g,14,74,169);g.y+=128;g.vy=2*FP;g.grounded=0;
+ game_step(&g,LEFT);assert(g.area==14&&g.x==74*FP-320);
+ for(int i=0;i<100&&!g.falls;i++)game_step(&g,0);
+ assert(g.falls==1&&g.area==14&&g.lives==2);
+ at(&g,14,74,169);g.y+=128;g.vy=2*FP;g.grounded=0;
+ game_step(&g,0);assert(g.area==15&&g.x==164*FP);
  /* The lower portal translates subpixels exactly, preserving downward velocity. */
  at(&g,14,95,169);g.x+=17;g.y+=128;g.vy=2*FP;g.grounded=0;
  int wx=g.x-view_origin[14][0]*FP,wy=g.y-view_origin[14][1]*FP;

@@ -782,11 +782,15 @@ int main(int argc,char **argv){
  puts("PASS lower landing integration: input-only registered drop, world-pixel checks, walk, pause, pit and local respawn; lever/gems/defeats persist; thorn and crawl mechanics remain unfinished");
  tap(c,8);state(c,8);unsigned edge_tick=value(c,16);run(c,20);assert(value(c,16)==edge_tick);
  tap(c,1);state(c,7);
- c->setKeys(c,16);for(int i=0;i<160&&value(c,18)==upper_falls;i++)run(c,1);
+ /* Walking left during the fall must miss the lower rock instead of entering it. */
+ move_to(c,16,90);c->setKeys(c,32);run(c,14);c->setKeys(c,0);
+ assert(value(c,17)==14&&(int)value(c,8)<74*FP);
+ for(int i=0;i<160&&value(c,18)==upper_falls;i++)run(c,1);
  c->setKeys(c,0);run(c,4);
  assert(value(c,17)==14&&value(c,31)==upper_lives-1&&value(c,18)==upper_falls+1);
  assert(value(c,42)&&value(c,43)&&value(c,10)==5&&!value(c,40)&&value(c,26)==4);
  capture(c,"build/post_lever_respawn.ppm");
+ puts("PASS lower drop safety integration: controller-driven leftward miss remains outside lower rock, loses one life and respawns on the upper edge");
  c->setKeys(c,32);for(int i=0;i<80&&value(c,17)!=13;i++)run(c,1);
  c->setKeys(c,0);run(c,4);assert(value(c,17)==13&&value(c,14)&&value(c,42));
  capture(c,"build/post_lever_return.ppm");

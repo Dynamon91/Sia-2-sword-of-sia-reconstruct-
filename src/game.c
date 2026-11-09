@@ -368,7 +368,7 @@ void game_step(Game *g,unsigned input){
    g->area=14;g->progress.area=14;g->x-=144*FP;g->y-=8*FP;camera(g);
   }else if(g->area==14&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=32*FP&&g->grounded){
    g->area=13;g->progress.area=13;g->x+=144*FP;g->y+=8*FP;camera(g);
-  }else if(g->area==14&&g->y>=170*FP&&g->vy>0&&g->x<102*FP){
+  }else if(g->area==14&&g->y>=170*FP&&g->vy>0&&g->x>=74*FP&&g->x<102*FP){
    g->area=15;g->progress.area=15;g->x+=90*FP;g->y-=105*FP;camera(g);
   }else if(g->area==7&&g->x<90*FP&&g->y<=-8*FP&&g->vy<0){
    g->area=8;g->progress.area=8;g->x+=35*FP;g->y+=81*FP;camera(g);

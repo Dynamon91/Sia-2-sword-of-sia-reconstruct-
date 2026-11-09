@@ -16,6 +16,8 @@ An ongoing reconstruction of Lady Sia 2: Sword of Sia for Game Boy Advance, base
 
 The current build includes a partial reconstruction of World 1 with controllable gameplay, collisions, pickups, damage, falling and game over. Levels, sprite and scenery animations, and the original interface are still being reconstructed and refined. This project is incomplete and does not represent the finished original game.
 
+Latest error fixes: the lever check now tracks only its sampled atlas region and palette, so unrelated scenery edits do not invalidate it. A leftward missed drop no longer enters the lower rock. [Reproduction and regression checks](references/ERROR_FIX_STATUS.md).
+
 Latest verified change: a sixteenth partial viewport connects the first post-lever edge to the lower landing. Walk to about x=90 on the edge, then release movement to descend. The landing supports walking, pause and local pit respawn while preserving gems, defeated guards and the lever. It is currently a one-way drop. Crawling, thorn movement/collision and the following left route remain unfinished. [Evidence, controls and limits](references/LOWER_LANDING_STATUS.md).
 
 ![Native ROM: new lower landing](previews/lower_landing_respawn.png)

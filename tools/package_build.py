@@ -14,7 +14,7 @@ def main():
    if line.startswith('PASS '):passed.append(line.rstrip())
  if not any(s.startswith('PASS frontend ') for s in passed) or not any(s.startswith('PASS settings integration:') for s in passed):
   raise SystemExit('Both gameplay and settings emulator PASS reports are required')
- for prefix in ['PASS lower landing integration:', 'PASS authentic loading integration:', 'PASS directional camera integration:', 'PASS post-lever edge integration:', 'PASS lever visual integration:', 'PASS continuous camera integration:', 'PASS airborne integration:', 'PASS ledge integration:', 'PASS scenery integration:', 'PASS disk save integration:', 'PASS reset input integration:', 'PASS menu cancel integration:', 'PASS continuation integration:', 'PASS bridge run integration:', 'PASS upper route integration:', 'PASS upper revisit integration:']:
+ for prefix in ['PASS lower drop safety integration:', 'PASS lower landing integration:', 'PASS authentic loading integration:', 'PASS directional camera integration:', 'PASS post-lever edge integration:', 'PASS lever visual integration:', 'PASS continuous camera integration:', 'PASS airborne integration:', 'PASS ledge integration:', 'PASS scenery integration:', 'PASS disk save integration:', 'PASS reset input integration:', 'PASS menu cancel integration:', 'PASS continuation integration:', 'PASS bridge run integration:', 'PASS upper route integration:', 'PASS upper revisit integration:']:
   if not any(s.startswith(prefix) for s in passed):raise SystemExit('Missing '+prefix)
  pictures=[p.with_suffix('.png') for p in sorted(root.glob('*.ppm'))]
  if not any(s.startswith('PASS pickup death integration:') for s in passed):
@@ -50,7 +50,7 @@ A: conferma/salto. B: indietro/attacco.\nFrecce: movimento. Salta sotto il bordo
  for source in ['references/LEVER_ROUTE_STATUS.md','previews/lever_route_gameplay.gif','previews/lever_route_preview.json','previews/lever_entry.png','previews/lever_guard_defeated.png','previews/lever_return.png','assets/lever_route_manifest.json']:
   source_file=root/Path(source).name if source.startswith('previews/') and source.endswith('.png') else repo/source
   shutil.copyfile(source_file,out/Path(source).name)
- for source in ['references/LOWER_LANDING_STATUS.md','assets/lower_landing_manifest.json','references/LOADING_REFERENCE_STATUS.md','assets/loading_manifest.json','references/CAMERA_FOLLOW_STATUS.md','references/CAMERA_FOLLOW_OBSERVATIONS.json','references/POST_LEVER_EDGE_STATUS.md','assets/post_lever_manifest.json','references/LEVER_VISUAL_STATUS.md','assets/lever_pose_manifest.json','references/COPILOT_LEVER_REPAIR.md','references/CONTINUOUS_CAMERA_STATUS.md','assets/scroll_manifest.json']:
+ for source in ['references/ERROR_FIX_STATUS.md','references/LOWER_LANDING_STATUS.md','assets/lower_landing_manifest.json','references/LOADING_REFERENCE_STATUS.md','assets/loading_manifest.json','references/CAMERA_FOLLOW_STATUS.md','references/CAMERA_FOLLOW_OBSERVATIONS.json','references/POST_LEVER_EDGE_STATUS.md','assets/post_lever_manifest.json','references/LEVER_VISUAL_STATUS.md','assets/lever_pose_manifest.json','references/COPILOT_LEVER_REPAIR.md','references/CONTINUOUS_CAMERA_STATUS.md','assets/scroll_manifest.json']:
   source_file=root/Path(source).name if source.startswith('previews/') and source.endswith('.png') else repo/source
   shutil.copyfile(source_file,out/Path(source).name)
  for source in ['previews/lower_landing_gameplay.gif','previews/lower_landing_preview.json','previews/post_lever_gameplay.gif','previews/post_lever_preview.json']:

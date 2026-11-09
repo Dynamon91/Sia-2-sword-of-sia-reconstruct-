@@ -50,7 +50,8 @@ def outputs():
     png=io.BytesIO();crop.save(png,format='PNG')
     report={'video_sha256':'7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51',
             'source_seconds':182,'source_sha256':hashlib.sha256((ref/'182.png').read_bytes()).hexdigest(),
-            'atlas_sha256':hashlib.sha256(atlas_bytes).hexdigest(),
+            'atlas_region_sha256':hashlib.sha256(atlas[y0:y0+44,x0:x0+40].tobytes()).hexdigest(),
+            'palette_sha256':hashlib.sha256(header).hexdigest(),
             'registrations':registrations,'area':13,'destination':[64,104,40,44],
             'source_crop':[63,104,103,148], 'opaque_pixels':sum(bool(x) for x in data),
             'limits':['Two visual states only; original intermediate rotation timing is not recovered',
