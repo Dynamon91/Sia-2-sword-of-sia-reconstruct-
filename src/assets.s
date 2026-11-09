@@ -191,3 +191,8 @@ scroll_cloud:
 .global lever_lowered
 lever_lowered:
 .incbin "assets/lever_lowered.bin"
+
+.balign 4
+.global loading_screen
+loading_screen:
+.incbin "assets/loading_screen.bin"

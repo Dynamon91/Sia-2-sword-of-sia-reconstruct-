@@ -53,3 +53,8 @@ Le nove animazioni sono riesportate dai framebuffer senza alterare i pixel.
 Questi sono risultati locali; CI del nuovo commit e hardware non vengono
 dichiarati verificati in questa nota.
 SHA-256 ROM: 0e13be3c8d98fe6d8367b08bf9e8646ae736757cfbd4a922a32bced5e70373bf.
+
+## Entry-wait follow-up
+
+The initial Please wait interval is now measured and implemented separately; see
+LOADING_REFERENCE_STATUS.md. No wait is attached to the current gameplay portals.

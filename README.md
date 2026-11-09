@@ -16,9 +16,13 @@ An ongoing reconstruction of Lady Sia 2: Sword of Sia for Game Boy Advance, base
 
 The current build includes a partial reconstruction of World 1 with controllable gameplay, collisions, pickups, damage, falling and game over. Levels, sprite and scenery animations, and the original interface are still being reconstructed and refined. This project is incomplete and does not represent the finished original game.
 
-Latest visual fix: the camera now follows a common world across viewports, preserving player and scenery positions instead of switching entire screens. Horizontal and vertical transitions, return portals and live controls are checked in mGBA. Sky seams are reconstructed and remain provisional. [Implementation, local checks and limitations](references/CONTINUOUS_CAMERA_STATUS.md).
+Latest verified change: PLAY shows the observed “Please wait” entry screen with timing measured from the reference, then opens the arrival dialogue. The intro movie remains removed. The fifteen partial gameplay views keep continuous camera following; no arbitrary zone loading is added. [Evidence and limits](references/LOADING_REFERENCE_STATUS.md).
 
-Latest playable change: W1L1 now has fourteen linked partial viewports, four independent prototype guards and five gems. From the high ledge after the island gap, continue LEFT into two new views of the lever area. Fight the fourth guard, return RIGHT and revisit without respawning defeated guards or collected gems. The lever remains inactive; the thorn barrier and following route are pending. Geometry, patrols and covered scenery remain provisional. [Implementation and local checks](references/LEVER_ROUTE_STATUS.md).
+The partial route now reaches the post-lever edge. B activates the recorded lowered lever pose near the switch. Four prototype guards and five gems retain their state on return. The thorn barrier animation and onward route remain unfinished; geometry and covered scenery are provisional. [Post-lever status](references/POST_LEVER_EDGE_STATUS.md).
+
+![Native ROM: authentic entry wait](previews/loading_original.png)
+
+Earlier gameplay previews below illustrate the preceding route checkpoints; CI exports fresh captures for each build.
 
 ![Native ROM: lever area, fourth guard, return and revisit](previews/lever_route_gameplay.gif)
 

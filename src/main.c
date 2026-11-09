@@ -7,6 +7,8 @@ static const char save_type[] __attribute__((used))="SRAM_V113";
 #include "scenery.h"
 #include "story.h"
 #include "view_camera.h"
+#include "loading.h"
+extern const unsigned char loading_screen[];
 #include "../assets/assets.h"
 #include "../assets/room.h"
 #include "../assets/ui.h"
@@ -22,13 +24,13 @@ typedef unsigned short u16;
 #define REG16(a) (*(volatile u16 *)(a))
 #define REG32(a) (*(volatile unsigned *)(a))
 #define RGB(r,g,b) ((r)|((g)<<5)|((b)<<10))
-enum { TITLE,MENU,INTRO,STORY,OPTIONS,CREDITS,ARRIVAL,LAB,PAUSE,TUTORIAL,GAME_OVER };
+enum { TITLE,MENU,INTRO,STORY,OPTIONS,CREDITS,ARRIVAL,LAB,PAUSE,TUTORIAL,GAME_OVER,LOADING };
 static volatile u16 *page;
 static const u16 *pending_palette;
 static unsigned front,state,selection,story_index,option_index,dirty;
 static unsigned sound_enabled,intro_enabled,paused,previous_keys;
 static unsigned clock_ticks,clock_last,audio_end,audio_active,intro_frame;
-static unsigned arrival_index;
+static unsigned arrival_index,loading_age;
 static u16 object_shadow[128*4];
 static Game game;
 static ViewCamera view_camera;
@@ -316,6 +318,8 @@ static void render(void){
  case STORY:
   dialog(story_index);footer("A NEXT B BACK START MENU");
   number(148,83,story_index+1,243);break;
+ case LOADING:
+  image(loading_screen);if(!loading_text_visible(loading_age))rect(0,0,240,160,0);break;
  case ARRIVAL:
   draw_arrival();break;
  case OPTIONS:
@@ -354,7 +358,7 @@ static void render(void){
  shown[11]=(unsigned)game.area;shown[12]=cloud_phase(game.ticks);
  shown[13]=(unsigned)(view_camera.x/FP-view_origin[game.area][0]);shown[14]=(unsigned)(view_camera.y/FP-view_origin[game.area][1]);
  shown[15]=(unsigned)view_camera.x;shown[16]=(unsigned)view_camera.y;
- shown[17]=game_ledge_frame(&game);shown[18]=(unsigned)game.ledge_y;shown[19]=game.lives;
+ shown[17]=game_ledge_frame(&game);shown[18]=(unsigned)game.ledge_y;shown[19]=game.lives;shown[20]=loading_age;
 }
 int main(void){
  REG16(0x04000204)=0x4317;REG16(0x04000000)=0x0404;
@@ -375,7 +379,7 @@ int main(void){
    if(pressed&4){audio_stop();story_index=0;enter(STORY);}
    else if(pressed&9){
     audio_stop();
-    if(selection==0)arrival();
+    if(selection==0){loading_age=0;paused=0;enter(LOADING);}
     if(selection==1){option_index=0;enter(OPTIONS);}
     if(selection==2)enter(CREDITS);
    }break;
@@ -384,6 +388,8 @@ int main(void){
    if(pressed&(2|32)){if(story_index)story_index--;else enter(MENU);dirty=1;}
    if(pressed&(1|16)){if(story_index+1<story_count)story_index++;else enter(MENU);dirty=1;}
    break;
+  case LOADING:
+   if(++loading_age>=LOADING_TOTAL_FRAMES)arrival();else dirty=1;break;
   case ARRIVAL:
    if(pressed&2)return_menu();
    else if(pressed&9){if(arrival_index==0){arrival_index=1;dirty=1;}else start_level();}

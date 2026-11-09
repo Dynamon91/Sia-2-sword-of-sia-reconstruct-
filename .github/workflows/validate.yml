@@ -15,6 +15,8 @@ jobs:
           python3 tools/audit_route_continuation.py --output build/route-registration.json
       - name: Audit post-lever references and reject inconsistent joins
         run: python3 tools/audit_post_lever.py --check
+      - name: Verify authentic entry loading
+        run: python3 tools/convert_loading.py --check
       - name: Restore and verify embedded assets
         run: python3 tools/unpack_assets.py
       - name: Remove intro playback and recording overlays

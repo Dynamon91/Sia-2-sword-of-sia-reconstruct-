@@ -65,3 +65,6 @@ clean:
 .PHONY: all test clean
 
 build/assets.o: assets/lever_lowered.bin
+
+build/main.o: src/loading.h
+build/assets.o: assets/loading_screen.bin

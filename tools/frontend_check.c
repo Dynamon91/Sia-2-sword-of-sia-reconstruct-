@@ -11,6 +11,7 @@
 #include "../src/alignment.h"
 #include "../src/scenery.h"
 #include "../src/view_camera.h"
+#include "../src/loading.h"
 #include "../assets/ui.h"
 /* Keep diagnostics, but do not bury PASS/error lines in per-DMA debug output. */
 static void emulator_log(struct mLogger *logger,int category,enum mLogLevel level,const char *format,va_list args){
@@ -71,6 +72,37 @@ static unsigned shown(struct mCore *c,int offset){return c->busRead32(c,0x0203F1
 static void state(struct mCore *c,unsigned expected){
  if(value(c,0)!=expected)fprintf(stderr,"Expected state %u, got %u at frame %u\n",expected,value(c,0),c->frameCounter(c));
  assert(value(c,0)==expected);
+}
+static void await_arrival(struct mCore *c){
+ for(unsigned n=0;value(c,0)==11&&n<LOADING_TOTAL_FRAMES+30;n++)run(c,1);
+ state(c,6);
+}
+static void check_loading(struct mCore *c){
+ unsigned char asset[38912];FILE *f=fopen("assets/loading_screen.bin","rb");assert(f);
+ assert(fread(asset,1,sizeof(asset),f)==sizeof(asset));fclose(f);
+ c->setKeys(c,1);unsigned n=0;
+ while(shown(c,0)!=11&&n++<8)run(c,1);
+ assert(shown(c,0)==11&&shown(c,20)<=3);
+ unsigned phases=0,tick=value(c,16),frames=0;
+ c->setKeys(c,15);
+ while(shown(c,0)==11&&frames++<LOADING_TOTAL_FRAMES+10){
+  unsigned age=shown(c,20),phase=age<LOADING_BLACK_BEFORE?0:loading_text_visible(age)?1:2;
+  assert(value(c,16)==tick&&value(c,1)==0);
+  if(!(phases&(1u<<phase))){
+   unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
+   for(unsigned j=0;j<38400;j++)assert(c->busRead8(c,base+j)==(phase==1?asset[512+j]:0));
+   for(unsigned j=0;j<128;j++)assert(c->busRead16(c,0x07000000+j*8)&0x0200);
+   if(phase==1){
+    for(unsigned j=0;j<256;j++)assert(c->busRead16(c,0x05000000+j*2)==(unsigned)(asset[j*2]|asset[j*2+1]<<8));
+    capture(c,"build/loading_original.ppm");
+   }
+   phases|=1u<<phase;
+  }
+  run(c,1);
+ }
+ assert(phases==7&&frames>=LOADING_TOTAL_FRAMES-3&&frames<=LOADING_TOTAL_FRAMES+3);
+ state(c,6);assert(value(c,13)==0);c->setKeys(c,0);run(c,2);
+ printf("PASS authentic loading integration: %u displayed frames; exact pixels/palette, three timed phases, hidden objects, frozen physics and held-input isolation\n",frames);
 }
 static void check_world_background(struct mCore *c){
  static unsigned char world[810000],clouds[25600],sky[2][80][240],lever_patch[40*44];static int loaded;
@@ -333,7 +365,7 @@ int main(int argc,char **argv){
  tap(c,128);tap(c,1);state(c,4);tap(c,1);assert(value(c,3)==0);
  capture(c,"build/options_v06.ppm");
  tap(c,1);assert(value(c,3)==1);tap(c,128);assert(value(c,4)==0);
- tap(c,2);state(c,1);tap(c,64);tap(c,1);state(c,6);
+ tap(c,2);state(c,1);tap(c,64);check_loading(c);
  capture(c,"build/arrival_v06.ppm");
  unsigned arrival_tick=value(c,16),arrival_cloud=shown(c,12);run(c,30);
  assert(value(c,16)==arrival_tick&&shown(c,12)==arrival_cloud);
@@ -452,8 +484,8 @@ int main(int argc,char **argv){
  tap(c,4);state(c,1);assert(value(c,7)==0);
  tap(c,64);tap(c,1);state(c,5);capture(c,"build/credits_v06.ppm");tap(c,2);state(c,1);
  tap(c,64);tap(c,1);state(c,4);assert(value(c,4)==0);
- tap(c,2);tap(c,64);tap(c,1);state(c,6);assert(value(c,1)==0);
- printf("PASS frontend no-intro: %u emulated frames; linked areas, camera, pickups, pause, menus, direct arrival without intro\n",c->frameCounter(c));
+ tap(c,2);tap(c,64);tap(c,1);await_arrival(c);assert(value(c,1)==0);
+ printf("PASS frontend no-intro: %u emulated frames; linked areas, camera, pickups, pause, menus, authentic entry loading without intro movie\n",c->frameCounter(c));
  /* Exercise settings through the actual menu before resetting the CPU. */
  tap(c,2);state(c,1);tap(c,128);tap(c,1);state(c,4);
  /* Entering OPTIONS always selects SOUND. */
@@ -480,7 +512,7 @@ int main(int argc,char **argv){
  puts("PASS settings integration: menu writes SRAM, soft-reset reload, corrupt-record defaults. Disk persistence is checked separately; real hardware is not tested.");
  /* Verify actual fall damage, Game Over, frozen state and retry. */
  tap(c,8);tap(c,128);tap(c,1);state(c,4);
- tap(c,2);tap(c,64);tap(c,1);state(c,6);
+ tap(c,2);tap(c,64);tap(c,1);await_arrival(c);
  tap(c,1);tap(c,1);state(c,7);assert(value(c,22)==3);
  ascend_first_ledge(c);
  move_to(c,16,139);c->setKeys(c,17);run(c,45);c->setKeys(c,0);run(c,40);
