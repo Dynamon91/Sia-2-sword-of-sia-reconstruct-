@@ -45,8 +45,12 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -p test_lever_asset_dependencies.py
           python3 tools/convert_lever_pose.py --check
+      - name: Verify recorded crawl poses
+        run: python3 tools/convert_crawl.py --check
       - name: Verify first lower landing
         run: python3 tools/convert_lower_landing.py --check
+      - name: Verify next crawl passage viewport
+        run: python3 tools/convert_crawl_passage.py --check
       - name: Verify shared-world scrolling banks
         run: python3 tools/prepare_scroll_assets.py --check
       - name: Audit animation palette and foot anchors

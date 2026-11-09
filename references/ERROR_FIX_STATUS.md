@@ -24,3 +24,9 @@ The delivery includes exact test results and real captures from the rebuilt
 ROM. Hardware is untested. Standing/crawling passage, moving thorn mechanics,
 following route and complete levels remain unfinished; collision geometry is
 still provisional. No new loading or zone cuts are introduced.
+
+## Later crawl checkpoint
+
+The later crawl implementation and seventeenth partial viewport supersede the
+previous blocked-passage limitation; see [CRAWL_STATUS.md](CRAWL_STATUS.md).
+This document retains the evidence of its earlier checkpoint.

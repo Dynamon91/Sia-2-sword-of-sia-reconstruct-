@@ -48,3 +48,9 @@ frame repeats; the test does not claim a perfect frame rate. Directional camera
 samples: 2,026 right, 1,468 left, 1,810 idle. Ten motion exports retain every source RGB pixel.
 There are 102 real ROM screenshots. CI for this new commit is not yet observed.
 SHA-256 ROM: 021cbacf952e1339e58444b92fa881df1dd1ca36686f5661a932b4d4fc6e8608.
+
+## Later crawl checkpoint
+
+The later crawl implementation and seventeenth partial viewport supersede the
+previous blocked-passage limitation; see [CRAWL_STATUS.md](CRAWL_STATUS.md).
+This document retains the evidence of its earlier checkpoint.

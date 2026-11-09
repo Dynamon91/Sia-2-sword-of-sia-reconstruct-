@@ -5,6 +5,7 @@ const Platform platforms[PLATFORM_COUNT]={{81,88,70,8},{186,40,54,8}};
 static const Platform bridge_platforms[3]={{33,BRIDGE_SURFACE_Y,48,8},{81,BRIDGE_SURFACE_Y,125,8},{206,BRIDGE_SURFACE_Y,34,8}};
 static const Platform cliff_platforms[2]={{0,54,43,8},{96,115,144,8}};
 static const Platform cliff_rock={96,115,144,45};
+static const Platform crawl_passage_roof={83,-143,164,167};
 static const Platform lower_landing_roof={0,-80,164,167};
 static const Platform post_lever_roof={128,-80,112,140};
 static const Platform lever_wall={0,-80,44,240};
@@ -49,6 +50,7 @@ static int lever_edge_floor(int player_x){
 int game_extension_floor(int area,int player_x){
   if(area==5)return game_continuation_floor(player_x);
   int center=player_x+PLAYER_W/2,floor=4096;
+  if(area==16)return player_x+PLAYER_W>0&&player_x<240?55:4096;
   if(area==15)return player_x+PLAYER_W>0&&player_x<192?118:4096;
   if(area==14){int floor=lever_edge_floor(player_x+144);return floor==4096?4096:floor-8;}
   if(area==12)return player_x+PLAYER_W>0&&player_x<174?63:4096;
@@ -86,6 +88,8 @@ const Gem level_gems[GEM_COUNT]={{0,109,62,0},{1,133,74,1},{3,151,47,2},{4,126,4
 /* Animation and damage share the same attack clock: wind-up, contact, recovery. */
 unsigned game_attack_frame(const Game *g){return g->attack>8?0:g->attack>=4?1:2;}
 unsigned game_walk_frame(const Game *g){return g->walk_ticks/(6u*320u);}
+unsigned game_crawl_frame(const Game *g){return g->crawl_ticks/(8u*FP);}
+int game_body_top(const Game *g){return g->y+(g->crawling?(PLAYER_H-CRAWL_H)*FP:0);}
 unsigned game_air_frame(const Game *g){
   if(g->grounded||g->climbing||g->game_over)return AIR_NONE;
   /* Estimated near-apex window. Positive velocity always means falling,
@@ -118,6 +122,7 @@ void game_reset(Game *g){
   level_progress_reset(&g->progress,3);
   g->enemy4_x=80*FP;g->enemy4_dir=-1;g->enemy4_hp=2;g->enemy4_flash=0;g->enemy4_last_swing=0;
   g->enemy3_x=118*FP;g->enemy3_dir=-1;g->enemy3_hp=2;g->enemy3_flash=0;g->enemy3_last_swing=0;
+  g->crawling=0;g->crawl_ticks=0;
   g->hurt_timer=0;g->game_over=0;g->walk_ticks=0;g->lives=3;
   g->enemy2_x=210*FP;g->enemy2_dir=-1;g->enemy2_hp=2;g->enemy2_flash=0;g->enemy2_last_swing=0;
   g->enemy_x=155*FP;g->enemy_dir=-1;g->enemy_hp=2;g->enemy_flash=0;g->swing_id=0;g->enemy_last_swing=0;
@@ -149,6 +154,8 @@ static void respawn_area(Game *g){
   if(g->area==13){g->x=174*FP;g->y=109*FP;}
   if(g->area==14){g->x=42*FP;g->y=(game_extension_floor(14,42)-PLAYER_H)*FP;}
   if(g->area==15){g->x=172*FP;g->y=78*FP;}
+  if(g->area==16){g->x=55*FP;g->y=15*FP;}
+  g->crawling=0;g->crawl_ticks=0;
   g->vx=0;g->vy=0;g->grounded=1;g->climbing=0;g->sign_open=0;
   g->camera=0;camera(g);
 }
@@ -157,7 +164,7 @@ static void lose_life(Game *g){
   if(g->game_over)return;
   if(g->lives)g->lives--;
   /* Pickup feedback belongs to the lost life, while the collected gem survives. */
-  g->pickup_timer=0;
+  g->pickup_timer=0;g->crawling=0;g->crawl_ticks=0;
   g->attack=0;g->walk_ticks=0;g->vx=0;g->vy=0;g->climbing=0;g->ledge_ticks=0;g->ledge_cooldown=0;
   if(!g->lives){g->progress.health=0;g->game_over=1;return;}
   g->progress.health=g->progress.max_health;
@@ -250,21 +257,27 @@ void game_step(Game *g,unsigned input){
    }
    if(g->climbing||g->grounded){collect(g);camera(g);return;}
   }
-  if((pressed&ATTACK)&&!g->attack){g->attack=12;g->swing_id++;}
+  /* The logical y remains standing-top anchored: changing body height preserves feet. */
+  int low_rock=(g->area==15&&g->x<164*FP&&g->x+PLAYER_W*FP>0&&g->y<87*FP&&g->y+PLAYER_H*FP>-80*FP)||
+               (g->area==16&&g->x<247*FP&&g->x+PLAYER_W*FP>83*FP&&g->y<24*FP&&g->y+PLAYER_H*FP>-143*FP);
+  g->crawling=(g->area==15||g->area==16)&&g->grounded&&((input&DOWN)||(g->crawling&&low_rock));
+  if(g->crawling)g->attack=0;
+  if(!g->crawling&&(pressed&ATTACK)&&!g->attack){g->attack=12;g->swing_id++;}
   else if(g->attack)--g->attack;
   lever_step(g,pressed);
   int old_floor=(g->area>=5?game_extension_floor(g->area,g->x/FP):g->area==3?guard_floor(g->x/FP+PLAYER_W/2):g->area?4096:game_floor(g->x/FP+PLAYER_W/2))*FP;
   int was_floor=g->grounded&&g->y+PLAYER_H*FP==old_floor;
-  g->vx=((input&RIGHT)!=0)*320-((input&LEFT)!=0)*320;
+  int speed=g->crawling?CRAWL_SPEED:320;
+  g->vx=((input&RIGHT)!=0)*speed-((input&LEFT)!=0)*speed;
   if(g->vx&&!g->attack)g->facing=g->vx>0?1:-1;
   int old_x=g->x;
   g->x+=g->vx;
   /* Solid rock volumes: resolve crossed faces without snapping onto the top. */
-  const Platform *solids=g->area==15?&lower_landing_roof:g->area==14?&post_lever_roof:g->area==13?&lever_wall:g->area==8?upper_solids:g->area==7?riser_solids:g->area==6?bridge_run_solids:g->area==5?continuation_solids:g->area==2?&cliff_rock:gap_platforms;
-  int solid_count=(g->area==2||g->area==13||g->area==14||g->area==15)?1:g->area>=9?0:g->area>=4?2:0;
+  const Platform *solids=g->area==16?&crawl_passage_roof:g->area==15?&lower_landing_roof:g->area==14?&post_lever_roof:g->area==13?&lever_wall:g->area==8?upper_solids:g->area==7?riser_solids:g->area==6?bridge_run_solids:g->area==5?continuation_solids:g->area==2?&cliff_rock:gap_platforms;
+  int solid_count=(g->area==2||g->area==13||g->area==14||g->area==15||g->area==16)?1:g->area>=9?0:g->area>=4?2:0;
   for(int i=0;i<solid_count;i++){
    const Platform *p=&solids[i];
-   if(g->y+PLAYER_H*FP<=p->y*FP||g->y>=(p->y+p->h)*FP)continue;
+   if(g->y+PLAYER_H*FP<=p->y*FP||game_body_top(g)>=(p->y+p->h)*FP)continue;
    if(g->vx>0&&old_x+PLAYER_W*FP<=p->x*FP&&g->x+PLAYER_W*FP>p->x*FP){
     g->x=(p->x-PLAYER_W)*FP;g->vx=0;
    }else if(g->vx<0&&old_x>=(p->x+p->w)*FP&&g->x<(p->x+p->w)*FP){
@@ -277,7 +290,7 @@ void game_step(Game *g,unsigned input){
   int moved_x=g->x-old_x;
   if(!moved_x)g->vx=0;
   int center=g->x/FP+PLAYER_W/2;
-  if((pressed&JUMP)&&g->grounded){g->vy=(g->area>=7&&(input&UP))?-1280:-960;g->grounded=0;}
+  if(!g->crawling&&(pressed&JUMP)&&g->grounded){g->vy=(g->area>=7&&(input&UP))?-1280:-960;g->grounded=0;}
   int old_bottom=g->y+PLAYER_H*FP;
   g->vy+=32;if(g->vy>6*FP)g->vy=6*FP;
   int next=g->y+g->vy,landing=0x7fffffff;
@@ -285,7 +298,7 @@ void game_step(Game *g,unsigned input){
   if(g->vy<0)for(int i=0;i<solid_count;i++){
    const Platform *p=&solids[i];int underside=(p->y+p->h)*FP;
    if(g->x+PLAYER_W*FP>p->x*FP&&g->x<(p->x+p->w)*FP&&
-      g->y>=underside&&next<underside){next=underside;g->vy=0;}
+      game_body_top(g)>=underside&&next+(g->crawling?(PLAYER_H-CRAWL_H)*FP:0)<underside){next=underside-(g->crawling?(PLAYER_H-CRAWL_H)*FP:0);g->vy=0;}
   }
   g->grounded=0;
   const Platform *list=g->area==11?&island_upper_ledge:g->area==4?gap_platforms:g->area==2?cliff_platforms:g->area?bridge_platforms:platforms;
@@ -318,6 +331,8 @@ void game_step(Game *g,unsigned input){
   if(g->grounded&&moved_x&&!g->attack)
    g->walk_ticks=(g->walk_ticks+(unsigned)(moved_x<0?-moved_x:moved_x))%(18u*320u);
   else g->walk_ticks=0;
+  if(g->crawling&&g->grounded&&moved_x)g->crawl_ticks=(g->crawl_ticks+(unsigned)(moved_x<0?-moved_x:moved_x))%(16u*FP);
+  else if(!g->crawling)g->crawl_ticks=0;
   if(!g->area&&(pressed&DOWN)&&center>=158&&center<=190&&g->grounded)g->sign_open=1;
   if(!g->area&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=225*FP&&g->grounded&&g->y==0)transition_area(g,1);
   else if(g->area==1&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=32*FP&&g->grounded)transition_area(g,0);
@@ -370,6 +385,10 @@ void game_step(Game *g,unsigned input){
    g->area=13;g->progress.area=13;g->x+=144*FP;g->y+=8*FP;camera(g);
   }else if(g->area==14&&g->y>=170*FP&&g->vy>0&&g->x>=74*FP&&g->x<102*FP){
    g->area=15;g->progress.area=15;g->x+=90*FP;g->y-=105*FP;camera(g);
+  }else if(g->area==15&&g->crawling&&g->grounded&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=74*FP){
+   g->area=16;g->progress.area=16;g->x+=83*FP;g->y-=63*FP;camera(g);
+  }else if(g->area==16&&g->grounded&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=158*FP){
+   g->area=15;g->progress.area=15;g->x-=83*FP;g->y+=63*FP;camera(g);
   }else if(g->area==7&&g->x<90*FP&&g->y<=-8*FP&&g->vy<0){
    g->area=8;g->progress.area=8;g->x+=35*FP;g->y+=81*FP;camera(g);
   }else if(g->area==8&&g->y>=110*FP&&!g->grounded){

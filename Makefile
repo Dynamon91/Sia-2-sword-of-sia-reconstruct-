@@ -28,6 +28,8 @@ build/sia2_lab.gba: build/sia2_lab.elf tools/fix_header.py
 	$(PREFIX)objcopy -O binary $< $@
 	python3 tools/fix_header.py $@
 test: | build
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_crawl.c -o build/test_crawl
+	./build/test_crawl
 	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_post_lever.c -o build/test_post_lever
 	./build/test_post_lever
 	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_view_camera.c -o build/test_view_camera
@@ -70,3 +72,8 @@ build/main.o: src/loading.h
 build/assets.o: assets/loading_screen.bin
 
 build/assets.o: assets/lower_strip_open.bin
+
+build/assets.o: assets/crawl_cycle.bin
+
+
+build/assets.o: assets/scroll_world_open.bin

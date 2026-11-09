@@ -103,8 +103,8 @@
     144
   ],
   "limits": [
-    "First lower landing only; provisional low rock stops standing movement at x=164 before the unfinished crawl passage",
-    "Crawling, thorn collision and thorn movement remain unverified and are not implemented",
+    "First lower landing; low rock stops standing movement at x=164, while separate crawl code handles passage",
+    "Legacy strip patch retained for audit; runtime uses the post-lever world atlas. Thorn collision and intermediate movement are not implemented",
     "Player pixels restored from later registered video; three edge columns, covered header and sky behind removed tall thorns estimated",
     "The older 182-to-185 inconsistent registration remains rejected; this uses independent 183 terrain patches"
   ]

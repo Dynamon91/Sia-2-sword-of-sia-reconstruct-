@@ -3,9 +3,9 @@
 **🚧 WORK IN PROGRESS — Ricostruzione ancora in sviluppo.**
 
 <!-- PROJECT_PROGRESS -->
-![Avanzamento complessivo stimato: 15.25%](docs/progress.svg)
+![Avanzamento complessivo stimato: 16%](docs/progress.svg)
 
-**Progetto completo: circa 15.25%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
+**Progetto completo: circa 16%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
 <!-- /PROJECT_PROGRESS -->
 
 ![Anteprima degli asset attualmente integrati](previews/readme_frontend.png)
@@ -16,13 +16,11 @@ An ongoing reconstruction of Lady Sia 2: Sword of Sia for Game Boy Advance, base
 
 The current build includes a partial reconstruction of World 1 with controllable gameplay, collisions, pickups, damage, falling and game over. Levels, sprite and scenery animations, and the original interface are still being reconstructed and refined. This project is incomplete and does not represent the finished original game.
 
-Latest error fixes: the lever check now tracks only its sampled atlas region and palette, so unrelated scenery edits do not invalidate it. A leftward missed drop no longer enters the lower rock. [Reproduction and regression checks](references/ERROR_FIX_STATUS.md).
+Latest verified change: the route now has seventeen partial viewports. On the lower landing after the lever, hold DOWN+LEFT to crawl under the rock and reach the next recorded view. Releasing DOWN beneath the ceiling keeps Sia low; at a clear end she can stand safely. Use DOWN+RIGHT to return. Jump and attack are suppressed while low. [Controls, source measurements and limits](references/CRAWL_STATUS.md).
 
-Latest verified change: a sixteenth partial viewport connects the first post-lever edge to the lower landing. Walk to about x=90 on the edge, then release movement to descend. The landing supports walking, pause and local pit respawn while preserving gems, defeated guards and the lever. It is currently a one-way drop. Crawling, thorn movement/collision and the following left route remain unfinished. [Evidence, controls and limits](references/LOWER_LANDING_STATUS.md).
+![Native ROM: crawl beneath the lever island](previews/crawl_under_roof.png)
 
-![Native ROM: new lower landing](previews/lower_landing_respawn.png)
-
-PLAY retains the measured original “Please wait” before the arrival dialogue; the intro movie stays removed. Continuous camera following has no arbitrary zone cuts. The route still has four prototype guards and five gems; geometry, camera easing and covered scenery remain provisional.
+Two masked prone poses come from the original video. A provisional camera guide uses the recorded lower-strip positions, and a precomputed post-lever background removes old thorn silhouettes. The valid drop and missed-drop safety checks remain in place. PLAY retains the original Please wait; the intro movie is removed. Thorn motion/damage, further routes and complete levels remain unfinished; geometry and camera timing are provisional.
 
 Earlier gameplay previews below illustrate the preceding route checkpoints; CI exports fresh captures for each build.
 

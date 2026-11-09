@@ -8,7 +8,7 @@ static const char save_type[] __attribute__((used))="SRAM_V113";
 #include "story.h"
 #include "view_camera.h"
 #include "loading.h"
-extern const unsigned char loading_screen[],lower_strip_open[];
+extern const unsigned char loading_screen[],crawl_cycle[];
 #include "../assets/assets.h"
 #include "../assets/room.h"
 #include "../assets/ui.h"
@@ -36,7 +36,7 @@ static Game game;
 static ViewCamera view_camera;
 static int sprite_dx,sprite_dy;
 extern const unsigned char lever_lowered[];
-extern const unsigned char scroll_world[],scroll_world_sky[],scroll_cloud[];
+extern const unsigned char scroll_world[],scroll_world_open[],scroll_world_sky[],scroll_cloud[];
 static const u16 lab_palette[256]={
  RGB(3,5,10),RGB(8,12,18),RGB(10,18,19),RGB(25,21,12),RGB(23,10,15),RGB(30,29,24),
  [240]=0,[241]=RGB(31,31,31),[242]=RGB(31,26,10),[243]=RGB(10,27,30),[244]=RGB(1,3,6),[245]=RGB(27,12,17)
@@ -245,9 +245,10 @@ static void draw_world(void){
  if(!game.area&&!view_camera.x&&!view_camera.y&&!game.camera_y){draw_initial_background();return;}
  int sx=-view_camera.x/FP,sy=380-view_camera.y/FP;unsigned shift=(unsigned)sx&3;
  pending_palette=(const u16*)room_background;
+ const unsigned char *world=game.progress.barrier_open?scroll_world_open:scroll_world;
  for(int y=0;y<160;y++){
   int row=sy+y;
-  const unsigned char *source=scroll_world+shift*810000+row*1500+sx-(int)shift;
+  const unsigned char *source=world+shift*810000+row*1500+sx-(int)shift;
   REG32(0x040000D4)=(unsigned)source;REG32(0x040000D8)=(unsigned)(page+y*120);
   REG32(0x040000DC)=0x84000000|60;
   unsigned offset=(unsigned)row*2;
@@ -264,7 +265,6 @@ static void entity_origin(unsigned area){sprite_dx=view_camera.x/FP-view_origin[
 static void draw_level(void){
  unsigned profile_start=REG16(0x0400010C);
  draw_world();
- if(game.progress.barrier_open){entity_origin(15);sprite(0,80,160,64,lower_strip_open,0);}
  if(game.progress.lever_activated){entity_origin(13);sprite(64,104,40,44,lever_lowered,0);}
  (*(volatile unsigned*)0x0203F0C8)=(u16)(REG16(0x0400010C)-profile_start);
  for(unsigned i=0;i<GEM_COUNT;i++){
@@ -285,7 +285,9 @@ static void draw_level(void){
  unsigned air=game_air_frame(&game);
  const unsigned char *actor=room_sprites;
  int width=48,height=56,anchor=24;
- if(game.attack&&!game.climbing){
+ if(game.crawling){
+  width=64;height=36;anchor=32;actor=crawl_cycle+game_crawl_frame(&game)*64*36;
+ }else if(game.attack&&!game.climbing){
   width=80;height=64;anchor=39;actor=attack_cycle+game_attack_frame(&game)*80*64;
  }else if(air!=AIR_NONE){
   width=56;anchor=28;actor=jump_cycle+air*56*56;
@@ -293,7 +295,7 @@ static void draw_level(void){
  if(game.climbing){
   sprite(game.x/FP+PLAYER_W/2-24,game.ledge_y-44-game.camera_y,
          48,104,ledge_cycle+game_ledge_frame(&game)*48*104,0);
- }else if(!game.hurt_timer||(game.hurt_timer&4))sprite(aligned_sprite_x(game.x/FP+PLAYER_W/2,width,anchor,game.facing<0),game.y/FP+PLAYER_H-height-game.camera_y,
+ }else if(!game.hurt_timer||(game.hurt_timer&4))sprite(aligned_sprite_x(game.x/FP+PLAYER_W/2,width,anchor,game.facing<0),game.y/FP+PLAYER_H-height-game.camera_y+(game.crawling?CRAWL_FLOOR_BIAS:0),
         width,height,actor,game.facing<0);
  (*(volatile unsigned*)0x0203F0CC)=(u16)(REG16(0x0400010C)-profile_start);
  if(game.pickup_timer>0){
@@ -359,7 +361,7 @@ static void render(void){
  shown[11]=(unsigned)game.area;shown[12]=cloud_phase(game.ticks);
  shown[13]=(unsigned)(view_camera.x/FP-view_origin[game.area][0]);shown[14]=(unsigned)(view_camera.y/FP-view_origin[game.area][1]);
  shown[15]=(unsigned)view_camera.x;shown[16]=(unsigned)view_camera.y;
- shown[17]=game_ledge_frame(&game);shown[18]=(unsigned)game.ledge_y;shown[19]=game.lives;shown[20]=loading_age;
+ shown[17]=game_ledge_frame(&game);shown[18]=(unsigned)game.ledge_y;shown[19]=game.lives;shown[20]=loading_age;shown[21]=(unsigned)game.crawling;shown[22]=game_crawl_frame(&game);
 }
 int main(void){
  REG16(0x04000204)=0x4317;REG16(0x04000000)=0x0404;
@@ -458,7 +460,7 @@ int main(void){
   debug[35]=game_air_frame(&game);debug[36]=(unsigned)game.vy;debug[37]=(unsigned)game.facing;
   debug[38]=(unsigned)game.enemy3_hp;debug[39]=(unsigned)game.enemy3_x;
   debug[40]=(unsigned)game.enemy4_hp;debug[41]=(unsigned)game.enemy4_x;
-  debug[42]=game.progress.lever_activated;debug[43]=game.progress.barrier_open;
+  debug[42]=game.progress.lever_activated;debug[43]=game.progress.barrier_open;debug[44]=(unsigned)game.crawling;debug[45]=game_crawl_frame(&game);debug[46]=(unsigned)game_body_top(&game);
   if(dirty)render();else wait_frame();
  }
 }

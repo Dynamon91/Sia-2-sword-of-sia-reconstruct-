@@ -44,7 +44,7 @@ static void run(struct mCore *c,unsigned count){
     int movement=world_x-camera_last_world_x,center=shown_x+PLAYER_W*FP/2;
     if(movement==320&&abs(center-80*FP)<=FP)camera_right_frames++;
     if(movement==-320&&abs(center-128*FP)<=FP)camera_left_frames++;
-    if(!movement&&center>=16*FP&&center<=224*FP){
+    if(!movement&&!c->busRead32(c,0x0203F154)&&center>=16*FP&&center<=224*FP){
      assert(camera_x==scroll_last_x);camera_idle_frames++;
     }
    }
@@ -104,16 +104,39 @@ static void check_loading(struct mCore *c){
  state(c,6);assert(value(c,13)==0);c->setKeys(c,0);run(c,2);
  printf("PASS authentic loading integration: %u displayed frames; exact pixels/palette, three timed phases, hidden objects, frozen physics and held-input isolation\n",frames);
 }
+static unsigned check_crawl_pose(struct mCore *c){
+ static unsigned char frames[64*36*2],world[810000],opened[810000];static int loaded;
+ if(!loaded){
+  FILE *f=fopen("assets/crawl_cycle.bin","rb");assert(f);assert(fread(frames,1,sizeof(frames),f)==sizeof(frames));fclose(f);
+  f=fopen("assets/scroll_world.bin","rb");assert(f);assert(fread(world,1,sizeof(world),f)==sizeof(world));fclose(f);
+  f=fopen("assets/scroll_world_open.bin","rb");assert(f);assert(fread(opened,1,sizeof(opened),f)==sizeof(opened));fclose(f);
+  loaded=1;
+ }
+ assert(shown(c,0)==7&&shown(c,21)&&shown(c,8)&&(shown(c,11)==15||shown(c,11)==16));
+ unsigned frame=shown(c,22);assert(frame<2);int flip=(int)shown(c,5)<0;
+ int left=aligned_sprite_x((int)shown(c,1)/FP+PLAYER_W/2,64,32,flip),top=(int)shown(c,2)/FP-(int)shown(c,3)+PLAYER_H-36+CRAWL_FLOOR_BIAS;
+ int cx=(int)shown(c,15)/FP,cy=(int)shown(c,16)/FP;
+ unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
+ for(int y=0;y<36;y++)for(int x=0;x<64;x++){
+  int sx=left+x,sy=top+y;if(sx<0||sx>=240||sy<0||sy>=160)continue;
+  unsigned ink=frames[frame*64*36+y*64+(flip?63-x:x)];
+  int expected=(value(c,43)?opened:world)[(380-cy+sy)*1500+sx-cx];
+  if(ink)expected=ink;
+  assert(c->busRead8(c,base+sy*240+sx)==(unsigned)expected);
+ }
+ return 1u<<(frame+(flip?2:0));
+}
 static void check_world_background(struct mCore *c){
- static unsigned char world[810000],clouds[25600],sky[2][80][240],lever_patch[40*44],strip_patch[160*64];static int loaded;
+ static unsigned char world[810000],opened[810000],clouds[25600],sky[2][80][240],lever_patch[40*44];static int loaded;
  if(!loaded){
   FILE *atlas=fopen("assets/scroll_world.bin","rb");assert(atlas);assert(fread(world,1,sizeof(world),atlas)==sizeof(world));fclose(atlas);
+  atlas=fopen("assets/scroll_world_open.bin","rb");assert(atlas);assert(fread(opened,1,sizeof(opened),atlas)==sizeof(opened));fclose(atlas);
   FILE *f=fopen("assets/cloud_strip.bin","rb");assert(f);assert(fread(clouds,1,25600,f)==25600);fclose(f);
   f=fopen("assets/scroll_sky.bin","rb");assert(f);
   for(unsigned a=0;a<2;a++)for(unsigned y=0;y<80;y++){
    fseek(f,(a*80+y)*2,SEEK_SET);unsigned off=(unsigned)fgetc(f);off|=(unsigned)fgetc(f)<<8;fseek(f,(long)off,SEEK_SET);int count=fgetc(f);
    for(int i=0;i<count;i++){int x=fgetc(f),n=fgetc(f);while(n--)sky[a][y][x++]=1;}
-  }fclose(f);f=fopen("assets/lever_lowered.bin","rb");assert(f);assert(fread(lever_patch,1,sizeof(lever_patch),f)==sizeof(lever_patch));fclose(f);f=fopen("assets/lower_strip_open.bin","rb");assert(f);assert(fread(strip_patch,1,sizeof(strip_patch),f)==sizeof(strip_patch));fclose(f);loaded=1;
+  }fclose(f);f=fopen("assets/lever_lowered.bin","rb");assert(f);assert(fread(lever_patch,1,sizeof(lever_patch),f)==sizeof(lever_patch));fclose(f);loaded=1;
  }
  int cx=(int)shown(c,15)/FP,cy=(int)shown(c,16)/FP,px=(int)shown(c,1)/FP,py=(int)shown(c,2)/FP-(int)shown(c,3);
  unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000,checked=0;
@@ -130,9 +153,7 @@ static void check_world_background(struct mCore *c){
    if(x>=gx+guards[i][1]-22&&x<gx+guards[i][2]+45&&y>=gy-60&&y<gy+12)actor=1;
   }
   if(actor)continue;
-  int expected=world[(380-cy+y)*1500+x-cx];
-  int tx=x-(cx-view_origin[15][0]),ty=y-(cy-view_origin[15][1]);
-  if(value(c,43)&&tx>=0&&tx<160&&ty>=80&&ty<144&&strip_patch[(ty-80)*160+tx])expected=strip_patch[(ty-80)*160+tx];
+  int expected=(value(c,43)?opened:world)[(380-cy+y)*1500+x-cx];
   for(unsigned a=0;a<VIEW_COUNT;a++){
    int sx=x-cx+view_origin[a][0],sy=y-cy+view_origin[a][1];
    if(sx<0||sx>=240||sy<0||sy>=160)continue;
@@ -338,6 +359,7 @@ int main(int argc,char **argv){
  assert(!mkdir("build/lever_route_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/post_lever_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/lower_landing_sequence",0777)||errno==EEXIST);
+ assert(!mkdir("build/crawl_sequence",0777)||errno==EEXIST);
  mLogSetDefaultLogger(&test_logger);
  assert(argc==2);struct mCore *c=mCoreFind(argv[1]);assert(c&&c->init(c));mCoreInitConfig(c,NULL);
  color_t *pixels=calloc(240*160,sizeof(color_t));assert(pixels);c->setVideoBuffer(c,pixels,240);
@@ -768,6 +790,46 @@ int main(int argc,char **argv){
  assert((int)value(c,8)==164*FP&&value(c,14));
  c->setKeys(c,0);run(c,16);check_world_background(c);
  capture(c,"build/lower_landing_walk.ppm");
+ /* Crawl branch is isolated from the existing landing/pit regression. */
+ void *crawl_before=malloc(c->stateSize(c));assert(crawl_before&&c->saveState(c,crawl_before));
+ const char *crawl_previous_sequence=sequence_dir;unsigned crawl_previous_frame=sequence_frame;
+ sequence_dir="build/crawl_sequence";sequence_frame=0;
+ c->setKeys(c,128);run(c,4);assert(value(c,44)&&value(c,14));unsigned crawl_seen=check_crawl_pose(c);
+ capture(c,"build/crawl_idle.ppm");
+ c->setKeys(c,160);
+ for(int i=0;i<120&&(int)value(c,8)>112*FP;i++){run(c,1);crawl_seen|=check_crawl_pose(c);}
+ assert((int)value(c,8)<114*FP&&value(c,17)==15&&value(c,44)&&value(c,14)&&(int)value(c,9)==78*FP);
+ c->setKeys(c,32);run(c,16);assert(value(c,44)&&value(c,14));crawl_seen|=check_crawl_pose(c);
+ capture(c,"build/crawl_under_roof.ppm");
+ c->setKeys(c,3);run(c,8);c->setKeys(c,0);run(c,8);
+ assert(value(c,44)&&value(c,14)&&!value(c,36)&&value(c,29)==3);crawl_seen|=check_crawl_pose(c);
+ tap(c,8);state(c,8);unsigned crawl_tick=value(c,16),crawl_phase=value(c,45);run(c,20);
+ assert(value(c,16)==crawl_tick&&value(c,45)==crawl_phase&&value(c,44));
+ capture(c,"build/crawl_pause.ppm");tap(c,1);state(c,7);
+ c->setKeys(c,32);unsigned crawl_portals=0;
+ for(int i=0;i<300&&(value(c,17)!=16||(int)value(c,8)>55*FP);i++){
+  unsigned area=value(c,17);int wx=(int)value(c,8),wy=(int)value(c,9);run(c,1);
+  if(area==15&&value(c,17)==16){assert((int)value(c,8)==wx+83*FP-CRAWL_SPEED&&(int)value(c,9)==wy-63*FP);crawl_portals++;}
+  if(shown(c,21))crawl_seen|=check_crawl_pose(c);
+ }
+ c->setKeys(c,0);run(c,4);assert(value(c,17)==16&&!value(c,44)&&value(c,14)&&(int)value(c,9)==15*FP&&crawl_portals==1);
+ capture(c,"build/crawl_far_exit.ppm");
+ c->setKeys(c,144);
+ for(int i=0;i<360&&(value(c,17)!=15||(int)value(c,8)<167*FP);i++){
+  run(c,1);if(shown(c,21))crawl_seen|=check_crawl_pose(c);
+ }
+ c->setKeys(c,16);run(c,3);
+ for(int i=0;i<240&&(int)value(c,8)<167*FP;i++){
+  run(c,1);if(shown(c,21))crawl_seen|=check_crawl_pose(c);
+ }
+ c->setKeys(c,0);run(c,4);
+ assert(crawl_seen==15&&!value(c,44)&&!shown(c,21)&&value(c,14)&&(int)value(c,8)>=164*FP);
+ assert(value(c,31)==upper_lives&&value(c,18)==upper_falls&&value(c,10)==5&&!value(c,40)&&value(c,42)&&value(c,43));
+ capture(c,"build/crawl_exit.ppm");
+ FILE *crawl_count=fopen("build/crawl_sequence/frame_count.txt","w");assert(crawl_count);fprintf(crawl_count,"%u\n",sequence_frame);fclose(crawl_count);
+ sequence_dir=NULL;assert(c->loadState(c,crawl_before));free(crawl_before);
+ sequence_dir=crawl_previous_sequence;sequence_frame=crawl_previous_frame;
+ puts("PASS crawl integration: controller-driven low passage and return, both poses/facings pixel-checked including transparency, fixed feet, forced low stance, no jump/attack, pause and safe stand-up; run state preserved");
  tap(c,8);state(c,8);unsigned lower_tick=value(c,16);run(c,20);assert(value(c,16)==lower_tick);
  capture(c,"build/lower_landing_pause.ppm");tap(c,1);state(c,7);
  c->setKeys(c,16);for(int i=0;i<180&&value(c,18)==upper_falls;i++)run(c,1);
@@ -779,7 +841,7 @@ int main(int argc,char **argv){
  fprintf(lower_count,"%u\n",sequence_frame);fclose(lower_count);
  sequence_dir=NULL;assert(c->loadState(c,lower_before));free(lower_before);
  sequence_dir=lower_previous_sequence;sequence_frame=lower_previous_frame;
- puts("PASS lower landing integration: input-only registered drop, world-pixel checks, walk, pause, pit and local respawn; lever/gems/defeats persist; thorn and crawl mechanics remain unfinished");
+ puts("PASS lower landing integration: input-only registered drop, world-pixel checks, walk, pause, pit and local respawn; lever/gems/defeats persist; thorn mechanics remain unfinished");
  tap(c,8);state(c,8);unsigned edge_tick=value(c,16);run(c,20);assert(value(c,16)==edge_tick);
  tap(c,1);state(c,7);
  /* Walking left during the fall must miss the lower rock instead of entering it. */
@@ -920,7 +982,7 @@ int main(int argc,char **argv){
  c->setKeys(c,2);run(c,2);assert(value(c,29)==0);
  c->setKeys(c,0);run(c,20);
  puts("PASS reset input integration: held A/B across R reset remain idle; release and fresh press restore jump and attack");
- assert((scroll_portals&0xFF80u)==0xFF80u);
+ assert((scroll_portals&0x1FF80u)==0x1FF80u);
  fprintf(stderr,"Scrolling performance: %u displayed updates in %u active scrolling frames\n",scroll_updates,scroll_frames);
  for(unsigned a=1;a<VIEW_COUNT;a++){
   assert(area_frames[a]>0);

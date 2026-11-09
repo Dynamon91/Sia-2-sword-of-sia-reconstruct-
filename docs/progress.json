@@ -4,14 +4,14 @@
     {
       "name": "Motore e sistemi di gioco",
       "weight": 15,
-      "earned": 9.0,
-      "evidence": "Controlli, combattimento, quattro guardie persistenti, vite/game over, pendenze e camera continua con raccordi verificati; geometria, fisica e IA ancora provvisorie."
+      "earned": 9.25,
+      "evidence": "Controlli, combattimento, quattro guardie, vite/game over, camera continua e strisciamento con corpo basso, mantenimento sotto soffitto e rialzata sicura verificati; geometria, IA e tempi ancora provvisori."
     },
     {
       "name": "Mondo 1 e boss",
       "weight": 20,
-      "earned": 5.0,
-      "evidence": "Sedici inquadrature parziali collegate: aggiunta la discesa e il primo atterraggio sotto la leva, con cammino, pausa e respawn locale verificati. Quattro guardie e cinque gemme persistenti; strisciamento, spine, percorso successivo e boss incompleti."
+      "earned": 5.5,
+      "evidence": "Diciassette inquadrature parziali collegate: nuovo passaggio basso dopo la leva, vista successiva e ritorno, con cinque gemme e quattro guardie persistenti. Percorso seguente, livelli e boss incompleti."
     },
     {
       "name": "Mondo 2 e boss",
