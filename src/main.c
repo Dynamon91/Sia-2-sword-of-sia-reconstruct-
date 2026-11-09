@@ -8,7 +8,7 @@ static const char save_type[] __attribute__((used))="SRAM_V113";
 #include "story.h"
 #include "view_camera.h"
 #include "loading.h"
-extern const unsigned char loading_screen[];
+extern const unsigned char loading_screen[],lower_strip_open[];
 #include "../assets/assets.h"
 #include "../assets/room.h"
 #include "../assets/ui.h"
@@ -264,6 +264,7 @@ static void entity_origin(unsigned area){sprite_dx=view_camera.x/FP-view_origin[
 static void draw_level(void){
  unsigned profile_start=REG16(0x0400010C);
  draw_world();
+ if(game.progress.barrier_open){entity_origin(15);sprite(0,80,160,64,lower_strip_open,0);}
  if(game.progress.lever_activated){entity_origin(13);sprite(64,104,40,44,lever_lowered,0);}
  (*(volatile unsigned*)0x0203F0C8)=(u16)(REG16(0x0400010C)-profile_start);
  for(unsigned i=0;i<GEM_COUNT;i++){

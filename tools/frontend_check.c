@@ -105,7 +105,7 @@ static void check_loading(struct mCore *c){
  printf("PASS authentic loading integration: %u displayed frames; exact pixels/palette, three timed phases, hidden objects, frozen physics and held-input isolation\n",frames);
 }
 static void check_world_background(struct mCore *c){
- static unsigned char world[810000],clouds[25600],sky[2][80][240],lever_patch[40*44];static int loaded;
+ static unsigned char world[810000],clouds[25600],sky[2][80][240],lever_patch[40*44],strip_patch[160*64];static int loaded;
  if(!loaded){
   FILE *atlas=fopen("assets/scroll_world.bin","rb");assert(atlas);assert(fread(world,1,sizeof(world),atlas)==sizeof(world));fclose(atlas);
   FILE *f=fopen("assets/cloud_strip.bin","rb");assert(f);assert(fread(clouds,1,25600,f)==25600);fclose(f);
@@ -113,7 +113,7 @@ static void check_world_background(struct mCore *c){
   for(unsigned a=0;a<2;a++)for(unsigned y=0;y<80;y++){
    fseek(f,(a*80+y)*2,SEEK_SET);unsigned off=(unsigned)fgetc(f);off|=(unsigned)fgetc(f)<<8;fseek(f,(long)off,SEEK_SET);int count=fgetc(f);
    for(int i=0;i<count;i++){int x=fgetc(f),n=fgetc(f);while(n--)sky[a][y][x++]=1;}
-  }fclose(f);f=fopen("assets/lever_lowered.bin","rb");assert(f);assert(fread(lever_patch,1,sizeof(lever_patch),f)==sizeof(lever_patch));fclose(f);loaded=1;
+  }fclose(f);f=fopen("assets/lever_lowered.bin","rb");assert(f);assert(fread(lever_patch,1,sizeof(lever_patch),f)==sizeof(lever_patch));fclose(f);f=fopen("assets/lower_strip_open.bin","rb");assert(f);assert(fread(strip_patch,1,sizeof(strip_patch),f)==sizeof(strip_patch));fclose(f);loaded=1;
  }
  int cx=(int)shown(c,15)/FP,cy=(int)shown(c,16)/FP,px=(int)shown(c,1)/FP,py=(int)shown(c,2)/FP-(int)shown(c,3);
  unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000,checked=0;
@@ -131,6 +131,8 @@ static void check_world_background(struct mCore *c){
   }
   if(actor)continue;
   int expected=world[(380-cy+y)*1500+x-cx];
+  int tx=x-(cx-view_origin[15][0]),ty=y-(cy-view_origin[15][1]);
+  if(value(c,43)&&tx>=0&&tx<160&&ty>=80&&ty<144&&strip_patch[(ty-80)*160+tx])expected=strip_patch[(ty-80)*160+tx];
   for(unsigned a=0;a<VIEW_COUNT;a++){
    int sx=x-cx+view_origin[a][0],sy=y-cy+view_origin[a][1];
    if(sx<0||sx>=240||sy<0||sy>=160)continue;
@@ -335,6 +337,7 @@ int main(int argc,char **argv){
  assert(!mkdir("build/island_gap_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/lever_route_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/post_lever_sequence",0777)||errno==EEXIST);
+ assert(!mkdir("build/lower_landing_sequence",0777)||errno==EEXIST);
  mLogSetDefaultLogger(&test_logger);
  assert(argc==2);struct mCore *c=mCoreFind(argv[1]);assert(c&&c->init(c));mCoreInitConfig(c,NULL);
  color_t *pixels=calloc(240*160,sizeof(color_t));assert(pixels);c->setVideoBuffer(c,pixels,240);
@@ -745,6 +748,38 @@ int main(int argc,char **argv){
  assert(value(c,17)==14&&value(c,14)&&(int)value(c,9)==(game_extension_floor(14,(int)value(c,8)/FP)-PLAYER_H)*FP);
  assert(value(c,31)==upper_lives&&value(c,18)==upper_falls&&value(c,42));
  check_world_background(c);capture(c,"build/post_lever_entry.ppm");
+ /* Isolate the one-way lower drop; restoring this host snapshot is not a game portal. */
+ void *lower_before=malloc(c->stateSize(c));assert(lower_before&&c->saveState(c,lower_before));
+ const char *lower_previous_sequence=sequence_dir;unsigned lower_previous_frame=sequence_frame;
+ sequence_dir="build/lower_landing_sequence";sequence_frame=0;
+ move_to(c,16,90);c->setKeys(c,0);unsigned lower_crossed=0;
+ for(int i=0;i<120&&(value(c,17)!=15||!value(c,14));i++){
+  unsigned area=value(c,17);int ox=(int)value(c,8),oy=(int)value(c,9);run(c,1);
+  if(area==14&&value(c,17)==15){
+   assert((int)value(c,8)==ox+90*FP);
+   assert((int)value(c,9)-oy==-105*FP+(int)value(c,36));lower_crossed++;
+  }
+ }
+ assert(value(c,17)==15&&value(c,14)&&lower_crossed==1&&(int)value(c,9)==78*FP);
+ assert(value(c,31)==upper_lives&&value(c,18)==upper_falls&&value(c,42)&&value(c,43));
+ c->setKeys(c,0);run(c,24);assert(shown(c,8)&&shown(c,11)==15);
+ check_world_background(c);capture(c,"build/lower_landing_entry.ppm");
+ move_to(c,32,167);c->setKeys(c,32);run(c,12);
+ assert((int)value(c,8)==164*FP&&value(c,14));
+ c->setKeys(c,0);run(c,16);check_world_background(c);
+ capture(c,"build/lower_landing_walk.ppm");
+ tap(c,8);state(c,8);unsigned lower_tick=value(c,16);run(c,20);assert(value(c,16)==lower_tick);
+ capture(c,"build/lower_landing_pause.ppm");tap(c,1);state(c,7);
+ c->setKeys(c,16);for(int i=0;i<180&&value(c,18)==upper_falls;i++)run(c,1);
+ c->setKeys(c,0);run(c,4);
+ assert(value(c,17)==15&&value(c,31)==upper_lives-1&&value(c,18)==upper_falls+1);
+ assert(value(c,14)&&(int)value(c,9)==78*FP&&value(c,42)&&value(c,43)&&value(c,10)==5&&!value(c,40)&&value(c,26)==4);
+ capture(c,"build/lower_landing_respawn.ppm");
+ FILE *lower_count=fopen("build/lower_landing_sequence/frame_count.txt","w");assert(lower_count);
+ fprintf(lower_count,"%u\n",sequence_frame);fclose(lower_count);
+ sequence_dir=NULL;assert(c->loadState(c,lower_before));free(lower_before);
+ sequence_dir=lower_previous_sequence;sequence_frame=lower_previous_frame;
+ puts("PASS lower landing integration: input-only registered drop, world-pixel checks, walk, pause, pit and local respawn; lever/gems/defeats persist; thorn and crawl mechanics remain unfinished");
  tap(c,8);state(c,8);unsigned edge_tick=value(c,16);run(c,20);assert(value(c,16)==edge_tick);
  tap(c,1);state(c,7);
  c->setKeys(c,16);for(int i=0;i<160&&value(c,18)==upper_falls;i++)run(c,1);
@@ -881,7 +916,7 @@ int main(int argc,char **argv){
  c->setKeys(c,2);run(c,2);assert(value(c,29)==0);
  c->setKeys(c,0);run(c,20);
  puts("PASS reset input integration: held A/B across R reset remain idle; release and fresh press restore jump and attack");
- assert((scroll_portals&0x7F80u)==0x7F80u);
+ assert((scroll_portals&0xFF80u)==0xFF80u);
  fprintf(stderr,"Scrolling performance: %u displayed updates in %u active scrolling frames\n",scroll_updates,scroll_frames);
  for(unsigned a=1;a<VIEW_COUNT;a++){
   assert(area_frames[a]>0);

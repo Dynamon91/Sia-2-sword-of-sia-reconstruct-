@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-08",
+  "updated": "2026-11-09",
   "areas": [
     {
       "name": "Motore e sistemi di gioco",
@@ -10,8 +10,8 @@
     {
       "name": "Mondo 1 e boss",
       "weight": 20,
-      "earned": 4.75,
-      "evidence": "Quindici inquadrature parziali collegate, inclusa la prima vista dopo la leva: ingresso aereo, bordo, soffitto, ritorno e respawn verificati. Quattro guardie e cinque gemme persistenti; striscia con spine, percorso successivo, livello e boss incompleti."
+      "earned": 5.0,
+      "evidence": "Sedici inquadrature parziali collegate: aggiunta la discesa e il primo atterraggio sotto la leva, con cammino, pausa e respawn locale verificati. Quattro guardie e cinque gemme persistenti; strisciamento, spine, percorso successivo e boss incompleti."
     },
     {
       "name": "Mondo 2 e boss",

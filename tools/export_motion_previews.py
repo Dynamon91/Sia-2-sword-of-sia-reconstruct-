@@ -74,7 +74,7 @@ def export(build, name, out, scale=2):
 def main():
     p=argparse.ArgumentParser();p.add_argument('build',type=Path);p.add_argument('--out',type=Path,default=Path('previews'));p.add_argument('--scale',type=int,choices=[1,2,3],default=2);a=p.parse_args()
     a.out.mkdir(parents=True,exist_ok=True)
-    for name in ['jump','ledge','scenery','continuation','bridge_run','ramp','island_gap','lever_route','post_lever']:export(a.build,name,a.out,a.scale)
+    for name in ['jump','ledge','scenery','continuation','bridge_run','ramp','island_gap','lever_route','post_lever','lower_landing']:export(a.build,name,a.out,a.scale)
 
 
 if __name__=='__main__':main()

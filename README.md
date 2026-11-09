@@ -3,9 +3,9 @@
 **🚧 WORK IN PROGRESS — Ricostruzione ancora in sviluppo.**
 
 <!-- PROJECT_PROGRESS -->
-![Avanzamento complessivo stimato: 15%](docs/progress.svg)
+![Avanzamento complessivo stimato: 15.25%](docs/progress.svg)
 
-**Progetto completo: circa 15%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
+**Progetto completo: circa 15.25%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
 <!-- /PROJECT_PROGRESS -->
 
 ![Anteprima degli asset attualmente integrati](previews/readme_frontend.png)
@@ -16,11 +16,11 @@ An ongoing reconstruction of Lady Sia 2: Sword of Sia for Game Boy Advance, base
 
 The current build includes a partial reconstruction of World 1 with controllable gameplay, collisions, pickups, damage, falling and game over. Levels, sprite and scenery animations, and the original interface are still being reconstructed and refined. This project is incomplete and does not represent the finished original game.
 
-Latest verified change: PLAY shows the observed “Please wait” entry screen with timing measured from the reference, then opens the arrival dialogue. The intro movie remains removed. The fifteen partial gameplay views keep continuous camera following; no arbitrary zone loading is added. [Evidence and limits](references/LOADING_REFERENCE_STATUS.md).
+Latest verified change: a sixteenth partial viewport connects the first post-lever edge to the lower landing. Walk to about x=90 on the edge, then release movement to descend. The landing supports walking, pause and local pit respawn while preserving gems, defeated guards and the lever. It is currently a one-way drop. Crawling, thorn movement/collision and the following left route remain unfinished. [Evidence, controls and limits](references/LOWER_LANDING_STATUS.md).
 
-The partial route now reaches the post-lever edge. B activates the recorded lowered lever pose near the switch. Four prototype guards and five gems retain their state on return. The thorn barrier animation and onward route remain unfinished; geometry and covered scenery are provisional. [Post-lever status](references/POST_LEVER_EDGE_STATUS.md).
+![Native ROM: new lower landing](previews/lower_landing_respawn.png)
 
-![Native ROM: authentic entry wait](previews/loading_original.png)
+PLAY retains the measured original “Please wait” before the arrival dialogue; the intro movie stays removed. Continuous camera following has no arbitrary zone cuts. The route still has four prototype guards and five gems; geometry, camera easing and covered scenery remain provisional.
 
 Earlier gameplay previews below illustrate the preceding route checkpoints; CI exports fresh captures for each build.
 

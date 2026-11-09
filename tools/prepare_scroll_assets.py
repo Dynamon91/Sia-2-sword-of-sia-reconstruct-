@@ -6,7 +6,7 @@ from PIL import Image
 from scipy.ndimage import binary_dilation,binary_fill_holes,gaussian_filter
 from repair_sprite_edges import indexed
 ROOT=Path(__file__).resolve().parents[1]
-NAMES=['room','bridge','cliff','guard_room','gap','continuation_background','bridge_run_background','riser_background','upper_background','ramp_lower_background','ramp_upper_background','island_gap_background','lever_entry_background','lever_room_background','post_lever_background']
+NAMES=['room','bridge','cliff','guard_room','gap','continuation_background','bridge_run_background','riser_background','upper_background','ramp_lower_background','ramp_upper_background','island_gap_background','lever_entry_background','lever_room_background','post_lever_background','lower_landing_background']
 def main():
  p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');args=p.parse_args()
  text=(ROOT/'src/view_camera.h').read_text();block=text.split('view_origin[VIEW_COUNT][2]=',1)[1].split(';',1)[0]
@@ -83,5 +83,5 @@ def main():
   path=ROOT/'assets'/name
   if args.check:assert path.read_bytes()==data,name
   else:path.write_bytes(data)
- print('PASS world atlas: fifteen shared palettes, deterministic registrations, lossless aligned source rows and animated sky spans')
+ print('PASS world atlas: sixteen shared palettes, deterministic registrations, lossless aligned source rows and animated sky spans')
 if __name__=='__main__':main()

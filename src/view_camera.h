@@ -1,11 +1,11 @@
 #ifndef VIEW_CAMERA_H
 #define VIEW_CAMERA_H
 #include "game.h"
-#define VIEW_COUNT 15
+#define VIEW_COUNT 16
 /* Screen translations compose into a shared world; early cliff offsets provisional. */
 static const int view_origin[VIEW_COUNT][2]={{0,0},{-152,60},{-358,14},{-574,29},
  {-732,47},{-920,72},{-1090,81},{-1258,88},{-1223,169},{-1165,154},
- {-1057,247},{-981,291},{-863,294},{-819,380},{-963,372}};
+ {-1057,247},{-981,291},{-863,294},{-819,380},{-963,372},{-873,267}};
 typedef struct { int x,y; } ViewCamera;
 static inline void view_camera_reset(ViewCamera *v,const Game *g){
  v->x=view_origin[g->area][0]*FP;v->y=(view_origin[g->area][1]-g->camera_y)*FP;

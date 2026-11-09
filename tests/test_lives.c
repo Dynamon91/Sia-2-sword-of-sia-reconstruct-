@@ -3,7 +3,7 @@
 #include <stdio.h>
 int main(void){
  Game g;
- for(int area=0;area<15;area++){
+ for(int area=0;area<16;area++){
   game_reset(&g);g.area=area;g.progress.area=(unsigned)area;
   assert(level_collect_gem(&g.progress,0));g.gems=1;g.collected=1;
   assert(level_defeat_enemy(&g.progress,0));g.enemy_hp=0;

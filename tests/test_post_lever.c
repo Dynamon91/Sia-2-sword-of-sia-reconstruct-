@@ -28,14 +28,26 @@ int main(void){
  game_step(&g,0);game_step(&g,0);assert(g.y==60*FP&&!g.vy&&!g.grounded);
  /* Opposing directions cannot trigger the return portal. */
  at(&g,14,31,101);g.grounded=1;game_step(&g,LEFT|RIGHT);assert(g.area==14);
- /* The next section is not authored yet: missing the edge remains a fatal pit. */
+ at(&g,15,165,78);g.grounded=1;
+ game_step(&g,LEFT);assert(g.x==164*FP&&!g.vx&&g.grounded);
+ /* The lower portal translates subpixels exactly, preserving downward velocity. */
+ at(&g,14,95,169);g.x+=17;g.y+=128;g.vy=2*FP;g.grounded=0;
+ int wx=g.x-view_origin[14][0]*FP,wy=g.y-view_origin[14][1]*FP;
+ game_step(&g,0);assert(g.area==15&&g.vy==2*FP+32);
+ assert(g.x-view_origin[15][0]*FP==wx&&g.y-view_origin[15][1]*FP==wy+g.vy);
+ assert(game_extension_floor(15,191)==118&&game_extension_floor(15,192)==4096);
+ /* A deep drop reaches the registered lower landing and preserves the run. */
  at(&g,14,90,101);assert(level_collect_gem(&g.progress,4));g.gems=1;g.collected=16;
  assert(level_defeat_enemy(&g.progress,3));g.enemy4_hp=0;
  assert(level_set_lever_state(&g.progress,1));
- for(int i=0;i<100&&!g.falls;i++)game_step(&g,0);
- assert(g.falls==1&&g.lives==2&&g.area==14&&g.x==42*FP&&g.y==(game_extension_floor(14,42)-PLAYER_H)*FP);
+ for(int i=0;i<100&&!g.grounded;i++)game_step(&g,0);
+ for(int i=0;i<100&&g.area==14;i++)game_step(&g,0);
+ for(int i=0;i<100&&!g.grounded;i++)game_step(&g,0);
+ assert(g.area==15&&g.grounded&&g.y==78*FP&&g.lives==3&&!g.falls);
+ for(int i=0;i<160&&!g.falls;i++)game_step(&g,RIGHT);
+ assert(g.falls==1&&g.lives==2&&g.area==15&&g.x==172*FP&&g.y==78*FP);
  assert(g.gems==1&&g.collected==16&&!g.enemy4_hp&&g.progress.defeated==1);
  assert(g.progress.lever_activated&&g.progress.barrier_open);
  game_step(&g,RESET);assert(g.area==0&&!g.progress.lever_activated&&g.lives==3);
- puts("PASS post-lever edge: airborne registered entry, landing, return, roof side/underside, pit respawn and persistent run state");
+ puts("PASS post-lever edge: airborne registered entry, landing, return, roof side/underside, lower landing, pit respawn and persistent run state");
 }

@@ -196,3 +196,8 @@ lever_lowered:
 .global loading_screen
 loading_screen:
 .incbin "assets/loading_screen.bin"
+
+.balign 4
+.global lower_strip_open
+lower_strip_open:
+.incbin "assets/lower_strip_open.bin"
