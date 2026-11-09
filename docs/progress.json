@@ -1,17 +1,17 @@
 {
-  "updated": "2026-11-08",
+  "updated": "2026-11-09",
   "areas": [
     {
       "name": "Motore e sistemi di gioco",
       "weight": 15,
-      "earned": 9.0,
-      "evidence": "Controlli, combattimento, quattro guardie persistenti, vite/game over, pendenze e camera continua con raccordi verificati; geometria, fisica e IA ancora provvisorie."
+      "earned": 9.25,
+      "evidence": "Controlli, combattimento, quattro guardie, vite/game over, camera continua e strisciamento con corpo basso, mantenimento sotto soffitto e rialzata sicura verificati; geometria, IA e tempi ancora provvisori."
     },
     {
       "name": "Mondo 1 e boss",
       "weight": 20,
-      "earned": 4.5,
-      "evidence": "Quattordici inquadrature parziali collegate: ponte, parete, rampa, isole e due viste della zona della leva; quarta guardia, ritorno e rivisita verificati. Leva, barriera, livello, mondo e boss incompleti."
+      "earned": 5.5,
+      "evidence": "Diciassette inquadrature parziali collegate: nuovo passaggio basso dopo la leva, vista successiva e ritorno, con cinque gemme e quattro guardie persistenti. Percorso seguente, livelli e boss incompleti."
     },
     {
       "name": "Mondo 2 e boss",
@@ -34,8 +34,8 @@
     {
       "name": "Fedeltà visiva, interfaccia, animazioni e audio",
       "weight": 15,
-      "earned": 0,
-      "evidence": "Tre pose aeree, quattro di presa/risalita e scorrimento delle nuvole nelle prime due aree integrati e verificati; ciclo originale delle nuvole, altre animazioni, interfaccia e audio ancora parziali."
+      "earned": 0.25,
+      "evidence": "Pose aeree/risalita e nuvole già integrate; posa abbassata della leva recuperata dal video a 182 s e verificata pixel per pixel nella ROM. Rotazione intermedia, barriera mobile, altre animazioni, interfaccia e audio ancora incompleti."
     },
     {
       "name": "Riferimenti, validazione e consegna finale",

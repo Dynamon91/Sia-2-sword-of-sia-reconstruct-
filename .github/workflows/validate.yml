@@ -13,6 +13,10 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -p test_route_registration.py
           python3 tools/audit_route_continuation.py --output build/route-registration.json
+      - name: Audit post-lever references and reject inconsistent joins
+        run: python3 tools/audit_post_lever.py --check
+      - name: Verify authentic entry loading
+        run: python3 tools/convert_loading.py --check
       - name: Restore and verify embedded assets
         run: python3 tools/unpack_assets.py
       - name: Remove intro playback and recording overlays
@@ -35,6 +39,18 @@ jobs:
         run: python3 tools/convert_island_gap.py --check
       - name: Verify lever-area backgrounds and measured portals
         run: python3 tools/convert_lever_route.py --check
+      - name: Verify registered post-lever edge background
+        run: python3 tools/convert_post_lever.py --check
+      - name: Verify recorded lowered lever pose
+        run: |
+          python3 -m unittest discover -s tests -p test_lever_asset_dependencies.py
+          python3 tools/convert_lever_pose.py --check
+      - name: Verify recorded crawl poses
+        run: python3 tools/convert_crawl.py --check
+      - name: Verify first lower landing
+        run: python3 tools/convert_lower_landing.py --check
+      - name: Verify next crawl passage viewport
+        run: python3 tools/convert_crawl_passage.py --check
       - name: Verify shared-world scrolling banks
         run: python3 tools/prepare_scroll_assets.py --check
       - name: Audit animation palette and foot anchors

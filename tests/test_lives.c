@@ -3,7 +3,7 @@
 #include <stdio.h>
 int main(void){
  Game g;
- for(int area=0;area<14;area++){
+ for(int area=0;area<17;area++){
   game_reset(&g);g.area=area;g.progress.area=(unsigned)area;
   assert(level_collect_gem(&g.progress,0));g.gems=1;g.collected=1;
   assert(level_defeat_enemy(&g.progress,0));g.enemy_hp=0;
@@ -32,5 +32,5 @@ int main(void){
  for(int n=0;n<200;n++)game_step(&g,RIGHT|ATTACK);
  assert(g.ticks==tick&&g.falls==falls&&!game_damage(&g,99));
  game_step(&g,RESET);assert(g.lives==3&&g.progress.health==3&&!g.game_over&&!g.falls);
- puts("PASS lives: lethal-hit respawn in fourteen areas, progress preservation, immunity, pit override, frozen defeat and full retry");
+ puts("PASS lives: lethal-hit respawn in seventeen areas, progress preservation, immunity, pit override, frozen defeat and full retry");
 }

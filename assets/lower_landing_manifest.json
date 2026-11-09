@@ -1,0 +1,111 @@
+{
+  "video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "source_seconds": [
+    183,
+    185,
+    186.1
+  ],
+  "source_sha256": [
+    "f67be7fc2202b5d3bb053f055339a98e7c3707da01ec236f9eef8098726e42bf",
+    "e7b41df2ba03aa052267fd61e74ccbfc3fa69dc5586cddb2180d8e0c13ae3798",
+    "eed4949e8918d802d368f2c710b24a112e37fd3e5c733d14674046a8cc550f85"
+  ],
+  "registrations": [
+    {
+      "delta": [
+        90,
+        -105
+      ],
+      "patches": [
+        {
+          "delta": [
+            90,
+            -105
+          ],
+          "mae_rgb": 3.017857,
+          "runner_up_mae_rgb": 7.047619,
+          "patch": [
+            24,
+            145,
+            32,
+            152
+          ]
+        },
+        {
+          "delta": [
+            90,
+            -105
+          ],
+          "mae_rgb": 4.642857,
+          "runner_up_mae_rgb": 22.14881,
+          "patch": [
+            44,
+            151,
+            52,
+            158
+          ]
+        }
+      ]
+    },
+    {
+      "delta": [
+        83,
+        -63
+      ],
+      "patches": [
+        {
+          "delta": [
+            83,
+            -63
+          ],
+          "mae_rgb": 2.420573,
+          "runner_up_mae_rgb": 9.661458,
+          "patch": [
+            100,
+            132,
+            116,
+            148
+          ]
+        },
+        {
+          "delta": [
+            83,
+            -63
+          ],
+          "mae_rgb": 2.71224,
+          "runner_up_mae_rgb": 8.828125,
+          "patch": [
+            45,
+            124,
+            61,
+            140
+          ]
+        }
+      ]
+    }
+  ],
+  "origin": [
+    -873,
+    267
+  ],
+  "walk_plane": {
+    "x_range": [
+      0,
+      192
+    ],
+    "y": 118,
+    "geometry": "provisional"
+  },
+  "open_strip_pose_bounds": [
+    0,
+    80,
+    160,
+    144
+  ],
+  "limits": [
+    "First lower landing; low rock stops standing movement at x=164, while separate crawl code handles passage",
+    "Legacy strip patch retained for audit; runtime uses the post-lever world atlas. Thorn collision and intermediate movement are not implemented",
+    "Player pixels restored from later registered video; three edge columns, covered header and sky behind removed tall thorns estimated",
+    "The older 182-to-185 inconsistent registration remains rejected; this uses independent 183 terrain patches"
+  ]
+}

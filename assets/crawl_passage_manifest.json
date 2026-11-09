@@ -1,0 +1,55 @@
+{
+  "video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "source_seconds": [
+    185,
+    186.1
+  ],
+  "source_sha256": [
+    "e7b41df2ba03aa052267fd61e74ccbfc3fa69dc5586cddb2180d8e0c13ae3798",
+    "eed4949e8918d802d368f2c710b24a112e37fd3e5c733d14674046a8cc550f85"
+  ],
+  "patches": [
+    {
+      "delta": [
+        83,
+        -63
+      ],
+      "mae_rgb": 2.420573,
+      "runner_up_mae_rgb": 9.661458,
+      "patch": [
+        100,
+        132,
+        116,
+        148
+      ]
+    },
+    {
+      "delta": [
+        83,
+        -63
+      ],
+      "mae_rgb": 2.71224,
+      "runner_up_mae_rgb": 8.828125,
+      "patch": [
+        45,
+        124,
+        61,
+        140
+      ]
+    }
+  ],
+  "origin": [
+    -790,
+    204
+  ],
+  "delta": [
+    83,
+    -63
+  ],
+  "limits": [
+    "Player region restored through measured lower-terrain registration; covered header/rock edge and avatar sky estimated",
+    "Collision floor y=55 and low rock are provisional, not recovered map data",
+    "Left boundary of this partial view is the current route limit; no next level is claimed",
+    "No intermediate thorn movement or thorn damage is implemented"
+  ]
+}

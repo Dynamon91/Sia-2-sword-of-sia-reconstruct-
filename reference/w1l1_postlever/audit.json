@@ -1,0 +1,232 @@
+{
+  "video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "frames": {
+    "180": {
+      "path": "reference/w1l1_next/180.png",
+      "sha256": "c9106101e7a5ca503b8dff4e6b2ef6d82b6685f8d5c41643a02677ca68f8aa9f"
+    },
+    "182": {
+      "path": "reference/w1l1_next/182.png",
+      "sha256": "2a65218cae5e124fad0d3b1ca5406b33821a85bd6a1b055013bfc040a1eb54a3"
+    },
+    "183": {
+      "path": "reference/w1l1_postlever/183.png",
+      "sha256": "f67be7fc2202b5d3bb053f055339a98e7c3707da01ec236f9eef8098726e42bf"
+    },
+    "184": {
+      "path": "reference/w1l1_postlever/184.png",
+      "sha256": "123a8dc5141e8062adcc4fc1033b40510de6cf67080cc3ed1ef706c3c2c8e5d4"
+    },
+    "185": {
+      "path": "reference/w1l1_postlever/185.png",
+      "sha256": "e7b41df2ba03aa052267fd61e74ccbfc3fa69dc5586cddb2180d8e0c13ae3798"
+    }
+  },
+  "registrations": [
+    {
+      "from": 180,
+      "to": 182,
+      "accepted": true,
+      "delta": [
+        -1,
+        0
+      ],
+      "patches": [
+        {
+          "delta": [
+            -1,
+            0
+          ],
+          "mae_rgb": 8.529167,
+          "runner_up_mae_rgb": 34.333333,
+          "patch": [
+            65,
+            139,
+            73,
+            149
+          ]
+        },
+        {
+          "delta": [
+            -1,
+            0
+          ],
+          "mae_rgb": 6.945578,
+          "runner_up_mae_rgb": 18.972789,
+          "patch": [
+            107,
+            132,
+            114,
+            139
+          ]
+        }
+      ],
+      "reason": "independent patches agree"
+    },
+    {
+      "from": 180,
+      "to": 183,
+      "accepted": true,
+      "delta": [
+        -144,
+        -8
+      ],
+      "patches": [
+        {
+          "delta": [
+            -144,
+            -8
+          ],
+          "mae_rgb": 4.694444,
+          "runner_up_mae_rgb": 9.666667,
+          "patch": [
+            176,
+            152,
+            184,
+            158
+          ]
+        },
+        {
+          "delta": [
+            -144,
+            -8
+          ],
+          "mae_rgb": 6.881944,
+          "runner_up_mae_rgb": 13.013889,
+          "patch": [
+            192,
+            149,
+            200,
+            155
+          ]
+        }
+      ],
+      "reason": "independent patches agree"
+    },
+    {
+      "from": 182,
+      "to": 183,
+      "accepted": true,
+      "delta": [
+        -143,
+        -8
+      ],
+      "patches": [
+        {
+          "delta": [
+            -143,
+            -8
+          ],
+          "mae_rgb": 3.034722,
+          "runner_up_mae_rgb": 9.034722,
+          "patch": [
+            175,
+            152,
+            183,
+            158
+          ]
+        },
+        {
+          "delta": [
+            -143,
+            -8
+          ],
+          "mae_rgb": 5.756944,
+          "runner_up_mae_rgb": 11.611111,
+          "patch": [
+            191,
+            149,
+            199,
+            155
+          ]
+        }
+      ],
+      "reason": "independent patches agree"
+    },
+    {
+      "from": 183,
+      "to": 184,
+      "accepted": true,
+      "delta": [
+        -160,
+        32
+      ],
+      "patches": [
+        {
+          "delta": [
+            -160,
+            32
+          ],
+          "mae_rgb": 4.921875,
+          "runner_up_mae_rgb": 12.833333,
+          "patch": [
+            170,
+            60,
+            178,
+            68
+          ]
+        },
+        {
+          "delta": [
+            -160,
+            32
+          ],
+          "mae_rgb": 8.378788,
+          "runner_up_mae_rgb": 13.027273,
+          "patch": [
+            175,
+            69,
+            185,
+            80
+          ]
+        }
+      ],
+      "reason": "independent patches agree"
+    },
+    {
+      "from": 182,
+      "to": 185,
+      "accepted": false,
+      "delta": null,
+      "patches": [
+        {
+          "delta": [
+            -53,
+            -114
+          ],
+          "mae_rgb": 7.885417,
+          "runner_up_mae_rgb": 40.921875,
+          "patch": [
+            67,
+            133,
+            75,
+            141
+          ]
+        },
+        {
+          "delta": [
+            -53,
+            -113
+          ],
+          "mae_rgb": 6.473251,
+          "runner_up_mae_rgb": 16.790123,
+          "patch": [
+            104,
+            131,
+            113,
+            140
+          ]
+        }
+      ],
+      "reason": "high-confidence patches disagree; do not round or average"
+    }
+  ],
+  "triangle_180_182_183_consistent": true,
+  "playable_geometry_added": false,
+  "overall_completion_estimate_percent": 14.75,
+  "limits": [
+    "Camera registrations are not collision geometry or player displacements",
+    "The thorn strip and later movement require separate tracking",
+    "182 to 185 is rejected; no complete post-lever route is claimed"
+  ]
+}
