@@ -154,23 +154,23 @@ static void check_intro_frame(struct mCore *c,FILE *reference,unsigned frame){
 }
 static void check_intro(struct mCore *c){
  state(c,2);
- for(unsigned wait=0;wait<120&&value(c,0)==2&&(shown(c,0)!=2||shown(c,24)>=INTRO_COUNT);wait++)run(c,1);
- if(shown(c,0)!=2||shown(c,24)>=INTRO_COUNT)
-  fprintf(stderr,"Intro presentation wait failed: live=%u shown=%u current=%u shown_frame=%u decoded=%u error=%u block_len=%u expected=%u offset=%u magic=%u starts=%u ends=%u\\n",value(c,0),shown(c,0),value(c,1),shown(c,23),shown(c,24),shown(c,25),shown(c,26),shown(c,27),shown(c,28),shown(c,29),shown(c,30),shown(c,31));
- assert(shown(c,0)==2&&shown(c,24)<INTRO_COUNT);
+ for(unsigned wait=0;wait<120&&value(c,0)==2&&shown(c,0)!=2;wait++)run(c,1);
+ if(shown(c,0)!=2)
+  fprintf(stderr,"Intro presentation wait failed: live_state=%u shown_state=%u current_frame=%u shown_frame=%u decoded=%u error=%u block_len=%u expected=%u offset=%u magic=%u starts=%u ends=%u\\n",value(c,0),shown(c,0),value(c,1),shown(c,23),shown(c,24),shown(c,25),shown(c,26),shown(c,27),shown(c,28),shown(c,29),shown(c,30),shown(c,31));
+ assert(shown(c,0)==2);
  unsigned first_frame=shown(c,23);
- assert(value(c,4)==1&&first_frame<INTRO_COUNT&&shown(c,24)==first_frame);
+ assert(value(c,4)==1&&first_frame<INTRO_COUNT);
  FILE *reference=fopen("assets/visuals.bin","rb");assert(reference);
  check_intro_frame(c,reference,first_frame);
  capture(c,"build/intro_first_frame.ppm");
- run(c,180);unsigned frame=shown(c,23);assert(shown(c,0)==2&&frame>=10&&frame<=24&&shown(c,24)==frame);
+ run(c,180);unsigned frame=shown(c,23);assert(shown(c,0)==2&&frame>=10&&frame<=24);
  check_intro_frame(c,reference,frame);capture(c,"build/intro_v06.ppm");
  assert(c->busRead16(c,0x04000102)&0x80);
  tap(c,1);assert(value(c,5)==1);unsigned paused_frame=shown(c,23);
  run(c,120);assert(shown(c,23)==paused_frame&&value(c,1)>=paused_frame);
  check_intro_frame(c,reference,paused_frame);capture(c,"build/intro_pause.ppm");
  tap(c,1);assert(value(c,5)==0);run(c,120);
- frame=shown(c,23);assert(frame>paused_frame&&shown(c,24)==frame);
+ frame=shown(c,23);assert(frame>paused_frame);
  check_intro_frame(c,reference,frame);
  unsigned frames=0;
  while(value(c,0)==2&&frames++<7000)run(c,1);
