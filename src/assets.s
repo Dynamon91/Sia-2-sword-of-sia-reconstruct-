@@ -213,6 +213,11 @@ crawl_cycle:
 
 
 .balign 4
+.global crawl_passage_sky_patch
+crawl_passage_sky_patch:
+.incbin "assets/crawl_passage_sky_patch.bin"
+
+.balign 4
 .global scroll_world_open
 scroll_world_open:
 .incbin "assets/scroll_world_open.bin"

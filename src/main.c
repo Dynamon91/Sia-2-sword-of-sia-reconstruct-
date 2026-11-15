@@ -40,6 +40,7 @@ static ViewCamera view_camera;
 static int sprite_dx,sprite_dy;
 extern const unsigned char lever_lowered[];
 extern const unsigned char scroll_world[],scroll_world_open[],scroll_world_sky[],scroll_cloud[];
+extern const unsigned char crawl_passage_sky_patch[];
 static const u16 lab_palette[256]={
  RGB(3,5,10),RGB(8,12,18),RGB(10,18,19),RGB(25,21,12),RGB(23,10,15),RGB(30,29,24),
  [240]=0,[241]=RGB(31,31,31),[242]=RGB(31,26,10),[243]=RGB(10,27,30),[244]=RGB(1,3,6),[245]=RGB(27,12,17)
@@ -301,6 +302,19 @@ static void draw_initial_background(void){
   }
  }
 }
+static void draw_crawl_passage_sky_patch(int sx,int sy){
+ /* World-space crop of the logo-covered sky in viewport 17: nearest palette
+    colors avoid the magenta Bayer stipple while leaving terrain untouched. */
+ int left=-view_origin[16][0]+204-sx;
+ int top=380-view_origin[16][1]+13-sy;
+ for(int y=0;y<32;y++){
+  int screen_y=top+y;if((unsigned)screen_y>=160)continue;
+  for(int x=0;x<36;x++){
+   int screen_x=left+x;
+   if((unsigned)screen_x<240)pixel(screen_x,screen_y,crawl_passage_sky_patch[y*36+x]);
+  }
+ }
+}
 static void draw_world(void){
  if(!game.area&&!view_camera.x&&!view_camera.y&&!game.camera_y){draw_initial_background();return;}
  int sx=-view_camera.x/FP,sy=380-view_camera.y/FP;unsigned shift=(unsigned)sx&3;
@@ -320,6 +334,7 @@ static void draw_world(void){
    if(a<b)cloud_span(y,a-sx,b-sx,(int)(cloud_phase(game.ticks)+(unsigned)(sky_x+a-start))%(int)CLOUD_WIDTH,sky_y);
   }
  }
+ if(game.progress.barrier_open)draw_crawl_passage_sky_patch(sx,sy);
 }
 static void entity_origin(unsigned area){sprite_dx=view_camera.x/FP-view_origin[area][0];sprite_dy=view_camera.y/FP-view_origin[area][1];}
 static void draw_level(void){

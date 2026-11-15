@@ -46,6 +46,19 @@
     83,
     -63
   ],
+  "sky_patch": {
+    "rect": [
+      204,
+      13,
+      36,
+      32
+    ],
+    "world_origin": [
+      994,
+      189
+    ],
+    "method": "nearest shared-palette colors; no ordered dither"
+  },
   "limits": [
     "Player region restored through measured lower-terrain registration; covered header/rock edge and avatar sky estimated",
     "Collision floor y=55 and low rock are provisional, not recovered map data",
