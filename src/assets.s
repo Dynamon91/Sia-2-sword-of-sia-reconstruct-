@@ -221,3 +221,8 @@ crawl_passage_sky_patch:
 .global scroll_world_open
 scroll_world_open:
 .incbin "assets/scroll_world_open.bin"
+
+.balign 4
+.global crawl_passage_roof_patch
+crawl_passage_roof_patch:
+.incbin "assets/crawl_passage_roof_patch.bin"

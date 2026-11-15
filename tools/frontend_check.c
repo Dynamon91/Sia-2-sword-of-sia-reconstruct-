@@ -180,8 +180,8 @@ static void check_intro(struct mCore *c){
  puts("PASS intro graphics integration: opening background has no gray banner or avatar edge; moon, chamber and portrait captures come from the ROM");
  printf("PASS intro integration: all %u displayed frames checked pixel-exactly; audio, A pause/resume, 98-second end and loading handoff\n",intro_seen_count);
 }
-static void load_crawl_sky(unsigned char *target){
- unsigned char data[65536];FILE *f=fopen("assets/crawl_passage_sky_patch.bin","rb");assert(f);
+static void load_crawl_patch(const char *path,unsigned char *target){
+ unsigned char data[65536];FILE *f=fopen(path,"rb");assert(f);
  size_t size=fread(data,1,sizeof(data),f);assert(!ferror(f)&&feof(f)&&size>=CRAWL_SKY_HEIGHT*2);fclose(f);
  for(int y=0;y<CRAWL_SKY_HEIGHT;y++){
   size_t off=data[y*2]|((unsigned)data[y*2+1]<<8);assert(off+2<=size);
@@ -200,7 +200,8 @@ static unsigned check_crawl_pose(struct mCore *c){
   FILE *f=fopen("assets/crawl_cycle.bin","rb");assert(f);assert(fread(frames,1,sizeof(frames),f)==sizeof(frames));fclose(f);
   f=fopen("assets/scroll_world.bin","rb");assert(f);assert(fread(world,1,sizeof(world),f)==sizeof(world));fclose(f);
   f=fopen("assets/scroll_world_open.bin","rb");assert(f);assert(fread(opened,1,sizeof(opened),f)==sizeof(opened));fclose(f);
-  load_crawl_sky(crawl_patch);
+  load_crawl_patch("assets/crawl_passage_sky_patch.bin",crawl_patch);
+  load_crawl_patch("assets/crawl_passage_roof_patch.bin",crawl_patch);
   loaded=1;
  }
  assert(shown(c,0)==7&&shown(c,21)&&shown(c,8)&&(shown(c,11)==15||shown(c,11)==16));
@@ -232,7 +233,8 @@ static void check_world_background(struct mCore *c){
   for(unsigned a=0;a<2;a++)for(unsigned y=0;y<80;y++){
    fseek(f,(a*80+y)*2,SEEK_SET);unsigned off=(unsigned)fgetc(f);off|=(unsigned)fgetc(f)<<8;fseek(f,(long)off,SEEK_SET);int count=fgetc(f);
    for(int i=0;i<count;i++){int x=fgetc(f),n=fgetc(f);while(n--)sky[a][y][x++]=1;}
-  }fclose(f);f=fopen("assets/lever_lowered.bin","rb");assert(f);assert(fread(lever_patch,1,sizeof(lever_patch),f)==sizeof(lever_patch));fclose(f);load_crawl_sky(crawl_patch);loaded=1;
+  }fclose(f);f=fopen("assets/lever_lowered.bin","rb");assert(f);assert(fread(lever_patch,1,sizeof(lever_patch),f)==sizeof(lever_patch));fclose(f);
+  load_crawl_patch("assets/crawl_passage_sky_patch.bin",crawl_patch);load_crawl_patch("assets/crawl_passage_roof_patch.bin",crawl_patch);loaded=1;
  }
  int cx=(int)shown(c,15)/FP,cy=(int)shown(c,16)/FP,px=(int)shown(c,1)/FP,py=(int)shown(c,2)/FP-(int)shown(c,3);
  unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000,checked=0;
@@ -957,6 +959,7 @@ int main(int argc,char **argv){
  sequence_dir=crawl_previous_sequence;sequence_frame=crawl_previous_frame;
  puts("PASS crawl integration: controller-driven low passage and return, both poses/facings pixel-checked including transparency, fixed feet, forced low stance, no jump/attack, pause and safe stand-up; run state preserved");
  puts("PASS crawl sky integration: sparse repair and untouched world pixels match the native framebuffer beneath the roof and at the far exit");
+ puts("PASS crawl roof integration: recovered header foreground and remaining world pixels match native VRAM at both crawl captures");
  tap(c,8);state(c,8);unsigned lower_tick=value(c,16);run(c,20);assert(value(c,16)==lower_tick);
  capture(c,"build/lower_landing_pause.ppm");tap(c,1);state(c,7);
  c->setKeys(c,16);for(int i=0;i<180&&value(c,18)==upper_falls;i++)run(c,1);

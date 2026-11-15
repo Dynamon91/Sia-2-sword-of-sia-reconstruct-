@@ -1,0 +1,93 @@
+{
+  "video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "source_seconds": [
+    185,
+    186.1
+  ],
+  "source_sha256": [
+    "e7b41df2ba03aa052267fd61e74ccbfc3fa69dc5586cddb2180d8e0c13ae3798",
+    "eed4949e8918d802d368f2c710b24a112e37fd3e5c733d14674046a8cc550f85"
+  ],
+  "method": "Exhaustive integer search using foreground-only samples; banner/avatar targets excluded; two disjoint patches required",
+  "registrations": [
+    {
+      "patch": [
+        83,
+        77,
+        99,
+        85
+      ],
+      "foreground_pixels": 37,
+      "delta": [
+        83,
+        -63
+      ],
+      "mae_rgb": 5.207207,
+      "runner_up_mae_rgb": 11.873874,
+      "accepted": true
+    },
+    {
+      "patch": [
+        94,
+        85,
+        113,
+        99
+      ],
+      "foreground_pixels": 33,
+      "delta": [
+        83,
+        -63
+      ],
+      "mae_rgb": 6.393939,
+      "runner_up_mae_rgb": 13.424242,
+      "accepted": true
+    }
+  ],
+  "rejected_repeated_root": {
+    "patch": [
+      99,
+      77,
+      113,
+      99
+    ],
+    "foreground_pixels": 33,
+    "delta": [
+      51,
+      -63
+    ],
+    "mae_rgb": 5.0,
+    "runner_up_mae_rgb": 5.646465,
+    "accepted": false
+  },
+  "source_rect": [
+    0,
+    63,
+    157,
+    14
+  ],
+  "target_rect": [
+    83,
+    0,
+    157,
+    14
+  ],
+  "world_origin": [
+    790,
+    176
+  ],
+  "encoded_extent": [
+    240,
+    55
+  ],
+  "recovered_foreground_pixels": 1317,
+  "estimated_sky_pixels": 881,
+  "sampled_indexed_pixels_sha256": "a8dcc4589f8f2ee49c36810d034134650975ba37f5e76a56ccc1195a44868d7f",
+  "palette_sha256": "0f145cfe1ec41897e09f333e75cf9a86eef904a9fe9f2f701ee810eea47693a9",
+  "observed_target_pixels_changed": 0,
+  "limits": [
+    "Only the recording-covered header is repaired; visible roots and ground remain unchanged",
+    "Foreground mask follows visible source colors; sky behind the recording is still estimated",
+    "Other unrecorded corners and scenery seams remain unfinished; no moving-thorn behavior inferred"
+  ],
+  "encoded_bytes": 4672
+}

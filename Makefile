@@ -77,3 +77,4 @@ build/assets.o: assets/crawl_cycle.bin
 
 
 build/assets.o: assets/scroll_world_open.bin
+build/assets.o: assets/crawl_passage_roof_patch.bin

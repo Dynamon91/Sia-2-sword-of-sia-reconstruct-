@@ -36,6 +36,7 @@ Il livello completo, i boss, gli altri livelli e mondi, il movimento/danno delle
 - [Passaggio basso, controlli e riferimenti](references/CRAWL_STATUS.md)
 - [Parete superiore e raccordi del fondale](references/UPPER_WALL_GRAPHICS_STATUS.md)
 - [Cielo del passaggio basso: riquadro e puntinatura corretti](references/CRAWL_SKY_GRAPHICS_STATUS.md)
+- [Bordo della roccia recuperato dai fotogrammi originali](references/CRAWL_ROOF_RESTORATION_STATUS.md)
 - [Camera e continuità delle viste](references/CONTINUOUS_CAMERA_STATUS.md)
 - [Persistenza e recupero delle preferenze](references/SAVE_RELOAD_STATUS.md)
 

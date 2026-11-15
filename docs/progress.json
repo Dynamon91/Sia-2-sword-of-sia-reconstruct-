@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-09",
+  "updated": "2026-11-15",
   "areas": [
     {
       "name": "Motore e sistemi di gioco",
@@ -35,7 +35,7 @@
       "name": "Fedeltà visiva, interfaccia, animazioni e audio",
       "weight": 15,
       "earned": 0.25,
-      "evidence": "Pose aeree/risalita e nuvole già integrate; posa abbassata della leva recuperata dal video a 182 s e verificata pixel per pixel nella ROM. Rotazione intermedia, barriera mobile, altre animazioni, interfaccia e audio ancora incompleti."
+      "evidence": "Menu con cursore misurato, intro restaurata, pose aeree/risalita, nuvole e leva abbassata verificati nella ROM. Corretti cielo copiato e retinatura del passaggio basso; 1.317 pixel del bordo superiore recuperati tramite due registrazioni disgiunte. Cielo nascosto e altri raccordi restano stimati; animazioni, barriera mobile, interfaccia e separazione audio ancora incomplete."
     },
     {
       "name": "Riferimenti, validazione e consegna finale",

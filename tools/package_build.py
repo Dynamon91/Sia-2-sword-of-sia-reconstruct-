@@ -25,6 +25,8 @@ def main():
   raise SystemExit('Missing PASS island gap integration:')
  if not any(s.startswith('PASS ramp route integration:') for s in passed):
   raise SystemExit('Missing PASS ramp route integration:')
+ if not any(s.startswith('PASS crawl roof integration:') for s in passed):
+  raise SystemExit('Missing PASS crawl roof integration:')
  if any(not p.exists() for p in pictures):raise SystemExit('Export every emulator PPM before packaging')
  if not pictures:raise SystemExit('Missing actual emulator captures')
  if not (root/'intro_v06.png').exists():raise SystemExit('Missing actual restored-intro emulator capture')
@@ -43,6 +45,8 @@ A: conferma/salto. B: indietro/attacco.\nFrecce: movimento. Salta sotto il bordo
  shutil.copyfile(repo/'assets/frontend_cleanup.json',out/'frontend_cleanup.json')
  shutil.copyfile(repo/'references/MENU_CURSOR_ALIGNMENT_STATUS.md',out/'MENU_CURSOR_ALIGNMENT_STATUS.md')
  shutil.copyfile(repo/'references/CRAWL_SKY_GRAPHICS_STATUS.md',out/'CRAWL_SKY_GRAPHICS_STATUS.md')
+ shutil.copyfile(repo/'references/CRAWL_ROOF_RESTORATION_STATUS.md',out/'CRAWL_ROOF_RESTORATION_STATUS.md')
+ shutil.copyfile(repo/'assets/crawl_passage_roof_manifest.json',out/'crawl_passage_roof_manifest.json')
  shutil.copyfile(repo/'references/LIFE_FEEDBACK_STATUS.md',out/'LIFE_FEEDBACK_STATUS.md')
  shutil.copyfile(repo/'references/RAMP_ROUTE_STATUS.md',out/'RAMP_ROUTE_STATUS.md')
  for source in ['previews/ramp_gameplay.gif','previews/ramp_preview.json','previews/ramp_upper_landing.png','previews/ramp_lower_entry.png','assets/ramp_route_manifest.json']:

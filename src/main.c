@@ -42,6 +42,7 @@ static int sprite_dx,sprite_dy;
 extern const unsigned char lever_lowered[];
 extern const unsigned char scroll_world[],scroll_world_open[],scroll_world_sky[],scroll_cloud[];
 extern const unsigned char crawl_passage_sky_patch[];
+extern const unsigned char crawl_passage_roof_patch[];
 static const u16 lab_palette[256]={
  RGB(3,5,10),RGB(8,12,18),RGB(10,18,19),RGB(25,21,12),RGB(23,10,15),RGB(30,29,24),
  [240]=0,[241]=RGB(31,31,31),[242]=RGB(31,26,10),[243]=RGB(10,27,30),[244]=RGB(1,3,6),[245]=RGB(27,12,17)
@@ -303,7 +304,7 @@ static void draw_initial_background(void){
   }
  }
 }
-static void __attribute__((section(".romtext"),noinline)) draw_crawl_passage_sky_patch(int sx,int sy){
+static void __attribute__((section(".romtext"),noinline)) draw_crawl_passage_patch(const unsigned char *patch,int sx,int sy){
  /* Only declared reconstruction pixels have ink. Zero leaves observed
     terrain and the existing shared-world composition untouched. */
  int left=-view_origin[16][0]-sx;
@@ -311,8 +312,8 @@ static void __attribute__((section(".romtext"),noinline)) draw_crawl_passage_sky
  if(left>=240||left+CRAWL_SKY_WIDTH<=0)return;
  for(int y=0;y<CRAWL_SKY_HEIGHT;y++){
   int screen_y=top+y;if((unsigned)screen_y>=160)continue;
-  unsigned offset=crawl_passage_sky_patch[y*2]|((unsigned)crawl_passage_sky_patch[y*2+1]<<8);
-  const unsigned char *runs=crawl_passage_sky_patch+offset;
+  unsigned offset=patch[y*2]|((unsigned)patch[y*2+1]<<8);
+  const unsigned char *runs=patch+offset;
   unsigned count=*runs;runs+=2;
   for(unsigned i=0;i<count;i++){
    int x=left+*runs++;unsigned length=*runs++;
@@ -352,7 +353,10 @@ static void draw_world(void){
    if(a<b)cloud_span(y,a-sx,b-sx,(int)(cloud_phase(game.ticks)+(unsigned)(sky_x+a-start))%(int)CLOUD_WIDTH,sky_y);
   }
  }
- if(game.progress.barrier_open)draw_crawl_passage_sky_patch(sx,sy);
+ if(game.progress.barrier_open){
+  draw_crawl_passage_patch(crawl_passage_sky_patch,sx,sy);
+  draw_crawl_passage_patch(crawl_passage_roof_patch,sx,sy);
+ }
 }
 static void entity_origin(unsigned area){sprite_dx=view_camera.x/FP-view_origin[area][0];sprite_dy=view_camera.y/FP-view_origin[area][1];}
 static void draw_level(void){
