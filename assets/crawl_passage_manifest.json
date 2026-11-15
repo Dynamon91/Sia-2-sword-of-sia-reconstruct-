@@ -48,19 +48,29 @@
   ],
   "sky_patch": {
     "rect": [
-      204,
       0,
-      36,
-      45
+      0,
+      240,
+      55
     ],
     "world_origin": [
-      994,
+      790,
       176
     ],
-    "method": "nearest sky-compatible shared-palette colors; no ordered dither"
+    "transparent_index": 0,
+    "pixels": 4424,
+    "actor_sky_rect": [
+      142,
+      37,
+      50,
+      18
+    ],
+    "method": "sparse nearest sky-compatible palette overlay; copied parallax sky replaced by harmonic fill with floor excluded; no ordered dither",
+    "encoding": "55 little-endian row offsets; count/padding, x/length, even and odd aligned opaque run banks"
   },
   "limits": [
-    "Player region restored through measured lower-terrain registration; covered header/rock edge and avatar sky estimated",
+    "Player terrain restored through measured lower-terrain registration; covered header/rock edge, avatar sky and sky behind removed actor estimated",
+    "Shared world source banks are unchanged; sparse runtime overlay preserves all pixels outside the declared repair mask",
     "Collision floor y=55 and low rock are provisional, not recovered map data",
     "Left boundary of this partial view is the current route limit; no next level is claimed",
     "No intermediate thorn movement or thorn damage is implemented"

@@ -5,6 +5,7 @@ static const char save_type[] __attribute__((used))="SRAM_V113";
 #define SETTINGS_SRAM ((volatile unsigned char *)0x0E000000)
 #include "alignment.h"
 #include "scenery.h"
+#include "crawl_sky.h"
 #include "story.h"
 #include "view_camera.h"
 #include "loading.h"
@@ -303,25 +304,33 @@ static void draw_initial_background(void){
  }
 }
 static void __attribute__((section(".romtext"),noinline)) draw_crawl_passage_sky_patch(int sx,int sy){
- /* World-space crop of the logo-covered sky in viewport 17: nearest palette
-    colors avoid the magenta Bayer stipple while leaving terrain untouched. */
- int left=-view_origin[16][0]+204-sx;
+ /* Only declared reconstruction pixels have ink. Zero leaves observed
+    terrain and the existing shared-world composition untouched. */
+ int left=-view_origin[16][0]-sx;
  int top=380-view_origin[16][1]-sy;
- int x0=left<0?0:left,x1=left+36;
- if(x1>240)x1=240;
- if(x0>=x1)return;
- int source_x=x0-left;
- for(int y=0;y<45;y++){
+ if(left>=240||left+CRAWL_SKY_WIDTH<=0)return;
+ for(int y=0;y<CRAWL_SKY_HEIGHT;y++){
   int screen_y=top+y;if((unsigned)screen_y>=160)continue;
-  int x=x0,offset=source_x,base=y*36;
-  if(x&1){pixel(x++,screen_y,crawl_passage_sky_patch[base+offset++]);}
-  volatile u16 *dst=page+screen_y*120+(x>>1);
-  while(x+1<x1){
-   *dst++=(u16)(crawl_passage_sky_patch[base+offset]|
-       ((unsigned)crawl_passage_sky_patch[base+offset+1]<<8));
-   x+=2;offset+=2;
+  unsigned offset=crawl_passage_sky_patch[y*2]|((unsigned)crawl_passage_sky_patch[y*2+1]<<8);
+  const unsigned char *runs=crawl_passage_sky_patch+offset;
+  unsigned count=*runs;runs+=2;
+  for(unsigned i=0;i<count;i++){
+   int x=left+*runs++;unsigned length=*runs++;
+   const unsigned char *source=runs;unsigned even_bytes=(length+1)&~1u;
+   runs+=even_bytes+((length+2)&~1u);
+   int start=x<0?-x:0,stop=x+(int)length>240?240-x:(int)length;
+   if(start>=stop)continue;
+   x+=start;unsigned n=(unsigned)(stop-start);
+   if((x^start)&1)source+=even_bytes+1;
+   source+=start;
+   if(x&1){pixel(x++,screen_y,*source++);n--;}
+   if(n>=2){
+    REG32(0x040000D4)=(unsigned)source;
+    REG32(0x040000D8)=(unsigned)(page+screen_y*120+x/2);
+    REG32(0x040000DC)=0x80000000|(n/2);
+   }
+   if(n&1)pixel(x+(int)n-1,screen_y,source[n-1]);
   }
-  if(x<x1)pixel(x,screen_y,crawl_passage_sky_patch[base+offset]);
  }
 }
 static void draw_world(void){

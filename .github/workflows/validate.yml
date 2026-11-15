@@ -54,7 +54,9 @@ jobs:
       - name: Verify first lower landing
         run: python3 tools/convert_lower_landing.py --check
       - name: Verify next crawl passage viewport
-        run: python3 tools/convert_crawl_passage.py --check
+        run: |
+          python3 -m unittest discover -s tests -p test_crawl_sky.py
+          python3 tools/convert_crawl_passage.py --check
       - name: Verify shared-world scrolling banks
         run: |
           python3 tools/prepare_scroll_assets.py --check

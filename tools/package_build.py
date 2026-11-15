@@ -42,6 +42,7 @@ A: conferma/salto. B: indietro/attacco.\nFrecce: movimento. Salta sotto il bordo
  repo=Path(__file__).resolve().parents[1]
  shutil.copyfile(repo/'assets/frontend_cleanup.json',out/'frontend_cleanup.json')
  shutil.copyfile(repo/'references/MENU_CURSOR_ALIGNMENT_STATUS.md',out/'MENU_CURSOR_ALIGNMENT_STATUS.md')
+ shutil.copyfile(repo/'references/CRAWL_SKY_GRAPHICS_STATUS.md',out/'CRAWL_SKY_GRAPHICS_STATUS.md')
  shutil.copyfile(repo/'references/LIFE_FEEDBACK_STATUS.md',out/'LIFE_FEEDBACK_STATUS.md')
  shutil.copyfile(repo/'references/RAMP_ROUTE_STATUS.md',out/'RAMP_ROUTE_STATUS.md')
  for source in ['previews/ramp_gameplay.gif','previews/ramp_preview.json','previews/ramp_upper_landing.png','previews/ramp_lower_entry.png','assets/ramp_route_manifest.json']:
