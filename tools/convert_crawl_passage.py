@@ -5,7 +5,18 @@ import numpy as np
 from PIL import Image
 from audit_route_continuation import match
 from convert_bridge_run import sky_fill,quantize
-from repair_sprite_edges import indexed
+def sky_patch_indices(image,header):
+ words=np.frombuffer(header,dtype='<u2')
+ colors=np.array([[(int(w)>>s&31)*255//31 for s in (0,5,10)] for w in words],dtype=np.int32)
+ candidates=colors[1:240]
+ allowed=(candidates[:,1]>=candidates[:,0])&(candidates[:,2]>=candidates[:,1]-8)
+ ids=np.flatnonzero(allowed)+1
+ rgb=np.asarray(image.convert('RGB')).astype(np.int32)
+ flat=rgb.reshape(-1,3);result=np.empty(len(flat),dtype=np.uint8)
+ for start in range(0,len(flat),1024):
+  delta=flat[start:start+1024,None,:]-colors[ids][None,:,:]
+  result[start:start+1024]=ids[np.sum(delta*delta,axis=2).argmin(1)]
+ return result.reshape(rgb.shape[:2])
 ROOT=Path(__file__).resolve().parents[1]
 def outputs():
  paths=[ROOT/'reference/w1l1_lower_landing/185.png',ROOT/'reference/w1l1_lower_landing/186_1.png']
@@ -22,14 +33,16 @@ def outputs():
  a[:14]=a[14:15]
  header=(ROOT/'assets/continuation_palette.bin').read_bytes()
  data,preview=quantize(a,holes,header)
- sky_patch=indexed(Image.fromarray(a[13:45,204:240]),header)
+ sky_patch=sky_patch_indices(Image.fromarray(a[13:45,204:240]),header)
  words=np.frombuffer(header,dtype='<u2')
  colors=np.array([[(int(w)>>s&31)*255//31 for s in (0,5,10)] for w in words],dtype=np.uint8)
  preview_pixels=np.asarray(preview).copy()
  preview_pixels[13:45,204:240]=colors[sky_patch]
+ assert np.all(colors[sky_patch][:,:,1]>=colors[sky_patch][:,:,0])
+ assert np.all(colors[sky_patch][:,:,2].astype(np.int16)>=colors[sky_patch][:,:,1].astype(np.int16)-8)
  preview=Image.fromarray(preview_pixels)
  p=io.BytesIO();Image.fromarray(a).save(p,format='PNG');q=io.BytesIO();preview.resize((720,480),Image.Resampling.NEAREST).save(q,format='PNG')
- manifest={'video_sha256':'7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51','source_seconds':[185,186.1],'source_sha256':[hashlib.sha256(p.read_bytes()).hexdigest() for p in paths],'patches':patches,'origin':[-790,204],'delta':[83,-63],'sky_patch':{'rect':[204,13,36,32],'world_origin':[994,189],'method':'nearest shared-palette colors; no ordered dither'},'limits':['Player region restored through measured lower-terrain registration; covered header/rock edge and avatar sky estimated','Collision floor y=55 and low rock are provisional, not recovered map data','Left boundary of this partial view is the current route limit; no next level is claimed','No intermediate thorn movement or thorn damage is implemented']}
+ manifest={'video_sha256':'7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51','source_seconds':[185,186.1],'source_sha256':[hashlib.sha256(p.read_bytes()).hexdigest() for p in paths],'patches':patches,'origin':[-790,204],'delta':[83,-63],'sky_patch':{'rect':[204,13,36,32],'world_origin':[994,189],'method':'nearest sky-compatible shared-palette colors; no ordered dither'},'limits':['Player region restored through measured lower-terrain registration; covered header/rock edge and avatar sky estimated','Collision floor y=55 and low rock are provisional, not recovered map data','Left boundary of this partial view is the current route limit; no next level is claimed','No intermediate thorn movement or thorn damage is implemented']}
  return {'crawl_passage_background.bin':data,'crawl_passage_background.png':p.getvalue(),'crawl_passage_background_preview.png':q.getvalue(),'crawl_passage_sky_patch.bin':sky_patch.tobytes(),'crawl_passage_manifest.json':(json.dumps(manifest,indent=2)+'\n').encode()}
 def main():
  p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');a=p.parse_args()

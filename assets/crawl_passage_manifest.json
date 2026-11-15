@@ -57,7 +57,7 @@
       994,
       189
     ],
-    "method": "nearest shared-palette colors; no ordered dither"
+    "method": "nearest sky-compatible shared-palette colors; no ordered dither"
   },
   "limits": [
     "Player region restored through measured lower-terrain registration; covered header/rock edge and avatar sky estimated",
