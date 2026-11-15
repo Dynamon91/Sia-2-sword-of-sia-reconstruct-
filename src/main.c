@@ -302,7 +302,7 @@ static void draw_initial_background(void){
   }
  }
 }
-static void draw_crawl_passage_sky_patch(int sx,int sy){
+static void __attribute__((section(".romtext"),noinline)) draw_crawl_passage_sky_patch(int sx,int sy){
  /* World-space crop of the logo-covered sky in viewport 17: nearest palette
     colors avoid the magenta Bayer stipple while leaving terrain untouched. */
  int left=-view_origin[16][0]+204-sx;
