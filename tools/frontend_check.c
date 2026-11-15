@@ -153,18 +153,21 @@ static void check_intro_frame(struct mCore *c,FILE *reference,unsigned frame){
  assert(palette_mismatches==0);
 }
 static void check_intro(struct mCore *c){
- state(c,2);unsigned first_frame=value(c,1);assert(value(c,4)==1&&first_frame<INTRO_COUNT);
+ state(c,2);run(c,2);
+ unsigned first_frame=shown(c,23);
+ assert(value(c,4)==1&&first_frame<INTRO_COUNT&&shown(c,24)==first_frame);
  FILE *reference=fopen("assets/visuals.bin","rb");assert(reference);
  check_intro_frame(c,reference,first_frame);
  capture(c,"build/intro_first_frame.ppm");
- run(c,180);unsigned frame=value(c,1);assert(frame>=10&&frame<=24);
+ run(c,180);unsigned frame=shown(c,23);assert(frame>=10&&frame<=24&&shown(c,24)==frame);
  check_intro_frame(c,reference,frame);capture(c,"build/intro_v06.ppm");
  assert(c->busRead16(c,0x04000102)&0x80);
- tap(c,1);assert(value(c,5)==1);unsigned paused_frame=value(c,1);
- run(c,120);assert(value(c,1)==paused_frame);
+ tap(c,1);assert(value(c,5)==1);unsigned paused_frame=shown(c,23);
+ run(c,120);assert(shown(c,23)==paused_frame&&value(c,1)>=paused_frame);
  check_intro_frame(c,reference,paused_frame);capture(c,"build/intro_pause.ppm");
  tap(c,1);assert(value(c,5)==0);run(c,120);
- frame=value(c,1);assert(frame>paused_frame);check_intro_frame(c,reference,frame);
+ frame=shown(c,23);assert(frame>paused_frame&&shown(c,24)==frame);
+ check_intro_frame(c,reference,frame);
  unsigned frames=0;
  while(value(c,0)==2&&frames++<7000)run(c,1);
  state(c,11);assert(value(c,1)==0);
