@@ -34,7 +34,7 @@ static unsigned arrival_index,loading_age;
 static u16 object_shadow[128*4];
 static unsigned char intro_cache[ASSET_FRAME_BYTES] __attribute__((aligned(4)));
 static unsigned char intro_delta[ASSET_FRAME_BYTES] __attribute__((aligned(4)));
-static volatile unsigned intro_decoded=~0u;
+static volatile unsigned intro_decoded=~0u,intro_result;
 static Game game;
 static ViewCamera view_camera;
 static int sprite_dx,sprite_dy;
@@ -385,7 +385,7 @@ static void render(void){
   blit(FRAME_MENU);
   ui_object(0,16,(44+(int)selection*24-12)*160/148,1,UI_CURSOR_TILE);break;
  case INTRO:
-  if(!intro_decode_to(intro_frame))blit(FRAME_TITLE);
+  intro_result=(unsigned)intro_decode_to(intro_frame);if(!intro_result)blit(FRAME_TITLE);
   break;
  case STORY:
   dialog(story_index);footer("A NEXT B BACK START MENU");
@@ -431,7 +431,7 @@ static void render(void){
  shown[11]=(unsigned)game.area;shown[12]=cloud_phase(game.ticks);
  shown[13]=(unsigned)(view_camera.x/FP-view_origin[game.area][0]);shown[14]=(unsigned)(view_camera.y/FP-view_origin[game.area][1]);
  shown[15]=(unsigned)view_camera.x;shown[16]=(unsigned)view_camera.y;
- shown[17]=game_ledge_frame(&game);shown[18]=(unsigned)game.ledge_y;shown[19]=game.lives;shown[20]=loading_age;shown[21]=(unsigned)game.crawling;shown[22]=game_crawl_frame(&game);shown[23]=intro_frame;shown[24]=intro_decoded;shown[25]=intro_error;shown[26]=intro_error_length;shown[27]=intro_error_expected;shown[28]=intro_error_offset;shown[29]=intro_video[0];shown[30]=intro_offset(0);shown[31]=intro_offset(1);
+ shown[17]=game_ledge_frame(&game);shown[18]=(unsigned)game.ledge_y;shown[19]=game.lives;shown[20]=loading_age;shown[21]=(unsigned)game.crawling;shown[22]=game_crawl_frame(&game);shown[23]=intro_frame;shown[24]=intro_decoded;shown[25]=intro_error;shown[26]=intro_error_length;shown[27]=intro_error_expected;shown[28]=intro_error_offset;shown[29]=intro_video[INTRO_INDEX_BYTES];shown[30]=intro_offset(0);shown[31]=intro_offset(1);shown[32]=intro_result;
 }
 int main(void){
  REG16(0x04000204)=0x4317;REG16(0x04000000)=0x0404;
