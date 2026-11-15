@@ -34,7 +34,7 @@ static unsigned arrival_index,loading_age;
 static u16 object_shadow[128*4];
 static unsigned char intro_cache[ASSET_FRAME_BYTES] __attribute__((aligned(4)));
 static unsigned char intro_delta[ASSET_FRAME_BYTES] __attribute__((aligned(4)));
-static volatile unsigned intro_decoded=~0u,intro_result;
+static volatile unsigned intro_decoded=~0u,intro_result,intro_requested,intro_after_decode;
 static Game game;
 static ViewCamera view_camera;
 static int sprite_dx,sprite_dy;
@@ -185,6 +185,7 @@ static int __attribute__((section(".rodata.intro"),noinline)) intro_decompress(c
  return 1;
 }
 static int intro_decode_to(unsigned wanted){
+ intro_requested=wanted;intro_after_decode=intro_decoded;
  if(wanted>=INTRO_COUNT)wanted=INTRO_COUNT-1;
  if(intro_decoded==~0u||wanted<intro_decoded){
   unsigned first=intro_offset(0),last=intro_offset(1);
@@ -192,7 +193,7 @@ static int intro_decode_to(unsigned wanted){
   const unsigned char *block=intro_video+INTRO_INDEX_BYTES+first;
   if(!intro_decompress(block,last-first,intro_delta))return 0;
   for(unsigned i=0;i<ASSET_FRAME_BYTES;i++)intro_cache[i]=intro_delta[i];
-  intro_decoded=0;
+  intro_decoded=0;intro_after_decode=intro_decoded;
  }
  while(intro_decoded<wanted){
   unsigned next=intro_decoded+1;
@@ -201,7 +202,7 @@ static int intro_decode_to(unsigned wanted){
   const unsigned char *block=intro_video+INTRO_INDEX_BYTES+first;
   if(!intro_decompress(block,last-first,intro_delta))return 0;
   for(unsigned i=0;i<ASSET_FRAME_BYTES;i++)intro_cache[i]^=intro_delta[i];
-  intro_decoded=next;
+  intro_decoded=next;intro_after_decode=intro_decoded;
  }
  image(intro_cache);
  return 1;
@@ -431,7 +432,7 @@ static void render(void){
  shown[11]=(unsigned)game.area;shown[12]=cloud_phase(game.ticks);
  shown[13]=(unsigned)(view_camera.x/FP-view_origin[game.area][0]);shown[14]=(unsigned)(view_camera.y/FP-view_origin[game.area][1]);
  shown[15]=(unsigned)view_camera.x;shown[16]=(unsigned)view_camera.y;
- shown[17]=game_ledge_frame(&game);shown[18]=(unsigned)game.ledge_y;shown[19]=game.lives;shown[20]=loading_age;shown[21]=(unsigned)game.crawling;shown[22]=game_crawl_frame(&game);shown[23]=intro_frame;shown[24]=intro_decoded;shown[25]=intro_error;shown[26]=intro_error_length;shown[27]=intro_error_expected;shown[28]=intro_error_offset;shown[29]=intro_video[INTRO_INDEX_BYTES];shown[30]=intro_offset(0);shown[31]=intro_offset(1);shown[32]=intro_result;shown[33]=intro_cache[512];shown[34]=intro_delta[512];
+ shown[17]=game_ledge_frame(&game);shown[18]=(unsigned)game.ledge_y;shown[19]=game.lives;shown[20]=loading_age;shown[21]=(unsigned)game.crawling;shown[22]=game_crawl_frame(&game);shown[23]=intro_frame;shown[24]=intro_decoded;shown[25]=intro_error;shown[26]=intro_error_length;shown[27]=intro_error_expected;shown[28]=intro_error_offset;shown[29]=intro_video[INTRO_INDEX_BYTES];shown[30]=intro_offset(0);shown[31]=intro_offset(1);shown[32]=intro_result;shown[33]=intro_cache[512];shown[34]=intro_delta[512];shown[35]=intro_requested;shown[36]=intro_after_decode;
 }
 int main(void){
  REG16(0x04000204)=0x4317;REG16(0x04000000)=0x0404;
