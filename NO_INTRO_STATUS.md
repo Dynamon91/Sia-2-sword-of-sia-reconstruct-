@@ -11,3 +11,8 @@ Verifiche: GCC ARM, intestazione GBA, test ASan/UBSan, audit posizioni e animazi
 Restano da fare: mappe e boss completi dei mondi 1/2, animazioni integrali e scenari animati fedeli, interfaccia originale completa, ricostruzione accurata delle parti coperte. I PNG del mondo 2 sono riferimenti e non livelli giocabili. Nessuna percentuale globale è stimata senza un inventario completo dei contenuti.
 
 Ricompilazione: python3 tools/unpack_assets.py; python3 tools/clean_frontend.py; python3 tools/repair_sprite_edges.py; make; ASAN_OPTIONS=detect_leaks=0 make test. Per le acquisizioni usare tools/frontend_check.c e mGBA.
+
+
+## Front-end correction — 15 November 2026
+
+The intro movie, its playback option and its 588-frame/audio sequence remain excluded from the GBA build; legacy saves with INTRO enabled do not restore it. The old intro capture is not used by the ROM. The frontend cleanup now removes the recording banner and avatar without vertically stretching the visible game rows: observed rows 12–159 retain their original coordinates, the blocked top strip is estimated from the first clear row, and the output remains 240×160. The avatar patch also uses the first unobscured row. These covered pixels are estimates, not recovered original art. CI includes a focused regression for pixel-position preservation; the weighted project estimate remains unchanged.
