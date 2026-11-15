@@ -125,7 +125,7 @@ static void check_intro_frame(struct mCore *c,FILE *reference,unsigned frame){
  }
  if(pixel_mismatches){
   fprintf(stderr,"Intro pixel mismatch count: frame=%u count=%u\\n",frame,pixel_mismatches);
-  fprintf(stderr,"Intro display telemetry: current=%u decoded=%u result=%u cache_px=%u delta_px=%u error=%u block_len=%u expected=%u offset=%u magic=%u starts=%u ends=%u front=%u dispcnt=%u\\n",shown(c,23),shown(c,24),shown(c,32),shown(c,33),shown(c,34),shown(c,25),shown(c,26),shown(c,27),shown(c,28),shown(c,29),shown(c,30),shown(c,31),shown(c,10),c->busRead16(c,0x04000000));
+  fprintf(stderr,"Intro display telemetry: current=%u decoded=%u result=%u cache_px=%u delta_px=%u requested=%u completed=%u error=%u block_len=%u expected=%u offset=%u magic=%u starts=%u ends=%u front=%u dispcnt=%u\\n",shown(c,23),shown(c,24),shown(c,32),shown(c,33),shown(c,34),shown(c,35),shown(c,36),shown(c,25),shown(c,26),shown(c,27),shown(c,28),shown(c,29),shown(c,30),shown(c,31),shown(c,10),c->busRead16(c,0x04000000));
   if(frame>2){
    unsigned char first[ASSET_FRAME_BYTES];
    assert(!fseek(reference,(long)INTRO_FIRST*ASSET_FRAME_BYTES,SEEK_SET));
