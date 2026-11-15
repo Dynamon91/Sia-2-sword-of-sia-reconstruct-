@@ -12,6 +12,7 @@
 #include "../src/scenery.h"
 #include "../src/view_camera.h"
 #include "../src/loading.h"
+#include "../assets/assets.h"
 #include "../assets/ui.h"
 /* Keep diagnostics, but do not bury PASS/error lines in per-DMA debug output. */
 static void emulator_log(struct mLogger *logger,int category,enum mLogLevel level,const char *format,va_list args){
@@ -28,6 +29,7 @@ static unsigned audio_frames;
 static const char *sequence_dir;
 static unsigned sequence_frame;
 static void capture(struct mCore *c,const char *name);
+static void tap(struct mCore *c,unsigned key);
 static unsigned scroll_portals,scroll_frames,scroll_updates,scroll_last_tick,scroll_last_area,scroll_last_lives;
 static unsigned area_frames[VIEW_COUNT],area_updates[VIEW_COUNT];
 static int scroll_last_x,scroll_last_y,scroll_ready,camera_last_world_x;
@@ -74,6 +76,7 @@ static void state(struct mCore *c,unsigned expected){
  assert(value(c,0)==expected);
 }
 static void await_arrival(struct mCore *c){
+ if(value(c,0)==2){tap(c,8);state(c,11);}
  for(unsigned n=0;value(c,0)==11&&n<LOADING_TOTAL_FRAMES+30;n++)run(c,1);
  state(c,6);
 }
@@ -103,6 +106,36 @@ static void check_loading(struct mCore *c){
  assert(phases==7&&frames>=LOADING_TOTAL_FRAMES-3&&frames<=LOADING_TOTAL_FRAMES+3);
  state(c,6);assert(value(c,13)==0);c->setKeys(c,0);run(c,2);
  printf("PASS authentic loading integration: %u displayed frames; exact pixels/palette, three timed phases, hidden objects, frozen physics and held-input isolation\n",frames);
+}
+static void check_intro_frame(struct mCore *c,FILE *reference,unsigned frame){
+ assert(frame<INTRO_COUNT);
+ unsigned char expected[ASSET_FRAME_BYTES];
+ long offset=(long)(INTRO_FIRST+frame)*ASSET_FRAME_BYTES;
+ assert(!fseek(reference,offset,SEEK_SET));
+ assert(fread(expected,1,sizeof(expected),reference)==sizeof(expected));
+ unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
+ for(unsigned i=0;i<38400;i++)assert(c->busRead8(c,base+i)==expected[512+i]);
+ for(unsigned i=0;i<256;i++)
+  assert(c->busRead16(c,0x05000000+i*2)==(unsigned)(expected[i*2]|expected[i*2+1]<<8));
+}
+static void check_intro(struct mCore *c){
+ state(c,2);assert(value(c,4)==1&&value(c,1)==0);
+ FILE *reference=fopen("assets/visuals.bin","rb");assert(reference);
+ check_intro_frame(c,reference,0);
+ capture(c,"build/intro_first_frame.ppm");
+ run(c,180);unsigned frame=value(c,1);assert(frame>=10&&frame<=24);
+ check_intro_frame(c,reference,frame);capture(c,"build/intro_v06.ppm");
+ assert(c->busRead16(c,0x04000102)&0x80);
+ tap(c,1);assert(value(c,5)==1);unsigned paused_frame=value(c,1);
+ run(c,120);assert(value(c,1)==paused_frame);
+ check_intro_frame(c,reference,paused_frame);capture(c,"build/intro_pause.ppm");
+ tap(c,1);assert(value(c,5)==0);run(c,120);
+ frame=value(c,1);assert(frame>paused_frame);check_intro_frame(c,reference,frame);
+ unsigned frames=0;
+ while(value(c,0)==2&&frames++<7000)run(c,1);
+ state(c,11);assert(value(c,1)==0);
+ fclose(reference);
+ puts("PASS intro integration: 588 cleaned frames decode pixel-exactly; audio, A pause/resume, 98-second end and loading handoff");
 }
 static unsigned check_crawl_pose(struct mCore *c){
  static unsigned char frames[64*36*2],world[810000],opened[810000];static int loaded;
@@ -389,7 +422,7 @@ int main(int argc,char **argv){
  tap(c,2);assert(value(c,2)==6);tap(c,8);state(c,1);
  tap(c,128);tap(c,1);state(c,4);tap(c,1);assert(value(c,3)==0);
  capture(c,"build/options_v06.ppm");
- tap(c,1);assert(value(c,3)==1);tap(c,128);assert(value(c,4)==0);
+ tap(c,1);assert(value(c,3)==1);tap(c,128);assert(value(c,4)==1);tap(c,1);assert(value(c,4)==0);
  tap(c,2);state(c,1);tap(c,64);check_loading(c);
  capture(c,"build/arrival_v06.ppm");
  unsigned arrival_tick=value(c,16),arrival_cloud=shown(c,12);run(c,30);
@@ -509,14 +542,18 @@ int main(int argc,char **argv){
  tap(c,4);state(c,1);assert(value(c,7)==0);
  tap(c,64);tap(c,1);state(c,5);capture(c,"build/credits_v06.ppm");tap(c,2);state(c,1);
  tap(c,64);tap(c,1);state(c,4);assert(value(c,4)==0);
- tap(c,2);tap(c,64);tap(c,1);await_arrival(c);assert(value(c,1)==0);
- printf("PASS frontend no-intro: %u emulated frames; linked areas, camera, pickups, pause, menus, authentic entry loading without intro movie\n",c->frameCounter(c));
+ tap(c,128);tap(c,1);assert(value(c,4)==1);
+ tap(c,2);state(c,1);tap(c,64);tap(c,1);state(c,2);
+ check_intro(c);check_loading(c);
+ tap(c,2);state(c,1);tap(c,1);state(c,2);tap(c,8);await_arrival(c);
+ printf("PASS frontend restored intro: linked areas, camera, pickups, pause, intro playback and loading integration\n");
  /* Exercise settings through the actual menu before resetting the CPU. */
  tap(c,2);state(c,1);tap(c,128);tap(c,1);state(c,4);
  /* Entering OPTIONS always selects SOUND. */
  tap(c,1);assert(value(c,3)==0);
- tap(c,128);assert(value(c,4)==0);
+ tap(c,128);tap(c,1);assert(value(c,4)==0);
  assert(c->busRead8(c,0x0E000000)=='L');
+ assert(c->busRead8(c,0x0E000004)==2);
  assert(c->busRead8(c,0x0E000005)==0);
  c->setKeys(c,0);c->reset(c);run(c,90);state(c,0);
  assert(value(c,3)==0&&value(c,4)==0&&value(c,7)==0);
@@ -533,8 +570,8 @@ int main(int argc,char **argv){
  /* A damaged checksum must select documented defaults on the next boot. */
  c->busWrite8(c,0x0E000006,c->busRead8(c,0x0E000006)^1);
  c->setKeys(c,0);c->reset(c);run(c,90);state(c,0);
- assert(value(c,3)==1&&value(c,4)==0);
- puts("PASS settings integration: menu writes SRAM, soft-reset reload, corrupt-record defaults. Disk persistence is checked separately; real hardware is not tested.");
+ assert(value(c,3)==1&&value(c,4)==1);
+ puts("PASS settings integration: menu writes SOUND/INTRO v2 SRAM, soft-reset reload, corrupt-record defaults. Disk persistence is checked separately; real hardware is not tested.");
  /* Verify actual fall damage, Game Over, frozen state and retry. */
  tap(c,8);tap(c,128);tap(c,1);state(c,4);
  tap(c,2);tap(c,64);tap(c,1);await_arrival(c);

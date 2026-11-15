@@ -2,11 +2,19 @@
 .balign 4
 .global assets_visuals
 assets_visuals:
-.incbin "assets/visuals.bin"
+.incbin "assets/frontend.bin"
 .balign 4
 .global audio_title
 audio_title:
 .incbin "assets/audio_title.pcm"
+.balign 4
+.global audio_intro
+audio_intro:
+.incbin "assets/audio_intro.pcm"
+.balign 4
+.global intro_video
+intro_video:
+.incbin "assets/intro_video.bin"
 .balign 4
 .global audio_level
 audio_level:

@@ -1,23 +1,11 @@
-# Salvataggio SOUND su file e ripresa del progetto
+# Salvataggio SOUND e INTRO su file e migrazione SRAM
 
-Aggiornamento del 7 novembre 2026. Avanzamento complessivo invariato al **9%**: questa verifica non aggiunge livelli o animazioni.
+Aggiornamento del 15 novembre 2026. La stima complessiva resta al 16%: il ripristino della sequenza non completa un livello né un mondo.
 
-## Verifica aggiunta
+Le preferenze SOUND e INTRO sono registrate in una struttura SRAM v2 con checksum e scrittura a commit marker. I nuovi salvataggi e quelli non validi avviano con SOUND e INTRO attivi.
 
-`tools/save_reload_check.c` avvia la ROM compilata con mGBA e un file SRAM temporaneo dedicato, di 32 KiB. Usa il menu del gioco per spegnere SOUND, chiude completamente il core e avvia una nuova istanza sulla stessa ROM e sullo stesso file. Controlla che SOUND rimanga spento e che audio e intro siano disattivati. Riaccende SOUND dal menu e verifica il valore dopo una nuova chiusura/riapertura. Infine salva di nuovo SOUND spento, corrompe il checksum sul disco e verifica che un altro avvio ripristini SOUND acceso e INTRO disabilitato.
+I record v1 creati dai build precedenti vengono migrati al primo avvio: SOUND conserva il valore salvato, INTRO viene riattivato perché il filmato è tornato disponibile. Il risultato viene scritto in v2; da quel momento INTRO può essere spento dal menu OPTIONS e la scelta viene mantenuta.
 
-La prova non usa uno stato rapido dell'emulatore e non sovrascrive i salvataggi personali: crea un file temporaneo distinto e lo elimina al termine. `build/options_disk_reload.png` mostra il menu effettivamente renderizzato dopo la riapertura con SOUND spento.
+tools/save_reload_check.c usa un file SRAM temporaneo di 32 KiB e istanze mGBA separate. Verifica entrambe le opzioni dopo la riapertura con SOUND/INTRO spenti e accesi, quindi corrompe il checksum e controlla i valori predefiniti. build/options_disk_reload.png mostra il menu renderizzato dopo la riapertura.
 
-Il workflow GitHub esegue la prova dopo i controlli di gameplay. Il confezionamento richiede il relativo risultato PASS prima di dichiarare `disk_save_reload_tested: true`. Il test del reset e la prova di corruzione in memoria restano nel controllo frontend precedente.
-
-## Compilazioni incrementali
-
-Il Makefile genera e legge le dipendenze dei file C con `-MMD -MP`: una modifica a un header incluso indirettamente, come `level_progress.h` attraverso `game.h`, ricompila anche il frontend. L'obiettivo predefinito rimane la ROM completa.
-
-## Ripristino
-
-I sorgenti, gli asset versionati e i controlli vengono conservati nel repository. Da un checkout pulito il workflow ripristina gli asset incorporati, applica la pulizia, compila la ROM, esegue i test e produce il pacchetto `Lady-Sia2-GBA-build`. Ogni pacchetto riporta commit sorgente, hash ROM e checksum dei file. Per recuperare una versione collaudata, usare il commit e l'artefatto di un'esecuzione con esito positivo.
-
-## Limiti
-
-La prova copre file SRAM con nuove istanze del core mGBA, non l'hardware GBA reale, altre applicazioni emulatore, un processo interrotto durante la scrittura o la persistenza di avanzamento/vite. Il formato corrente memorizza le impostazioni; non salva la partita. Nessuna nuova scena o animazione viene dichiarata completata.
+Il workflow richiede il risultato PASS prima di includere il pacchetto. La prova hardware su cartuccia reale non è stata eseguita.

@@ -1,10 +1,10 @@
 import unittest
 from PIL import Image
-from tools.clean_frontend import clean_frame
+from tools.clean_frontend import clean_frame, encode_intro_video, decode_intro_video
 
 class FrontendCleanupTest(unittest.TestCase):
     def test_preserves_observed_rows_and_native_geometry(self):
-        original=Image.new('L',(240,160))
+        original=Image.new("L",(240,160))
         for y in range(160):
             for x in range(240):
                 original.putpixel((x,y),(x*3+y*7)%240+1)
@@ -25,5 +25,16 @@ class FrontendCleanupTest(unittest.TestCase):
             for x in range(240):
                 self.assertEqual(repaired.getpixel((x,y)),repaired.getpixel((x,12)),(x,y))
 
-if __name__=='__main__':
+    def test_lz77_intro_delta_blocks_round_trip(self):
+        from tools.clean_frontend import FRAME_BYTES, decode_intro_video
+        base=bytes((i*17+(i//127))&255 for i in range(FRAME_BYTES))
+        changed=bytearray(base)
+        for i in range(0,len(changed),997):
+            changed[i]^=0x5A
+        third=bytes(changed)
+        frames=[base,bytes(changed),third]
+        blob=encode_intro_video(frames,expected_count=len(frames))
+        self.assertEqual(decode_intro_video(blob,len(frames)),frames)
+
+if __name__=="__main__":
     unittest.main()

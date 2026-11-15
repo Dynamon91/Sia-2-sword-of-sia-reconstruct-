@@ -10,7 +10,7 @@
 
 ![Screenshot della ROM attuale: ritorno alla leva, acquisito da mGBA](previews/readme_frontend.png)
 
-Cattura reale della ROM da mGBA, visualizzata senza aggiungere pixel o scene di riferimento. Il filmato INTRO e la relativa opzione restano rimossi; PLAY mostra il Please wait misurato e poi i dialoghi iniziali. Le parti coperte dei riferimenti restano stime.
+Cattura reale della ROM da mGBA. PLAY avvia l’intro ricostruita: 588 fotogrammi a 6 fps, con A per pausa/ripresa e START per saltare. La barra di registrazione e l’avatar sono mascherati; i pixel coperti sono stime dichiarate.
 
 An ongoing reconstruction of Lady Sia 2: Sword of Sia for Game Boy Advance, based on the gameplay video references recorded by Papacube.
 
@@ -20,7 +20,7 @@ Latest verified change: the route now has seventeen partial viewports. On the lo
 
 ![Native ROM: crawl beneath the lever island](previews/crawl_under_roof.png)
 
-Two masked prone poses come from the original video. A provisional camera guide uses the recorded lower-strip positions, and a precomputed post-lever background removes old thorn silhouettes. The valid drop and missed-drop safety checks remain in place. PLAY retains the original Please wait; the intro movie is removed. Thorn motion/damage, further routes and complete levels remain unfinished; geometry and camera timing are provisional.
+Two masked prone poses come from the original video. A provisional camera guide uses the recorded lower-strip positions, and a precomputed post-lever background removes old thorn silhouettes. The valid drop and missed-drop safety checks remain in place. PLAY now runs the restored 588-frame, 6 fps intro before the original Please wait. A pauses/resumes and START skips. The recording bar and avatar are masked, with covered pixels estimated rather than claimed as recovered original art. Thorn motion/damage, further routes and complete levels remain unfinished; geometry and camera timing are provisional.
 
 Earlier gameplay previews below illustrate the preceding route checkpoints; CI exports fresh captures for each build.
 
@@ -38,7 +38,7 @@ B now takes priority over simultaneous confirm or direction buttons in the main 
 
 Holding A/B while resetting the run with R no longer triggers an unintended jump or attack. Release and press again to act. [Fix and native ROM checks](references/RESET_INPUT_STATUS.md).
 
-SOUND persistence is also checked through a real 32 KiB SRAM file: fresh mGBA cores reload both settings, reject a corrupt checksum and keep intro playback disabled. [Validation and recovery notes](references/SAVE_RELOAD_STATUS.md).
+SOUND and INTRO persistence are checked through a real 32 KiB SRAM file. Fresh mGBA cores reload both settings, reject a corrupt checksum, and migrate earlier v1 records with the restored intro enabled while preserving SOUND. [Validation and recovery notes](references/SAVE_RELOAD_STATUS.md).
 
 The upper clouds also drift behind the first two viewports, using the speed and dialogue stops measured in the video. All 320 scroll positions are checked in mGBA. The full original cloud period is not yet known; the texture loop and video-covered sky remain estimates. [Details and limits](references/SCENERY_STATUS.md).
 
