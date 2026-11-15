@@ -141,16 +141,19 @@ static void check_intro_frame(struct mCore *c,FILE *reference,unsigned frame){
  }
 }
 static void check_intro(struct mCore *c){
- state(c,2);
- for(unsigned wait=0;wait<120&&value(c,0)==2&&shown(c,0)!=2;wait++)run(c,1);
- assert(shown(c,0)==2);
+ state(c,1);
+ FILE *reference=fopen("assets/visuals.bin","rb");assert(reference);
+ intro_reference=reference;intro_seen_count=0;
+ for(unsigned i=0;i<INTRO_COUNT;i++)intro_seen[i]=0;
+ /* Begin observing before PLAY; a normal 16-frame tap already reaches
+    intro frame 1 and would miss the opening frame in this regression. */
+ c->setKeys(c,1);
+ for(unsigned wait=0;wait<120&&shown(c,0)!=2;wait++)run(c,1);
+ assert(value(c,0)==2&&shown(c,0)==2);c->setKeys(c,0);
  unsigned first_frame=shown(c,23);
  assert(value(c,4)==1&&first_frame<INTRO_COUNT);
- FILE *reference=fopen("assets/visuals.bin","rb");assert(reference);
  check_intro_frame(c,reference,first_frame);
  assert(first_frame==0);
- intro_reference=reference;intro_seen_count=1;
- for(unsigned i=0;i<INTRO_COUNT;i++)intro_seen[i]=i==first_frame;
  /* The opening has a black background here: neither the gray banner nor
     the recording avatar may remain, even if the generated reference is bad. */
  unsigned intro_base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
@@ -589,7 +592,7 @@ int main(int argc,char **argv){
  tap(c,64);tap(c,1);state(c,5);capture(c,"build/credits_v06.ppm");tap(c,2);state(c,1);
  tap(c,64);tap(c,1);state(c,4);assert(value(c,4)==0);
  tap(c,128);tap(c,1);assert(value(c,4)==1);
- tap(c,2);state(c,1);tap(c,64);tap(c,1);state(c,2);
+ tap(c,2);state(c,1);tap(c,64);
  check_intro(c);check_loading(c);
  tap(c,2);state(c,1);tap(c,1);state(c,2);tap(c,8);await_arrival(c);
  printf("PASS frontend restored intro: linked areas, camera, pickups, pause, intro playback and loading integration\n");
