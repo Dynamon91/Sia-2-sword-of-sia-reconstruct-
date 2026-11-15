@@ -5,7 +5,8 @@
 - Run relevant checks and distinguish local results, GitHub CI results and hardware tests. Never claim a build or emulator test passed without evidence.
 - Keep the overall weighted completion estimate in docs/progress.json honest. A validation-only milestone does not imply completed levels. Generate the progress display using tools/update_progress.py when the estimate changes.
 - User-facing progress updates and final delivery should include the overall completion estimate and an actual build screenshot or animation when available. Clearly label reused previews.
-- Maintain visual and gameplay fidelity to supplied references. Intro playback and recording overlays must remain removed; generated approximations must be identified in status notes.
+- Maintain visual and gameplay fidelity to supplied references. Preserve the restored intro in the current build unless the user requests a playback change, and keep recording overlays removed; generated approximations must be identified in status notes.
 - End each milestone with a recoverable source commit and state what remains unfinished. Do not imply unattended work continues after the session ends.
 
 - User priority: advance the contiguous playable route in larger milestones. Provisional collision geometry is authorized when clearly labeled; fix blocking errors immediately, then refine fidelity. Raise the weighted estimate only for implemented and verified work.
+
