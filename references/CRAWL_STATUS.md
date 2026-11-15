@@ -31,11 +31,11 @@ covered it. Sky at the boundary is feathered; observed foreground is retained.
 The earlier world bank is kept before activation. This uses 3.24 MB extra ROM,
 not another full world buffer in working RAM. No old strip bitmap is drawn over this bank: that would reintroduce old
 spike silhouettes. Aligned atlas DMA rows avoid the former per-pixel overlay
-cost. The open-bank crawl screenshot exposed magenta Bayer stipple in the
-logo-covered upper-right sky. A generated 36x32 nearest-palette overlay now
-corrects only that sky rectangle in world coordinates after the atlas transfer;
-terrain and actor layers stay untouched. The covered sky remains an estimate
-from adjacent image data.
+cost. The open-bank crawl screenshot exposed a magenta Bayer-stipple band in the
+logo-covered upper-right sky. A 36x45 nearest-palette overlay now covers the
+full band at local source rectangle (204,0) and world origin (994,176), using
+only sky-compatible colors without ordered dithering. Terrain and actor layers
+stay untouched. The covered sky remains an estimate from adjacent image data.
 
 C tests cover lowered collision bounds, fixed feet, forced crouching, blocked
 jump/attack, safe standing, both registered portals, return, pit respawn, reset,
