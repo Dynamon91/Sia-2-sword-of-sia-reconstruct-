@@ -173,7 +173,7 @@ static unsigned check_crawl_pose(struct mCore *c){
  return 1u<<(frame+(flip?2:0));
 }
 static void check_world_background(struct mCore *c){
- static unsigned char world[810000],opened[810000],clouds[25600],sky[2][80][240],lever_patch[40*44];static int loaded;
+ static unsigned char world[810000],opened[810000],clouds[25600],sky[2][80][240],lever_patch[40*44],crawl_patch[36*32];static int loaded;
  if(!loaded){
   FILE *atlas=fopen("assets/scroll_world.bin","rb");assert(atlas);assert(fread(world,1,sizeof(world),atlas)==sizeof(world));fclose(atlas);
   atlas=fopen("assets/scroll_world_open.bin","rb");assert(atlas);assert(fread(opened,1,sizeof(opened),atlas)==sizeof(opened));fclose(atlas);
@@ -182,7 +182,7 @@ static void check_world_background(struct mCore *c){
   for(unsigned a=0;a<2;a++)for(unsigned y=0;y<80;y++){
    fseek(f,(a*80+y)*2,SEEK_SET);unsigned off=(unsigned)fgetc(f);off|=(unsigned)fgetc(f)<<8;fseek(f,(long)off,SEEK_SET);int count=fgetc(f);
    for(int i=0;i<count;i++){int x=fgetc(f),n=fgetc(f);while(n--)sky[a][y][x++]=1;}
-  }fclose(f);f=fopen("assets/lever_lowered.bin","rb");assert(f);assert(fread(lever_patch,1,sizeof(lever_patch),f)==sizeof(lever_patch));fclose(f);loaded=1;
+  }fclose(f);f=fopen("assets/lever_lowered.bin","rb");assert(f);assert(fread(lever_patch,1,sizeof(lever_patch),f)==sizeof(lever_patch));fclose(f);f=fopen("assets/crawl_passage_sky_patch.bin","rb");assert(f);assert(fread(crawl_patch,1,sizeof(crawl_patch),f)==sizeof(crawl_patch));fclose(f);loaded=1;
  }
  int cx=(int)shown(c,15)/FP,cy=(int)shown(c,16)/FP,px=(int)shown(c,1)/FP,py=(int)shown(c,2)/FP-(int)shown(c,3);
  unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000,checked=0;
@@ -210,6 +210,9 @@ static void check_world_background(struct mCore *c){
   if(value(c,42)&&lx>=64&&lx<104&&ly>=104&&ly<148){
    unsigned p=lever_patch[(ly-104)*40+lx-64];if(p)expected=(int)p;
   }
+  int world_x=x-cx,world_y=380-cy+y;
+  if(value(c,43)&&world_x>=994&&world_x<1030&&world_y>=189&&world_y<221)
+   expected=crawl_patch[(world_y-189)*36+world_x-994];
   unsigned actual=c->busRead8(c,base+(unsigned)y*240+(unsigned)x);
   if(actual!=(unsigned)expected)fprintf(stderr,"World pixel mismatch at %d,%d camera %d,%d: %u != %d\n",x,y,cx,cy,actual,expected);
   assert(actual==(unsigned)expected);checked++;
