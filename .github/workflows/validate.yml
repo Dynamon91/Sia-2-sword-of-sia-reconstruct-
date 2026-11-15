@@ -21,7 +21,7 @@ jobs:
         run: python3 tools/convert_loading.py --check
       - name: Restore and verify embedded assets
         run: python3 tools/unpack_assets.py
-      - name: Remove intro playback and recording overlays
+      - name: Clean recording overlays and encode restored intro
         run: python3 tools/clean_frontend.py
       - name: Repair captured sprite borders and palette
         run: python3 tools/repair_sprite_edges.py

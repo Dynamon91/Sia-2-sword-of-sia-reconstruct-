@@ -90,7 +90,6 @@ static void check_loading(struct mCore *c){
  c->setKeys(c,15);
  while(value(c,0)==11&&frames++<LOADING_TOTAL_FRAMES+10){
   unsigned age=shown(c,20),phase=age<LOADING_BLACK_BEFORE?0:loading_text_visible(age)?1:2;
-  if(value(c,16)!=tick||value(c,1)!=0)fprintf(stderr,"Loading check mismatch: state=%u shown=%u tick=%u expected_tick=%u intro_frame=%u age=%u\\n",value(c,0),shown(c,0),value(c,16),tick,value(c,1),shown(c,20));
   assert(value(c,16)==tick&&value(c,1)==0);
   if(!(phases&(1u<<phase))){
    unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
@@ -115,58 +114,21 @@ static void check_intro_frame(struct mCore *c,FILE *reference,unsigned frame){
  assert(!fseek(reference,offset,SEEK_SET));
  assert(fread(expected,1,sizeof(expected),reference)==sizeof(expected));
  unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
- unsigned char actual_image[38400];
- unsigned pixel_mismatches=0;
  for(unsigned i=0;i<38400;i++){
-  unsigned actual=c->busRead8(c,base+i);actual_image[i]=(unsigned char)actual;
-  if(actual!=expected[512+i]){
-   if(pixel_mismatches<12)fprintf(stderr,"Intro pixel mismatch: frame=%u byte=%u expected=%u actual=%u\\n",frame,i,expected[512+i],actual);
-   pixel_mismatches++;
-  }
+  unsigned actual=c->busRead8(c,base+i);
+  if(actual!=expected[512+i])fprintf(stderr,"Intro pixel mismatch: frame=%u byte=%u expected=%u actual=%u\\n",frame,i,expected[512+i],actual);
+  assert(actual==expected[512+i]);
  }
- if(pixel_mismatches){
-  fprintf(stderr,"Intro pixel mismatch count: frame=%u count=%u\\n",frame,pixel_mismatches);
-  fprintf(stderr,"Intro display telemetry: current=%u decoded=%u result=%u cache_px=%u delta_px=%u requested=%u completed=%u error=%u block_len=%u expected=%u offset=%u magic=%u starts=%u ends=%u front=%u dispcnt=%u\\n",shown(c,23),shown(c,24),shown(c,32),shown(c,33),shown(c,34),shown(c,35),shown(c,36),shown(c,25),shown(c,26),shown(c,27),shown(c,28),shown(c,29),shown(c,30),shown(c,31),shown(c,10),c->busRead16(c,0x04000000));
-  if(frame>2){
-   unsigned char first[ASSET_FRAME_BYTES];
-   assert(!fseek(reference,(long)INTRO_FIRST*ASSET_FRAME_BYTES,SEEK_SET));
-   assert(fread(first,1,sizeof(first),reference)==sizeof(first));
-   unsigned first_distance=0,back_first_distance=0;
-   unsigned other_page=base==0x06000000?0x0600A000:0x06000000;
-   for(unsigned i=0;i<38400;i++){first_distance+=actual_image[i]!=first[512+i];back_first_distance+=c->busRead8(c,other_page+i)!=first[512+i];}
-   fprintf(stderr,"Intro frame-zero distance: requested=%u display=%u back=%u\\n",frame,first_distance,back_first_distance);
-  }
-  unsigned other_base=base==0x06000000?0x0600A000:0x06000000;
-  for(unsigned candidate=frame>2?frame-2:0;candidate<INTRO_COUNT&&candidate<=frame+2;candidate++){
-   unsigned char candidate_frame[ASSET_FRAME_BYTES];
-   assert(!fseek(reference,(long)(INTRO_FIRST+candidate)*ASSET_FRAME_BYTES,SEEK_SET));
-   assert(fread(candidate_frame,1,sizeof(candidate_frame),reference)==sizeof(candidate_frame));
-   unsigned displayed_distance=0,other_distance=0;
-   for(unsigned i=0;i<38400;i++){
-    displayed_distance+=actual_image[i]!=candidate_frame[512+i];
-    other_distance+=c->busRead8(c,other_base+i)!=candidate_frame[512+i];
-   }
-   fprintf(stderr,"Intro candidate distance: requested=%u candidate=%u display=%u back=%u\\n",frame,candidate,displayed_distance,other_distance);
-  }
- }
- assert(pixel_mismatches==0);
- unsigned palette_mismatches=0;
  for(unsigned i=0;i<256;i++){
   unsigned expected_color=expected[i*2]|expected[i*2+1]<<8;
   unsigned actual_color=c->busRead16(c,0x05000000+i*2);
-  if(actual_color!=expected_color){
-   if(palette_mismatches<12)fprintf(stderr,"Intro palette mismatch: frame=%u color=%u expected=%u actual=%u\\n",frame,i,expected_color,actual_color);
-   palette_mismatches++;
-  }
+  if(actual_color!=expected_color)fprintf(stderr,"Intro palette mismatch: frame=%u color=%u expected=%u actual=%u\\n",frame,i,expected_color,actual_color);
+  assert(actual_color==expected_color);
  }
- if(palette_mismatches)fprintf(stderr,"Intro palette mismatch count: frame=%u count=%u\\n",frame,palette_mismatches);
- assert(palette_mismatches==0);
 }
 static void check_intro(struct mCore *c){
  state(c,2);
  for(unsigned wait=0;wait<120&&value(c,0)==2&&shown(c,0)!=2;wait++)run(c,1);
- if(shown(c,0)!=2)
-  fprintf(stderr,"Intro presentation wait failed: live_state=%u shown_state=%u current_frame=%u shown_frame=%u decoded=%u error=%u block_len=%u expected=%u offset=%u magic=%u starts=%u ends=%u\\n",value(c,0),shown(c,0),value(c,1),shown(c,23),shown(c,24),shown(c,25),shown(c,26),shown(c,27),shown(c,28),shown(c,29),shown(c,30),shown(c,31));
  assert(shown(c,0)==2);
  unsigned first_frame=shown(c,23);
  assert(value(c,4)==1&&first_frame<INTRO_COUNT);

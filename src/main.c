@@ -34,7 +34,7 @@ static unsigned arrival_index,loading_age;
 static u16 object_shadow[128*4];
 static unsigned char intro_cache[ASSET_FRAME_BYTES] __attribute__((aligned(4)));
 static unsigned char intro_delta[ASSET_FRAME_BYTES] __attribute__((aligned(4)));
-static volatile unsigned intro_decoded,intro_result,intro_requested,intro_after_decode;
+static volatile unsigned intro_decoded;
 static Game game;
 static ViewCamera view_camera;
 static int sprite_dx,sprite_dy;
@@ -154,55 +154,48 @@ static unsigned intro_offset(unsigned frame){
  const unsigned char *p=intro_video+frame*4;
  return p[0]|((unsigned)p[1]<<8)|((unsigned)p[2]<<16)|((unsigned)p[3]<<24);
 }
-static unsigned intro_error,intro_error_length,intro_error_expected,intro_error_offset;
-static int __attribute__((section(".rodata.intro"),noinline)) intro_decompress(const unsigned char *source,unsigned length,unsigned char *target){
- intro_error=0;intro_error_length=length;intro_error_expected=0;intro_error_offset=0;
- if(length<4){intro_error=1;return 0;}
- if(source[0]!=0x10){intro_error=2;intro_error_expected=source[0];return 0;}
+static int intro_decompress(const unsigned char *source,unsigned length,unsigned char *target){
+ if(length<4||source[0]!=0x10)return 0;
  unsigned expected=source[1]|((unsigned)source[2]<<8)|((unsigned)source[3]<<16);
- intro_error_expected=expected;
- if(expected!=ASSET_FRAME_BYTES){intro_error=3;return 0;}
+ if(expected!=ASSET_FRAME_BYTES)return 0;
  unsigned input=4,output=0;
  while(output<expected){
-  if(input>=length){intro_error=4;intro_error_offset=output;return 0;}
+  if(input>=length)return 0;
   unsigned flags=source[input++];
   for(int bit=7;bit>=0&&output<expected;bit--){
    if(flags&(1u<<bit)){
-    if(input+2>length){intro_error=5;intro_error_offset=output;return 0;}
+    if(input+2>length)return 0;
     unsigned a=source[input++],b=source[input++];
     unsigned count=(a>>4)+3;
     unsigned distance=(((a&15)<<8)|b)+1;
-    if(distance>output){intro_error=6;intro_error_offset=output;intro_error_expected=distance;return 0;}
-    if(output+count>expected){intro_error=7;intro_error_offset=output;intro_error_expected=count;return 0;}
+    if(distance>output||output+count>expected)return 0;
     for(unsigned n=0;n<count;n++){target[output]=target[output-distance];output++;}
    }else{
-    if(input>=length){intro_error=8;intro_error_offset=output;return 0;}
+    if(input>=length)return 0;
     target[output++]=source[input++];
    }
   }
  }
- if(output!=expected){intro_error=9;intro_error_offset=output;return 0;}
- return 1;
+ return output==expected;
 }
 static int intro_decode_to(unsigned wanted){
- intro_requested=wanted;intro_after_decode=intro_decoded;
  if(wanted>=INTRO_COUNT)wanted=INTRO_COUNT-1;
  if(intro_decoded==~0u||wanted<intro_decoded){
   unsigned first=intro_offset(0),last=intro_offset(1);
-  if(last<=first){intro_error=10;intro_error_length=last;intro_error_expected=first;return 0;}
+  if(last<=first)return 0;
   const unsigned char *block=intro_video+INTRO_INDEX_BYTES+first;
   if(!intro_decompress(block,last-first,intro_delta))return 0;
   for(unsigned i=0;i<ASSET_FRAME_BYTES;i++)intro_cache[i]=intro_delta[i];
-  intro_decoded=0;intro_after_decode=intro_decoded;
+  intro_decoded=0;
  }
  while(intro_decoded<wanted){
   unsigned next=intro_decoded+1;
   unsigned first=intro_offset(next),last=intro_offset(next+1);
-  if(last<=first){intro_error=11;intro_error_length=last;intro_error_expected=first;return 0;}
+  if(last<=first)return 0;
   const unsigned char *block=intro_video+INTRO_INDEX_BYTES+first;
   if(!intro_decompress(block,last-first,intro_delta))return 0;
   for(unsigned i=0;i<ASSET_FRAME_BYTES;i++)intro_cache[i]^=intro_delta[i];
-  intro_decoded=next;intro_after_decode=intro_decoded;
+  intro_decoded=next;
  }
  image(intro_cache);
  return 1;
@@ -386,7 +379,7 @@ static void render(void){
   blit(FRAME_MENU);
   ui_object(0,16,(44+(int)selection*24-12)*160/148,1,UI_CURSOR_TILE);break;
  case INTRO:
-  intro_result=(unsigned)intro_decode_to(intro_frame);if(!intro_result)blit(FRAME_TITLE);
+  if(!intro_decode_to(intro_frame))blit(FRAME_TITLE);
   break;
  case STORY:
   dialog(story_index);footer("A NEXT B BACK START MENU");
@@ -432,7 +425,7 @@ static void render(void){
  shown[11]=(unsigned)game.area;shown[12]=cloud_phase(game.ticks);
  shown[13]=(unsigned)(view_camera.x/FP-view_origin[game.area][0]);shown[14]=(unsigned)(view_camera.y/FP-view_origin[game.area][1]);
  shown[15]=(unsigned)view_camera.x;shown[16]=(unsigned)view_camera.y;
- shown[17]=game_ledge_frame(&game);shown[18]=(unsigned)game.ledge_y;shown[19]=game.lives;shown[20]=loading_age;shown[21]=(unsigned)game.crawling;shown[22]=game_crawl_frame(&game);shown[23]=intro_frame;shown[24]=intro_decoded;shown[25]=intro_error;shown[26]=intro_error_length;shown[27]=intro_error_expected;shown[28]=intro_error_offset;shown[29]=intro_video[INTRO_INDEX_BYTES];shown[30]=intro_offset(0);shown[31]=intro_offset(1);shown[32]=intro_result;shown[33]=intro_cache[512];shown[34]=intro_delta[512];shown[35]=intro_requested;shown[36]=intro_after_decode;
+ shown[17]=game_ledge_frame(&game);shown[18]=(unsigned)game.ledge_y;shown[19]=game.lives;shown[20]=loading_age;shown[21]=(unsigned)game.crawling;shown[22]=game_crawl_frame(&game);shown[23]=intro_frame;
 }
 int main(void){
  REG16(0x04000204)=0x4317;REG16(0x04000000)=0x0404;
