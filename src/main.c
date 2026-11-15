@@ -154,35 +154,41 @@ static unsigned intro_offset(unsigned frame){
  const unsigned char *p=intro_video+frame*4;
  return p[0]|((unsigned)p[1]<<8)|((unsigned)p[2]<<16)|((unsigned)p[3]<<24);
 }
+static unsigned intro_error,intro_error_length,intro_error_expected,intro_error_offset;
 static int intro_decompress(const unsigned char *source,unsigned length,unsigned char *target){
- if(length<4||source[0]!=0x10)return 0;
+ intro_error=0;intro_error_length=length;intro_error_expected=0;intro_error_offset=0;
+ if(length<4){intro_error=1;return 0;}
+ if(source[0]!=0x10){intro_error=2;intro_error_expected=source[0];return 0;}
  unsigned expected=source[1]|((unsigned)source[2]<<8)|((unsigned)source[3]<<16);
- if(expected!=ASSET_FRAME_BYTES)return 0;
+ intro_error_expected=expected;
+ if(expected!=ASSET_FRAME_BYTES){intro_error=3;return 0;}
  unsigned input=4,output=0;
  while(output<expected){
-  if(input>=length)return 0;
+  if(input>=length){intro_error=4;intro_error_offset=output;return 0;}
   unsigned flags=source[input++];
   for(int bit=7;bit>=0&&output<expected;bit--){
    if(flags&(1u<<bit)){
-    if(input+2>length)return 0;
+    if(input+2>length){intro_error=5;intro_error_offset=output;return 0;}
     unsigned a=source[input++],b=source[input++];
     unsigned count=(a>>4)+3;
     unsigned distance=(((a&15)<<8)|b)+1;
-    if(distance>output||output+count>expected)return 0;
+    if(distance>output){intro_error=6;intro_error_offset=output;intro_error_expected=distance;return 0;}
+    if(output+count>expected){intro_error=7;intro_error_offset=output;intro_error_expected=count;return 0;}
     for(unsigned n=0;n<count;n++){target[output]=target[output-distance];output++;}
    }else{
-    if(input>=length)return 0;
+    if(input>=length){intro_error=8;intro_error_offset=output;return 0;}
     target[output++]=source[input++];
    }
   }
  }
- return output==expected;
+ if(output!=expected){intro_error=9;intro_error_offset=output;return 0;}
+ return 1;
 }
 static int intro_decode_to(unsigned wanted){
  if(wanted>=INTRO_COUNT)wanted=INTRO_COUNT-1;
  if(intro_decoded==~0u||wanted<intro_decoded){
   unsigned first=intro_offset(0),last=intro_offset(1);
-  if(last<=first)return 0;
+  if(last<=first){intro_error=10;intro_error_length=last;intro_error_expected=first;return 0;}
   const unsigned char *block=intro_video+INTRO_INDEX_BYTES+first;
   if(!intro_decompress(block,last-first,intro_delta))return 0;
   for(unsigned i=0;i<ASSET_FRAME_BYTES;i++)intro_cache[i]=intro_delta[i];
@@ -191,7 +197,7 @@ static int intro_decode_to(unsigned wanted){
  while(intro_decoded<wanted){
   unsigned next=intro_decoded+1;
   unsigned first=intro_offset(next),last=intro_offset(next+1);
-  if(last<=first)return 0;
+  if(last<=first){intro_error=11;intro_error_length=last;intro_error_expected=first;return 0;}
   const unsigned char *block=intro_video+INTRO_INDEX_BYTES+first;
   if(!intro_decompress(block,last-first,intro_delta))return 0;
   for(unsigned i=0;i<ASSET_FRAME_BYTES;i++)intro_cache[i]^=intro_delta[i];
@@ -425,7 +431,7 @@ static void render(void){
  shown[11]=(unsigned)game.area;shown[12]=cloud_phase(game.ticks);
  shown[13]=(unsigned)(view_camera.x/FP-view_origin[game.area][0]);shown[14]=(unsigned)(view_camera.y/FP-view_origin[game.area][1]);
  shown[15]=(unsigned)view_camera.x;shown[16]=(unsigned)view_camera.y;
- shown[17]=game_ledge_frame(&game);shown[18]=(unsigned)game.ledge_y;shown[19]=game.lives;shown[20]=loading_age;shown[21]=(unsigned)game.crawling;shown[22]=game_crawl_frame(&game);shown[23]=intro_frame;shown[24]=intro_decoded;
+ shown[17]=game_ledge_frame(&game);shown[18]=(unsigned)game.ledge_y;shown[19]=game.lives;shown[20]=loading_age;shown[21]=(unsigned)game.crawling;shown[22]=game_crawl_frame(&game);shown[23]=intro_frame;shown[24]=intro_decoded;shown[25]=intro_error;shown[26]=intro_error_length;shown[27]=intro_error_expected;shown[28]=intro_error_offset;shown[29]=intro_video[0];shown[30]=intro_offset(0);shown[31]=intro_offset(1);
 }
 int main(void){
  REG16(0x04000204)=0x4317;REG16(0x04000000)=0x0404;
