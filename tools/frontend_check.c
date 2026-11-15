@@ -114,15 +114,26 @@ static void check_intro_frame(struct mCore *c,FILE *reference,unsigned frame){
  assert(!fseek(reference,offset,SEEK_SET));
  assert(fread(expected,1,sizeof(expected),reference)==sizeof(expected));
  unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
+ unsigned char actual_image[38400];
  unsigned pixel_mismatches=0;
  for(unsigned i=0;i<38400;i++){
-  unsigned actual=c->busRead8(c,base+i);
+  unsigned actual=c->busRead8(c,base+i);actual_image[i]=(unsigned char)actual;
   if(actual!=expected[512+i]){
    if(pixel_mismatches<12)fprintf(stderr,"Intro pixel mismatch: frame=%u byte=%u expected=%u actual=%u\\n",frame,i,expected[512+i],actual);
    pixel_mismatches++;
   }
  }
- if(pixel_mismatches)fprintf(stderr,"Intro pixel mismatch count: frame=%u count=%u\\n",frame,pixel_mismatches);
+ if(pixel_mismatches){
+  fprintf(stderr,"Intro pixel mismatch count: frame=%u count=%u\\n",frame,pixel_mismatches);
+  for(unsigned candidate=frame>2?frame-2:0;candidate<INTRO_COUNT&&candidate<=frame+2;candidate++){
+   unsigned char other[ASSET_FRAME_BYTES];
+   assert(!fseek(reference,(long)(INTRO_FIRST+candidate)*ASSET_FRAME_BYTES,SEEK_SET));
+   assert(fread(other,1,sizeof(other),reference)==sizeof(other));
+   unsigned different=0;
+   for(unsigned i=0;i<38400;i++)different+=actual_image[i]!=other[512+i];
+   fprintf(stderr,"Intro candidate distance: displayed=%u candidate=%u pixels=%u\\n",frame,candidate,different);
+  }
+ }
  assert(pixel_mismatches==0);
  unsigned palette_mismatches=0;
  for(unsigned i=0;i<256;i++){
