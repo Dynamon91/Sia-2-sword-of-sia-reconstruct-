@@ -34,7 +34,7 @@ static unsigned arrival_index,loading_age;
 static u16 object_shadow[128*4];
 static unsigned char intro_cache[ASSET_FRAME_BYTES] __attribute__((aligned(4)));
 static unsigned char intro_delta[ASSET_FRAME_BYTES] __attribute__((aligned(4)));
-static volatile unsigned intro_decoded=~0u,intro_result,intro_requested,intro_after_decode;
+static volatile unsigned intro_decoded,intro_result,intro_requested,intro_after_decode;
 static Game game;
 static ViewCamera view_camera;
 static int sprite_dx,sprite_dy;
