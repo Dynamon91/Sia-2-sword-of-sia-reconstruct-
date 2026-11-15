@@ -307,12 +307,21 @@ static void draw_crawl_passage_sky_patch(int sx,int sy){
     colors avoid the magenta Bayer stipple while leaving terrain untouched. */
  int left=-view_origin[16][0]+204-sx;
  int top=380-view_origin[16][1]+13-sy;
+ int x0=left<0?0:left,x1=left+36;
+ if(x1>240)x1=240;
+ if(x0>=x1)return;
+ int source_x=x0-left;
  for(int y=0;y<32;y++){
   int screen_y=top+y;if((unsigned)screen_y>=160)continue;
-  for(int x=0;x<36;x++){
-   int screen_x=left+x;
-   if((unsigned)screen_x<240)pixel(screen_x,screen_y,crawl_passage_sky_patch[y*36+x]);
+  int x=x0,offset=source_x,base=y*36;
+  if(x&1){pixel(x++,screen_y,crawl_passage_sky_patch[base+offset++]);}
+  volatile u16 *dst=page+screen_y*120+(x>>1);
+  while(x+1<x1){
+   *dst++=(u16)(crawl_passage_sky_patch[base+offset]|
+       ((unsigned)crawl_passage_sky_patch[base+offset+1]<<8));
+   x+=2;offset+=2;
   }
+  if(x<x1)pixel(x,screen_y,crawl_passage_sky_patch[base+offset]);
  }
 }
 static void draw_world(void){

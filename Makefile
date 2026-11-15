@@ -66,7 +66,7 @@ clean:
 	rm -rf build
 .PHONY: all test clean
 
-build/assets.o: assets/lever_lowered.bin
+build/assets.o: assets/lever_lowered.bin assets/crawl_passage_sky_patch.bin
 
 build/main.o: src/loading.h
 build/assets.o: assets/loading_screen.bin
