@@ -401,7 +401,7 @@ static void render(void){
  case TITLE:blit(FRAME_TITLE);break;
  case MENU:
   blit(FRAME_MENU);
-  ui_object(0,16,(44+(int)selection*24-12)*160/148,1,UI_CURSOR_TILE);break;
+  ui_object(0,16,44+selection*24,1,UI_CURSOR_TILE);break;
  case INTRO:
   if(!intro_decode_to(intro_frame))blit(FRAME_TITLE);
   break;
@@ -567,3 +567,4 @@ int main(void){
   if(dirty)render();else wait_frame();
  }
 }
+

@@ -429,6 +429,26 @@ static void check_cloud_animation(struct mCore *c){
  puts("PASS scenery integration: all 320 cloud phases including odd/even DMA and wrap match an independent compositor; foreground stays fixed; pause freezes and resumes the active clock");
 }
 
+static void check_menu_cursor_alignment(struct mCore *c){
+ /* Native positions measured in the supplied menu capture (assets/ui_manifest.json).
+    A former 240x148 stretch must not transform these 240x160 coordinates. */
+ const unsigned rows[]={44,68,92};
+ const char *pictures[]={"build/menu_v06.ppm","build/menu_options_selection.ppm","build/menu_credits_selection.ppm"};
+ for(unsigned i=0;i<3;i++){
+  state(c,1);
+  unsigned attr0=c->busRead16(c,0x07000000),attr1=c->busRead16(c,0x07000002);
+  assert((attr0&255)==rows[i]&&(attr0&0x2000));
+  assert((attr1&511)==16&&(attr1>>14)==1);
+  assert((c->busRead16(c,0x07000004)&1023)==UI_CURSOR_TILE);
+  for(unsigned slot=1;slot<128;slot++)assert(c->busRead16(c,0x07000000+slot*8)&0x0200);
+  capture(c,pictures[i]);tap(c,128);
+ }
+ assert((c->busRead16(c,0x07000000)&255)==44);
+ tap(c,64);assert((c->busRead16(c,0x07000000)&255)==92);
+ tap(c,128);assert((c->busRead16(c,0x07000000)&255)==44);
+ puts("PASS menu cursor alignment: PLAY/OPTIONS/CREDITS use measured native positions (16,44/68/92), one cursor, correct tile and wrap in both directions");
+}
+
 int main(int argc,char **argv){
  setvbuf(stdout,NULL,_IOLBF,0);
  assert(!mkdir("build/ledge_sequence",0777)||errno==EEXIST);
@@ -459,13 +479,13 @@ int main(int argc,char **argv){
  const unsigned cancel_combos[]={3,10,6,66,130,18,34};
  for(unsigned i=0;i<sizeof(cancel_combos)/sizeof(cancel_combos[0]);i++){
   tap(c,8);state(c,1);
-  assert((c->busRead16(c,0x07000000)&255)==34);
+  assert((c->busRead16(c,0x07000000)&255)==44);
   tap(c,cancel_combos[i]);state(c,0);
  }
- tap(c,8);state(c,1);capture(c,"build/menu_v06.ppm");
+ tap(c,8);state(c,1);
  assert((c->busRead16(c,0x04000000)&0x1040)==0x1040);
  assert((c->busRead16(c,0x07000004)&1023)==UI_CURSOR_TILE);
- assert((c->busRead16(c,0x07000000)&255)==34);
+ check_menu_cursor_alignment(c);
  tap(c,4);state(c,3);capture(c,"build/story_v06.ppm");
  for(int i=1;i<8;i++){tap(c,1);state(c,3);assert(value(c,2)==(unsigned)i);}
  tap(c,2);assert(value(c,2)==6);tap(c,8);state(c,1);
