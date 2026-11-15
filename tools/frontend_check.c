@@ -88,7 +88,7 @@ static void check_loading(struct mCore *c){
  assert(shown(c,0)==11&&shown(c,20)<=3);
  unsigned phases=0,tick=value(c,16),frames=0;
  c->setKeys(c,15);
- while(shown(c,0)==11&&frames++<LOADING_TOTAL_FRAMES+10){
+ while(value(c,0)==11&&frames++<LOADING_TOTAL_FRAMES+10){
   unsigned age=shown(c,20),phase=age<LOADING_BLACK_BEFORE?0:loading_text_visible(age)?1:2;
   if(value(c,16)!=tick||value(c,1)!=0)fprintf(stderr,"Loading check mismatch: state=%u shown=%u tick=%u expected_tick=%u intro_frame=%u age=%u\\n",value(c,0),shown(c,0),value(c,16),tick,value(c,1),shown(c,20));
   assert(value(c,16)==tick&&value(c,1)==0);
