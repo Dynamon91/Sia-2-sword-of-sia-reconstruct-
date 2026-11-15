@@ -9,4 +9,5 @@
 - End each milestone with a recoverable source commit and state what remains unfinished. Do not imply unattended work continues after the session ends.
 
 - User priority: advance the contiguous playable route in larger milestones. Provisional collision geometry is authorized when clearly labeled; fix blocking errors immediately, then refine fidelity. Raise the weighted estimate only for implemented and verified work.
+- User quality priority (15 November 2026): compare graphics with the supplied native references and inspect real ROM captures. Correct the visible defects addressed by each milestone before delivery, preserve observed pixels, and identify estimated regions.
 
