@@ -1,0 +1,43 @@
+{
+  "video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "source_seconds": [
+    185,
+    186.1
+  ],
+  "source_files": [
+    "reference/w1l1_crawl/185_0.png",
+    "reference/w1l1_crawl/186_1.png"
+  ],
+  "camera_origins": [
+    [
+      -873,
+      267
+    ],
+    [
+      -790,
+      204
+    ]
+  ],
+  "normalized_source_anchor_x": [
+    139,
+    169
+  ],
+  "world_anchor_x": [
+    1012,
+    959
+  ],
+  "floor_bias_pixels": 7,
+  "method": "Reversible linear guide keyed to common world x; six-pixel bounded convergence",
+  "limits": [
+    "Two observed anchor positions, not a recovered original camera script",
+    "Return follows the same provisional guide in reverse; original return timing is not verified",
+    "Collision floor and body bounds are provisional"
+  ],
+  "source_sha256": [
+    "e7b41df2ba03aa052267fd61e74ccbfc3fa69dc5586cddb2180d8e0c13ae3798",
+    "eed4949e8918d802d368f2c710b24a112e37fd3e5c733d14674046a8cc550f85"
+  ],
+  "estimated_speed_subpixels_per_update": 208,
+  "observed_anchor_displacement_pixels": 53,
+  "observed_interval_seconds": 1.1
+}

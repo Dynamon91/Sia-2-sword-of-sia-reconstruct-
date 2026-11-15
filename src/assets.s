@@ -2,11 +2,19 @@
 .balign 4
 .global assets_visuals
 assets_visuals:
-.incbin "assets/visuals.bin"
+.incbin "assets/frontend.bin"
 .balign 4
 .global audio_title
 audio_title:
 .incbin "assets/audio_title.pcm"
+.balign 4
+.global audio_intro
+audio_intro:
+.incbin "assets/audio_intro.pcm"
+.balign 4
+.global intro_video
+intro_video:
+.incbin "assets/intro_video.bin"
 .balign 4
 .global audio_level
 audio_level:
@@ -186,3 +194,30 @@ scroll_world_sky:
 .global scroll_cloud
 scroll_cloud:
 .incbin "assets/scroll_cloud.bin"
+
+.balign 4
+.global lever_lowered
+lever_lowered:
+.incbin "assets/lever_lowered.bin"
+
+.balign 4
+.global loading_screen
+loading_screen:
+.incbin "assets/loading_screen.bin"
+
+
+.balign 4
+.global crawl_cycle
+crawl_cycle:
+.incbin "assets/crawl_cycle.bin"
+
+
+.balign 4
+.global crawl_passage_sky_patch
+crawl_passage_sky_patch:
+.incbin "assets/crawl_passage_sky_patch.bin"
+
+.balign 4
+.global scroll_world_open
+scroll_world_open:
+.incbin "assets/scroll_world_open.bin"

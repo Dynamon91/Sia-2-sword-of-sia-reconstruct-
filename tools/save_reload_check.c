@@ -35,6 +35,12 @@ static struct mCore *boot(const char *rom,const char *save,color_t *pixels){
  c->reset(c);frames(c,90);assert(debug(c,0)==0);return c;
 }
 static void options(struct mCore *c){tap(c,8);tap(c,128);tap(c,1);assert(debug(c,0)==4);}
+static void set_intro(struct mCore *c,unsigned on){
+ tap(c,128);assert(debug(c,0)==4);
+ if(debug(c,4)!=on)tap(c,1);
+ assert(debug(c,4)==on);
+ tap(c,64);assert(debug(c,0)==4);
+}
 static void close_core(struct mCore *c){c->deinit(c);}
 static void capture(struct mCore *c){
  const void *buffer;size_t stride;c->getPixels(c,&buffer,&stride);
@@ -50,16 +56,17 @@ int main(int argc,char **argv){
  /* A unique throwaway file never overwrites a player's adjacent .sav. */
  char save[]="build/settings-reload-XXXXXX";int fd=mkstemp(save);assert(fd>=0);assert(!close(fd));
  color_t *pixels=calloc(240*160,sizeof(*pixels));assert(pixels);
- struct mCore *c=boot(argv[1],save,pixels);assert(debug(c,3)==1&&debug(c,4)==0);
- options(c);tap(c,1);assert(debug(c,3)==0);frames(c,120);close_core(c);
+ struct mCore *c=boot(argv[1],save,pixels);assert(debug(c,3)==1&&debug(c,4)==1);
+ options(c);tap(c,1);assert(debug(c,3)==0);set_intro(c,0);
+ assert(c->busRead8(c,0x0E000004)==2&&c->busRead8(c,0x0E000005)==0);frames(c,120);close_core(c);
  struct stat st;assert(!stat(save,&st)&&st.st_size==32768);
  c=boot(argv[1],save,pixels);assert(debug(c,3)==0&&debug(c,4)==0&&debug(c,7)==0);
- options(c);capture(c);tap(c,1);assert(debug(c,3)==1);frames(c,120);close_core(c);
- c=boot(argv[1],save,pixels);assert(debug(c,3)==1&&debug(c,4)==0);
- options(c);tap(c,1);assert(debug(c,3)==0);frames(c,120);close_core(c);
+ options(c);capture(c);set_intro(c,1);tap(c,1);assert(debug(c,3)==1);frames(c,120);close_core(c);
+ c=boot(argv[1],save,pixels);assert(debug(c,3)==1&&debug(c,4)==1);
+ options(c);tap(c,1);assert(debug(c,3)==0);set_intro(c,0);frames(c,120);close_core(c);
  FILE *f=fopen(save,"r+b");assert(f);assert(!fseek(f,6,SEEK_SET));int byte=fgetc(f);assert(byte!=EOF);
  assert(!fseek(f,6,SEEK_SET));assert(fputc(byte^1,f)!=EOF);assert(!fclose(f));
- c=boot(argv[1],save,pixels);assert(debug(c,3)==1&&debug(c,4)==0);close_core(c);
+ c=boot(argv[1],save,pixels);assert(debug(c,3)==1&&debug(c,4)==1);close_core(c);
  free(pixels);assert(!unlink(save));
- puts("PASS disk save integration: fresh mGBA cores reload SOUND off/on from a 32 KiB SRAM file; intro stays disabled; corrupt checksum restores defaults");
+ puts("PASS disk save integration: SOUND and INTRO off/on survive fresh mGBA core reloads; corrupt checksum restores both enabled");
 }

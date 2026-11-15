@@ -5,9 +5,17 @@
 int main(void){
  Game g;game_reset(&g);ViewCamera v;view_camera_reset(&v,&g);
  assert(!v.x&&!v.y);
- for(int i=0;i<200;i++){g.x+=320;int x=v.x,y=v.y;view_camera_step(&v,&g);assert(abs(v.x-x)<=6*FP&&abs(v.y-y)<=6*FP);}
+ for(int i=0;i<200;i++){g.vx=320;g.x+=320;int x=v.x,y=v.y;view_camera_step(&v,&g);assert(abs(v.x-x)<=6*FP&&abs(v.y-y)<=6*FP);}
+ /* Follow actual velocity and settle into the reference-inspired framing. */
+ game_reset(&g);g.area=5;g.x=120*FP;view_camera_reset(&v,&g);
+ for(int i=0;i<60;i++){g.vx=320;g.x+=320;int x=v.x;view_camera_step(&v,&g);assert(abs(v.x-x)<=6*FP);}
+ assert(abs(g.x+PLAYER_W*FP/2-view_origin[5][0]*FP+v.x-80*FP)<=FP);
+ for(int i=0;i<60;i++){g.vx=-320;g.x-=320;int x=v.x;view_camera_step(&v,&g);assert(abs(v.x-x)<=6*FP);}
+ assert(abs(g.x+PLAYER_W*FP/2-view_origin[5][0]*FP+v.x-128*FP)<=FP);
+ g.vx=0;int held=v.x;
+ for(int i=0;i<60;i++){g.facing=-g.facing;view_camera_step(&v,&g);assert(v.x==held);}
  /* All registered late-route portals preserve the projected player at a fixed camera. */
- const int pairs[][4]={{0,1,-152,60},{1,2,-206,-46},{2,3,-216,15},{3,4,-158,18},{4,5,-188,25},{5,6,-170,9},{6,7,-168,7},{7,8,35,81},{8,9,58,-15},{9,10,108,93},{10,11,76,44},{11,12,118,3},{12,13,44,86}};
+ const int pairs[][4]={{0,1,-152,60},{1,2,-206,-46},{2,3,-216,15},{3,4,-158,18},{4,5,-188,25},{5,6,-170,9},{6,7,-168,7},{7,8,35,81},{8,9,58,-15},{9,10,108,93},{10,11,76,44},{11,12,118,3},{12,13,44,86},{13,14,-144,-8},{14,15,90,-105},{15,16,83,-63}};
  for(unsigned i=0;i<sizeof(pairs)/sizeof(pairs[0]);i++){
   int a=pairs[i][0],b=pairs[i][1],dx=pairs[i][2],dy=pairs[i][3];
   assert(view_origin[b][0]-view_origin[a][0]==dx);
@@ -28,5 +36,12 @@ int main(void){
  ViewCamera same=v;int px=g.x-view_origin[11][0]*FP,py=g.y-view_origin[11][1]*FP;
  g.area=12;g.x+=118*FP;g.y+=3*FP;assert(g.x-view_origin[12][0]*FP==px&&g.y-view_origin[12][1]*FP==py);
  Game old=g;old.area=11;old.x-=118*FP;old.y-=3*FP;view_camera_step(&same,&old);view_camera_step(&v,&g);assert(v.x==same.x&&v.y==same.y);
- puts("PASS world camera: bounded follow, thirteen portal transforms (early cliff geometry provisional), area-independent projection and no portal camera reset");
+ game_reset(&g);g.area=15;g.x=132*FP;g.y=78*FP;g.grounded=1;g.crawling=1;view_camera_reset(&v,&g);
+ for(int i=0;i<64;i++)view_camera_step(&v,&g);
+ assert(v.x==-873*FP&&v.y==267*FP);
+ g.x=79*FP;for(int i=0;i<64;i++)view_camera_step(&v,&g);
+ assert(v.x==-790*FP&&v.y==204*FP);
+ ViewCamera guide=v;g.area=16;g.x+=83*FP;g.y-=63*FP;view_camera_step(&v,&g);
+ assert(v.x==guide.x&&v.y==guide.y);
+ puts("PASS world camera: bounded follow, sixteen portal transforms (early cliff geometry provisional), area-independent projection and no portal camera reset");
 }

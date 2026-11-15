@@ -9,14 +9,22 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi python3-pil python3-numpy python3-scipy libmgba-dev
+      - name: Check frontend cleanup preserves pixel positions
+        run: python3 -m unittest discover -s tests -p test_frontend_cleanup.py
       - name: Audit next-route references without inventing a playable map
         run: |
           python3 -m unittest discover -s tests -p test_route_registration.py
           python3 tools/audit_route_continuation.py --output build/route-registration.json
+      - name: Audit post-lever references and reject inconsistent joins
+        run: python3 tools/audit_post_lever.py --check
+      - name: Verify authentic entry loading
+        run: python3 tools/convert_loading.py --check
       - name: Restore and verify embedded assets
         run: python3 tools/unpack_assets.py
-      - name: Remove intro playback and recording overlays
-        run: python3 tools/clean_frontend.py
+      - name: Clean recording overlays and encode restored intro
+        run: |
+          python3 tools/clean_frontend.py
+          git diff --exit-code -- assets/frontend_cleanup.json
       - name: Repair captured sprite borders and palette
         run: python3 tools/repair_sprite_edges.py
       - name: Remove residual actor pixels from first-room scenery
@@ -35,8 +43,22 @@ jobs:
         run: python3 tools/convert_island_gap.py --check
       - name: Verify lever-area backgrounds and measured portals
         run: python3 tools/convert_lever_route.py --check
+      - name: Verify registered post-lever edge background
+        run: python3 tools/convert_post_lever.py --check
+      - name: Verify recorded lowered lever pose
+        run: |
+          python3 -m unittest discover -s tests -p test_lever_asset_dependencies.py
+          python3 tools/convert_lever_pose.py --check
+      - name: Verify recorded crawl poses
+        run: python3 tools/convert_crawl.py --check
+      - name: Verify first lower landing
+        run: python3 tools/convert_lower_landing.py --check
+      - name: Verify next crawl passage viewport
+        run: python3 tools/convert_crawl_passage.py --check
       - name: Verify shared-world scrolling banks
-        run: python3 tools/prepare_scroll_assets.py --check
+        run: |
+          python3 tools/prepare_scroll_assets.py --check
+          python3 -m unittest discover -s tests -p test_upper_wall_atlas.py
       - name: Audit animation palette and foot anchors
         run: |
           python3 tools/convert_jump.py
@@ -71,3 +93,4 @@ jobs:
           name: Lady-Sia2-GBA-build
           path: build/release/
           if-no-files-found: error
+

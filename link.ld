@@ -5,6 +5,7 @@ MEMORY { ROM (rx) : ORIGIN = 0x08000000, LENGTH = 32M
 SECTIONS {
  .header : { KEEP(*(.header)) } > ROM
  .iwram : { . = ALIGN(4); __iwram_start = .; *(.text*) . = ALIGN(4); __iwram_end = .; } > IWRAM AT> ROM
+ .romtext : { *(.romtext*) } > ROM
  __iwram_load = LOADADDR(.iwram);
  .rodata : { *(.rodata*) } > ROM
  .bss (NOLOAD) : { . = ALIGN(4); __bss_start = .; *(.bss*) *(COMMON) . = ALIGN(4); __bss_end = .; } > RAM

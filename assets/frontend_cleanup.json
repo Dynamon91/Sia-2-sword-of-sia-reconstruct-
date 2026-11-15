@@ -1,13 +1,22 @@
 {
-  "banner_removed_rows": 12,
+  "cleanup_revision": 2,
+  "input_sha256": "a59a3d541eff2b6c071bb84d05fdd8a5ab87572fc7ff885d5f3af958bfa144a9",
+  "cleaned_visuals_sha256": "1c59acc5ba51fc777548e4b62b420e9a9d0d7e3ed71594966e76760191eb1ec5",
+  "frontend_sha256": "55ecfed5c088b80ef898a67bf45f5ccdc4e69c2645238cf5e937ae5c833e04fe",
+  "intro_video_sha256": "a8ff55a0bb07e04ffc4e715319cf21420eaecf8a97f07471f4a6e90862fd468f",
+  "intro_video_bytes": 7589185,
+  "intro_uncompressed_bytes": 22880256,
+  "intro_frame_count": 588,
+  "intro_fps": 6,
+  "intro_audio_length_samples": 1605632,
+  "recording_banner_removed_rows": 13,
   "recording_avatar_removed_rect": [
-    209,
-    12,
-    31,
+    208,
+    13,
+    32,
     18
   ],
-  "occluded_pixels": "estimated from first uncovered row; NOT original recovered art",
-  "resampling": "nearest, 240x148 to 240x160",
-  "intro_playback_removed": true,
-  "output_sha256": "1f379e8cc1763f137c1f96e05c2d4c1a2b73170f37d91dd99c6570736a62af77"
+  "covered_pixels": "harmonic RGB continuation from unobscured boundary, mapped to the original GBA palette; not recovered original art",
+  "observed_rows": "kept at their original y coordinates; no scaling",
+  "video_encoding": "GBA LZ77 blocks; first frame absolute; later frames XOR deltas; little-endian uint32 offset table"
 }

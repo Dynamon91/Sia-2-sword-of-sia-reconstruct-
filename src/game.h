@@ -4,6 +4,9 @@
 #define FP 256
 #define PLAYER_W 14
 #define PLAYER_H 40
+#define CRAWL_H 20
+#define CRAWL_SPEED 208
+#define CRAWL_FLOOR_BIAS 7
 #define WORLD_W 240
 #define PLATFORM_COUNT 2
 #define GEM_COUNT 5
@@ -15,7 +18,7 @@ typedef struct { int x,y,w,h; } Platform;
 typedef struct { int area,x,y; unsigned id; } Gem;
 extern const Gem level_gems[GEM_COUNT];
 typedef struct { int x,y,vx,vy,grounded,facing,attack,camera,previous;
-    int climbing,gems,collected,sign_open,camera_y,area,falls,pickup_timer; int hurt_timer,game_over,enemy_x,enemy_dir,enemy_hp,enemy_flash; int enemy2_x,enemy2_dir,enemy2_hp,enemy2_flash; unsigned enemy2_last_swing,walk_ticks; unsigned swing_id,enemy_last_swing; unsigned ticks,lives; int ledge_y; unsigned ledge_ticks,ledge_cooldown; int enemy3_x,enemy3_dir,enemy3_hp,enemy3_flash; unsigned enemy3_last_swing; LevelProgress progress; int enemy4_x,enemy4_dir,enemy4_hp,enemy4_flash; unsigned enemy4_last_swing; } Game;
+    int climbing,gems,collected,sign_open,camera_y,area,falls,pickup_timer; int hurt_timer,game_over,enemy_x,enemy_dir,enemy_hp,enemy_flash; int enemy2_x,enemy2_dir,enemy2_hp,enemy2_flash; unsigned enemy2_last_swing,walk_ticks; unsigned swing_id,enemy_last_swing; unsigned ticks,lives; int ledge_y; unsigned ledge_ticks,ledge_cooldown; int enemy3_x,enemy3_dir,enemy3_hp,enemy3_flash; unsigned enemy3_last_swing; LevelProgress progress; int enemy4_x,enemy4_dir,enemy4_hp,enemy4_flash; unsigned enemy4_last_swing; int crawling; unsigned crawl_ticks; } Game;
 extern const Platform platforms[PLATFORM_COUNT];
 int game_floor(int x);
 /* Provisional sixth-view walk plane, using character overlap at the edges. */
@@ -27,6 +30,8 @@ int game_damage(Game *g,unsigned amount);
 unsigned game_attack_frame(const Game *g);
 /* walk_ticks stores subpixel distance modulo one three-pose stride. */
 unsigned game_walk_frame(const Game *g);
+unsigned game_crawl_frame(const Game *g);
+int game_body_top(const Game *g);
 unsigned game_ledge_frame(const Game *g);
 /* Pose follows vertical motion; AIR_NONE is never a sprite-buffer offset. */
 unsigned game_air_frame(const Game *g);

@@ -1,0 +1,235 @@
+{
+  "floor_bias_pixels": 7,
+  "video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "frames": [
+    {
+      "seconds": 185,
+      "source": "reference/w1l1_crawl/185_0.png",
+      "source_sha256": "e7b41df2ba03aa052267fd61e74ccbfc3fa69dc5586cddb2180d8e0c13ae3798",
+      "crop": [
+        108,
+        98,
+        172,
+        134
+      ],
+      "row_start": 5,
+      "row_intervals": [
+        [
+          21,
+          28
+        ],
+        [
+          20,
+          31
+        ],
+        [
+          12,
+          32
+        ],
+        [
+          11,
+          32
+        ],
+        [
+          10,
+          33
+        ],
+        [
+          10,
+          34
+        ],
+        [
+          10,
+          33
+        ],
+        [
+          10,
+          34
+        ],
+        [
+          11,
+          35
+        ],
+        [
+          11,
+          36
+        ],
+        [
+          12,
+          37
+        ],
+        [
+          12,
+          37
+        ],
+        [
+          12,
+          37
+        ],
+        [
+          12,
+          38
+        ],
+        [
+          13,
+          40
+        ],
+        [
+          13,
+          49
+        ],
+        [
+          14,
+          50
+        ],
+        [
+          11,
+          51
+        ],
+        [
+          10,
+          51
+        ],
+        [
+          8,
+          51
+        ],
+        [
+          6,
+          49
+        ],
+        [
+          6,
+          44
+        ]
+      ],
+      "observed_contact_y": 125,
+      "authored_floor_y": 118,
+      "opaque_pixels": 607
+    },
+    {
+      "seconds": 186.1,
+      "source": "reference/w1l1_crawl/186_1.png",
+      "source_sha256": "eed4949e8918d802d368f2c710b24a112e37fd3e5c733d14674046a8cc550f85",
+      "crop": [
+        138,
+        32,
+        202,
+        68
+      ],
+      "row_start": 7,
+      "row_intervals": [
+        [
+          23,
+          28
+        ],
+        [
+          21,
+          31
+        ],
+        [
+          19,
+          32
+        ],
+        [
+          14,
+          32
+        ],
+        [
+          13,
+          33
+        ],
+        [
+          12,
+          35
+        ],
+        [
+          11,
+          35
+        ],
+        [
+          11,
+          34
+        ],
+        [
+          12,
+          34
+        ],
+        [
+          13,
+          35
+        ],
+        [
+          13,
+          37
+        ],
+        [
+          13,
+          38
+        ],
+        [
+          14,
+          39
+        ],
+        [
+          14,
+          40
+        ],
+        [
+          14,
+          44
+        ],
+        [
+          14,
+          48
+        ],
+        [
+          12,
+          49
+        ],
+        [
+          11,
+          50
+        ],
+        [
+          8,
+          51
+        ],
+        [
+          6,
+          51
+        ],
+        [
+          6,
+          51
+        ],
+        [
+          7,
+          51
+        ],
+        [
+          9,
+          50
+        ]
+      ],
+      "observed_contact_y": 62,
+      "authored_floor_y": 55,
+      "opaque_pixels": 638
+    }
+  ],
+  "size": [
+    64,
+    36
+  ],
+  "anchor": [
+    32,
+    36
+  ],
+  "facing": "right; source poses mirrored without resampling",
+  "palette_sha256": "0f145cfe1ec41897e09f333e75cf9a86eef904a9fe9f2f701ee810eea47693a9",
+  "limits": [
+    "Manual silhouette masks from compressed video; palette quantized to existing 1..239 colors",
+    "Crawl timing and movement speed are provisional",
+    "Floor alignment uses current authored collision floor; not recovered original hitboxes"
+  ]
+}

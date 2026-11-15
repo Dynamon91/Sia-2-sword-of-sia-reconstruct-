@@ -1,0 +1,76 @@
+{
+  "video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "source_seconds": 183,
+  "source_sha256": "f67be7fc2202b5d3bb053f055339a98e7c3707da01ec236f9eef8098726e42bf",
+  "registrations": [
+    {
+      "delta": [
+        -144,
+        -8
+      ],
+      "mae_rgb": 4.694444,
+      "runner_up_mae_rgb": 9.666667,
+      "patch": [
+        176,
+        152,
+        184,
+        158
+      ]
+    },
+    {
+      "delta": [
+        -144,
+        -8
+      ],
+      "mae_rgb": 6.881944,
+      "runner_up_mae_rgb": 13.013889,
+      "patch": [
+        192,
+        149,
+        200,
+        155
+      ]
+    }
+  ],
+  "roof_restoration_registrations": [
+    {
+      "delta": [
+        -160,
+        32
+      ],
+      "mae_rgb": 4.921875,
+      "runner_up_mae_rgb": 12.833333,
+      "patch": [
+        170,
+        60,
+        178,
+        68
+      ]
+    },
+    {
+      "delta": [
+        -160,
+        32
+      ],
+      "mae_rgb": 8.378788,
+      "runner_up_mae_rgb": 13.027273,
+      "patch": [
+        175,
+        69,
+        185,
+        80
+      ]
+    }
+  ],
+  "delta": [
+    -144,
+    -8
+  ],
+  "later_source_sha256": "123a8dc5141e8062adcc4fc1033b40510de6cf67080cc3ed1ef706c3c2c8e5d4",
+  "restored_terrain_pixels": 157,
+  "limits": [
+    "Covered player/sky estimated; overlap terrain restored from the cleaned preceding view",
+    "Occluded right roof recovered from registered 184s frame; unrecorded upper sky estimated",
+    "Left walk plane and upper rock bounds are provisional; following thorn strip not integrated"
+  ]
+}

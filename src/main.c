@@ -7,6 +7,8 @@ static const char save_type[] __attribute__((used))="SRAM_V113";
 #include "scenery.h"
 #include "story.h"
 #include "view_camera.h"
+#include "loading.h"
+extern const unsigned char loading_screen[],crawl_cycle[];
 #include "../assets/assets.h"
 #include "../assets/room.h"
 #include "../assets/ui.h"
@@ -22,18 +24,23 @@ typedef unsigned short u16;
 #define REG16(a) (*(volatile u16 *)(a))
 #define REG32(a) (*(volatile unsigned *)(a))
 #define RGB(r,g,b) ((r)|((g)<<5)|((b)<<10))
-enum { TITLE,MENU,INTRO,STORY,OPTIONS,CREDITS,ARRIVAL,LAB,PAUSE,TUTORIAL,GAME_OVER };
+enum { TITLE,MENU,INTRO,STORY,OPTIONS,CREDITS,ARRIVAL,LAB,PAUSE,TUTORIAL,GAME_OVER,LOADING };
 static volatile u16 *page;
 static const u16 *pending_palette;
 static unsigned front,state,selection,story_index,option_index,dirty;
 static unsigned sound_enabled,intro_enabled,paused,previous_keys;
 static unsigned clock_ticks,clock_last,audio_end,audio_active,intro_frame;
-static unsigned arrival_index;
+static unsigned arrival_index,loading_age;
 static u16 object_shadow[128*4];
+static unsigned char intro_cache[ASSET_FRAME_BYTES] __attribute__((aligned(4)));
+static unsigned char intro_delta[ASSET_FRAME_BYTES] __attribute__((aligned(4)));
+static volatile unsigned intro_decoded;
 static Game game;
 static ViewCamera view_camera;
 static int sprite_dx,sprite_dy;
-extern const unsigned char scroll_world[],scroll_world_sky[],scroll_cloud[];
+extern const unsigned char lever_lowered[];
+extern const unsigned char scroll_world[],scroll_world_open[],scroll_world_sky[],scroll_cloud[];
+extern const unsigned char crawl_passage_sky_patch[];
 static const u16 lab_palette[256]={
  RGB(3,5,10),RGB(8,12,18),RGB(10,18,19),RGB(25,21,12),RGB(23,10,15),RGB(30,29,24),
  [240]=0,[241]=RGB(31,31,31),[242]=RGB(31,26,10),[243]=RGB(10,27,30),[244]=RGB(1,3,6),[245]=RGB(27,12,17)
@@ -99,7 +106,7 @@ static void wait_frame(void){
  while(REG16(0x04000006)>=160){}
  while(REG16(0x04000006)<160){}
 }
-static void ui_init(void){
+static void __attribute__((section(".romtext"),noinline)) ui_init(void){
  REG32(0x040000D4)=(unsigned)ui_palette;REG32(0x040000D8)=0x05000200;
  REG32(0x040000DC)=0x84000000|128;
  REG32(0x040000D4)=(unsigned)ui_tiles;REG32(0x040000D8)=0x06014000;
@@ -144,7 +151,64 @@ static void audio_play(const unsigned char *p,unsigned length){
  REG32(0x040000C4)=0xB6400004;
  REG16(0x04000100)=0xFC00;REG16(0x04000102)=0x80;audio_active=1;
 }
+static unsigned intro_offset(unsigned frame){
+ const unsigned char *p=intro_video+frame*4;
+ return p[0]|((unsigned)p[1]<<8)|((unsigned)p[2]<<16)|((unsigned)p[3]<<24);
+}
+static int intro_decompress(const unsigned char *source,unsigned length,unsigned char *target){
+ if(length<4||source[0]!=0x10)return 0;
+ unsigned expected=source[1]|((unsigned)source[2]<<8)|((unsigned)source[3]<<16);
+ if(expected!=ASSET_FRAME_BYTES)return 0;
+ unsigned input=4,output=0;
+ while(output<expected){
+  if(input>=length)return 0;
+  unsigned flags=source[input++];
+  for(int bit=7;bit>=0&&output<expected;bit--){
+   if(flags&(1u<<bit)){
+    if(input+2>length)return 0;
+    unsigned a=source[input++],b=source[input++];
+    unsigned count=(a>>4)+3;
+    unsigned distance=(((a&15)<<8)|b)+1;
+    if(distance>output||output+count>expected)return 0;
+    for(unsigned n=0;n<count;n++){target[output]=target[output-distance];output++;}
+   }else{
+    if(input>=length)return 0;
+    target[output++]=source[input++];
+   }
+  }
+ }
+ return output==expected;
+}
+static int intro_decode_to(unsigned wanted){
+ if(wanted>=INTRO_COUNT)wanted=INTRO_COUNT-1;
+ if(intro_decoded==~0u||wanted<intro_decoded){
+  unsigned first=intro_offset(0),last=intro_offset(1);
+  if(last<=first)return 0;
+  const unsigned char *block=intro_video+INTRO_INDEX_BYTES+first;
+  if(!intro_decompress(block,last-first,intro_delta))return 0;
+  for(unsigned i=0;i<ASSET_FRAME_BYTES;i++)intro_cache[i]=intro_delta[i];
+  intro_decoded=0;
+ }
+ while(intro_decoded<wanted){
+  unsigned next=intro_decoded+1;
+  unsigned first=intro_offset(next),last=intro_offset(next+1);
+  if(last<=first)return 0;
+  const unsigned char *block=intro_video+INTRO_INDEX_BYTES+first;
+  if(!intro_decompress(block,last-first,intro_delta))return 0;
+  for(unsigned i=0;i<ASSET_FRAME_BYTES;i++)intro_cache[i]^=intro_delta[i];
+  intro_decoded=next;
+ }
+ image(intro_cache);
+ return 1;
+}
 static void enter(unsigned next){state=next;dirty=1;}
+static void start_intro(void){
+ paused=0;intro_frame=0;intro_decoded=~0u;clock_start();
+ audio_play(audio_intro,AUDIO_INTRO_LEN);enter(INTRO);
+}
+static void start_loading(void){
+ audio_stop();paused=0;intro_frame=0;loading_age=0;enter(LOADING);
+}
 static void arrival(void){audio_stop();paused=0;arrival_index=0;game_reset(&game);view_camera_reset(&view_camera,&game);enter(ARRIVAL);}
 static void return_menu(void){audio_stop();paused=0;enter(MENU);}
 static void start_level(void){
@@ -238,13 +302,36 @@ static void draw_initial_background(void){
   }
  }
 }
+static void __attribute__((section(".romtext"),noinline)) draw_crawl_passage_sky_patch(int sx,int sy){
+ /* World-space crop of the logo-covered sky in viewport 17: nearest palette
+    colors avoid the magenta Bayer stipple while leaving terrain untouched. */
+ int left=-view_origin[16][0]+204-sx;
+ int top=380-view_origin[16][1]-sy;
+ int x0=left<0?0:left,x1=left+36;
+ if(x1>240)x1=240;
+ if(x0>=x1)return;
+ int source_x=x0-left;
+ for(int y=0;y<45;y++){
+  int screen_y=top+y;if((unsigned)screen_y>=160)continue;
+  int x=x0,offset=source_x,base=y*36;
+  if(x&1){pixel(x++,screen_y,crawl_passage_sky_patch[base+offset++]);}
+  volatile u16 *dst=page+screen_y*120+(x>>1);
+  while(x+1<x1){
+   *dst++=(u16)(crawl_passage_sky_patch[base+offset]|
+       ((unsigned)crawl_passage_sky_patch[base+offset+1]<<8));
+   x+=2;offset+=2;
+  }
+  if(x<x1)pixel(x,screen_y,crawl_passage_sky_patch[base+offset]);
+ }
+}
 static void draw_world(void){
  if(!game.area&&!view_camera.x&&!view_camera.y&&!game.camera_y){draw_initial_background();return;}
  int sx=-view_camera.x/FP,sy=380-view_camera.y/FP;unsigned shift=(unsigned)sx&3;
  pending_palette=(const u16*)room_background;
+ const unsigned char *world=game.progress.barrier_open?scroll_world_open:scroll_world;
  for(int y=0;y<160;y++){
   int row=sy+y;
-  const unsigned char *source=scroll_world+shift*810000+row*1500+sx-(int)shift;
+  const unsigned char *source=world+shift*810000+row*1500+sx-(int)shift;
   REG32(0x040000D4)=(unsigned)source;REG32(0x040000D8)=(unsigned)(page+y*120);
   REG32(0x040000DC)=0x84000000|60;
   unsigned offset=(unsigned)row*2;
@@ -256,11 +343,13 @@ static void draw_world(void){
    if(a<b)cloud_span(y,a-sx,b-sx,(int)(cloud_phase(game.ticks)+(unsigned)(sky_x+a-start))%(int)CLOUD_WIDTH,sky_y);
   }
  }
+ if(game.progress.barrier_open)draw_crawl_passage_sky_patch(sx,sy);
 }
 static void entity_origin(unsigned area){sprite_dx=view_camera.x/FP-view_origin[area][0];sprite_dy=view_camera.y/FP-view_origin[area][1];}
 static void draw_level(void){
  unsigned profile_start=REG16(0x0400010C);
  draw_world();
+ if(game.progress.lever_activated){entity_origin(13);sprite(64,104,40,44,lever_lowered,0);}
  (*(volatile unsigned*)0x0203F0C8)=(u16)(REG16(0x0400010C)-profile_start);
  for(unsigned i=0;i<GEM_COUNT;i++){
   const Gem *gem=&level_gems[i];
@@ -280,7 +369,9 @@ static void draw_level(void){
  unsigned air=game_air_frame(&game);
  const unsigned char *actor=room_sprites;
  int width=48,height=56,anchor=24;
- if(game.attack&&!game.climbing){
+ if(game.crawling){
+  width=64;height=36;anchor=32;actor=crawl_cycle+game_crawl_frame(&game)*64*36;
+ }else if(game.attack&&!game.climbing){
   width=80;height=64;anchor=39;actor=attack_cycle+game_attack_frame(&game)*80*64;
  }else if(air!=AIR_NONE){
   width=56;anchor=28;actor=jump_cycle+air*56*56;
@@ -288,7 +379,7 @@ static void draw_level(void){
  if(game.climbing){
   sprite(game.x/FP+PLAYER_W/2-24,game.ledge_y-44-game.camera_y,
          48,104,ledge_cycle+game_ledge_frame(&game)*48*104,0);
- }else if(!game.hurt_timer||(game.hurt_timer&4))sprite(aligned_sprite_x(game.x/FP+PLAYER_W/2,width,anchor,game.facing<0),game.y/FP+PLAYER_H-height-game.camera_y,
+ }else if(!game.hurt_timer||(game.hurt_timer&4))sprite(aligned_sprite_x(game.x/FP+PLAYER_W/2,width,anchor,game.facing<0),game.y/FP+PLAYER_H-height-game.camera_y+(game.crawling?CRAWL_FLOOR_BIAS:0),
         width,height,actor,game.facing<0);
  (*(volatile unsigned*)0x0203F0CC)=(u16)(REG16(0x0400010C)-profile_start);
  if(game.pickup_timer>0){
@@ -310,16 +401,22 @@ static void render(void){
  case TITLE:blit(FRAME_TITLE);break;
  case MENU:
   blit(FRAME_MENU);
-  ui_object(0,16,(44+(int)selection*24-12)*160/148,1,UI_CURSOR_TILE);break;
+  ui_object(0,16,44+selection*24,1,UI_CURSOR_TILE);break;
+ case INTRO:
+  if(!intro_decode_to(intro_frame))blit(FRAME_TITLE);
+  break;
  case STORY:
   dialog(story_index);footer("A NEXT B BACK START MENU");
   number(148,83,story_index+1,243);break;
+ case LOADING:
+  image(loading_screen);if(!loading_text_visible(loading_age))rect(0,0,240,160,0);break;
  case ARRIVAL:
   draw_arrival();break;
  case OPTIONS:
   clear();text(18,20,"OPTIONS",242);
   text(24,50,sound_enabled?"SOUND       ON":"SOUND       OFF",241);
-  text(24,72,"BACK",241);ui_object(0,3,46+option_index*22,1,UI_CURSOR_TILE);
+  text(24,72,intro_enabled?"INTRO       ON":"INTRO       OFF",241);
+  text(24,94,"BACK",241);ui_object(0,3,46+option_index*22,1,UI_CURSOR_TILE);
   footer("A CHANGE  B MENU");break;
  case CREDITS:
   clear();text(15,20,"RECONSTRUCTION CREDITS",242);
@@ -352,12 +449,12 @@ static void render(void){
  shown[11]=(unsigned)game.area;shown[12]=cloud_phase(game.ticks);
  shown[13]=(unsigned)(view_camera.x/FP-view_origin[game.area][0]);shown[14]=(unsigned)(view_camera.y/FP-view_origin[game.area][1]);
  shown[15]=(unsigned)view_camera.x;shown[16]=(unsigned)view_camera.y;
- shown[17]=game_ledge_frame(&game);shown[18]=(unsigned)game.ledge_y;shown[19]=game.lives;
+ shown[17]=game_ledge_frame(&game);shown[18]=(unsigned)game.ledge_y;shown[19]=game.lives;shown[20]=loading_age;shown[21]=(unsigned)game.crawling;shown[22]=game_crawl_frame(&game);shown[23]=intro_frame;
 }
 int main(void){
  REG16(0x04000204)=0x4317;REG16(0x04000000)=0x0404;
  REG16(0x04000088)=0x200;REG16(0x0400010E)=0x81;ui_init();
- settings_load(SETTINGS_SRAM,&sound_enabled,&intro_enabled);intro_enabled=0;dirty=1;game_reset(&game);view_camera_reset(&view_camera,&game);
+ settings_load(SETTINGS_SRAM,&sound_enabled,&intro_enabled);dirty=1;game_reset(&game);view_camera_reset(&view_camera,&game);
  clock_start();audio_play(audio_title,AUDIO_TITLE_LEN);
  for(;;){
   clock_update();
@@ -373,27 +470,44 @@ int main(void){
    if(pressed&4){audio_stop();story_index=0;enter(STORY);}
    else if(pressed&9){
     audio_stop();
-    if(selection==0)arrival();
+    if(selection==0){if(intro_enabled)start_intro();else start_loading();}
     if(selection==1){option_index=0;enter(OPTIONS);}
     if(selection==2)enter(CREDITS);
    }break;
+  case INTRO:
+   if(pressed&8){start_loading();break;}
+   if(pressed&1){
+    paused^=1;dirty=1;
+    if(paused)audio_stop();else{
+     unsigned offset=clock_ticks&~3u;
+     if(offset<AUDIO_INTRO_LEN)audio_play(audio_intro+offset,AUDIO_INTRO_LEN-offset);
+    }
+   }
+   if(clock_ticks>=INTRO_TICKS){start_loading();break;}
+   {unsigned next=(clock_ticks*INTRO_FPS)>>14;
+    if(next>=INTRO_COUNT)next=INTRO_COUNT-1;
+    if(next!=intro_frame){intro_frame=next;dirty=1;}}
+   break;
   case STORY:
    if(pressed&12){enter(MENU);break;}
    if(pressed&(2|32)){if(story_index)story_index--;else enter(MENU);dirty=1;}
    if(pressed&(1|16)){if(story_index+1<story_count)story_index++;else enter(MENU);dirty=1;}
    break;
+  case LOADING:
+   if(++loading_age>=LOADING_TOTAL_FRAMES)arrival();else dirty=1;break;
   case ARRIVAL:
    if(pressed&2)return_menu();
    else if(pressed&9){if(arrival_index==0){arrival_index=1;dirty=1;}else start_level();}
    break;
   case OPTIONS:
    if(pressed&2){enter(MENU);break;}
-   if(pressed&64){option_index=(option_index+1)%2;dirty=1;}
-   if(pressed&128){option_index=(option_index+1)%2;dirty=1;}
+   if(pressed&64){option_index=(option_index+2)%3;dirty=1;}
+   if(pressed&128){option_index=(option_index+1)%3;dirty=1;}
    if(pressed&(1|16|32)){
     if(option_index==0){sound_enabled^=1;audio_stop();}
-    if(option_index==0)settings_store(SETTINGS_SRAM,sound_enabled,0);
-    if(option_index==1)enter(MENU);
+    if(option_index==1)intro_enabled^=1;
+    if(option_index<2)settings_store(SETTINGS_SRAM,sound_enabled,intro_enabled);
+    if(option_index==2)enter(MENU);
     dirty=1;
    }break;
   case CREDITS:if(pressed&11)enter(MENU);break;
@@ -449,6 +563,8 @@ int main(void){
   debug[35]=game_air_frame(&game);debug[36]=(unsigned)game.vy;debug[37]=(unsigned)game.facing;
   debug[38]=(unsigned)game.enemy3_hp;debug[39]=(unsigned)game.enemy3_x;
   debug[40]=(unsigned)game.enemy4_hp;debug[41]=(unsigned)game.enemy4_x;
+  debug[42]=game.progress.lever_activated;debug[43]=game.progress.barrier_open;debug[44]=(unsigned)game.crawling;debug[45]=game_crawl_frame(&game);debug[46]=(unsigned)game_body_top(&game);
   if(dirty)render();else wait_frame();
  }
 }
+
