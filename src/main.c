@@ -155,7 +155,7 @@ static unsigned intro_offset(unsigned frame){
  return p[0]|((unsigned)p[1]<<8)|((unsigned)p[2]<<16)|((unsigned)p[3]<<24);
 }
 static unsigned intro_error,intro_error_length,intro_error_expected,intro_error_offset;
-static int intro_decompress(const unsigned char *source,unsigned length,unsigned char *target){
+static int __attribute__((section(".rodata.intro"))) intro_decompress(const unsigned char *source,unsigned length,unsigned char *target){
  intro_error=0;intro_error_length=length;intro_error_expected=0;intro_error_offset=0;
  if(length<4){intro_error=1;return 0;}
  if(source[0]!=0x10){intro_error=2;intro_error_expected=source[0];return 0;}
@@ -184,7 +184,7 @@ static int intro_decompress(const unsigned char *source,unsigned length,unsigned
  if(output!=expected){intro_error=9;intro_error_offset=output;return 0;}
  return 1;
 }
-static int intro_decode_to(unsigned wanted){
+static int __attribute__((section(".rodata.intro"))) intro_decode_to(unsigned wanted){
  if(wanted>=INTRO_COUNT)wanted=INTRO_COUNT-1;
  if(intro_decoded==~0u||wanted<intro_decoded){
   unsigned first=intro_offset(0),last=intro_offset(1);
