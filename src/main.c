@@ -34,7 +34,7 @@ static unsigned arrival_index,loading_age;
 static u16 object_shadow[128*4];
 static unsigned char intro_cache[ASSET_FRAME_BYTES] __attribute__((aligned(4)));
 static unsigned char intro_delta[ASSET_FRAME_BYTES] __attribute__((aligned(4)));
-static unsigned intro_decoded=~0u;
+static volatile unsigned intro_decoded=~0u;
 static Game game;
 static ViewCamera view_camera;
 static int sprite_dx,sprite_dy;
@@ -155,7 +155,7 @@ static unsigned intro_offset(unsigned frame){
  return p[0]|((unsigned)p[1]<<8)|((unsigned)p[2]<<16)|((unsigned)p[3]<<24);
 }
 static unsigned intro_error,intro_error_length,intro_error_expected,intro_error_offset;
-static int __attribute__((section(".rodata.intro"))) intro_decompress(const unsigned char *source,unsigned length,unsigned char *target){
+static int __attribute__((section(".rodata.intro"),noinline)) intro_decompress(const unsigned char *source,unsigned length,unsigned char *target){
  intro_error=0;intro_error_length=length;intro_error_expected=0;intro_error_offset=0;
  if(length<4){intro_error=1;return 0;}
  if(source[0]!=0x10){intro_error=2;intro_error_expected=source[0];return 0;}
@@ -184,7 +184,7 @@ static int __attribute__((section(".rodata.intro"))) intro_decompress(const unsi
  if(output!=expected){intro_error=9;intro_error_offset=output;return 0;}
  return 1;
 }
-static int __attribute__((section(".rodata.intro"))) intro_decode_to(unsigned wanted){
+static int intro_decode_to(unsigned wanted){
  if(wanted>=INTRO_COUNT)wanted=INTRO_COUNT-1;
  if(intro_decoded==~0u||wanted<intro_decoded){
   unsigned first=intro_offset(0),last=intro_offset(1);
