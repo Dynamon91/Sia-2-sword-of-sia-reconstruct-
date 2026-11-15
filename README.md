@@ -1,6 +1,6 @@
 # Lady Sia 2: Sword of Sia — GBA Reconstruction
 
-**🚧 WORK IN PROGRESS — Ricostruzione ancora in sviluppo.**
+Ricostruzione nativa per Game Boy Advance basata sui video di riferimento del gioco non pubblicato, registrati da Papacube. **Progetto in sviluppo.**
 
 <!-- PROJECT_PROGRESS -->
 ![Avanzamento complessivo stimato: 16%](docs/progress.svg)
@@ -8,78 +8,55 @@
 **Progetto completo: circa 16%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
 <!-- /PROJECT_PROGRESS -->
 
-![Screenshot della ROM attuale: ritorno alla leva, acquisito da mGBA](previews/readme_frontend.png)
+## Base del progetto: menu e intro verificati
 
-Cattura reale della ROM da mGBA. PLAY avvia l’intro ricostruita: 588 fotogrammi a 6 fps, con A per pausa/ripresa e START per saltare. La barra di registrazione e l’avatar sono mascherati; i pixel coperti sono stime dichiarate.
+**Il menu principale e l’intro ripulita costituiscono la base verificata da cui proseguire la ricostruzione.** Il ramo `main` raccoglie questa base insieme al percorso parziale del Mondo 1.
 
-An ongoing reconstruction of Lady Sia 2: Sword of Sia for Game Boy Advance, based on the gameplay video references recorded by Papacube.
+- **Menu:** PLAY, OPTIONS e CREDITS, con cursore alle coordinate native misurate nel riferimento: x=16, y=44/68/92. Navigazione, ritorno circolare e priorità di B durante l’annullamento sono verificati nella ROM.
+- **Intro:** 588 fotogrammi a 240×160 e 6 fps, per 98 secondi, con audio. PLAY avvia il filmato; A mette in pausa/riprende; START passa al Please wait originale. Il termine naturale porta allo stesso caricamento.
+- **Preferenze:** SOUND e INTRO si salvano in SRAM e vengono ricaricate dopo la chiusura e riapertura dell’emulatore.
 
-The current build includes a partial reconstruction of World 1 with controllable gameplay, collisions, pickups, damage, falling and game over. Levels, sprite and scenery animations, and the original interface are still being reconstructed and refined. This project is incomplete and does not represent the finished original game.
+![Menu principale: cattura reale della ROM verificata in mGBA](previews/menu_v06.png)
 
-Latest verified change: the route now has seventeen partial viewports. On the lower landing after the lever, hold DOWN+LEFT to crawl under the rock and reach the next recorded view. Releasing DOWN beneath the ceiling keeps Sia low; at a clear end she can stand safely. Use DOWN+RIGHT to return. Jump and attack are suppressed while low. [Controls, source measurements and limits](references/CRAWL_STATUS.md).
+![Intro ripulita: testo e scena notturna acquisiti dalla ROM in mGBA](previews/intro_cleanup_comparison.png)
 
-![Native ROM: crawl beneath the lever island](previews/crawl_under_roof.png)
+La barra e l’avatar della registrazione sono rimossi. I pixel osservati mantengono posizione e palette; le piccole zone coperte sono ricostruite dai bordi visibili e rimangono stime dichiarate. Le schermate OPTIONS, pausa e crediti sono ancora interfacce provvisorie.
 
-Two masked prone poses come from the original video. A provisional camera guide uses the recorded lower-strip positions, and a precomputed post-lever background removes old thorn silhouettes. The valid drop and missed-drop safety checks remain in place. PLAY now runs the restored 588-frame, 6 fps intro before the original Please wait. A pauses/resumes and START skips. The recording bar and avatar are masked, with covered pixels estimated rather than claimed as recovered original art. Thorn motion/damage, further routes and complete levels remain unfinished; geometry and camera timing are provisional.
+La priorità è confrontare la grafica con i riferimenti e con catture reali della ROM, correggendo artefatti e posizioni errate senza alterare i pixel osservati. [Menu: misure e controlli](references/MENU_CURSOR_ALIGNMENT_STATUS.md) · [Intro: sorgenti, pulizia e limiti](references/INTRO_RESTORATION_STATUS.md).
 
-Earlier gameplay previews below illustrate the preceding route checkpoints; CI exports fresh captures for each build.
+## Stato del percorso giocabile
 
-![Native ROM: lever area, fourth guard, return and revisit](previews/lever_route_gameplay.gif)
+Sono collegate **17 inquadrature parziali del primo livello del Mondo 1**, con movimento controllabile, salti, prese ai bordi, collisioni provvisorie, cinque gemme, quattro guardie prototipo, danni, cadute, vite e Game Over.
 
-![Native ROM: next island gap, high ledge and return](previews/island_gap_gameplay.gif)
+La leva si attiva con A a terra nelle vicinanze e conserva lo stato durante il respawn. Dopo la discesa sul piano inferiore, Giù+sinistra permette di strisciare nel passaggio basso; Giù+destra torna indietro. Sotto il soffitto Sia resta bassa e si rialza dove c’è spazio. La camera segue il personaggio nello spazio comune alle viste.
 
-![Native ROM: climb the new ramp, reach the island and return](previews/ramp_gameplay.gif)
+Il livello completo, i boss, gli altri livelli e mondi, il movimento/danno delle spine e diverse animazioni restano da ricostruire. Geometria, dettagli coperti e alcune tarature della camera sono provvisori. Le musiche usano ancora la registrazione mista disponibile.
 
-![Bridge combat, upper route, fifth gem and return recorded from the native ROM](previews/bridge_run_gameplay.gif)
+- [Leva e riscontro visivo](references/LEVER_VISUAL_STATUS.md)
+- [Passaggio basso, controlli e riferimenti](references/CRAWL_STATUS.md)
+- [Parete superiore e raccordi del fondale](references/UPPER_WALL_GRAPHICS_STATUS.md)
+- [Camera e continuità delle viste](references/CONTINUOUS_CAMERA_STATUS.md)
+- [Persistenza e recupero delle preferenze](references/SAVE_RELOAD_STATUS.md)
 
-The preceding sixth-view slope and gap remain playable. [Sixth-view milestone](references/CONTINUATION_PLAYABLE_STATUS.md).
+## Verifica e build
 
-B now takes priority over simultaneous confirm or direction buttons in the main menu and options, preventing accidental starts and SOUND changes while backing out. [Native checks](references/MENU_CANCEL_STATUS.md).
+La pipeline [Validate GBA reconstruction](https://github.com/Dynamon91/Sia-2-sword-of-sia-reconstruct-/actions/workflows/validate.yml) esegue controlli delle sorgenti e degli asset, test con sanitizzatori, compilazione ARM7TDMI, regressione mGBA e riapertura del file SRAM. Il pacchetto `Lady-Sia2-GBA-build` viene pubblicato negli artifact solo dopo il superamento dei controlli.
 
-Holding A/B while resetting the run with R no longer triggers an unintended jump or attack. Release and press again to act. [Fix and native ROM checks](references/RESET_INPUT_STATUS.md).
+La base di codice verificata nel checkpoint [99fe7d3](https://github.com/Dynamon91/Sia-2-sword-of-sia-reconstruct-/commit/99fe7d31fe1732919e91b709178c59e522a4f625) controlla **tutti i 588 fotogrammi presentati dell’intro**, le tre selezioni del menu e il percorso giocabile. [Esecuzione CI superata](https://github.com/Dynamon91/Sia-2-sword-of-sia-reconstruct-/actions/runs/43725681183).
 
-SOUND and INTRO persistence are checked through a real 32 KiB SRAM file. Fresh mGBA cores reload both settings, reject a corrupt checksum, and migrate earlier v1 records with the restored intro enabled while preserving SOUND. [Validation and recovery notes](references/SAVE_RELOAD_STATUS.md).
+Il pacchetto comprende la ROM, 115 screenshot reali, animazioni del gameplay, `TEST_REPORT.txt`, `BUILD_INFO.json` e checksum. I dati della build corrente si trovano nel suo artifact. **Hardware GBA reale non ancora verificato.**
 
-The upper clouds also drift behind the first two viewports, using the speed and dialogue stops measured in the video. All 320 scroll positions are checked in mGBA. The full original cloud period is not yet known; the texture loop and video-covered sky remain estimates. [Details and limits](references/SCENERY_STATUS.md).
+## Controlli di base
 
-![Animated upper sky recorded from the native ROM](previews/scenery_gameplay.gif)
+| Contesto | Comando | Azione |
+| --- | --- | --- |
+| Menu | Su / Giù | Seleziona PLAY, OPTIONS o CREDITS |
+| Menu | A / START | Conferma |
+| Menu e opzioni | B | Torna indietro |
+| Intro | A | Pausa / ripresa |
+| Intro | START | Passa al caricamento |
+| Gioco | Frecce, A, B | Movimento, salto e attacco |
+| Gioco | START / SELECT | Pausa / menu |
+| Gioco | R | Ripristina la partita di test |
 
-Three observed jump poses follow rising, the apex and falling. The complete sword and foot alignment are preserved in both directions. Native mGBA checks compare the sprite and transparent background pixels, and cover landing, pause and airborne attacks. [Details and limits](references/JUMP_STATUS.md).
-
-![Two jumps in both directions recorded continuously in mGBA](previews/jump_gameplay.gif)
-
-Jump to catch the first-room rock ledges, then press Up/A to pull up or Down to let go. Four video-derived poses are integrated and tested. [Details and limits](references/LEDGE_STATUS.md).
-
-![Ledge catch and pull-up recorded in mGBA](previews/ledge_gameplay.gif)
-
-### Leva: riscontro visivo recuperato
-
-A a terra vicino alla leva visibile cambia tra le pose alzata e abbassata, come indicato dal dialogo originale nel video a 178,33 s; B resta l'attacco con la spada. L'interazione non fa partire anche un salto. La posa
-abbassata deriva dal video originale a 182 s; la rotazione intermedia e
-la barriera mobile restano incomplete. [Provenienza e verifiche](references/LEVER_VISUAL_STATUS.md).
-
-![Posa abbassata nella ROM](previews/lever_lowered.png)
-
-### Preparazione del tratto dopo la leva
-
-[Audit dei raccordi video](references/POST_LEVER_ROUTE_AUDIT.md): quattro
-registrazioni concordi e un raccordo respinto. Il checkpoint di audit non aggiungeva aree. Ora la prima vista del bordo è
-collegata al percorso: vedere [stato giocabile](references/POST_LEVER_EDGE_STATUS.md).
-
-### Primo bordo dopo la leva giocabile
-
-Dalla seconda vista della leva, salta a destra vicino al bordo per raggiungere
-la quindicesima inquadratura parziale. Fermati per atterrare e vai a sinistra
-per tornare. Il vuoto oltre il bordo causa una caduta; il nuovo respawn conserva
-leva, gemme e nemici sconfitti. Soffitto e piano di cammino sono provvisori.
-La striscia con le spine non è ancora integrata.
-
-![Nuovo bordo nella ROM](previews/post_lever_entry.png)
-
-### Seguito direzionale della telecamera
-
-La camera lascia spazio davanti a Sia durante il movimento e mantiene la
-posizione orizzontale quando si ferma. I portali delle collisioni non impongono
-stacchi visivi. Taratura iniziale e limiti: [stato della camera](references/CAMERA_FOLLOW_STATUS.md).
-I punti originali di finto loading devono ancora essere annotati dal video.
-
+Le capacità e i comandi provvisori specifici delle nuove sezioni sono descritti nei rispettivi documenti di stato.
