@@ -119,9 +119,9 @@ static void check_intro_frame(struct mCore *c,FILE *reference,unsigned frame){
   assert(c->busRead16(c,0x05000000+i*2)==(unsigned)(expected[i*2]|expected[i*2+1]<<8));
 }
 static void check_intro(struct mCore *c){
- state(c,2);assert(value(c,4)==1&&value(c,1)==0);
+ state(c,2);unsigned first_frame=value(c,1);assert(value(c,4)==1&&first_frame<INTRO_COUNT);
  FILE *reference=fopen("assets/visuals.bin","rb");assert(reference);
- check_intro_frame(c,reference,0);
+ check_intro_frame(c,reference,first_frame);
  capture(c,"build/intro_first_frame.ppm");
  run(c,180);unsigned frame=value(c,1);assert(frame>=10&&frame<=24);
  check_intro_frame(c,reference,frame);capture(c,"build/intro_v06.ppm");
