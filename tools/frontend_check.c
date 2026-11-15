@@ -156,7 +156,7 @@ static void check_intro(struct mCore *c){
  state(c,2);
  for(unsigned wait=0;wait<120&&value(c,0)==2&&(shown(c,0)!=2||shown(c,24)>=INTRO_COUNT);wait++)run(c,1);
  if(shown(c,0)!=2||shown(c,24)>=INTRO_COUNT)
-  fprintf(stderr,"Intro presentation wait failed: live_state=%u shown_state=%u current_frame=%u shown_frame=%u decoded=%u\\n",value(c,0),shown(c,0),value(c,1),shown(c,23),shown(c,24));
+  fprintf(stderr,"Intro presentation wait failed: live=%u shown=%u current=%u shown_frame=%u decoded=%u error=%u block_len=%u expected=%u offset=%u magic=%u starts=%u ends=%u\\n",value(c,0),shown(c,0),value(c,1),shown(c,23),shown(c,24),shown(c,25),shown(c,26),shown(c,27),shown(c,28),shown(c,29),shown(c,30),shown(c,31));
  assert(shown(c,0)==2&&shown(c,24)<INTRO_COUNT);
  unsigned first_frame=shown(c,23);
  assert(value(c,4)==1&&first_frame<INTRO_COUNT&&shown(c,24)==first_frame);
