@@ -754,13 +754,13 @@ int main(int argc,char **argv){
  assert(!value(c,40)&&value(c,26)==4&&value(c,10)==5&&value(c,31)==upper_lives);
  capture(c,"build/lever_guard_defeated.ppm");
  assert(!value(c,42)&&!value(c,43));
- move_to(c,32,80);c->setKeys(c,0);run(c,2);tap(c,2);
+ move_to(c,32,80);c->setKeys(c,0);run(c,2);tap(c,1);
  assert(value(c,17)==13&&value(c,42)&&value(c,43));
  capture(c,"build/lever_activated.ppm");
  /* Preserve the existing return-route timing after checking the actual switch. */
  move_to(c,16,150);c->setKeys(c,0);run(c,2);
  check_lowered_lever(c);capture(c,"build/lever_lowered.ppm");
- puts("PASS lever visual integration: observed lowered handle matches ROM framebuffer after B and shared-world projection");
+ puts("PASS lever visual integration: observed lowered handle matches ROM framebuffer after A interaction and shared-world projection");
  void *edge_before=malloc(c->stateSize(c));assert(edge_before&&c->saveState(c,edge_before));
  const char *edge_previous_sequence=sequence_dir;unsigned edge_previous_frame=sequence_frame;
  sequence_dir="build/post_lever_sequence";sequence_frame=0;
@@ -996,3 +996,4 @@ int main(int argc,char **argv){
  puts("PASS continuous camera integration: bounded six-pixel camera steps across areas 1-14, world-aligned background checks, live controls and pause; no portal-driven camera reset");
  c->deinit(c);free(pixels);
 }
+

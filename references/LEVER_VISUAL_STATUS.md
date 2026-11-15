@@ -22,7 +22,15 @@ zero è trasparente. Base della leva e terreno esterni alla maschera restano
 quelli dell'atlante. La stima del cielo occultato resta una ricostruzione.
 L'ordine di disegno conserva Sia davanti alla leva.
 
-L'attivazione con B cambia tra due pose osservate. Non viene dichiarato
+Il dialogo originale a 178,33 s indica di premere A quando si tocca la leva.
+Il codice precedente richiedeva B, in contrasto con il riferimento: la
+correzione usa il fronte di A a terra entro il raggio già implementato e
+sopprime il salto simultaneo. B conserva la funzione di attacco. La leva resta
+attiva dopo la morte secondo lo stato di gioco esistente. La prova C ora
+verifica entrambi i proiettori, il fronte d'ingresso e l'assenza del salto;
+il nuovo controllo mGBA verrà riportato separatamente dopo l'esecuzione.
+
+L'attivazione cambia tra due pose osservate. Non viene dichiarato
 recuperato il movimento intermedio o il suo tempo originale. La barriera di
 spine mobile e il percorso successivo restano da integrare; barrier_open è
 ancora solo stato logico. Il raggio di interazione e le collisioni restano
@@ -33,10 +41,12 @@ provvisori. Reset e morte seguono lo stato della partita già verificato.
 - Convertitore riproducibile con --check; registrazioni, palette e dimensioni
   controllate. La copia del video coincide con l'hash originale.
 - ROM compilata con GCC ARM 13.2.1. Suite mGBA 0.10.2 completa superata:
-  il percorso a pulsanti attiva B vicino alla leva, allontana Sia e confronta
+  il percorso a pulsanti del checkpoint precedente attiva B vicino alla leva,
+  allontana Sia e confronta
   ogni pixel opaco visibile della patch con il framebuffer nativo.
 - 5.176 aggiornamenti presentati su 5.176 fotogrammi attivi delle aree 1–13
   nella sequenza provata. Controlli, combattimento, ritorni e reset conservati.
 - Le otto animazioni sono riesportate dai framebuffer senza modificarne i pixel.
   Gli screenshot mostrano la ROM compilata. Risultati locali; CI del nuovo
   commit e hardware non vengono dichiarati superati in questa nota.
+

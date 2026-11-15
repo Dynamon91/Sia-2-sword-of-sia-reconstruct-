@@ -222,12 +222,15 @@ static void guard_step(Game *g){
 }
 /* The same observed switch is (29,63) in view 12 and (73,149) in view 13.
    Interaction radius is provisional; the captured switch pixels are unchanged. */
-static void lever_step(Game *g,unsigned pressed){
- if((g->area!=12&&g->area!=13)||!g->grounded||!(pressed&ATTACK))return;
+static int lever_step(Game *g,unsigned pressed){
+ if((g->area!=12&&g->area!=13)||!g->grounded||!(pressed&JUMP))return 0;
  int cx=g->x+PLAYER_W*FP/2,feet=g->y+PLAYER_H*FP;
  if(g->area==12){cx+=44*FP;feet+=86*FP;}
- if(cx>=49*FP&&cx<=97*FP&&feet>=141*FP&&feet<=157*FP)
+ if(cx>=49*FP&&cx<=97*FP&&feet>=141*FP&&feet<=157*FP){
   level_set_lever_state(&g->progress,1);
+  return 1;
+ }
+ return 0;
 }
 void game_step(Game *g,unsigned input){
   if(input&RESET){
@@ -264,7 +267,7 @@ void game_step(Game *g,unsigned input){
   if(g->crawling)g->attack=0;
   if(!g->crawling&&(pressed&ATTACK)&&!g->attack){g->attack=12;g->swing_id++;}
   else if(g->attack)--g->attack;
-  lever_step(g,pressed);
+  int interacted=lever_step(g,pressed);
   int old_floor=(g->area>=5?game_extension_floor(g->area,g->x/FP):g->area==3?guard_floor(g->x/FP+PLAYER_W/2):g->area?4096:game_floor(g->x/FP+PLAYER_W/2))*FP;
   int was_floor=g->grounded&&g->y+PLAYER_H*FP==old_floor;
   int speed=g->crawling?CRAWL_SPEED:320;
@@ -290,7 +293,7 @@ void game_step(Game *g,unsigned input){
   int moved_x=g->x-old_x;
   if(!moved_x)g->vx=0;
   int center=g->x/FP+PLAYER_W/2;
-  if(!g->crawling&&(pressed&JUMP)&&g->grounded){g->vy=(g->area>=7&&(input&UP))?-1280:-960;g->grounded=0;}
+  if(!g->crawling&&!interacted&&(pressed&JUMP)&&g->grounded){g->vy=(g->area>=7&&(input&UP))?-1280:-960;g->grounded=0;}
   int old_bottom=g->y+PLAYER_H*FP;
   g->vy+=32;if(g->vy>6*FP)g->vy=6*FP;
   int next=g->y+g->vy,landing=0x7fffffff;
@@ -399,3 +402,4 @@ void game_step(Game *g,unsigned input){
   else if(g->y>210*FP){g->falls++;lose_life(g);return;}
   guard_step(g);
 }
+

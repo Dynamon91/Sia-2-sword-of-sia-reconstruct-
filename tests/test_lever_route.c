@@ -3,18 +3,19 @@
 #include <stdio.h>
 static void at(Game *g,int area,int x,int y){game_reset(g);g->area=area;g->progress.area=(unsigned)area;g->x=x*FP;g->y=y*FP;}
 static void test_lever_input_edges(void){
- Game g;at(&g,13,73,109);g.grounded=1;g.previous=ATTACK;
- game_step(&g,ATTACK);assert(!g.progress.lever_activated);
+ Game g;at(&g,13,73,109);g.grounded=1;g.previous=JUMP;
+ game_step(&g,JUMP);assert(!g.progress.lever_activated);
  game_step(&g,0);game_step(&g,UP);assert(!g.progress.lever_activated);
- game_step(&g,0);game_step(&g,JUMP);assert(!g.progress.lever_activated);
- at(&g,13,130,109);g.grounded=1;game_step(&g,ATTACK);assert(!g.progress.lever_activated);
- at(&g,13,73,70);game_step(&g,ATTACK);assert(!g.progress.lever_activated);
+ game_step(&g,0);game_step(&g,ATTACK);assert(!g.progress.lever_activated&&g.attack==12);
+ at(&g,13,130,109);g.grounded=1;game_step(&g,JUMP);assert(!g.progress.lever_activated);
+ at(&g,13,73,70);game_step(&g,JUMP);assert(!g.progress.lever_activated);
  /* The former invisible entry trigger must no longer activate anything. */
- at(&g,12,142,23);g.grounded=1;game_step(&g,ATTACK);assert(!g.progress.lever_activated);
- at(&g,13,73,109);g.grounded=1;game_step(&g,ATTACK);assert(g.progress.lever_activated);
- game_step(&g,ATTACK);assert(g.progress.lever_activated);
+ at(&g,12,142,23);g.grounded=1;game_step(&g,JUMP);assert(!g.progress.lever_activated);
+ at(&g,13,73,109);g.grounded=1;game_step(&g,JUMP);assert(g.progress.lever_activated);
+ assert(g.grounded&&!g.vy); /* Interacting with A must not also jump. */
+ game_step(&g,JUMP);assert(g.progress.lever_activated&&g.grounded);
  /* Both captured projections identify the same switch in shared coordinates. */
- at(&g,12,29,23);g.grounded=1;game_step(&g,ATTACK);assert(g.progress.lever_activated);
+ at(&g,12,29,23);g.grounded=1;game_step(&g,JUMP);assert(g.progress.lever_activated&&g.grounded);
 }
 static void test_lever_barrier(void){
  Game g;at(&g,12,142,23);
@@ -25,7 +26,7 @@ static void test_lever_barrier(void){
  /* Neutralize only the guard in this interaction fixture; combat is checked below. */
  g.enemy4_hp=0;
  while(g.x>80*FP)game_step(&g,LEFT);
- game_step(&g,0);game_step(&g,ATTACK);
+ game_step(&g,0);game_step(&g,JUMP);
  assert(g.progress.lever_activated&&g.progress.barrier_open);
  for(int i=0;i<100&&g.area!=12;i++)game_step(&g,RIGHT);
  assert(g.area==12&&g.progress.lever_activated&&g.progress.barrier_open);
@@ -71,3 +72,4 @@ int main(void){
  game_step(&g,RESET);assert(g.area==0&&g.enemy4_hp==2&&g.progress.defeated==0);
  puts("PASS lever route and barrier: reference-aligned switch, accessible approach, logical gate state, revisits, death persistence, reset, fourth guard and gem persistence");
 }
+

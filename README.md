@@ -54,7 +54,7 @@ Jump to catch the first-room rock ledges, then press Up/A to pull up or Down to 
 
 ### Leva: riscontro visivo recuperato
 
-B vicino alla leva visibile cambia tra le pose alzata e abbassata. La posa
+A a terra vicino alla leva visibile cambia tra le pose alzata e abbassata, come indicato dal dialogo originale nel video a 178,33 s; B resta l'attacco con la spada. L'interazione non fa partire anche un salto. La posa
 abbassata deriva dal video originale a 182 s; la rotazione intermedia e
 la barriera mobile restano incomplete. [Provenienza e verifiche](references/LEVER_VISUAL_STATUS.md).
 
@@ -82,3 +82,4 @@ La camera lascia spazio davanti a Sia durante il movimento e mantiene la
 posizione orizzontale quando si ferma. I portali delle collisioni non impongono
 stacchi visivi. Taratura iniziale e limiti: [stato della camera](references/CAMERA_FOLLOW_STATUS.md).
 I punti originali di finto loading devono ancora essere annotati dal video.
+
