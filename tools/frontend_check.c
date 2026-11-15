@@ -153,13 +153,15 @@ static void check_intro_frame(struct mCore *c,FILE *reference,unsigned frame){
  assert(palette_mismatches==0);
 }
 static void check_intro(struct mCore *c){
- state(c,2);run(c,2);
+ state(c,2);
+ for(unsigned wait=0;wait<8&&(shown(c,0)!=2||shown(c,24)>=INTRO_COUNT);wait++)run(c,1);
+ assert(shown(c,0)==2&&shown(c,24)<INTRO_COUNT);
  unsigned first_frame=shown(c,23);
  assert(value(c,4)==1&&first_frame<INTRO_COUNT&&shown(c,24)==first_frame);
  FILE *reference=fopen("assets/visuals.bin","rb");assert(reference);
  check_intro_frame(c,reference,first_frame);
  capture(c,"build/intro_first_frame.ppm");
- run(c,180);unsigned frame=shown(c,23);assert(frame>=10&&frame<=24&&shown(c,24)==frame);
+ run(c,180);unsigned frame=shown(c,23);assert(shown(c,0)==2&&frame>=10&&frame<=24&&shown(c,24)==frame);
  check_intro_frame(c,reference,frame);capture(c,"build/intro_v06.ppm");
  assert(c->busRead16(c,0x04000102)&0x80);
  tap(c,1);assert(value(c,5)==1);unsigned paused_frame=shown(c,23);
