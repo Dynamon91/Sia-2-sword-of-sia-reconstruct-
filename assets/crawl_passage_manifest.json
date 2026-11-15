@@ -49,13 +49,13 @@
   "sky_patch": {
     "rect": [
       204,
-      13,
+      0,
       36,
-      32
+      45
     ],
     "world_origin": [
       994,
-      189
+      176
     ],
     "method": "nearest sky-compatible shared-palette colors; no ordered dither"
   },

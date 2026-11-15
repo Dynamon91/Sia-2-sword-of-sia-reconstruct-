@@ -306,12 +306,12 @@ static void __attribute__((section(".romtext"),noinline)) draw_crawl_passage_sky
  /* World-space crop of the logo-covered sky in viewport 17: nearest palette
     colors avoid the magenta Bayer stipple while leaving terrain untouched. */
  int left=-view_origin[16][0]+204-sx;
- int top=380-view_origin[16][1]+13-sy;
+ int top=380-view_origin[16][1]-sy;
  int x0=left<0?0:left,x1=left+36;
  if(x1>240)x1=240;
  if(x0>=x1)return;
  int source_x=x0-left;
- for(int y=0;y<32;y++){
+ for(int y=0;y<45;y++){
   int screen_y=top+y;if((unsigned)screen_y>=160)continue;
   int x=x0,offset=source_x,base=y*36;
   if(x&1){pixel(x++,screen_y,crawl_passage_sky_patch[base+offset++]);}
