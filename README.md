@@ -8,9 +8,9 @@
 **Progetto completo: circa 16%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
 <!-- /PROJECT_PROGRESS -->
 
-![Anteprima degli asset attualmente integrati](previews/readme_frontend.png)
+![Screenshot della ROM attuale: ritorno alla leva, acquisito da mGBA](previews/readme_frontend.png)
 
-Anteprima degli asset di titolo, menu e scene attualmente integrati, ripuliti dagli overlay della registrazione. Le zone originariamente coperte sono ricostruite e approssimate.
+Cattura reale della ROM da mGBA, visualizzata senza aggiungere pixel o scene di riferimento. Il filmato INTRO e la relativa opzione restano rimossi; PLAY mostra il Please wait misurato e poi i dialoghi iniziali. Le parti coperte dei riferimenti restano stime.
 
 An ongoing reconstruction of Lady Sia 2: Sword of Sia for Game Boy Advance, based on the gameplay video references recorded by Papacube.
 
