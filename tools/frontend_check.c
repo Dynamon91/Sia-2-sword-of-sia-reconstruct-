@@ -125,7 +125,15 @@ static void check_intro_frame(struct mCore *c,FILE *reference,unsigned frame){
  }
  if(pixel_mismatches){
   fprintf(stderr,"Intro pixel mismatch count: frame=%u count=%u\\n",frame,pixel_mismatches);
-  fprintf(stderr,"Intro display telemetry: current=%u decoded=%u front=%u dispcnt=%u\\n",shown(c,23),shown(c,24),shown(c,10),c->busRead16(c,0x04000000));
+  fprintf(stderr,"Intro display telemetry: current=%u decoded=%u result=%u error=%u block_len=%u expected=%u offset=%u magic=%u starts=%u ends=%u front=%u dispcnt=%u\\n",shown(c,23),shown(c,24),shown(c,32),shown(c,25),shown(c,26),shown(c,27),shown(c,28),shown(c,29),shown(c,30),shown(c,31),shown(c,10),c->busRead16(c,0x04000000));
+  if(frame>2){
+   unsigned char first[ASSET_FRAME_BYTES];
+   assert(!fseek(reference,(long)INTRO_FIRST*ASSET_FRAME_BYTES,SEEK_SET));
+   assert(fread(first,1,sizeof(first),reference)==sizeof(first));
+   unsigned first_distance=0;
+   for(unsigned i=0;i<38400;i++)first_distance+=actual_image[i]!=first[512+i];
+   fprintf(stderr,"Intro frame-zero distance: requested=%u pixels=%u\\n",frame,first_distance);
+  }
   unsigned other_base=base==0x06000000?0x0600A000:0x06000000;
   for(unsigned candidate=frame>2?frame-2:0;candidate<INTRO_COUNT&&candidate<=frame+2;candidate++){
    unsigned char candidate_frame[ASSET_FRAME_BYTES];
