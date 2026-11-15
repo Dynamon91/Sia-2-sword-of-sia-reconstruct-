@@ -114,21 +114,27 @@ static void check_intro_frame(struct mCore *c,FILE *reference,unsigned frame){
  assert(!fseek(reference,offset,SEEK_SET));
  assert(fread(expected,1,sizeof(expected),reference)==sizeof(expected));
  unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
+ unsigned pixel_mismatches=0;
  for(unsigned i=0;i<38400;i++){
   unsigned actual=c->busRead8(c,base+i);
   if(actual!=expected[512+i]){
-   fprintf(stderr,"Intro pixel mismatch: frame=%u byte=%u expected=%u actual=%u\\n",frame,i,expected[512+i],actual);
-   assert(actual==expected[512+i]);
+   if(pixel_mismatches<12)fprintf(stderr,"Intro pixel mismatch: frame=%u byte=%u expected=%u actual=%u\\n",frame,i,expected[512+i],actual);
+   pixel_mismatches++;
   }
  }
+ if(pixel_mismatches)fprintf(stderr,"Intro pixel mismatch count: frame=%u count=%u\\n",frame,pixel_mismatches);
+ assert(pixel_mismatches==0);
+ unsigned palette_mismatches=0;
  for(unsigned i=0;i<256;i++){
   unsigned expected_color=expected[i*2]|expected[i*2+1]<<8;
   unsigned actual_color=c->busRead16(c,0x05000000+i*2);
   if(actual_color!=expected_color){
-   fprintf(stderr,"Intro palette mismatch: frame=%u color=%u expected=%u actual=%u\\n",frame,i,expected_color,actual_color);
-   assert(actual_color==expected_color);
+   if(palette_mismatches<12)fprintf(stderr,"Intro palette mismatch: frame=%u color=%u expected=%u actual=%u\\n",frame,i,expected_color,actual_color);
+   palette_mismatches++;
   }
  }
+ if(palette_mismatches)fprintf(stderr,"Intro palette mismatch count: frame=%u count=%u\\n",frame,palette_mismatches);
+ assert(palette_mismatches==0);
 }
 static void check_intro(struct mCore *c){
  state(c,2);unsigned first_frame=value(c,1);assert(value(c,4)==1&&first_frame<INTRO_COUNT);
