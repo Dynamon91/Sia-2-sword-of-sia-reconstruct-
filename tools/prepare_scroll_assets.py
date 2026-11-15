@@ -23,6 +23,32 @@ def main():
  for area,((ox,oy),image) in enumerate(zip(origins,pictures)):
   x,y=-ox,380-oy;target=atlas[y:y+160,x:x+240];ids=owner[y:y+160,x:x+240];empty=ids==255
   target[empty]=image[empty];ids[empty]=area
+ # A reconstructed recording header must not cover an unobscured pixel from
+ # another registered view. Preserve the original priority between real pixels.
+ header_replaced=0
+ for area in range(6,11):
+  (ox,oy),image=origins[area],pictures[area]
+  x,y=-ox,380-oy;ids=owner[y:y+160,x:x+240]
+  yy,xx=np.indices(image.shape);valid=yy>=14
+  valid[13:45,204:240]=False # recording avatar; estimated in each source
+  replace=np.zeros(image.shape,dtype=bool)
+  for previous in range(6,area):
+   previous_top=380-origins[previous][1]
+   replace|=(ids==previous)&(y+yy<previous_top+14)&valid
+  target=atlas[y:y+160,x:x+240]
+  target[replace]=image[replace];ids[replace]=area
+  header_replaced+=int(replace.sum())
+ # The upper wall continues beyond the captured rectangle. The former fixed
+ # sky fallback cut rectangular holes through it as the camera rose or moved
+ # right. Extend the nearest edge of this registered view only into unrecorded
+ # pixels; the hidden wall/sky remains an explicit approximation.
+ wall_area=8;wall_left,wall_top=-origins[wall_area][0],380-origins[wall_area][1]
+ wy,wx=np.indices(atlas.shape)
+ wall_extension=(owner==255)&(wx>=wall_left)&(wy<wall_top+160)
+ wall_y=np.clip(wy-wall_top,0,159);wall_x=np.clip(wx-wall_left,0,239)
+ recorded_before=atlas[owner!=255].copy()
+ atlas[wall_extension]=pictures[wall_area][wall_y[wall_extension],wall_x[wall_extension]]
+ assert np.array_equal(atlas[owner!=255],recorded_before)
  # Feather only sky at viewport borders; never blur platform or actor pixels.
  words=np.frombuffer(palette,dtype='<u2');colors=np.array([[(int(w)>>s&31)*255//31 for s in (0,5,10)] for w in words],dtype='uint8')
  rgb=colors[atlas].astype('float32');foreground=np.zeros((height,width),dtype=bool)
@@ -32,6 +58,8 @@ def main():
   terrain=binary_fill_holes(warm|(neutral&binary_dilation(warm,iterations=2)))
   terrain=binary_dilation(terrain,iterations=1)
   x,y=-ox,380-oy;foreground[y:y+160,x:x+240]|=terrain&(owner[y:y+160,x:x+240]==area)
+  if area==wall_area:
+   foreground[wall_extension]=terrain[wall_y[wall_extension],wall_x[wall_extension]]
  boundaries=np.zeros_like(foreground);boundaries[1:]|=owner[1:]!=owner[:-1];boundaries[:,1:]|=owner[:,1:]!=owner[:,:-1]
  editable=binary_dilation(boundaries,iterations=32)&~foreground&(owner>=2)
  weights=(~foreground).astype('float32');denominator=gaussian_filter(weights,12,mode='nearest')
@@ -95,11 +123,13 @@ def main():
   for y in range(80):
    row=cloud[y*320:(y+1)*320];cloud_banks.extend(row[shift:]+row[:shift])
  manifest={'order':NAMES,'origins':origins,'width':width,'height':height,'world_top':-380,'sources':sources,
+  'header_pixels_replaced_by_visible_source':header_replaced,
+  'upper_wall_edge_extension':{'area':wall_area,'pixels':int(wall_extension.sum()),'foreground_pixels':int((wall_extension&foreground).sum()),'observed_pixels_changed':0,'method':'Clamp the registered upper-view edge into unrecorded atlas corners; estimated detail'},
   'sky_repaired_pixels':int(np.count_nonzero(atlas!=before)),
   'open_view_priority':{'area':16,'rectangle':[int(left),int(top),240,160],'sky_repaired_pixels':int(np.count_nonzero(opened!=before_open)),'foreground_preserved':True},
   'foreground_pixels_preserved':bool(np.array_equal(atlas[foreground],before[foreground])),
-  'method':'Fixed viewport priority independent of gameplay area; foreground source pixels preserved; four aligned atlas/cloud banks; animated sky spans.',
-  'limits':['Sky at recorded viewport borders is feathered as an approximation; terrain pixels remain unchanged','Unrecorded atlas corners extend a fixed observed sky profile','Early cliff registrations and collision geometry remain provisional','Video-derived overlap seams remain subject to visual refinement','Post-lever bank uses the later recorded pose; intermediate scene movement is not recovered']}
+  'method':'Fixed priority between observed viewport pixels; visible source replaces covered headers; upper wall edge fills unrecorded corners; foreground source pixels preserved; four aligned atlas/cloud banks; animated sky spans.',
+  'limits':['Sky at recorded viewport borders is feathered as an approximation; terrain pixels remain unchanged','Unrecorded upper-wall corners extend captured edge colors; hidden detail is not recovered','Other unrecorded atlas corners extend a fixed observed sky profile','Early cliff registrations and collision geometry remain provisional','Video-derived overlap seams remain subject to visual refinement','Post-lever bank uses the later recorded pose; intermediate scene movement is not recovered']}
  outputs={'scroll_world_open.bin':open_banks,'scroll_world.bin':banks,'scroll_world_sky.bin':bytes(table+runs),'scroll_sky.bin':bytes(local_table+local_runs),
   'scroll_cloud.bin':bytes(cloud_banks),'scroll_manifest.json':(json.dumps(manifest,indent=2)+'\n').encode()}
  for name,data in outputs.items():
@@ -108,3 +138,4 @@ def main():
   else:path.write_bytes(data)
  print('PASS world atlas: seventeen shared palettes, deterministic registrations, lossless aligned source rows and animated sky spans')
 if __name__=='__main__':main()
+

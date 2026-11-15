@@ -110,7 +110,15 @@
     "lower_landing_background": "f4a7cc9aeaf4b82ef8b589b4ab82b77e063d91e8367acc14b7d2d2d5f003e075",
     "crawl_passage_background": "4c8af7db2c9dd6245830803c911f8a11468fa939611442677ff7b463bf09b338"
   },
-  "sky_repaired_pixels": 146580,
+  "header_pixels_replaced_by_visible_source": 6524,
+  "upper_wall_edge_extension": {
+    "area": 8,
+    "pixels": 55830,
+    "foreground_pixels": 27209,
+    "observed_pixels_changed": 0,
+    "method": "Clamp the registered upper-view edge into unrecorded atlas corners; estimated detail"
+  },
+  "sky_repaired_pixels": 141257,
   "open_view_priority": {
     "area": 16,
     "rectangle": [
@@ -123,10 +131,11 @@
     "foreground_preserved": true
   },
   "foreground_pixels_preserved": true,
-  "method": "Fixed viewport priority independent of gameplay area; foreground source pixels preserved; four aligned atlas/cloud banks; animated sky spans.",
+  "method": "Fixed priority between observed viewport pixels; visible source replaces covered headers; upper wall edge fills unrecorded corners; foreground source pixels preserved; four aligned atlas/cloud banks; animated sky spans.",
   "limits": [
     "Sky at recorded viewport borders is feathered as an approximation; terrain pixels remain unchanged",
-    "Unrecorded atlas corners extend a fixed observed sky profile",
+    "Unrecorded upper-wall corners extend captured edge colors; hidden detail is not recovered",
+    "Other unrecorded atlas corners extend a fixed observed sky profile",
     "Early cliff registrations and collision geometry remain provisional",
     "Video-derived overlap seams remain subject to visual refinement",
     "Post-lever bank uses the later recorded pose; intermediate scene movement is not recovered"

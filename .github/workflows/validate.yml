@@ -54,7 +54,9 @@ jobs:
       - name: Verify next crawl passage viewport
         run: python3 tools/convert_crawl_passage.py --check
       - name: Verify shared-world scrolling banks
-        run: python3 tools/prepare_scroll_assets.py --check
+        run: |
+          python3 tools/prepare_scroll_assets.py --check
+          python3 -m unittest discover -s tests -p test_upper_wall_atlas.py
       - name: Audit animation palette and foot anchors
         run: |
           python3 tools/convert_jump.py
@@ -89,3 +91,4 @@ jobs:
           name: Lady-Sia2-GBA-build
           path: build/release/
           if-no-files-found: error
+

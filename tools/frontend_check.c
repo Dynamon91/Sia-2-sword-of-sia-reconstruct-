@@ -741,10 +741,11 @@ int main(int argc,char **argv){
  assert((c->busRead16(c,0x0700000C)&1023)==720);
  FILE *five_file=fopen("assets/ui_digit5_tiles.bin","rb");assert(five_file);
  for(unsigned i=0;i<256;i++)assert(c->busRead8(c,0x06010000+720*32+i)==(unsigned)fgetc(five_file));
- fclose(five_file);capture(c,"build/upper_gem5.ppm");
+ fclose(five_file);check_world_background(c);capture(c,"build/upper_gem5.ppm");
  for(int i=0;i<160&&(value(c,17)!=7||!value(c,14));i++)run(c,1);
  assert(value(c,17)==7&&value(c,14)&&value(c,10)==5&&value(c,31)==upper_lives&&value(c,18)==upper_falls);
- capture(c,"build/upper_return.ppm");
+ check_world_background(c);capture(c,"build/upper_return.ppm");
+ puts("PASS upper wall graphics integration: native framebuffer matches the corrected world during upper jump and descent, including the formerly blank top/right corners");
  puts("PASS upper route integration: ninth viewport reached through UP+A, fifth gem and HUD, safe descending camera return; lives and defeats preserved");
  /* Revisit through real controls: no duplicate gem, guard respawn or life cost. */
  move_to(c,16,92);c->setKeys(c,0);run(c,2);
@@ -1053,4 +1054,5 @@ int main(int argc,char **argv){
  puts("PASS continuous camera integration: bounded six-pixel camera steps across areas 1-14, world-aligned background checks, live controls and pause; no portal-driven camera reset");
  c->deinit(c);free(pixels);
 }
+
 
