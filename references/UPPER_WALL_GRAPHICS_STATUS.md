@@ -27,3 +27,18 @@ l'atlante proiettato. I risultati effettivi accompagnano la build verificata.
 Restano da rifinire gli altri raccordi del video, i dettagli coperti e la fedeltà
 generale. Geometria e camera sono provvisorie; livelli, nemici e boss sono
 incompleti. Nessun collaudo su hardware reale è dichiarato.
+
+## Evidenza della build
+
+GitHub Actions, esecuzione 43714120052 sul commit
+`36b17ffca60f8dc2559797b82d8787efe4183c36`: pipeline completa superata.
+Passano i due controlli statici della parete, la riproducibilità degli asset,
+la compilazione nativa, la regressione mGBA e la riapertura SRAM. Il rapporto
+include il confronto del framebuffer durante salto e discesa. L'intro mantiene
+588 fotogrammi verificati, audio, pausa e passaggio al caricamento.
+
+La ROM occupa 21.228.356 byte e produce 110 screenshot. SHA-256:
+`4fe557cf2232356c6eb7d0362e278779f7f82c5ac3ec5342f05bead8252fdc0b`.
+Le catture versionate `upper_wall_jump.png`, `upper_wall_descent.png` e
+`upper_wall_landing.png` provengono da questa ROM. La preview di confronto
+accosta due catture reali senza modificare i pixel di gioco.
