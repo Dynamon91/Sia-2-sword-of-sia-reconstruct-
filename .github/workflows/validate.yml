@@ -22,7 +22,9 @@ jobs:
       - name: Restore and verify embedded assets
         run: python3 tools/unpack_assets.py
       - name: Clean recording overlays and encode restored intro
-        run: python3 tools/clean_frontend.py
+        run: |
+          python3 tools/clean_frontend.py
+          git diff --exit-code -- assets/frontend_cleanup.json
       - name: Repair captured sprite borders and palette
         run: python3 tools/repair_sprite_edges.py
       - name: Remove residual actor pixels from first-room scenery

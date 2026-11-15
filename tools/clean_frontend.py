@@ -3,6 +3,8 @@ from pathlib import Path
 import hashlib
 import json
 import struct
+from functools import lru_cache
+import numpy as np
 from PIL import Image
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -13,18 +15,72 @@ TOTAL_COUNT=FRONTEND_COUNT+INTRO_COUNT
 WIDTH=240
 HEIGHT=160
 
-def clean_frame(im):
+
+BANNER_ROWS=13
+AVATAR_RECT=(208,13,32,18)
+CLEANUP_REVISION=2
+
+@lru_cache(maxsize=1)
+def recording_repair_system():
+    """Factor the fixed Laplace system once for all captured frames."""
+    from scipy.sparse import csc_matrix
+    from scipy.sparse.linalg import splu
+    covered=np.zeros((HEIGHT,WIDTH),dtype=bool)
+    covered[:BANNER_ROWS]=True
+    left,top,width,height=AVATAR_RECT
+    covered[top:top+height,left:left+width]=True
+    yy,xx=np.nonzero(covered)
+    ids=np.full(covered.shape,-1,dtype=np.int32)
+    ids[yy,xx]=np.arange(len(yy))
+    rows=[];columns=[];values=[];boundary_rows=[];boundary_y=[];boundary_x=[]
+    for index,(y,x) in enumerate(zip(yy,xx)):
+        degree=0
+        for dy,dx in ((-1,0),(1,0),(0,-1),(0,1)):
+            ny,nx=y+dy,x+dx
+            if not (0<=ny<HEIGHT and 0<=nx<WIDTH):continue
+            degree+=1
+            neighbor=ids[ny,nx]
+            if neighbor>=0:
+                rows.append(index);columns.append(int(neighbor));values.append(-1.0)
+            else:
+                boundary_rows.append(index);boundary_y.append(ny);boundary_x.append(nx)
+        rows.append(index);columns.append(index);values.append(float(degree))
+    matrix=csc_matrix((values,(rows,columns)),shape=(len(yy),len(yy)))
+    return yy,xx,np.asarray(boundary_rows),np.asarray(boundary_y),np.asarray(boundary_x),splu(matrix)
+
+def clean_frame(im,palette=None):
     if im.size != (WIDTH,HEIGHT):
         raise ValueError("Expected a native 240x160 frontend still")
-    im=im.copy()
-    # The recording avatar covers the top-right of the actual game image.
-    # Extend the first unobscured row through that covered rectangle.
-    avatar=im.crop((209,30,240,31)).resize((31,18),Image.Resampling.NEAREST)
-    im.paste(avatar,(209,12))
-    # Reconstruct the recording banner rows without moving observed pixels.
-    first_clear=im.crop((0,12,240,13)).resize((240,12),Image.Resampling.NEAREST)
-    im.paste(first_clear,(0,0))
-    return im
+    if im.mode!="L":raise ValueError("Expected native indexed pixels in L mode")
+    pixels=np.asarray(im).copy()
+    yy,xx,rows,by,bx,system=recording_repair_system()
+    colors=None
+    if palette is not None:
+        if len(palette)!=512:raise ValueError("Expected a 256-color GBA palette")
+        words=np.frombuffer(palette,dtype='<u2')
+        colors=np.array([[(int(w)>>s&31)*255//31 for s in (0,5,10)] for w in words],dtype=np.int32)
+        boundary=colors[pixels[by,bx]].astype(np.float64)
+    else:
+        boundary=pixels[by,bx,None].astype(np.float64)
+    if np.all(boundary==boundary[0]):
+        filled=np.broadcast_to(boundary[0],(len(yy),boundary.shape[1]))
+    else:
+        rhs=np.zeros((len(yy),boundary.shape[1]),dtype=np.float64)
+        np.add.at(rhs,rows,boundary)
+        filled=system.solve(rhs)
+    # Only covered pixels are estimated. Diffusion avoids the former vertical
+    # streaks from repeating a contaminated row; observed art never moves.
+    filled=np.floor(filled+0.500001).clip(0,255).astype(np.int32)
+    if colors is None:
+        pixels[yy,xx]=filled[:,0].astype(np.uint8)
+    else:
+        unique,inverse=np.unique(filled,axis=0,return_inverse=True)
+        nearest=np.empty(len(unique),dtype=np.uint8)
+        for start in range(0,len(unique),1024):
+            delta=unique[start:start+1024,None,:]-colors[None,:,:]
+            nearest[start:start+1024]=np.sum(delta*delta,axis=2).argmin(1)
+        pixels[yy,xx]=nearest[inverse]
+    return Image.fromarray(pixels)
 
 def compress_lz77(data):
     """Encode GBA BIOS 0x10 LZ77 data with a 4 KiB window and 18-byte matches."""
@@ -166,7 +222,8 @@ def main():
     expected=next(a["sha256"] for a in archive["assets"] if a["path"]=="assets/visuals.bin")
     if report_path.exists():
         report=json.loads(report_path.read_text())
-        if (report.get("input_sha256")==expected and
+        if (report.get("cleanup_revision")==CLEANUP_REVISION and
+            report.get("input_sha256")==expected and
             report.get("cleaned_visuals_sha256")==hashlib.sha256(raw).hexdigest() and
             frontend_path.exists() and report.get("frontend_sha256")==sha(frontend_path) and
             intro_path.exists() and report.get("intro_video_sha256")==sha(intro_path)):
@@ -182,7 +239,7 @@ def main():
         frame=raw[index*FRAME_BYTES:(index+1)*FRAME_BYTES]
         palette=frame[:512]
         image=Image.frombytes("L",(WIDTH,HEIGHT),frame[512:])
-        image=clean_frame(image)
+        image=clean_frame(image,palette)
         fixed=palette+image.tobytes()
         cleaned.extend(fixed)
         if index>=FRONTEND_COUNT:
@@ -192,6 +249,7 @@ def main():
     intro_video=encode_intro_video(intro_frames)
     intro_path.write_bytes(intro_video)
     report={
+        "cleanup_revision":CLEANUP_REVISION,
         "input_sha256":expected,
         "cleaned_visuals_sha256":hashlib.sha256(cleaned).hexdigest(),
         "frontend_sha256":sha(frontend_path),
@@ -201,9 +259,9 @@ def main():
         "intro_frame_count":INTRO_COUNT,
         "intro_fps":6,
         "intro_audio_length_samples":1605632,
-        "recording_banner_removed_rows":12,
-        "recording_avatar_removed_rect":[209,12,31,18],
-        "covered_pixels":"estimated from adjacent unobscured pixels; not recovered original art",
+        "recording_banner_removed_rows":BANNER_ROWS,
+        "recording_avatar_removed_rect":list(AVATAR_RECT),
+        "covered_pixels":"harmonic RGB continuation from unobscured boundary, mapped to the original GBA palette; not recovered original art",
         "observed_rows":"kept at their original y coordinates; no scaling",
         "video_encoding":"GBA LZ77 blocks; first frame absolute; later frames XOR deltas; little-endian uint32 offset table"
     }

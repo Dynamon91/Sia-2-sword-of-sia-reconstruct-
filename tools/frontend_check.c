@@ -34,10 +34,24 @@ static unsigned scroll_portals,scroll_frames,scroll_updates,scroll_last_tick,scr
 static unsigned area_frames[VIEW_COUNT],area_updates[VIEW_COUNT];
 static int scroll_last_x,scroll_last_y,scroll_ready,camera_last_world_x;
 static unsigned camera_right_frames,camera_left_frames,camera_idle_frames;
+static FILE *intro_reference;
+static unsigned char intro_seen[INTRO_COUNT];
+static unsigned intro_seen_count;
+static void check_intro_frame(struct mCore *c,FILE *reference,unsigned frame);
 static void run(struct mCore *c,unsigned count){
  for(unsigned i=0;i<count;i++){
   c->runFrame(c);
   unsigned display_state=c->busRead32(c,0x0203F100),tick=c->busRead32(c,0x0203F124),area=c->busRead32(c,0x0203F12C),lives=c->busRead32(c,0x0203F14C);
+  if(intro_reference&&display_state==2){
+   unsigned frame=c->busRead32(c,0x0203F15C);
+   assert(frame<INTRO_COUNT);
+   if(!intro_seen[frame]){
+    check_intro_frame(c,intro_reference,frame);intro_seen[frame]=1;intro_seen_count++;
+    if(frame==90)capture(c,"build/intro_moon_clean.ppm");
+    if(frame==210)capture(c,"build/intro_chamber_clean.ppm");
+    if(frame==390)capture(c,"build/intro_portrait_clean.ppm");
+   }
+  }
   int camera_x=(int)c->busRead32(c,0x0203F13C),camera_y=(int)c->busRead32(c,0x0203F140);
   if(display_state==7&&area>=1&&scroll_ready&&tick>=scroll_last_tick&&tick-scroll_last_tick<=1&&lives==scroll_last_lives){
    assert(abs(camera_x-scroll_last_x)<=6*FP&&abs(camera_y-scroll_last_y)<=6*FP);
@@ -134,6 +148,16 @@ static void check_intro(struct mCore *c){
  assert(value(c,4)==1&&first_frame<INTRO_COUNT);
  FILE *reference=fopen("assets/visuals.bin","rb");assert(reference);
  check_intro_frame(c,reference,first_frame);
+ assert(first_frame==0);
+ intro_reference=reference;intro_seen_count=1;
+ for(unsigned i=0;i<INTRO_COUNT;i++)intro_seen[i]=i==first_frame;
+ /* The opening has a black background here: neither the gray banner nor
+    the recording avatar may remain, even if the generated reference is bad. */
+ unsigned intro_base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
+ for(unsigned y=0;y<60;y++)for(unsigned x=0;x<240;x++){
+  unsigned index=c->busRead8(c,intro_base+y*240+x);
+  assert((c->busRead16(c,0x05000000+index*2)&0x7FFF)==0);
+ }
  capture(c,"build/intro_first_frame.ppm");
  run(c,180);unsigned frame=shown(c,23);assert(shown(c,0)==2&&frame>=10&&frame<=24);
  check_intro_frame(c,reference,frame);capture(c,"build/intro_v06.ppm");
@@ -147,8 +171,10 @@ static void check_intro(struct mCore *c){
  unsigned frames=0;
  while(value(c,0)==2&&frames++<7000)run(c,1);
  state(c,11);assert(value(c,1)==0);
+ assert(intro_seen_count==INTRO_COUNT);intro_reference=NULL;
  fclose(reference);
- puts("PASS intro integration: 588 cleaned frames decode pixel-exactly; audio, A pause/resume, 98-second end and loading handoff");
+ puts("PASS intro graphics integration: opening background has no gray banner or avatar edge; moon, chamber and portrait captures come from the ROM");
+ printf("PASS intro integration: all %u displayed frames checked pixel-exactly; audio, A pause/resume, 98-second end and loading handoff\n",intro_seen_count);
 }
 static unsigned check_crawl_pose(struct mCore *c){
  static unsigned char frames[64*36*2],world[810000],opened[810000],crawl_patch[36*45];static int loaded;
