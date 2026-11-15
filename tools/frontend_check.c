@@ -151,11 +151,12 @@ static void check_intro(struct mCore *c){
  puts("PASS intro integration: 588 cleaned frames decode pixel-exactly; audio, A pause/resume, 98-second end and loading handoff");
 }
 static unsigned check_crawl_pose(struct mCore *c){
- static unsigned char frames[64*36*2],world[810000],opened[810000];static int loaded;
+ static unsigned char frames[64*36*2],world[810000],opened[810000],crawl_patch[36*32];static int loaded;
  if(!loaded){
   FILE *f=fopen("assets/crawl_cycle.bin","rb");assert(f);assert(fread(frames,1,sizeof(frames),f)==sizeof(frames));fclose(f);
   f=fopen("assets/scroll_world.bin","rb");assert(f);assert(fread(world,1,sizeof(world),f)==sizeof(world));fclose(f);
   f=fopen("assets/scroll_world_open.bin","rb");assert(f);assert(fread(opened,1,sizeof(opened),f)==sizeof(opened));fclose(f);
+  f=fopen("assets/crawl_passage_sky_patch.bin","rb");assert(f);assert(fread(crawl_patch,1,sizeof(crawl_patch),f)==sizeof(crawl_patch));fclose(f);
   loaded=1;
  }
  assert(shown(c,0)==7&&shown(c,21)&&shown(c,8)&&(shown(c,11)==15||shown(c,11)==16));
@@ -166,7 +167,10 @@ static unsigned check_crawl_pose(struct mCore *c){
  for(int y=0;y<36;y++)for(int x=0;x<64;x++){
   int sx=left+x,sy=top+y;if(sx<0||sx>=240||sy<0||sy>=160)continue;
   unsigned ink=frames[frame*64*36+y*64+(flip?63-x:x)];
-  int expected=(value(c,43)?opened:world)[(380-cy+sy)*1500+sx-cx];
+  int world_x=sx-cx,world_y=380-cy+sy;
+  int expected=(value(c,43)?opened:world)[world_y*1500+world_x];
+  if(value(c,43)&&world_x>=994&&world_x<1030&&world_y>=189&&world_y<221)
+   expected=crawl_patch[(world_y-189)*36+world_x-994];
   if(ink)expected=ink;
   assert(c->busRead8(c,base+sy*240+sx)==(unsigned)expected);
  }
