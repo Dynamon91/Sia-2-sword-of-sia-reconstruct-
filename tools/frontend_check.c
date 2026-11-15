@@ -125,13 +125,18 @@ static void check_intro_frame(struct mCore *c,FILE *reference,unsigned frame){
  }
  if(pixel_mismatches){
   fprintf(stderr,"Intro pixel mismatch count: frame=%u count=%u\\n",frame,pixel_mismatches);
+  fprintf(stderr,"Intro display telemetry: current=%u decoded=%u front=%u dispcnt=%u\\n",shown(c,23),shown(c,24),shown(c,10),c->busRead16(c,0x04000000));
+  unsigned other_base=base==0x06000000?0x0600A000:0x06000000;
   for(unsigned candidate=frame>2?frame-2:0;candidate<INTRO_COUNT&&candidate<=frame+2;candidate++){
-   unsigned char other[ASSET_FRAME_BYTES];
+   unsigned char candidate_frame[ASSET_FRAME_BYTES];
    assert(!fseek(reference,(long)(INTRO_FIRST+candidate)*ASSET_FRAME_BYTES,SEEK_SET));
-   assert(fread(other,1,sizeof(other),reference)==sizeof(other));
-   unsigned different=0;
-   for(unsigned i=0;i<38400;i++)different+=actual_image[i]!=other[512+i];
-   fprintf(stderr,"Intro candidate distance: displayed=%u candidate=%u pixels=%u\\n",frame,candidate,different);
+   assert(fread(candidate_frame,1,sizeof(candidate_frame),reference)==sizeof(candidate_frame));
+   unsigned displayed_distance=0,other_distance=0;
+   for(unsigned i=0;i<38400;i++){
+    displayed_distance+=actual_image[i]!=candidate_frame[512+i];
+    other_distance+=c->busRead8(c,other_base+i)!=candidate_frame[512+i];
+   }
+   fprintf(stderr,"Intro candidate distance: requested=%u candidate=%u display=%u back=%u\\n",frame,candidate,displayed_distance,other_distance);
   }
  }
  assert(pixel_mismatches==0);
