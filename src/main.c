@@ -106,7 +106,7 @@ static void wait_frame(void){
  while(REG16(0x04000006)>=160){}
  while(REG16(0x04000006)<160){}
 }
-static void ui_init(void){
+static void __attribute__((section(".romtext"),noinline)) ui_init(void){
  REG32(0x040000D4)=(unsigned)ui_palette;REG32(0x040000D8)=0x05000200;
  REG32(0x040000DC)=0x84000000|128;
  REG32(0x040000D4)=(unsigned)ui_tiles;REG32(0x040000D8)=0x06014000;
