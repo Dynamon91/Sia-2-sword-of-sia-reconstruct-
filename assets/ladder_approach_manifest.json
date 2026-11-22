@@ -250,9 +250,9 @@
         204
       ],
       "observed_rgb_pixels_unchanged": 28176,
-      "registered_replacement_pixels": 3538,
-      "estimated_pixels": 6686,
-      "estimated_repeated_rail_pixels": 178,
+      "registered_replacement_pixels": 3441,
+      "estimated_pixels": 6783,
+      "estimated_repeated_rail_pixels": 237,
       "collision_geometry": "provisional"
     },
     {
@@ -262,9 +262,9 @@
         261
       ],
       "observed_rgb_pixels_unchanged": 31818,
-      "registered_replacement_pixels": 4072,
-      "estimated_pixels": 2510,
-      "estimated_repeated_rail_pixels": 152,
+      "registered_replacement_pixels": 3981,
+      "estimated_pixels": 2601,
+      "estimated_repeated_rail_pixels": 211,
       "collision_geometry": "provisional"
     }
   ],

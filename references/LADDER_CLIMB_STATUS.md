@@ -12,7 +12,7 @@ Four distance-driven climb poses and three dedicated mounted sword phases are ex
 
 Original video SHA-256: `7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51`.
 
-The converter checks thirteen registrations, each using two disjoint static patches; repeated rungs are not used to choose translations. Body masks exclude visible rungs, sky, floor and enemy hit stars. No generated artwork or enlarged sprite assets are integrated. The native shared palette uses opaque indices 1..239 and transparent zero.
+The converter checks thirteen registrations, each using two disjoint static patches; repeated rungs are not used to choose translations. Body masks exclude visible rungs, sky, floor and enemy hit stars. Donor masks also exclude the entire green/white contact flash in the 189-second reference; the scenery regression rejects any remaining sword-green pixels on the empty ladder. No generated artwork or enlarged sprite assets are integrated. The native shared palette uses opaque indices 1..239 and transparent zero.
 
 | Transition | Measured translation |
 | --- | --- |
@@ -21,7 +21,7 @@ The converter checks thirteen registrations, each using two disjoint static patc
 
 | New view | Observed RGB pixels preserved | Registered foreground replacements | Estimated pixels | Derived ladder pixels within estimates |
 | --- | ---: | ---: | ---: | ---: |
-| ladder_upper | 27596 | 4253 | 6551 | 572 |
+| ladder_upper | 27596 | 4253 | 6551 | 541 |
 | ladder_upper_exit | 30069 | 3870 | 4461 | 0 |
 
 Recording overlays and actors are excluded from each donor. Later jumping footage exposes the tower header; that donor is restricted to the tower. Missing sky uses a clear strip capped above terrain, avoiding a ground-colored smear. The lower approach also uses an additional 189-second exposure. Persistently hidden rung fragments reuse the cleaned lower view and remain estimates rather than recovered original pixels.
@@ -30,7 +30,7 @@ The blue floating object's behavior is not established or implemented; it is rem
 
 ## Verified native build
 
-Local validation passes: 19 C programs with address/undefined-behavior sanitizers (leak detection disabled for this runtime), 19 Python tests, deterministic asset/atlas checks, GCC ARM 14.2.1 build, mGBA 0.10.5 gameplay suite and separate disk-SRAM reopening.
+Local validation passes: 19 C programs with address/undefined-behavior sanitizers (leak detection disabled for this runtime), 20 Python tests, deterministic asset/atlas checks, GCC ARM 14.2.1 build, mGBA 0.10.5 gameplay suite and separate disk-SRAM reopening.
 
 The native test reaches the ladder through controller inputs, checks all four climb poses and all three mounted attack phases in both directions including transparent background pixels, defeats the sixth guard, walks the upper portals both ways, pauses while mounted, descends and jumps away without losing health or lives. Host snapshots isolate branches of the regression; they are not game portals.
 
@@ -46,7 +46,7 @@ Area 20 performance: 31 updates in 31 active frames
 Directional framing: 2103 right-anchor, 1632 left-anchor, 2040 idle frames
 ```
 
-ROM: 21,364,000 bytes. SHA-256: `873af1b458ef484acb09145e4f91cc04272c8336cf37df20054b3675ee5ebd52`.
+ROM: 21,364,000 bytes. SHA-256: `c295c2d1fecb27ee018933b891ebf05f9cbfa24efc9f5bdd6f819bcb10c8b2d2`.
 IWRAM code: 28,280 / 28,672 linker bytes; the 4 KiB stack reservation is retained. EWRAM background buffers are unchanged.
 
 128 PNG captures and thirteen continuous lossless GIFs come from the compiled ROM. The exporter verifies every decoded GIF timing interval against its captured native RGB frame, including after lossless optimization.

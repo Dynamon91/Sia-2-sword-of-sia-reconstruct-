@@ -129,9 +129,9 @@
     "post_lever_background": "1685972d4989ca3ce34afcda7cf646202937b2047eafa01e2bb8ba1c3c715f76",
     "lower_landing_background": "f4a7cc9aeaf4b82ef8b589b4ab82b77e063d91e8367acc14b7d2d2d5f003e075",
     "crawl_passage_background": "4c8af7db2c9dd6245830803c911f8a11468fa939611442677ff7b463bf09b338",
-    "ladder_hall_background": "e6ab667f39359bfdd18193395d10d54284f1422a1d3493da494f8ee059f63b5d",
-    "ladder_foot_background": "472665214e38b5f80f9b3781cb6376f20b75a6bf708bcda5de588fff2ec87342",
-    "ladder_upper_background": "a2c4ba19f4c291ab6ca00a4097ba728d7f807c5fb628f9013e4df60b3a39b9ab",
+    "ladder_hall_background": "a57215eb018f7c4ff224f35f0d55d097259f9025a473a687c15225494774efa7",
+    "ladder_foot_background": "205751042aaf90721fb2a56e69dcc8d26e2f7802e4c0e5892dc800e534959228",
+    "ladder_upper_background": "4441d571bf83422eb4a9e8e13bfca3fa511c8b90c251392c94d4d5307292c1af",
     "ladder_upper_exit_background": "62de68cbaf1c27a8b7b9df74225495e376adfe04d9c1f1021d3db0323af1ebe9"
   },
   "header_pixels_replaced_by_visible_source": 6524,
@@ -142,7 +142,7 @@
     "observed_pixels_changed": 0,
     "method": "Clamp the registered upper-view edge into unrecorded atlas corners; estimated detail"
   },
-  "sky_repaired_pixels": 154847,
+  "sky_repaired_pixels": 154905,
   "open_view_priority": {
     "areas": [
       16,
@@ -183,7 +183,7 @@
         160
       ]
     ],
-    "sky_repaired_pixels": 16405,
+    "sky_repaired_pixels": 16413,
     "foreground_preserved": true
   },
   "foreground_pixels_preserved": true,

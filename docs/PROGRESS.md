@@ -11,7 +11,7 @@ Non misura il tempo rimanente né la percentuale di pixel originali recuperati. 
 | Mondo 2 e boss | 0 / 15 | Riferimenti disponibili; contenuti non integrati. |
 | Mondo 3 e boss | 0 / 15 | Video indicizzati; contenuti non integrati. |
 | Mondo 4, boss finale, finale e crediti | 0 / 15 | Video indicizzati; contenuti non integrati. |
-| Fedeltà visiva, interfaccia, animazioni e audio | 0.5 / 15 | Menu e tutti i 588 fotogrammi dell’intro verificati nella ROM. Aggiunte quattro pose di scala, tre attacchi dedicati, guardia estratta dal video e due viste superiori: tredici registrazioni su coppie di zone statiche. Donatori mascherati escludono gli attori; cielo coperto, piccoli frammenti di scala e raccordi restano stime dichiarate. Altre animazioni, interfaccia e audio incompleti. |
+| Fedeltà visiva, interfaccia, animazioni e audio | 0.5 / 15 | Menu e tutti i 588 fotogrammi dell’intro verificati nella ROM. Aggiunte quattro pose di scala, tre attacchi dedicati, guardia estratta dal video e due viste superiori: tredici registrazioni su coppie di zone statiche. Donatori mascherati escludono gli attori; cielo coperto, piccoli frammenti di scala e raccordi restano stime dichiarate. Altre animazioni, interfaccia e audio incompleti. Residui verdi dell’effetto di colpo rimossi dai fondali della scala e coperti da un controllo dedicato. |
 | Riferimenti, validazione e consegna finale | 1 / 5 | Riferimenti ricevuti fino al finale e test del prototipo; collaudo completo e hardware mancanti. |
 
 Aggiornare docs/progress.json solo dopo risultati verificati, poi eseguire `python3 tools/update_progress.py`. Audio sperimentale non integrato e materiali di riferimento non equivalgono a contenuti finiti.

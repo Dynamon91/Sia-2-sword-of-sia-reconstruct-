@@ -726,7 +726,7 @@
       "registered_foreground_pixels": 4253,
       "estimated_pixels": 6551,
       "estimated_terrain_pixels": 0,
-      "derived_ladder_pixels": 572
+      "derived_ladder_pixels": 541
     },
     {
       "name": "ladder_upper_exit",

@@ -63,6 +63,7 @@ jobs:
         run: |
           python3 tools/convert_ladder_approach.py --check
           python3 tools/convert_ladder_climb.py --check
+          python3 -m unittest discover -s tests -p test_ladder_scenery.py
           python3 tools/prepare_scroll_assets.py --check
           python3 -m unittest discover -s tests -p test_upper_wall_atlas.py
       - name: Audit animation palette and foot anchors

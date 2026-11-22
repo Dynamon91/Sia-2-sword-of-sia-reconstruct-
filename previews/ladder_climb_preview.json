@@ -1,10 +1,10 @@
 {
-  "rom_sha256": "873af1b458ef484acb09145e4f91cc04272c8336cf37df20054b3675ee5ebd52",
+  "rom_sha256": "c295c2d1fecb27ee018933b891ebf05f9cbfa24efc9f5bdd6f819bcb10c8b2d2",
   "native_frames": 485,
   "gif_frames": 377,
   "duration_ms": 8120,
-  "gif_sha256": "8bd9e0bd7cac3382a508ca06fd7fe5b286401809eafb21e5968af943b7d33809",
-  "gif_bytes": 4868095,
+  "gif_sha256": "41f58d59be66941bd1864ffd0f6edef37c0c59b14a793d94c0e11ba020e2e4dd",
+  "gif_bytes": 4853904,
   "source_resolution": [
     240,
     160
