@@ -1,0 +1,238 @@
+{
+  "video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "source_seconds": [
+    186.1,
+    187.5,
+    189.8,
+    190.5,
+    190.75,
+    191
+  ],
+  "sources": {
+    "reference/w1l1_lower_landing/186_1.png": "eed4949e8918d802d368f2c710b24a112e37fd3e5c733d14674046a8cc550f85",
+    "reference/w1l1_ladder/187_5.png": "98d77f5c8d75ba1d9eea5eb31719930870c0143b1a4bbec6c5020d4b39b5bcde",
+    "reference/w1l1_ladder/189_8.png": "696b9de36643f45a4c4a1014857d1a0de66c7a5e5031e02863a56ce01e9ed8b4",
+    "reference/w1l1_ladder/190_5.png": "c4beda2a77ddf26f5a28e52564fff8ae0c92b58418b8e9d648a53d421b44d347",
+    "reference/w1l1_ladder/190_75.png": "65b7baf06c175b99205c563fa852f246223f32d8a6339a2103527ed423f7377e",
+    "reference/w1l1_ladder/191.png": "4e20b2d1a095bde1d62231715fdf29f658fc9c5bf82d64588c6509b8a6b5c49a"
+  },
+  "registrations": [
+    {
+      "delta": [
+        92,
+        0
+      ],
+      "minimum_margin_rgb": 2,
+      "patches": [
+        {
+          "delta": [
+            92,
+            0
+          ],
+          "mae_rgb": 4.537037,
+          "runner_up_mae_rgb": 7.280864,
+          "patch": [
+            3,
+            64,
+            15,
+            73
+          ]
+        },
+        {
+          "delta": [
+            92,
+            0
+          ],
+          "mae_rgb": 2.611607,
+          "runner_up_mae_rgb": 4.6875,
+          "patch": [
+            2,
+            73,
+            18,
+            87
+          ]
+        }
+      ]
+    },
+    {
+      "delta": [
+        116,
+        57
+      ],
+      "minimum_margin_rgb": 2,
+      "patches": [
+        {
+          "delta": [
+            116,
+            57
+          ],
+          "mae_rgb": 2.518519,
+          "runner_up_mae_rgb": 4.707176,
+          "patch": [
+            70,
+            59,
+            86,
+            77
+          ]
+        },
+        {
+          "delta": [
+            116,
+            57
+          ],
+          "mae_rgb": 2.033565,
+          "runner_up_mae_rgb": 5.716435,
+          "patch": [
+            88,
+            59,
+            104,
+            77
+          ]
+        }
+      ]
+    },
+    {
+      "delta": [
+        -14,
+        -13
+      ],
+      "minimum_margin_rgb": 2,
+      "patches": [
+        {
+          "delta": [
+            -14,
+            -13
+          ],
+          "mae_rgb": 1.414286,
+          "runner_up_mae_rgb": 3.740476,
+          "patch": [
+            130,
+            42,
+            140,
+            56
+          ]
+        },
+        {
+          "delta": [
+            -14,
+            -13
+          ],
+          "mae_rgb": 1.369048,
+          "runner_up_mae_rgb": 9.571429,
+          "patch": [
+            130,
+            63,
+            140,
+            77
+          ]
+        }
+      ]
+    },
+    {
+      "delta": [
+        -18,
+        36
+      ],
+      "minimum_margin_rgb": 3,
+      "patches": [
+        {
+          "delta": [
+            -18,
+            36
+          ],
+          "mae_rgb": 1.007407,
+          "runner_up_mae_rgb": 9.885185,
+          "patch": [
+            140,
+            20,
+            149,
+            30
+          ]
+        },
+        {
+          "delta": [
+            -18,
+            36
+          ],
+          "mae_rgb": 2.25463,
+          "runner_up_mae_rgb": 7.74537,
+          "patch": [
+            175,
+            18,
+            183,
+            27
+          ]
+        }
+      ]
+    },
+    {
+      "delta": [
+        -30,
+        60
+      ],
+      "minimum_margin_rgb": 3,
+      "patches": [
+        {
+          "delta": [
+            -30,
+            60
+          ],
+          "mae_rgb": 1.918519,
+          "runner_up_mae_rgb": 9.840741,
+          "patch": [
+            140,
+            20,
+            149,
+            30
+          ]
+        },
+        {
+          "delta": [
+            -30,
+            60
+          ],
+          "mae_rgb": 3.069444,
+          "runner_up_mae_rgb": 8.125,
+          "patch": [
+            175,
+            18,
+            183,
+            27
+          ]
+        }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "name": "ladder_hall",
+      "origin": [
+        -698,
+        204
+      ],
+      "observed_rgb_pixels_unchanged": 28176,
+      "registered_replacement_pixels": 3337,
+      "estimated_pixels": 6887,
+      "estimated_repeated_rail_pixels": 238,
+      "collision_geometry": "provisional"
+    },
+    {
+      "name": "ladder_foot",
+      "origin": [
+        -582,
+        261
+      ],
+      "observed_rgb_pixels_unchanged": 31818,
+      "registered_replacement_pixels": 3984,
+      "estimated_pixels": 2598,
+      "estimated_repeated_rail_pixels": 210,
+      "collision_geometry": "provisional"
+    }
+  ],
+  "limits": [
+    "Compressed video palette; shared nearest-color GBA palette without dithering",
+    "Actor rectangles are excluded in all donors; hidden sky/header and a repeated rail fragment remain estimates",
+    "Single existing guard pose, patrol, timing and collision geometry remain provisional",
+    "The upper route, ladder climbing and additional enemy are not yet playable"
+  ]
+}

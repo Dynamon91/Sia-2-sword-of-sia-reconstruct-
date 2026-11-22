@@ -74,7 +74,7 @@ static void text(int x,int y,const char *s,unsigned color){
   x+=6;
  }
 }
-static void wrapped(int x,int y,const char *s,unsigned color){
+static void __attribute__((section(".romtext"),noinline)) wrapped(int x,int y,const char *s,unsigned color){
  int origin=x;
  while(*s){
   if(*s==' '){x+=6;s++;continue;}
@@ -86,7 +86,7 @@ static void wrapped(int x,int y,const char *s,unsigned color){
   }
  }
 }
-static void number(int x,int y,unsigned value,unsigned color){
+static void __attribute__((section(".romtext"),noinline)) number(int x,int y,unsigned value,unsigned color){
  char b[11];unsigned n=0;
  do{b[n++]=(char)('0'+value%10);value/=10;}while(value);
  for(unsigned i=0;i<n/2;i++){char t=b[i];b[i]=b[n-i-1];b[n-i-1]=t;}
@@ -224,7 +224,7 @@ static void resume_level(void){
  enter(LAB);
 }
 static void footer(const char *s){rect(0,149,240,11,240);text(4,151,s,241);}
-static void dialog(unsigned index){
+static void __attribute__((section(".romtext"),noinline)) dialog(unsigned index){
  const StoryPage *p=&story[index];blit(p->frame);
  rect(0,78,240,82,244);rect(0,78,240,1,242);
  text(10,83,p->speaker,242);text(188,83,p->time,243);
@@ -320,6 +320,8 @@ static void __attribute__((section(".romtext"),noinline)) draw_crawl_passage_pat
    const unsigned char *source=runs;unsigned even_bytes=(length+1)&~1u;
    runs+=even_bytes+((length+2)&~1u);
    int start=x<0?-x:0,stop=x+(int)length>240?240-x:(int)length;
+   int recorded=crawl_patch_first_column(y)-(x-left);
+   if(start<recorded)start=recorded;
    if(start>=stop)continue;
    x+=start;unsigned n=(unsigned)(stop-start);
    if((x^start)&1)source+=even_bytes+1;
@@ -359,7 +361,7 @@ static void draw_world(void){
  }
 }
 static void entity_origin(unsigned area){sprite_dx=view_camera.x/FP-view_origin[area][0];sprite_dy=view_camera.y/FP-view_origin[area][1];}
-static void draw_level(void){
+static void __attribute__((noinline)) draw_level(void){
  unsigned profile_start=REG16(0x0400010C);
  draw_world();
  if(game.progress.lever_activated){entity_origin(13);sprite(64,104,40,44,lever_lowered,0);}
@@ -378,6 +380,8 @@ static void draw_level(void){
  if(game.enemy3_hp&&(!game.enemy3_flash||(game.enemy3_flash&2)))sprite(game.enemy3_x/FP+9-20,104-55,41,60,guard_sprite,game.enemy3_dir>0);
  entity_origin(12);
  if(game.enemy4_hp&&(!game.enemy4_flash||(game.enemy4_flash&2)))sprite(game.enemy4_x/FP+9-15,63-51,34,55,guard2_sprite,game.enemy4_dir>0);
+ entity_origin(17);
+ if(game.enemy5_hp&&(!game.enemy5_flash||(game.enemy5_flash&2)))sprite(game.enemy5_x/FP+9-15,55-51,34,55,guard2_sprite,game.enemy5_dir>0);
  entity_origin((unsigned)game.area);sprite_dy+=game.camera_y;
  unsigned air=game_air_frame(&game);
  const unsigned char *actor=room_sprites;
@@ -577,6 +581,7 @@ int main(void){
   debug[38]=(unsigned)game.enemy3_hp;debug[39]=(unsigned)game.enemy3_x;
   debug[40]=(unsigned)game.enemy4_hp;debug[41]=(unsigned)game.enemy4_x;
   debug[42]=game.progress.lever_activated;debug[43]=game.progress.barrier_open;debug[44]=(unsigned)game.crawling;debug[45]=game_crawl_frame(&game);debug[46]=(unsigned)game_body_top(&game);
+  debug[47]=(unsigned)game.enemy5_hp;debug[48]=(unsigned)game.enemy5_x;
   if(dirty)render();else wait_frame();
  }
 }

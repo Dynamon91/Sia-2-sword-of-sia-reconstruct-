@@ -1,0 +1,20 @@
+{
+  "rom_sha256": "7410c6abd35384e574d11b1ab4e774b8c6a08824f717afce6d5b654a2b28206c",
+  "native_frames": 417,
+  "gif_frames": 292,
+  "duration_ms": 6980,
+  "gif_sha256": "be8991616da930f042d1dc6482ab13c9733d27d4071e57cb592a7875312dc0a1",
+  "gif_bytes": 8163437,
+  "source_resolution": [
+    240,
+    160
+  ],
+  "preview_resolution": [
+    480,
+    320
+  ],
+  "palette_colors": 131,
+  "all_source_pixels_preserved": true,
+  "interpolated": false,
+  "timing": "Cumulative native GBA time rounded to GIF 10 ms units"
+}

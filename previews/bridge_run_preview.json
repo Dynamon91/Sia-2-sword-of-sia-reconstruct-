@@ -1,10 +1,10 @@
 {
-  "rom_sha256": "5159c682d4b5e023cf6321c419003ee74e4c02c039f5968969931ee607141347",
+  "rom_sha256": "7410c6abd35384e574d11b1ab4e774b8c6a08824f717afce6d5b654a2b28206c",
   "native_frames": 688,
-  "gif_frames": 539,
+  "gif_frames": 541,
   "duration_ms": 11520,
-  "gif_sha256": "721a9c9d5110e070cf4ab3a1f91e4ee80e5003acb76ee6c94006a453988362fb",
-  "gif_bytes": 10466105,
+  "gif_sha256": "cb3102c98c8a4958a0aedbfca9c29659be02ad7d4762dbf46a2b85645c474399",
+  "gif_bytes": 12061630,
   "source_resolution": [
     240,
     160
@@ -13,8 +13,13 @@
     480,
     320
   ],
-  "palette_colors": 155,
+  "palette_colors": 154,
   "all_source_pixels_preserved": true,
   "interpolated": false,
-  "timing": "Cumulative native GBA time rounded to GIF 10 ms units"
+  "timing": "Cumulative native GBA time rounded to GIF 10 ms units",
+  "lossless_transport_optimization": {
+    "encoder": "gifsicle 1.96 -O3",
+    "input_gif_sha256": "eba62aa72af1186851fd25b2dc39ebace67f34adabac43da1a24301c7ddf0c06",
+    "all_original_rgb_and_timing_preserved": true
+  }
 }

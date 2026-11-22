@@ -1,17 +1,17 @@
 {
-  "updated": "2026-11-15",
+  "updated": "2026-11-22",
   "areas": [
     {
       "name": "Motore e sistemi di gioco",
       "weight": 15,
       "earned": 9.25,
-      "evidence": "Controlli, combattimento, quattro guardie, vite/game over, camera continua e strisciamento con corpo basso, mantenimento sotto soffitto e rialzata sicura verificati; geometria, IA e tempi ancora provvisori."
+      "evidence": "Controlli, combattimento con cinque guardie, vite/game over, camera continua e strisciamento verificati; ritorno dalla scala al tunnel senza scatti. Inizializzazione e interfacce non critiche spostate in ROM per compilare anche con GCC ARM 14. Geometria, IA e tempi ancora provvisori."
     },
     {
       "name": "Mondo 1 e boss",
       "weight": 20,
-      "earned": 5.5,
-      "evidence": "Diciassette inquadrature parziali collegate: nuovo passaggio basso dopo la leva, vista successiva e ritorno, con cinque gemme e quattro guardie persistenti. Percorso seguente, livelli e boss incompleti."
+      "earned": 6,
+      "evidence": "Diciannove inquadrature parziali collegate: dal passaggio basso si raggiunge la quinta guardia e il piede della scala, con ritorno e sconfitta persistente durante la partita. Cinque gemme conservate. Salita della scala, percorso seguente, livelli e boss incompleti."
     },
     {
       "name": "Mondo 2 e boss",
@@ -35,7 +35,7 @@
       "name": "Fedeltà visiva, interfaccia, animazioni e audio",
       "weight": 15,
       "earned": 0.25,
-      "evidence": "Menu con cursore misurato, intro restaurata, pose aeree/risalita, nuvole e leva abbassata verificati nella ROM. Corretti cielo copiato e retinatura del passaggio basso; 1.317 pixel del bordo superiore recuperati tramite due registrazioni disgiunte. Cielo nascosto e altri raccordi restano stimati; animazioni, barriera mobile, interfaccia e separazione audio ancora incomplete."
+      "evidence": "Menu, intro restaurata, pose aeree/risalita, nuvole e leva abbassata verificati nella ROM. Due nuovi fondali derivati da sei esposizioni del video; attori esclusi dai donatori. I pixel visibili dei nuovi fondali sono conservati fuori dalle maschere; cielo, parti coperte, piccolo frammento ripetuto della scala e raccordi restano stime dichiarate. Animazioni, barriera mobile, interfaccia e separazione audio incomplete."
     },
     {
       "name": "Riferimenti, validazione e consegna finale",

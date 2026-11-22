@@ -28,6 +28,8 @@ build/sia2_lab.gba: build/sia2_lab.elf tools/fix_header.py
 	$(PREFIX)objcopy -O binary $< $@
 	python3 tools/fix_header.py $@
 test: | build
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_ladder_approach.c -o build/test_ladder_approach
+	./build/test_ladder_approach
 	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_crawl.c -o build/test_crawl
 	./build/test_crawl
 	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_post_lever.c -o build/test_post_lever

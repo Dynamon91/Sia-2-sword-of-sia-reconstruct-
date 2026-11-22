@@ -72,7 +72,7 @@
     "Player terrain restored through measured lower-terrain registration; covered header/rock edge, avatar sky and sky behind removed actor estimated",
     "Shared world source banks are unchanged; sparse runtime overlay preserves all pixels outside the declared repair mask",
     "Collision floor y=55 and low rock are provisional, not recovered map data",
-    "Left boundary of this partial view is the current route limit; no next level is claimed",
+    "Left exit now connects to the ladder approach; ladder climbing and the next level remain unfinished",
     "No intermediate thorn movement or thorn damage is implemented"
   ]
 }

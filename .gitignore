@@ -19,3 +19,7 @@ assets/bridge_backdrop.bin
 assets/bridge.bin
 assets/room_sky.bin
 assets/audio_intro.pcm
+# Rebuilt from ROM parts and clean_frontend.py; do not commit duplicate payloads.
+Lady_Sia2_v06.gba
+assets/frontend.bin
+assets/intro_video.bin

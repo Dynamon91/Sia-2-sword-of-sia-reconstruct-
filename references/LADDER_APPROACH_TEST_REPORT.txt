@@ -1,0 +1,119 @@
+Local GCC ARM 14.2.1 / mGBA 0.10.5; 22 November 2026
+
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_ladder_approach.c -o build/test_ladder_approach
+./build/test_ladder_approach
+PASS ladder approach: two reversible world-preserving portals, five-guard persistence, sword contacts, camera bounds, wall, respawn and reset; upper ladder route unfinished
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_crawl.c -o build/test_crawl
+./build/test_crawl
+PASS crawl: safe low-rock entry, fixed feet, two distance-driven poses, forced crouch, suppressed jump/attack, safe stand-up, pit respawn, reset and area/air gating
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_post_lever.c -o build/test_post_lever
+./build/test_post_lever
+PASS post-lever edge: airborne registered entry, landing, return, roof side/underside, lower landing, pit respawn and persistent run state
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_view_camera.c -o build/test_view_camera
+./build/test_view_camera
+PASS world camera: bounded follow, sixteen portal transforms (early cliff geometry provisional), area-independent projection and no portal camera reset
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_lever_route.c -o build/test_lever_route
+./build/test_lever_route
+PASS lever route and barrier: reference-aligned switch, accessible approach, logical gate state, revisits, death persistence, reset, fourth guard and gem persistence
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_island_gap.c -o build/test_island_gap
+./build/test_island_gap
+PASS island gap: registered portal, input-only jumps both ways, high ledge, cancelled directions, pit respawn and persistent progress
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_ramp_route.c -o build/test_ramp_route
+./build/test_ramp_route
+PASS ramp route: opposite directions never trigger portals, two registered slope portals each way, upper landing and jump, persistent gem, pit life loss and upper respawn, reset
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_upper_route.c -o build/test_upper_route
+./build/test_upper_route
+PASS upper route: normal jump retained, high-jump portal, upper landing, fifth stable gem ID, camera return without life loss, upper respawn and reset
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_bridge_run.c -o build/test_bridge_run
+./build/test_bridge_run
+PASS bridge run: two registered portals both ways, connected slopes, solid wall, third guard contact/immunity/combat/persistence, eight-area respawn and reset
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_continuation.c -o build/test_continuation
+./build/test_continuation
+PASS continuation: registered round trip, grounded slopes both ways, reachable bridge, solid miss/fall, no upward teleport and six-area respawn
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_air_motion.c -o build/test_air_motion
+./build/test_air_motion
+PASS airborne motion: ordered rise/apex/fall in real jumps, both facings, landing/reset, immediate edge fall, ledge release and inactive-state guards
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_ledge.c -o build/test_ledge
+./build/test_ledge
+PASS ledges: jump reach, swept catch, idle hold, recorded pull-up phases, release/regrab prevention, damage, top landing and upper ledge
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_collisions.c -o build/test_collisions
+./build/test_collisions
+PASS collision volumes: side faces, clear jumps, swept landing, exact edges, undersides and fall respawn
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_lives.c -o build/test_lives
+./build/test_lives
+PASS lives: lethal-hit respawn in seventeen areas, progress preservation, immunity, pit override, frozen defeat and full retry
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_game.c -o build/test_game
+./build/test_game
+PASS v0.6: terrain, jump, ledge pull-up, platforms/camera, registered area position/velocity continuity, flip anchors, bridge surface, two gems, round-trip persistence, fall respawn, reset, sign and attack
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_gap_motion.c -o build/test_gap_motion
+./build/test_gap_motion
+PASS gap/motion: three walk poses, synchronized sword hit window, registered portals, reachable gap/gem, solid cliff sides, independent guard persistence
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g tests/test_settings.c -o build/test_settings
+./build/test_settings
+PASS settings: v2 combinations, erased SRAM, v1 intro migration, single-bit corruption and invalid commit marker
+gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/level_progress.c tests/test_level_progress.c -o build/test_level_progress
+./build/test_level_progress
+PASS whole-level progress: stable entity IDs, revisit persistence, bounds, pause, health saturation, completion and reset
+
+...................
+----------------------------------------------------------------------
+Ran 19 tests in 2.620s
+
+OK
+
+PASS post-lever audit: four agreed registrations, closed triangle, real one-pixel disagreement rejected; no playable map inferred
+PASS authentic entry loading: observed Please wait pixels, 153 GBA colors, overlay removal and timing manifest
+PASS continuation background: 26271 original RGB pixels preserved; registered terrain patch; 1..239 palette; integrated sixth-view background; collision geometry provisional
+PASS bridge/riser assets: two reproducible 240x160 backgrounds, registered terrain and shared GBA palette; provisional geometry
+PASS upper route assets: reproducible ninth background, separate fifth gem digit; occlusions estimated
+PASS ramp route assets: two backgrounds and two independently measured camera registrations; occlusions and slopes provisional
+PASS island gap assets: registered (+76,+44) portal and separate actor-free background; geometry provisional
+PASS lever route assets: two registered views, separate guard and player, provisional geometry and covered scenery
+PASS post-lever edge: measured portal, reproducible actor-free background, provisional walk plane
+PASS lever lowered pose: two independent registrations, observed handle, explicit hidden-sky estimate, bounded palette and reproducible patch
+PASS crawl assets: two video-derived manually masked poses, lossless facing normalization, transparent zero and bounded palette
+PASS lower landing assets: two independent registrations, video-restored player region, provisional lower walk plane
+PASS crawl passage: registered terrain preserved; sparse sky repair removes copied parallax rectangle and colored header stipple
+PASS crawl roof: two disjoint foreground registrations; recorded header terrain restored without copying parallax sky
+
+PASS ladder approach assets: five independent terrain registrations, two cleaned views and explicit repair masks
+PASS world atlas: nineteen shared palettes, deterministic registrations, lossless aligned source rows and animated sky spans
+
+PASS menu cursor alignment: PLAY/OPTIONS/CREDITS use measured native positions (16,44/68/92), one cursor, correct tile and wrap in both directions
+PASS authentic loading integration: 188 displayed frames; exact pixels/palette, three timed phases, hidden objects, frozen physics and held-input isolation
+PASS scenery integration: all 320 cloud phases including odd/even DMA and wrap match an independent compositor; foreground stays fixed; pause freezes and resumes the active clock
+PASS airborne integration: three velocity-driven poses, both facings pixel-checked including transparent scenery, landing, pause/resume and sword priority
+PASS ledge integration: input-driven jump/catch, stable hang, pause/resume, release, all three pull-up poses pixel-checked in native framebuffer, top landing
+PASS intro graphics integration: opening background has no gray banner or avatar edge; moon, chamber and portrait captures come from the ROM
+PASS intro integration: all 588 displayed frames checked pixel-exactly; audio, A pause/resume, 98-second end and loading handoff
+PASS authentic loading integration: 188 displayed frames; exact pixels/palette, three timed phases, hidden objects, frozen physics and held-input isolation
+PASS frontend restored intro: linked areas, camera, pickups, pause, intro playback and loading integration
+PASS menu cancel integration: B wins over A/START/SELECT/directions in MENU and OPTIONS; selection, SOUND and SRAM remain unchanged
+PASS settings integration: menu writes SOUND/INTRO v2 SRAM, soft-reset reload, corrupt-record defaults. Disk persistence is checked separately; real hardware is not tested.
+PASS defeat integration: three life-consuming falls, restored HP, Game Over, frozen simulation, retry resets run
+PASS lethal combat integration: one life consumed, HP restored, same area and gems preserved
+PASS combat integration: guard area, contact damage, sword defeat and persistent defeat counter
+PASS pickup death integration: input-only fall during active notification, hidden gem and digit OBJ on respawn, four gems and defeated enemies preserved; snapshot restored for route regression
+PASS upper wall graphics integration: native framebuffer matches the corrected world during upper jump and descent, including the formerly blank top/right corners
+PASS upper route integration: ninth viewport reached through UP+A, fifth gem and HUD, safe descending camera return; lives and defeats preserved
+PASS upper revisit integration: second input-only ascent and descent, five gems and HUD retained, no duplicate pickup, defeated guard retained, no life loss
+PASS lever visual integration: observed lowered handle matches ROM framebuffer after A interaction and shared-world projection
+PASS ladder approach integration: nineteen views; controller-driven two-way portals, fifth guard defeated persistently, ground/wall, pause, return/revisit and native world-pixel checks; ladder climbing unfinished
+PASS crawl integration: controller-driven low passage and return, both poses/facings pixel-checked including transparency, fixed feet, forced low stance, no jump/attack, pause and safe stand-up; run state preserved
+PASS crawl sky integration: sparse repair and untouched world pixels match the native framebuffer beneath the roof and at the far exit
+PASS crawl roof integration: recovered header foreground and remaining world pixels match native VRAM at both crawl captures
+PASS lower landing integration: input-only registered drop, world-pixel checks, walk, pause, pit and local respawn; lever/gems/defeats persist; thorn mechanics remain unfinished
+PASS lower drop safety integration: controller-driven leftward miss remains outside lower rock, loses one life and respawns on the upper edge
+PASS post-lever edge integration: fifteenth partial view reached by jumping, world-pixel check, pause, input-only pit respawn, return and persistent switch/gems/defeats
+PASS lever route integration: two new registered views, input-only fourth guard combat, persistent defeat and gems across return/revisit, pause and no life loss; isolated branch restored before existing regression
+PASS island gap integration: twelfth view, registered portal, gap jumps both ways, high ledge and return using controller input; five gems, three defeats and lives preserved
+PASS ramp route integration: eleven connected views, two measured portals each way, upper island landing, pause, input-only pit respawn and persistent five gems/three defeats; return to lower route without life loss
+PASS bridge run integration: nine linked viewports, third guard defeated through input, two registered portals in both directions, native riser pixels, solid wall and pause; gems and defeats persist
+PASS continuation integration: input-driven sixth viewport, registered portal, slope, native background pixels, bridge jump both directions, pause and persistent round trip
+PASS motion/gap integration: three recorded walk frames, three attack phases, registered fifth viewport, gap jump and fall, five persistent gems, OBJ digits 3/4/5, second guard defeat, return persistence
+PASS wall animation: native ROM stops running at blocked left boundary
+PASS cliff collision integration: missed jump hits solid side, falls, loses one life and preserves gems on respawn
+PASS reset input integration: held A/B across R reset remain idle; release and fresh press restore jump and attack
+PASS directional camera integration: native right/left framing, idle horizontal hold and bounded continuous following
+PASS continuous camera integration: bounded six-pixel camera steps across areas 1-14, world-aligned background checks, live controls and pause; no portal-driven camera reset
+PASS disk save integration: SOUND and INTRO off/on survive fresh mGBA core reloads; corrupt checksum restores both enabled

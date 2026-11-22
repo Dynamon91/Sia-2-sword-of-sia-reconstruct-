@@ -3,9 +3,9 @@
 Ricostruzione nativa per Game Boy Advance basata sui video di riferimento del gioco non pubblicato, registrati da Papacube. **Progetto in sviluppo.**
 
 <!-- PROJECT_PROGRESS -->
-![Avanzamento complessivo stimato: 16%](docs/progress.svg)
+![Avanzamento complessivo stimato: 16.5%](docs/progress.svg)
 
-**Progetto completo: circa 16%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
+**Progetto completo: circa 16.5%** — stima ponderata, non misura del tempo rimanente. [Criteri e stato delle singole parti](docs/PROGRESS.md).
 <!-- /PROJECT_PROGRESS -->
 
 ## Base del progetto: menu e intro verificati
@@ -26,12 +26,13 @@ La priorità è confrontare la grafica con i riferimenti e con catture reali del
 
 ## Stato del percorso giocabile
 
-Sono collegate **17 inquadrature parziali del primo livello del Mondo 1**, con movimento controllabile, salti, prese ai bordi, collisioni provvisorie, cinque gemme, quattro guardie prototipo, danni, cadute, vite e Game Over.
+Sono collegate **19 inquadrature parziali del primo livello del Mondo 1**, con movimento controllabile, salti, prese ai bordi, collisioni provvisorie, cinque gemme, cinque guardie prototipo, danni, cadute, vite e Game Over.
 
-La leva si attiva con A a terra nelle vicinanze e conserva lo stato durante il respawn. Dopo la discesa sul piano inferiore, Giù+sinistra permette di strisciare nel passaggio basso; Giù+destra torna indietro. Sotto il soffitto Sia resta bassa e si rialza dove c’è spazio. La camera segue il personaggio nello spazio comune alle viste.
+La leva si attiva con A a terra nelle vicinanze e conserva lo stato durante il respawn. Dopo la discesa sul piano inferiore, Giù+sinistra permette di strisciare nel passaggio basso; Giù+destra torna indietro. Sotto il soffitto Sia resta bassa e si rialza dove c’è spazio. La camera segue il personaggio nello spazio comune alle viste. All’uscita del tunnel si può continuare a sinistra, affrontare la quinta guardia con B e raggiungere il piede della scala. Il ritorno conserva gemme, guardie sconfitte e leva durante la partita. La salita della scala e il piano superiore restano da integrare.
 
 Il livello completo, i boss, gli altri livelli e mondi, il movimento/danno delle spine e diverse animazioni restano da ricostruire. Geometria, dettagli coperti e alcune tarature della camera sono provvisori. Le musiche usano ancora la registrazione mista disponibile.
 
+- [Nuovo percorso fino alla scala: riferimenti, controlli e verifiche](references/LADDER_APPROACH_STATUS.md)
 - [Leva e riscontro visivo](references/LEVER_VISUAL_STATUS.md)
 - [Passaggio basso, controlli e riferimenti](references/CRAWL_STATUS.md)
 - [Parete superiore e raccordi del fondale](references/UPPER_WALL_GRAPHICS_STATUS.md)
@@ -46,7 +47,11 @@ La pipeline [Validate GBA reconstruction](https://github.com/Dynamon91/Sia-2-swo
 
 La base di codice verificata nel checkpoint [99fe7d3](https://github.com/Dynamon91/Sia-2-sword-of-sia-reconstruct-/commit/99fe7d31fe1732919e91b709178c59e522a4f625) controlla **tutti i 588 fotogrammi presentati dell’intro**, le tre selezioni del menu e il percorso giocabile. [Esecuzione CI superata](https://github.com/Dynamon91/Sia-2-sword-of-sia-reconstruct-/actions/runs/43725681183).
 
-Il pacchetto comprende la ROM, 115 screenshot reali, animazioni del gameplay, `TEST_REPORT.txt`, `BUILD_INFO.json` e checksum. I dati della build corrente si trovano nel suo artifact. **Hardware GBA reale non ancora verificato.**
+Il checkpoint del 22 novembre aggiunge il percorso fino alla scala: 18 programmi C con sanitizzatori, 19 test Python, build GCC ARM 14, suite mGBA e riapertura SRAM superati localmente. I risultati CI della nuova revisione si verificano nella pipeline collegata sopra.
+
+Il pacchetto comprende la ROM, 121 screenshot reali, animazioni del gameplay, `TEST_REPORT.txt`, `BUILD_INFO.json` e checksum. I dati della build corrente si trovano nel suo artifact. **Hardware GBA reale non ancora verificato.**
+
+![Piede della scala: cattura reale della ROM in mGBA](previews/ladder_foot_reached.png)
 
 ## Controlli di base
 

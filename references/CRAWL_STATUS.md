@@ -5,7 +5,7 @@ only needed to enter the low stance. Releasing it under the ceiling keeps Sia
 low; jump and attack are suppressed there. At either clear end, releasing DOWN
 allows standing without changing the feet position. The new seventeenth partial
 viewport follows the lower strip to the left; move RIGHT with DOWN to return.
-The far left boundary remains the current route limit, not a completed level.
+The far left exit now continues to two additional partial views: a fifth guard and the ladder foot. See LADDER_APPROACH_STATUS.md. Ladder climbing remains unfinished.
 The upward return to the original lever island is still not authored.
 
 Two prone poses come from the supplied video at 185 and 186.1 seconds. They are
