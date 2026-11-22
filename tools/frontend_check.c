@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "../src/game.h"
+#include "../src/ladder.h"
 #include "../src/alignment.h"
 #include "../src/scenery.h"
 #include "../src/crawl_sky.h"
@@ -63,7 +64,7 @@ static void run(struct mCore *c,unsigned count){
     int movement=world_x-camera_last_world_x,center=shown_x+PLAYER_W*FP/2;
     if(movement==320&&abs(center-80*FP)<=FP)camera_right_frames++;
     if(movement==-320&&abs(center-128*FP)<=FP)camera_left_frames++;
-    if(!movement&&!c->busRead32(c,0x0203F154)&&center>=16*FP&&center<=224*FP){
+    if(!movement&&!c->busRead32(c,0x0203F154)&&c->busRead32(c,0x0203F11C)!=CLIMB_LADDER&&center>=16*FP&&center<=224*FP){
      assert(camera_x==scroll_last_x);camera_idle_frames++;
     }
    }
@@ -88,10 +89,12 @@ static void run(struct mCore *c,unsigned count){
 }
 static unsigned value(struct mCore *c,int offset){return c->busRead32(c,0x0203F000+offset*4);}
 static unsigned shown(struct mCore *c,int offset){return c->busRead32(c,0x0203F100+offset*4);}
-static void state(struct mCore *c,unsigned expected){
- if(value(c,0)!=expected)fprintf(stderr,"Expected state %u, got %u at frame %u\n",expected,value(c,0),c->frameCounter(c));
+static unsigned ladder_value(struct mCore *c,int offset){return c->busRead32(c,0x0203F200+offset*4);}
+static void state_at(struct mCore *c,unsigned expected,unsigned line){
+ if(value(c,0)!=expected)fprintf(stderr,"Expected state %u, got %u at frame %u (test line %u)\n",expected,value(c,0),c->frameCounter(c),line);
  assert(value(c,0)==expected);
 }
+#define state(c,expected) state_at(c,expected,__LINE__)
 static void await_arrival(struct mCore *c){
  if(value(c,0)==2){tap(c,8);state(c,11);}
  for(unsigned n=0;value(c,0)==11&&n<LOADING_TOTAL_FRAMES+30;n++)run(c,1);
@@ -252,6 +255,10 @@ static void check_world_background(struct mCore *c){
    int gx=cx-view_origin[guards[i][0]][0],gy=cy-view_origin[guards[i][0]][1]+guards[i][3];
    if(x>=gx+guards[i][1]-22&&x<gx+guards[i][2]+45&&y>=gy-60&&y<gy+12)actor=1;
   }
+  if(ladder_value(c,0)){
+   int gx=cx-view_origin[19][0],gy=cy-view_origin[19][1];
+   if(x>=gx+62&&x<gx+145&&y>=gy+12&&y<gy+91)actor=1;
+  }
   if(actor)continue;
   int expected=(value(c,43)?opened:world)[(380-cy+y)*1500+x-cx];
   for(unsigned a=0;a<VIEW_COUNT;a++){
@@ -307,6 +314,100 @@ static void move_to(struct mCore *c,unsigned key,int target){
   run(c,1);
  }
  c->setKeys(c,0);run(c,4);
+}
+/* Native VRAM checks cover alpha gaps as well as opaque pose pixels. */
+static unsigned check_ladder_pose(struct mCore *c){
+ static unsigned char climb[LADDER_POSES*40*64],attack[3*112*96],world[810000],patch[CRAWL_SKY_WIDTH*CRAWL_SKY_HEIGHT];static int loaded;
+ if(!loaded){
+  const char *paths[]={"assets/ladder_cycle.bin","assets/ladder_attack_cycle.bin","assets/scroll_world_open.bin"};
+  unsigned char *targets[]={climb,attack,world};size_t sizes[]={sizeof(climb),sizeof(attack),sizeof(world)};
+  for(unsigned i=0;i<3;i++){FILE *f=fopen(paths[i],"rb");assert(f);assert(fread(targets[i],1,sizes[i],f)==sizes[i]);fclose(f);}
+  load_crawl_patch("assets/crawl_passage_sky_patch.bin",patch);load_crawl_patch("assets/crawl_passage_roof_patch.bin",patch);loaded=1;
+ }
+ assert(shown(c,0)==7&&shown(c,7)==CLIMB_LADDER&&value(c,43));
+ unsigned phase=shown(c,25),frame=phase<3?phase:shown(c,24);int attacking=phase<3,flip=attacking&&(int)shown(c,5)>0;
+ int w=attacking?112:40,h=attacking?96:64,anchor=attacking?64:20;
+ assert(frame<(attacking?3:LADDER_POSES));
+ int left=aligned_sprite_x((int)shown(c,1)/FP+PLAYER_W/2,w,anchor,flip);
+ int top=(int)shown(c,2)/FP-(int)shown(c,3)+PLAYER_H-h;
+ int cx=(int)shown(c,15)/FP,cy=(int)shown(c,16)/FP;unsigned opaque=0,transparent=0;
+ unsigned base=(c->busRead16(c,0x04000000)&16)?0x0600A000:0x06000000;
+ for(int y=0;y<h;y++)for(int x=0;x<w;x++){
+  int sx=left+x,sy=top+y;if(sx<0||sx>=240||sy<0||sy>=160)continue;
+  unsigned ink=(attacking?attack:climb)[frame*w*h+y*w+(flip?w-1-x:x)];
+  int wx=sx-cx,wy=380-cy+sy;assert(wx>=0&&wx<1500&&wy>=0&&wy<540);
+  unsigned expected=world[wy*1500+wx];
+  int px=wx+view_origin[16][0],py=wy-380+view_origin[16][1];
+  if((unsigned)px<CRAWL_SKY_WIDTH&&(unsigned)py<CRAWL_SKY_HEIGHT&&px>=crawl_patch_first_column(py)&&patch[py*CRAWL_SKY_WIDTH+px])expected=patch[py*CRAWL_SKY_WIDTH+px];
+  if(ink){expected=ink;opaque++;}
+  else{
+   if(shown(c,27)&&sx>=cx-view_origin[19][0]+62&&sx<cx-view_origin[19][0]+145&&sy>=cy-view_origin[19][1]+12&&sy<cy-view_origin[19][1]+91)continue;
+   transparent++;
+  }
+  unsigned actual=c->busRead8(c,base+sy*240+sx);
+  if(actual!=expected){fprintf(stderr,"Ladder pixel mismatch phase %u frame %u flip %d local %d,%d screen %d,%d ink %u actual %u expected %u\n",phase,frame,flip,x,y,sx,sy,ink,actual,expected);capture(c,"build/ladder_pixel_fail.ppm");}
+  assert(actual==expected);
+ }
+ assert(opaque>200&&transparent>200);
+ return 1u<<(frame+(attacking?(flip?7:4):0));
+}
+static void check_ladder_branch(struct mCore *c){
+ void *saved=malloc(c->stateSize(c));assert(saved&&c->saveState(c,saved));
+ const char *prior=sequence_dir;unsigned prior_frame=sequence_frame;
+ sequence_dir="build/ladder_climb_sequence";sequence_frame=0;
+ unsigned lives=value(c,31),falls=value(c,18),health=value(c,22),seen=0;
+ move_to(c,16,153);assert(value(c,17)==18&&value(c,14));
+ c->setKeys(c,64);
+ for(unsigned i=0;i<80&&(i==0||(int)ladder_value(c,4)>68*FP);i++){
+  run(c,1);if(shown(c,7)==CLIMB_LADDER)seen|=check_ladder_pose(c);
+ }
+ c->setKeys(c,0);run(c,4);
+ assert(value(c,17)==19&&value(c,11)==CLIMB_LADDER&&ladder_value(c,0)==2);
+ assert((int)ladder_value(c,4)==68*FP);capture(c,"build/ladder_climb_middle.ppm");check_world_background(c);
+ int y=(int)value(c,9);unsigned pose=ladder_value(c,2);run(c,12);
+ assert((int)value(c,9)==y&&ladder_value(c,2)==pose);
+ tap(c,8);state(c,8);unsigned tick=value(c,16);run(c,20);
+ assert(value(c,16)==tick&&ladder_value(c,2)==pose&&value(c,11)==CLIMB_LADDER);
+ capture(c,"build/ladder_climb_pause.ppm");tap(c,1);state(c,7);
+ for(unsigned swing=0;swing<2;swing++){
+  c->setKeys(c,34);
+  for(unsigned i=0;i<16;i++){
+   run(c,1);if(shown(c,7)==CLIMB_LADDER)seen|=check_ladder_pose(c);
+   if(shown(c,25)==1)capture(c,"build/ladder_mounted_attack.ppm");
+  }
+  c->setKeys(c,0);run(c,4);
+  fprintf(stderr,"Mounted sword %u: hp %u defeated %u y %d expected %d state %u feet %d attack %u x %d guard %d\n",swing,ladder_value(c,0),value(c,26),(int)value(c,9),y,value(c,11),(int)ladder_value(c,4),ladder_value(c,5),(int)value(c,8),(int)ladder_value(c,1));
+ }
+ assert(!ladder_value(c,0)&&value(c,26)==6&&(int)value(c,9)==y);
+ c->setKeys(c,18);
+ for(unsigned i=0;i<16;i++){run(c,1);seen|=check_ladder_pose(c);}
+ c->setKeys(c,0);run(c,4);
+ c->setKeys(c,64);
+ for(unsigned i=0;i<80&&value(c,11)==CLIMB_LADDER;i++){run(c,1);if(shown(c,7)==CLIMB_LADDER)seen|=check_ladder_pose(c);}
+ c->setKeys(c,0);run(c,8);
+ assert(value(c,17)==19&&value(c,14)&&!value(c,11)&&(int)value(c,9)==40*FP);
+ check_world_background(c);capture(c,"build/ladder_upper_arrival.ppm");
+ move_to(c,16,143);assert(value(c,17)==20&&value(c,14)&&!ladder_value(c,0));
+ check_world_background(c);capture(c,"build/ladder_upper_exit.ppm");
+ move_to(c,32,123);assert(value(c,17)==19&&value(c,14));
+ c->setKeys(c,128);
+ for(unsigned i=0;i<110&&(i==0||value(c,11)==CLIMB_LADDER);i++){
+  run(c,1);if(shown(c,7)==CLIMB_LADDER)seen|=check_ladder_pose(c);
+  if(shown(c,7)==CLIMB_LADDER&&shown(c,26)==84*FP)capture(c,"build/ladder_descent.ppm");
+ }
+ c->setKeys(c,0);run(c,8);
+ assert(value(c,17)==18&&value(c,14)&&!value(c,11)&&(int)value(c,9)==72*FP);
+ check_world_background(c);capture(c,"build/ladder_climb_return.ppm");
+ c->setKeys(c,64);run(c,10);assert(value(c,11)==CLIMB_LADDER);
+ c->setKeys(c,17);run(c,2);assert(!value(c,11)&&(int)value(c,36)<0);
+ c->setKeys(c,0);for(unsigned i=0;i<120&&!value(c,14);i++)run(c,1);run(c,4);
+ assert(value(c,17)==18&&value(c,14)&&value(c,31)==lives&&value(c,18)==falls&&value(c,22)==health);
+ assert(value(c,10)==5&&value(c,26)==6&&!ladder_value(c,0)&&value(c,42)&&value(c,43));
+ assert(seen==1023);
+ FILE *f=fopen("build/ladder_climb_sequence/frame_count.txt","w");assert(f);fprintf(f,"%u\n",sequence_frame);fclose(f);
+ sequence_dir=NULL;assert(c->loadState(c,saved));free(saved);scroll_ready=0;
+ sequence_dir=prior;sequence_frame=prior_frame;
+ puts("PASS ladder climb integration: controller-driven ascent/descent, four climb poses and three mounted sword phases in both directions pixel-checked with transparency; sixth guard, upper portals, pause, jump detach and persistent round trip without health/life loss");
 }
 static void catch_first_ledge(struct mCore *c){
  move_to(c,16,107);c->setKeys(c,1);run(c,4);c->setKeys(c,0);
@@ -486,6 +587,7 @@ int main(int argc,char **argv){
  assert(!mkdir("build/lower_landing_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/crawl_sequence",0777)||errno==EEXIST);
  assert(!mkdir("build/ladder_approach_sequence",0777)||errno==EEXIST);
+ assert(!mkdir("build/ladder_climb_sequence",0777)||errno==EEXIST);
  mLogSetDefaultLogger(&test_logger);
  assert(argc==2);struct mCore *c=mCoreFind(argv[1]);assert(c&&c->init(c));mCoreInitConfig(c,NULL);
  color_t *pixels=calloc(240*160,sizeof(color_t));assert(pixels);c->setVideoBuffer(c,pixels,240);
@@ -970,6 +1072,7 @@ int main(int argc,char **argv){
  c->setKeys(c,32);run(c,100);c->setKeys(c,0);run(c,8);
  assert(value(c,17)==18&&(int)value(c,8)==132*FP&&value(c,14));
  check_world_background(c);capture(c,"build/ladder_foot_reached.ppm");
+ check_ladder_branch(c);
  tap(c,8);state(c,8);unsigned ladder_tick=value(c,16);run(c,20);assert(value(c,16)==ladder_tick);
  capture(c,"build/ladder_approach_pause.ppm");tap(c,1);state(c,7);
  c->setKeys(c,16);
@@ -985,7 +1088,7 @@ int main(int argc,char **argv){
  fprintf(ladder_count,"%u\n",sequence_frame);fclose(ladder_count);
  sequence_dir=NULL;assert(c->loadState(c,ladder_before));free(ladder_before);
  sequence_dir=ladder_previous_sequence;sequence_frame=ladder_previous_frame;
- puts("PASS ladder approach integration: nineteen views; controller-driven two-way portals, fifth guard defeated persistently, ground/wall, pause, return/revisit and native world-pixel checks; ladder climbing unfinished");
+ puts("PASS ladder approach integration: nineteen views; controller-driven two-way portals, fifth guard defeated persistently, ground/wall, pause, return/revisit and native world-pixel checks; climb tested separately");
  c->setKeys(c,144);
  for(int i=0;i<360&&(value(c,17)!=15||(int)value(c,8)<167*FP);i++){
   run(c,1);if(shown(c,21))crawl_seen|=check_crawl_pose(c);

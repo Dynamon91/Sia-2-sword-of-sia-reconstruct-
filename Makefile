@@ -16,49 +16,53 @@ build/main.o: src/main.c src/view_camera.h src/settings.h src/game.h src/alignme
 	$(CC) $(CFLAGS) -O3 -marm $(DEPFLAGS) -c $< -o $@
 build/level_progress.o: src/level_progress.c src/level_progress.h | build
 	$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
+build/ladder.o: src/ladder.c src/ladder.h src/game.h | build
+	$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
 build/story.o: src/story.c src/story.h assets/assets.h | build
 	$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
 build/assets.o: src/assets.s assets/jump_cycle.bin assets/ledge_cycle.bin assets/ambient_gems.bin assets/gap.bin assets/guard2_sprite.bin assets/walk_cycle.bin assets/attack_cycle.bin assets/ui_more_tiles.bin assets/guard_room.bin assets/guard_sprite.bin assets/cliff.bin assets/frontend.bin assets/audio_title.pcm assets/audio_intro.pcm assets/intro_video.bin assets/audio_level.pcm assets/font.bin assets/room.bin assets/room_sprites.bin assets/room_sky.bin assets/bridge.bin assets/bridge_sky.bin assets/bridge_run.bin assets/ui_palette.bin assets/ui_tiles.bin assets/ui_dialogs.bin assets/room_backdrop.bin assets/room_spans.bin assets/bridge_backdrop.bin assets/bridge_spans.bin | build
 	$(CC) -mcpu=arm7tdmi -marm -c $< -o $@
 build/assets.o: assets/upper_background.bin assets/ui_digit5_tiles.bin assets/cloud_strip.bin assets/continuation_background.bin assets/bridge_run_background.bin assets/riser_background.bin
 build/assets.o: assets/ramp_lower_background.bin assets/ramp_upper_background.bin assets/island_gap_background.bin assets/lever_entry_background.bin assets/lever_room_background.bin assets/scroll_world.bin assets/scroll_world_sky.bin assets/scroll_cloud.bin
-build/sia2_lab.elf: build/start.o build/game.o build/main.o build/story.o build/level_progress.o build/assets.o link.ld
-	$(CC) -mcpu=arm7tdmi -mthumb-interwork -nostdlib -T link.ld -Wl,-Map,build/sia2_lab.map build/start.o build/game.o build/main.o build/story.o build/level_progress.o build/assets.o -lgcc -o $@
+build/sia2_lab.elf: build/start.o build/game.o build/main.o build/story.o build/level_progress.o build/ladder.o build/assets.o link.ld
+	$(CC) -mcpu=arm7tdmi -mthumb-interwork -nostdlib -T link.ld -Wl,-Map,build/sia2_lab.map build/start.o build/game.o build/main.o build/story.o build/level_progress.o build/ladder.o build/assets.o -lgcc -o $@
 build/sia2_lab.gba: build/sia2_lab.elf tools/fix_header.py
 	$(PREFIX)objcopy -O binary $< $@
 	python3 tools/fix_header.py $@
 test: | build
-	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_ladder_approach.c -o build/test_ladder_approach
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c src/ladder.c tests/test_ladder.c -o build/test_ladder
+	./build/test_ladder
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c src/ladder.c tests/test_ladder_approach.c -o build/test_ladder_approach
 	./build/test_ladder_approach
-	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_crawl.c -o build/test_crawl
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c src/ladder.c tests/test_crawl.c -o build/test_crawl
 	./build/test_crawl
-	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_post_lever.c -o build/test_post_lever
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c src/ladder.c tests/test_post_lever.c -o build/test_post_lever
 	./build/test_post_lever
-	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_view_camera.c -o build/test_view_camera
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c src/ladder.c tests/test_view_camera.c -o build/test_view_camera
 	./build/test_view_camera
-	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_lever_route.c -o build/test_lever_route
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c src/ladder.c tests/test_lever_route.c -o build/test_lever_route
 	./build/test_lever_route
-	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_island_gap.c -o build/test_island_gap
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c src/ladder.c tests/test_island_gap.c -o build/test_island_gap
 	./build/test_island_gap
-	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_ramp_route.c -o build/test_ramp_route
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c src/ladder.c tests/test_ramp_route.c -o build/test_ramp_route
 	./build/test_ramp_route
-	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_upper_route.c -o build/test_upper_route
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c src/ladder.c tests/test_upper_route.c -o build/test_upper_route
 	./build/test_upper_route
-	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_bridge_run.c -o build/test_bridge_run
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c src/ladder.c tests/test_bridge_run.c -o build/test_bridge_run
 	./build/test_bridge_run
-	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_continuation.c -o build/test_continuation
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c src/ladder.c tests/test_continuation.c -o build/test_continuation
 	./build/test_continuation
-	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_air_motion.c -o build/test_air_motion
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c src/ladder.c tests/test_air_motion.c -o build/test_air_motion
 	./build/test_air_motion
-	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_ledge.c -o build/test_ledge
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c src/ladder.c tests/test_ledge.c -o build/test_ledge
 	./build/test_ledge
-	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_collisions.c -o build/test_collisions
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c src/ladder.c tests/test_collisions.c -o build/test_collisions
 	./build/test_collisions
-	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_lives.c -o build/test_lives
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c src/ladder.c tests/test_lives.c -o build/test_lives
 	./build/test_lives
-	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_game.c -o build/test_game
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c src/ladder.c tests/test_game.c -o build/test_game
 	./build/test_game
-	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c tests/test_gap_motion.c -o build/test_gap_motion
+	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g src/game.c src/level_progress.c src/ladder.c tests/test_gap_motion.c -o build/test_gap_motion
 	./build/test_gap_motion
 	gcc -std=c99 -Wall -Wextra -Werror -fsanitize=undefined,address -g tests/test_settings.c -o build/test_settings
 	./build/test_settings
@@ -80,3 +84,5 @@ build/assets.o: assets/crawl_cycle.bin
 
 build/assets.o: assets/scroll_world_open.bin
 build/assets.o: assets/crawl_passage_roof_patch.bin
+build/assets.o: assets/ladder_cycle.bin assets/ladder_attack_cycle.bin assets/ladder_upper_guard.bin
+build/assets.o: assets/ladder_attack_bounds.bin

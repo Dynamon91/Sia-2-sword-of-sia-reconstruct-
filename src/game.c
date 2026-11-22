@@ -1,5 +1,6 @@
 #include "game.h"
 #include "alignment.h"
+#include "ladder.h"
 /* Approximate first viewport from the supplied recording, not a recovered ROM map. */
 const Platform platforms[PLATFORM_COUNT]={{81,88,70,8},{186,40,54,8}};
 static const Platform bridge_platforms[3]={{33,BRIDGE_SURFACE_Y,48,8},{81,BRIDGE_SURFACE_Y,125,8},{206,BRIDGE_SURFACE_Y,34,8}};
@@ -7,6 +8,7 @@ static const Platform cliff_platforms[2]={{0,54,43,8},{96,115,144,8}};
 static const Platform cliff_rock={96,115,144,45};
 static const Platform crawl_passage_roof={83,-143,164,167};
 static const Platform ladder_foot_wall={0,-80,132,240};
+static const Platform ladder_upper_walls[2]={{176,-80,64,240},{164,-49,76,240}};
 static const Platform lower_landing_roof={0,-80,164,167};
 static const Platform post_lever_roof={128,-80,112,140};
 static const Platform lever_wall={0,-80,44,240};
@@ -48,9 +50,17 @@ static int lever_edge_floor(int player_x){
  int center=player_x+PLAYER_W/2;if(center<44)center=44;if(center>219)center=219;
  return profile_height(surface,5,center);
 }
-int game_extension_floor(int area,int player_x){
+int __attribute__((section(".romtext"),noinline)) game_extension_floor(int area,int player_x){
   if(area==5)return game_continuation_floor(player_x);
   int center=player_x+PLAYER_W/2,floor=4096;
+  if(area==20){int h=game_extension_floor(19,player_x+12);return h==4096?4096:h+31;}
+  if(area==19){
+   static const int top[][2]={{0,69},{20,71},{40,73},{80,76},{100,76},{118,80},{148,80},{175,85}};
+   if(player_x+PLAYER_W<=0||player_x>=176)return 4096;
+   if(center<0)center=0;
+   if(center>175)center=175;
+   return profile_height(top,8,center);
+  }
   if(area==18)return player_x+PLAYER_W>132&&player_x<240?112:4096;
   if(area==17)return player_x+PLAYER_W>12&&player_x<240?55:4096;
   if(area==16)return player_x+PLAYER_W>0&&player_x<240?55:4096;
@@ -126,6 +136,7 @@ void __attribute__((section(".romtext"),noinline)) game_reset(Game *g){
   level_progress_reset(&g->progress,3);
   g->enemy4_x=80*FP;g->enemy4_dir=-1;g->enemy4_hp=2;g->enemy4_flash=0;g->enemy4_last_swing=0;
   g->enemy5_x=55*FP;g->enemy5_dir=1;g->enemy5_hp=2;g->enemy5_flash=0;g->enemy5_last_swing=0;
+  g->enemy6_x=94*FP;g->enemy6_dir=-1;g->enemy6_hp=2;g->enemy6_flash=0;g->enemy6_last_swing=0;g->ladder_ticks=0;
   g->enemy3_x=118*FP;g->enemy3_dir=-1;g->enemy3_hp=2;g->enemy3_flash=0;g->enemy3_last_swing=0;
   g->crawling=0;g->crawl_ticks=0;
   g->hurt_timer=0;g->game_over=0;g->walk_ticks=0;g->lives=3;
@@ -162,6 +173,8 @@ static void __attribute__((section(".romtext"),noinline)) respawn_area(Game *g){
   if(g->area==16){g->x=55*FP;g->y=15*FP;}
   if(g->area==17){g->x=120*FP;g->y=15*FP;}
   if(g->area==18){g->x=198*FP;g->y=72*FP;}
+  if(g->area>=19){g->x=(g->area==20?128:140)*FP;g->y=(game_extension_floor(g->area,g->x/FP)-PLAYER_H)*FP;}
+  g->ladder_ticks=0;
   g->crawling=0;g->crawl_ticks=0;
   g->vx=0;g->vy=0;g->grounded=1;g->climbing=0;g->sign_open=0;
   g->camera=0;camera(g);
@@ -172,7 +185,7 @@ static void lose_life(Game *g){
   if(g->lives)g->lives--;
   /* Pickup feedback belongs to the lost life, while the collected gem survives. */
   g->pickup_timer=0;g->crawling=0;g->crawl_ticks=0;
-  g->attack=0;g->walk_ticks=0;g->vx=0;g->vy=0;g->climbing=0;g->ledge_ticks=0;g->ledge_cooldown=0;
+  g->attack=0;g->walk_ticks=0;g->vx=0;g->vy=0;g->climbing=0;g->ledge_ticks=0;g->ledge_cooldown=0;g->ladder_ticks=0;
   if(!g->lives){g->progress.health=0;g->game_over=1;return;}
   g->progress.health=g->progress.max_health;
   respawn_area(g);g->hurt_timer=90;
@@ -183,7 +196,7 @@ static void camera(Game *g){
   if(g->camera_y>0)g->camera_y=0;
   if(g->camera_y<-40)g->camera_y=-40;
 }
-static void collect(Game *g){
+static void __attribute__((section(".romtext"),noinline)) collect(Game *g){
   for(unsigned i=0;i<GEM_COUNT;i++){
    const Gem *item=&level_gems[i];
    if(item->area!=g->area)continue;
@@ -197,31 +210,32 @@ static void collect(Game *g){
 int game_damage(Game *g,unsigned amount){
   if(g->game_over||g->hurt_timer||!amount)return 0;
   if(!level_take_damage(&g->progress,amount))return 0;
-  g->climbing=0;g->ledge_ticks=0;g->ledge_cooldown=18;g->attack=0;g->hurt_timer=60;
+  g->climbing=0;g->ledge_ticks=0;g->ledge_cooldown=18;g->attack=0;g->hurt_timer=60;g->ladder_ticks=0;
   if(!g->progress.health)lose_life(g);
   return 1;
 }
-static void guard_step(Game *g){
-  if((g->area<3||g->area>7)&&g->area!=12&&g->area!=13&&g->area!=17&&g->area!=18)return;
-  int kind=g->area>=17?4:g->area>=12?3:g->area>=6?2:g->area>=4?1:0;
+static void __attribute__((section(".romtext"),noinline)) guard_step(Game *g){
+  if((g->area<3||g->area>7)&&g->area!=12&&g->area!=13&&g->area!=17&&g->area!=18&&g->area!=19&&g->area!=20)return;
+  int kind=g->area>=19?5:g->area>=17?4:g->area>=12?3:g->area>=6?2:g->area>=4?1:0;
   int second=kind==1;
-  int *hp=kind==4?&g->enemy5_hp:kind==3?&g->enemy4_hp:kind==2?&g->enemy3_hp:second?&g->enemy2_hp:&g->enemy_hp;
-  int *position=kind==4?&g->enemy5_x:kind==3?&g->enemy4_x:kind==2?&g->enemy3_x:second?&g->enemy2_x:&g->enemy_x;
-  int *direction=kind==4?&g->enemy5_dir:kind==3?&g->enemy4_dir:kind==2?&g->enemy3_dir:second?&g->enemy2_dir:&g->enemy_dir;
-  int *flash=kind==4?&g->enemy5_flash:kind==3?&g->enemy4_flash:kind==2?&g->enemy3_flash:second?&g->enemy2_flash:&g->enemy_flash;
-  unsigned *last=kind==4?&g->enemy5_last_swing:kind==3?&g->enemy4_last_swing:kind==2?&g->enemy3_last_swing:second?&g->enemy2_last_swing:&g->enemy_last_swing;
+  int *hp=kind==5?&g->enemy6_hp:kind==4?&g->enemy5_hp:kind==3?&g->enemy4_hp:kind==2?&g->enemy3_hp:second?&g->enemy2_hp:&g->enemy_hp;
+  int *position=kind==5?&g->enemy6_x:kind==4?&g->enemy5_x:kind==3?&g->enemy4_x:kind==2?&g->enemy3_x:second?&g->enemy2_x:&g->enemy_x;
+  int *direction=kind==5?&g->enemy6_dir:kind==4?&g->enemy5_dir:kind==3?&g->enemy4_dir:kind==2?&g->enemy3_dir:second?&g->enemy2_dir:&g->enemy_dir;
+  int *flash=kind==5?&g->enemy6_flash:kind==4?&g->enemy5_flash:kind==3?&g->enemy4_flash:kind==2?&g->enemy3_flash:second?&g->enemy2_flash:&g->enemy_flash;
+  unsigned *last=kind==5?&g->enemy6_last_swing:kind==4?&g->enemy5_last_swing:kind==3?&g->enemy4_last_swing:kind==2?&g->enemy3_last_swing:second?&g->enemy2_last_swing:&g->enemy_last_swing;
   if(!*hp)return;
   if(*flash>0)--*flash;
-  *position+=*direction*64;
-  int left=kind==4?38:kind==3?65:kind==2?85:second?188:140,right=kind==4?70:kind==3?100:kind==2?145:second?218:210;
+  *position+=*direction*(kind==5?192:64);
+  int left=kind==5?84:kind==4?38:kind==3?65:kind==2?85:second?188:140,right=kind==5?109:kind==4?70:kind==3?100:kind==2?145:second?218:210;
   if(*position<left*FP){*position=left*FP;*direction=1;}
   if(*position>right*FP){*position=right*FP;*direction=-1;}
-  int ex=*position/FP+(g->area==18?116:g->area==13?44:0)-(g->area==7?168:g->area==5?188:0);
-  int ey=(kind==4?55+(g->area==18?57:0):kind==3?63+(g->area==13?86:0):kind==2?104+(g->area==7?7:0):second?98+(g->area==5?25:0):guard_floor(ex+7))-40;
+  int ex=*position/FP+(g->area==18?116:g->area==13?44:0)-(g->area==20?12:g->area==7?168:g->area==5?188:0);
+  int ey=(kind==5?game_extension_floor(19,*position/FP+2)+(g->area==20?31:0):kind==4?55+(g->area==18?57:0):kind==3?63+(g->area==13?86:0):kind==2?104+(g->area==7?7:0):second?98+(g->area==5?25:0):guard_floor(ex+7))-40;
   int px=g->x/FP,py=g->y/FP;
   int vertical=py+PLAYER_H>ey&&py<ey+40;
+  int sword_vertical=py+PLAYER_H>ey&&py-(g->climbing==CLIMB_LADDER?32:0)<ey+40;
   int sword_left=g->facing>0?px+PLAYER_W:px-30;
-  if(g->attack&&game_attack_frame(g)==1&&*last!=g->swing_id&&vertical&&sword_left+30>ex&&sword_left<ex+18){
+  if(g->attack&&game_attack_frame(g)==1&&*last!=g->swing_id&&sword_vertical&&sword_left+30>ex&&sword_left<ex+18){
    *last=g->swing_id;--*hp;*flash=12;
    if(!*hp){level_defeat_enemy(&g->progress,(unsigned)kind);return;}
   }
@@ -250,6 +264,7 @@ void game_step(Game *g,unsigned input){
   unsigned pressed=input&~(unsigned)g->previous;g->previous=(int)input;g->ticks++;level_progress_tick(&g->progress,0);
   if(g->pickup_timer>0)g->pickup_timer--;
   if(g->ledge_cooldown)g->ledge_cooldown--;
+  if(game_ladder_step(g,input,pressed)){collect(g);guard_step(g);camera(g);return;}
   if(g->climbing){
    g->attack=0;g->vx=0;g->vy=0;g->walk_ticks=0;g->grounded=0;
    if(g->climbing==LEDGE_HANG){
@@ -283,8 +298,8 @@ void game_step(Game *g,unsigned input){
   int old_x=g->x;
   g->x+=g->vx;
   /* Solid rock volumes: resolve crossed faces without snapping onto the top. */
-  const Platform *solids=g->area==18?&ladder_foot_wall:g->area==16?&crawl_passage_roof:g->area==15?&lower_landing_roof:g->area==14?&post_lever_roof:g->area==13?&lever_wall:g->area==8?upper_solids:g->area==7?riser_solids:g->area==6?bridge_run_solids:g->area==5?continuation_solids:g->area==2?&cliff_rock:gap_platforms;
-  int solid_count=(g->area==2||g->area==13||g->area==14||g->area==15||g->area==16||g->area==18)?1:g->area>=9?0:g->area>=4?2:0;
+  const Platform *solids=g->area>=19?&ladder_upper_walls[g->area-19]:g->area==18?&ladder_foot_wall:g->area==16?&crawl_passage_roof:g->area==15?&lower_landing_roof:g->area==14?&post_lever_roof:g->area==13?&lever_wall:g->area==8?upper_solids:g->area==7?riser_solids:g->area==6?bridge_run_solids:g->area==5?continuation_solids:g->area==2?&cliff_rock:gap_platforms;
+  int solid_count=(g->area==2||g->area==13||g->area==14||g->area==15||g->area==16||g->area>=18)?1:g->area>=9?0:g->area>=4?2:0;
   for(int i=0;i<solid_count;i++){
    const Platform *p=&solids[i];
    if(g->y+PLAYER_H*FP<=p->y*FP||game_body_top(g)>=(p->y+p->h)*FP)continue;
@@ -407,6 +422,13 @@ void game_step(Game *g,unsigned input){
    g->area=18;g->progress.area=18;g->x+=116*FP;g->y+=57*FP;camera(g);
   }else if(g->area==18&&g->grounded&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=206*FP){
    g->area=17;g->progress.area=17;g->x-=116*FP;g->y-=57*FP;camera(g);
+  }else if(g->area==19&&g->grounded&&((input&(LEFT|RIGHT))==RIGHT)&&g->x>=140*FP){
+   g->area=20;g->progress.area=20;g->x-=12*FP;g->y+=31*FP;camera(g);
+  }else if(g->area==20&&g->grounded&&((input&(LEFT|RIGHT))==LEFT)&&g->x<=125*FP){
+   g->area=19;g->progress.area=19;g->x+=12*FP;g->y-=31*FP;camera(g);
+  }else if(g->area>=19&&!g->grounded&&g->vy>0&&game_ladder_base_feet(g)>=80*FP&&
+           g->x+(g->area==20?42:30)*FP>=132*FP&&g->x+(g->area==20?42:30)*FP<240*FP){
+   int from=g->area;g->area=18;g->progress.area=18;g->x+=(from==20?42:30)*FP;g->y-=(from==20?91:60)*FP;camera(g);
   }else if(g->area==7&&g->x<90*FP&&g->y<=-8*FP&&g->vy<0){
    g->area=8;g->progress.area=8;g->x+=35*FP;g->y+=81*FP;camera(g);
   }else if(g->area==8&&g->y>=110*FP&&!g->grounded){

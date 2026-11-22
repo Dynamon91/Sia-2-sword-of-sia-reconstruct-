@@ -50,5 +50,5 @@ int main(void){
  game_step(&g,RESET);assert(g.area==0&&g.enemy5_hp==2&&!g.progress.defeated&&!g.progress.barrier_open);
  corridor(&g);int enemy=g.enemy5_x;for(int i=0;i<5;i++)game_step(&g,0);
  assert(g.enemy5_x==enemy);
- puts("PASS ladder approach: two reversible world-preserving portals, five-guard persistence, sword contacts, camera bounds, wall, respawn and reset; upper ladder route unfinished");
+ puts("PASS ladder approach: two reversible world-preserving portals, five-guard persistence, sword contacts, camera bounds, wall, respawn and reset; upper ladder route checked separately");
 }

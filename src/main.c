@@ -8,6 +8,7 @@ static const char save_type[] __attribute__((used))="SRAM_V113";
 #include "crawl_sky.h"
 #include "story.h"
 #include "view_camera.h"
+#include "ladder.h"
 #include "loading.h"
 extern const unsigned char loading_screen[],crawl_cycle[];
 #include "../assets/assets.h"
@@ -18,6 +19,7 @@ extern const unsigned char continuation_background[],bridge_run_background[],ris
 extern const unsigned char ramp_lower_background[],ramp_upper_background[];
 extern const unsigned char cliff_background[],guard_background[],guard_sprite[];
 extern const unsigned char ambient_gems[],ledge_cycle[],jump_cycle[],cloud_strip[];
+extern const unsigned char ladder_cycle[],ladder_attack_cycle[],ladder_attack_bounds[],ladder_upper_guard[];
 extern const unsigned char gap_background[],guard2_sprite[],walk_cycle[],attack_cycle[],ui_more_tiles[];
 extern const unsigned char bridge_background[],bridge_sky[],bridge_run[];
 extern const unsigned char room_backdrop[],room_spans[],bridge_backdrop[],bridge_spans[];
@@ -249,6 +251,14 @@ static void sprite(int x,int y,int w,int h,const unsigned char *pixels,int flip)
   if(col<right&&*source)pixel(x+col,y+row,*source);
  }
 }
+/* The sword atlas contains large transparent margins. Draw its recorded
+   per-row bounds so those empty pixels cannot consume a second GBA frame. */
+static void bounded_sprite(int x,int y,int w,int h,const unsigned char *pixels,const unsigned char *bounds,int flip){
+ for(int row=0;row<h;row++){
+  int first=bounds[row*2],count=bounds[row*2+1];
+  if(count)sprite(x+(flip?w-first-count:first),y+row,count,1,pixels+row*w+first,flip);
+ }
+}
 static void draw_clouds(unsigned phase){
  const unsigned char *bank=cloud_strip+(phase&1u)*CLOUD_BANK_BYTES;
  unsigned offset=phase&~1u;
@@ -382,6 +392,11 @@ static void __attribute__((noinline)) draw_level(void){
  if(game.enemy4_hp&&(!game.enemy4_flash||(game.enemy4_flash&2)))sprite(game.enemy4_x/FP+9-15,63-51,34,55,guard2_sprite,game.enemy4_dir>0);
  entity_origin(17);
  if(game.enemy5_hp&&(!game.enemy5_flash||(game.enemy5_flash&2)))sprite(game.enemy5_x/FP+9-15,55-51,34,55,guard2_sprite,game.enemy5_dir>0);
+ entity_origin(19);
+ if(game.enemy6_hp&&(!game.enemy6_flash||(game.enemy6_flash&2))){
+  int flip=game.enemy6_dir<0;
+  sprite(aligned_sprite_x(game.enemy6_x/FP+9,48,24,flip),game_extension_floor(19,game.enemy6_x/FP+2)-58,48,64,ladder_upper_guard,flip);
+ }
  entity_origin((unsigned)game.area);sprite_dy+=game.camera_y;
  unsigned air=game_air_frame(&game);
  const unsigned char *actor=room_sprites;
@@ -393,7 +408,17 @@ static void __attribute__((noinline)) draw_level(void){
  }else if(air!=AIR_NONE){
   width=56;anchor=28;actor=jump_cycle+air*56*56;
  }else if(game.grounded&&game.vx)actor=walk_cycle+game_walk_frame(&game)*ROOM_SPRITE_SIZE;
- if(game.climbing){
+ if(game.climbing==CLIMB_LADDER){
+  int attacking=game.attack!=0,flip=attacking&&game.facing>0;
+  width=attacking?LADDER_ATTACK_W:LADDER_SPRITE_W;
+  height=attacking?LADDER_ATTACK_H:LADDER_SPRITE_H;
+  anchor=attacking?LADDER_ATTACK_ANCHOR_X:LADDER_SPRITE_ANCHOR_X;
+  actor=attacking?ladder_attack_cycle+game_attack_frame(&game)*LADDER_ATTACK_W*LADDER_ATTACK_H:
+                  ladder_cycle+game_ladder_frame(&game)*LADDER_SPRITE_W*LADDER_SPRITE_H;
+  int left=aligned_sprite_x(game.x/FP+PLAYER_W/2,width,anchor,flip),top=game.y/FP+PLAYER_H-height-game.camera_y;
+  if(attacking)bounded_sprite(left,top,width,height,actor,ladder_attack_bounds+game_attack_frame(&game)*LADDER_ATTACK_H*2,flip);
+  else sprite(left,top,width,height,actor,flip);
+ }else if(game.climbing){
   sprite(game.x/FP+PLAYER_W/2-24,game.ledge_y-44-game.camera_y,
          48,104,ledge_cycle+game_ledge_frame(&game)*48*104,0);
  }else if(!game.hurt_timer||(game.hurt_timer&4))sprite(aligned_sprite_x(game.x/FP+PLAYER_W/2,width,anchor,game.facing<0),game.y/FP+PLAYER_H-height-game.camera_y+(game.crawling?CRAWL_FLOOR_BIAS:0),
@@ -467,6 +492,9 @@ static void render(void){
  shown[13]=(unsigned)(view_camera.x/FP-view_origin[game.area][0]);shown[14]=(unsigned)(view_camera.y/FP-view_origin[game.area][1]);
  shown[15]=(unsigned)view_camera.x;shown[16]=(unsigned)view_camera.y;
  shown[17]=game_ledge_frame(&game);shown[18]=(unsigned)game.ledge_y;shown[19]=game.lives;shown[20]=loading_age;shown[21]=(unsigned)game.crawling;shown[22]=game_crawl_frame(&game);shown[23]=intro_frame;
+ shown[24]=game_ladder_frame(&game);shown[25]=(game.climbing==CLIMB_LADDER&&game.attack)?game_attack_frame(&game):3;
+ shown[26]=(unsigned)game_ladder_base_feet(&game);
+ shown[27]=(unsigned)game.enemy6_hp;
 }
 int main(void){
  REG16(0x04000204)=0x4317;REG16(0x04000000)=0x0404;
@@ -582,6 +610,9 @@ int main(void){
   debug[40]=(unsigned)game.enemy4_hp;debug[41]=(unsigned)game.enemy4_x;
   debug[42]=game.progress.lever_activated;debug[43]=game.progress.barrier_open;debug[44]=(unsigned)game.crawling;debug[45]=game_crawl_frame(&game);debug[46]=(unsigned)game_body_top(&game);
   debug[47]=(unsigned)game.enemy5_hp;debug[48]=(unsigned)game.enemy5_x;
+  volatile unsigned *ldebug=(volatile unsigned*)0x0203F200;
+  ldebug[0]=(unsigned)game.enemy6_hp;ldebug[1]=(unsigned)game.enemy6_x;ldebug[2]=game.ladder_ticks;
+  ldebug[3]=(unsigned)game.climbing;ldebug[4]=(unsigned)game_ladder_base_feet(&game);ldebug[5]=(unsigned)game.attack;
   if(dirty)render();else wait_frame();
  }
 }

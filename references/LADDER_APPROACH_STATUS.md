@@ -1,8 +1,10 @@
 # Route from the tunnel to the ladder foot
 
-22 November 2026. Overall weighted completion: **16.5%**. This adds two partial
+Historical checkpoint cf9b4b9, 22 November 2026. Overall weighted completion: **16.5%**. This adds two partial
 views to the existing route, giving **19 connected views** and **five prototype
-guards**. It does not complete the first level.
+guards**. It does not complete the first level. The current ladder-climb
+continuation and refreshed source measurements are documented in
+[LADDER_CLIMB_STATUS.md](LADDER_CLIMB_STATUS.md). Values below retain the earlier checkpoint evidence.
 
 Continue LEFT after standing at the far tunnel exit. Defeat the next guard with
 B and continue LEFT to the rock wall at the ladder foot. RIGHT returns to the
@@ -97,7 +99,9 @@ is used.
 
 ## Remaining work
 
-The ladder is visible but cannot yet be climbed. The upper guard, upper route,
-intermediate thorn movement/damage, remaining levels and bosses are unfinished.
+The subsequent ladder-climb milestone implements ascent/descent, mounted sword
+and the first upper platform, as detailed in LADDER_CLIMB_STATUS.md.
+The following island route, intermediate thorn movement/damage, remaining levels
+and bosses are still unfinished.
 Collision geometry, camera guide, covered scenery and animation timing still
 need refinement against the video. Real GBA hardware has not been tested.

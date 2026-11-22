@@ -6,7 +6,7 @@ from PIL import Image
 from scipy.ndimage import binary_dilation,binary_fill_holes,gaussian_filter
 from repair_sprite_edges import indexed
 ROOT=Path(__file__).resolve().parents[1]
-NAMES=['room','bridge','cliff','guard_room','gap','continuation_background','bridge_run_background','riser_background','upper_background','ramp_lower_background','ramp_upper_background','island_gap_background','lever_entry_background','lever_room_background','post_lever_background','lower_landing_background','crawl_passage_background','ladder_hall_background','ladder_foot_background']
+NAMES=['room','bridge','cliff','guard_room','gap','continuation_background','bridge_run_background','riser_background','upper_background','ramp_lower_background','ramp_upper_background','island_gap_background','lever_entry_background','lever_room_background','post_lever_background','lower_landing_background','crawl_passage_background','ladder_hall_background','ladder_foot_background','ladder_upper_background','ladder_upper_exit_background']
 def main():
  p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');args=p.parse_args()
  text=(ROOT/'src/view_camera.h').read_text();block=text.split('view_origin[VIEW_COUNT][2]=',1)[1].split(';',1)[0]
@@ -80,7 +80,7 @@ def main():
  opened=atlas.copy();open_foreground=foreground.copy();boundary=np.zeros_like(open_foreground)
  # Later route exposures supersede recording-covered and older scene pixels.
  # Keeping only the old viewport priority left striped header rectangles in sky.
- for area in [16,17,18]:
+ for area in [16,17,18,19,20]:
   ox,oy=origins[area];left,top=-ox,380-oy
   opened[top:top+160,left:left+240]=pictures[area]
   a=colors[pictures[area]].astype('int16');r,g,b=a.transpose(2,0,1)
@@ -130,7 +130,7 @@ def main():
   'header_pixels_replaced_by_visible_source':header_replaced,
   'upper_wall_edge_extension':{'area':wall_area,'pixels':int(wall_extension.sum()),'foreground_pixels':int((wall_extension&foreground).sum()),'observed_pixels_changed':0,'method':'Clamp the registered upper-view edge into unrecorded atlas corners; estimated detail'},
   'sky_repaired_pixels':int(np.count_nonzero(atlas!=before)),
-  'open_view_priority':{'areas':[16,17,18],'rectangles':[[-origins[a][0],380-origins[a][1],240,160] for a in [16,17,18]],'sky_repaired_pixels':int(np.count_nonzero(opened!=before_open)),'foreground_preserved':True},
+  'open_view_priority':{'areas':[16,17,18,19,20],'rectangles':[[-origins[a][0],380-origins[a][1],240,160] for a in [16,17,18,19,20]],'sky_repaired_pixels':int(np.count_nonzero(opened!=before_open)),'foreground_preserved':True},
   'foreground_pixels_preserved':bool(np.array_equal(atlas[foreground],before[foreground])),
   'method':'Fixed priority between observed viewport pixels; visible source replaces covered headers; upper wall edge fills unrecorded corners; foreground source pixels preserved; four aligned atlas/cloud banks; animated sky spans.',
   'limits':['Sky at recorded viewport borders is feathered as an approximation; terrain pixels remain unchanged','Unrecorded upper-wall corners extend captured edge colors; hidden detail is not recovered','Other unrecorded atlas corners extend a fixed observed sky profile','Early cliff registrations and collision geometry remain provisional','Video-derived overlap seams remain subject to visual refinement','Post-lever bank uses the later recorded pose; intermediate scene movement is not recovered']}
@@ -140,6 +140,6 @@ def main():
   path=ROOT/'assets'/name
   if args.check:assert path.read_bytes()==data,name
   else:path.write_bytes(data)
- print('PASS world atlas: nineteen shared palettes, deterministic registrations, lossless aligned source rows and animated sky spans')
+ print('PASS world atlas: twenty-one shared palettes, deterministic registrations, lossless aligned source rows and animated sky spans')
 if __name__=='__main__':main()
 

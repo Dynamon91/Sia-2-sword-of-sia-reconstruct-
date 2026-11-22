@@ -18,7 +18,9 @@
     "lower_landing_background",
     "crawl_passage_background",
     "ladder_hall_background",
-    "ladder_foot_background"
+    "ladder_foot_background",
+    "ladder_upper_background",
+    "ladder_upper_exit_background"
   ],
   "origins": [
     [
@@ -96,6 +98,14 @@
     [
       -582,
       261
+    ],
+    [
+      -612,
+      321
+    ],
+    [
+      -624,
+      352
     ]
   ],
   "width": 1500,
@@ -119,8 +129,10 @@
     "post_lever_background": "1685972d4989ca3ce34afcda7cf646202937b2047eafa01e2bb8ba1c3c715f76",
     "lower_landing_background": "f4a7cc9aeaf4b82ef8b589b4ab82b77e063d91e8367acc14b7d2d2d5f003e075",
     "crawl_passage_background": "4c8af7db2c9dd6245830803c911f8a11468fa939611442677ff7b463bf09b338",
-    "ladder_hall_background": "f71202f2523d97b9d177c03bd433afffaa8a28ccf30ff2c24d8b032053f4bd7b",
-    "ladder_foot_background": "dcde87f3bd5ec2f6521d1331544deffdc0fbf060bd5176a4b9a832f5f4cf853c"
+    "ladder_hall_background": "e6ab667f39359bfdd18193395d10d54284f1422a1d3493da494f8ee059f63b5d",
+    "ladder_foot_background": "472665214e38b5f80f9b3781cb6376f20b75a6bf708bcda5de588fff2ec87342",
+    "ladder_upper_background": "a2c4ba19f4c291ab6ca00a4097ba728d7f807c5fb628f9013e4df60b3a39b9ab",
+    "ladder_upper_exit_background": "62de68cbaf1c27a8b7b9df74225495e376adfe04d9c1f1021d3db0323af1ebe9"
   },
   "header_pixels_replaced_by_visible_source": 6524,
   "upper_wall_edge_extension": {
@@ -130,12 +142,14 @@
     "observed_pixels_changed": 0,
     "method": "Clamp the registered upper-view edge into unrecorded atlas corners; estimated detail"
   },
-  "sky_repaired_pixels": 145582,
+  "sky_repaired_pixels": 154847,
   "open_view_priority": {
     "areas": [
       16,
       17,
-      18
+      18,
+      19,
+      20
     ],
     "rectangles": [
       [
@@ -155,9 +169,21 @@
         119,
         240,
         160
+      ],
+      [
+        612,
+        59,
+        240,
+        160
+      ],
+      [
+        624,
+        28,
+        240,
+        160
       ]
     ],
-    "sky_repaired_pixels": 9643,
+    "sky_repaired_pixels": 16405,
     "foreground_preserved": true
   },
   "foreground_pixels_preserved": true,

@@ -8,7 +8,7 @@ jobs:
       - name: Install build and audit dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi python3-pil python3-numpy python3-scipy libmgba-dev
+          sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi python3-pil python3-numpy python3-scipy libmgba-dev gifsicle
       - name: Check frontend cleanup preserves pixel positions
         run: python3 -m unittest discover -s tests -p test_frontend_cleanup.py
       - name: Audit next-route references without inventing a playable map
@@ -62,6 +62,7 @@ jobs:
       - name: Verify shared-world scrolling banks
         run: |
           python3 tools/convert_ladder_approach.py --check
+          python3 tools/convert_ladder_climb.py --check
           python3 tools/prepare_scroll_assets.py --check
           python3 -m unittest discover -s tests -p test_upper_wall_atlas.py
       - name: Audit animation palette and foot anchors
@@ -78,7 +79,7 @@ jobs:
         run: make
       - name: Run mGBA gameplay and settings integration
         run: |
-          gcc -Wall -Wextra -Werror tools/frontend_check.c src/game.c src/level_progress.c -lmgba -o build/frontend_check
+          gcc -Wall -Wextra -Werror tools/frontend_check.c src/game.c src/level_progress.c src/ladder.c -lmgba -o build/frontend_check
           set -o pipefail
           ./build/frontend_check build/sia2_lab.gba | awk '/^PASS / { print; fflush() }' > build/emulator-report.txt
       - name: Verify settings after closing and reopening a cartridge save

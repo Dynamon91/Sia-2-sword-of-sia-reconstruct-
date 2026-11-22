@@ -6,7 +6,8 @@
     189.8,
     190.5,
     190.75,
-    191
+    191,
+    189.0
   ],
   "sources": {
     "reference/w1l1_lower_landing/186_1.png": "eed4949e8918d802d368f2c710b24a112e37fd3e5c733d14674046a8cc550f85",
@@ -14,7 +15,8 @@
     "reference/w1l1_ladder/189_8.png": "696b9de36643f45a4c4a1014857d1a0de66c7a5e5031e02863a56ce01e9ed8b4",
     "reference/w1l1_ladder/190_5.png": "c4beda2a77ddf26f5a28e52564fff8ae0c92b58418b8e9d648a53d421b44d347",
     "reference/w1l1_ladder/190_75.png": "65b7baf06c175b99205c563fa852f246223f32d8a6339a2103527ed423f7377e",
-    "reference/w1l1_ladder/191.png": "4e20b2d1a095bde1d62231715fdf29f658fc9c5bf82d64588c6509b8a6b5c49a"
+    "reference/w1l1_ladder/191.png": "4e20b2d1a095bde1d62231715fdf29f658fc9c5bf82d64588c6509b8a6b5c49a",
+    "reference/w1l1_ladder_climb/189_0.png": "3d9f9b6b8a62c38c9dc01fbad75416a2ab12119d143e2454e53310ac1e3db6bc"
   },
   "registrations": [
     {
@@ -201,6 +203,43 @@
           ]
         }
       ]
+    },
+    {
+      "delta": [
+        -38,
+        -12
+      ],
+      "minimum_margin_rgb": 1.5,
+      "patches": [
+        {
+          "delta": [
+            -38,
+            -12
+          ],
+          "mae_rgb": 3.669048,
+          "runner_up_mae_rgb": 5.395238,
+          "patch": [
+            130,
+            42,
+            140,
+            56
+          ]
+        },
+        {
+          "delta": [
+            -38,
+            -12
+          ],
+          "mae_rgb": 2.45,
+          "runner_up_mae_rgb": 9.342857,
+          "patch": [
+            130,
+            63,
+            140,
+            77
+          ]
+        }
+      ]
     }
   ],
   "views": [
@@ -211,9 +250,9 @@
         204
       ],
       "observed_rgb_pixels_unchanged": 28176,
-      "registered_replacement_pixels": 3337,
-      "estimated_pixels": 6887,
-      "estimated_repeated_rail_pixels": 238,
+      "registered_replacement_pixels": 3538,
+      "estimated_pixels": 6686,
+      "estimated_repeated_rail_pixels": 178,
       "collision_geometry": "provisional"
     },
     {
@@ -223,9 +262,9 @@
         261
       ],
       "observed_rgb_pixels_unchanged": 31818,
-      "registered_replacement_pixels": 3984,
-      "estimated_pixels": 2598,
-      "estimated_repeated_rail_pixels": 210,
+      "registered_replacement_pixels": 4072,
+      "estimated_pixels": 2510,
+      "estimated_repeated_rail_pixels": 152,
       "collision_geometry": "provisional"
     }
   ],
@@ -233,6 +272,6 @@
     "Compressed video palette; shared nearest-color GBA palette without dithering",
     "Actor rectangles are excluded in all donors; hidden sky/header and a repeated rail fragment remain estimates",
     "Single existing guard pose, patrol, timing and collision geometry remain provisional",
-    "The upper route, ladder climbing and additional enemy are not yet playable"
+    "These are lower approach assets; upper-route gameplay is described in ladder_climb_manifest.json"
   ]
 }

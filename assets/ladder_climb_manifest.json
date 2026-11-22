@@ -1,0 +1,753 @@
+{
+  "video_sha256": "7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51",
+  "sources": {
+    "foot": {
+      "path": "reference/w1l1_ladder/190_5.png",
+      "sha256": "c4beda2a77ddf26f5a28e52564fff8ae0c92b58418b8e9d648a53d421b44d347"
+    },
+    "top": {
+      "path": "reference/w1l1_ladder/191.png",
+      "sha256": "4e20b2d1a095bde1d62231715fdf29f658fc9c5bf82d64588c6509b8a6b5c49a"
+    },
+    "189_8": {
+      "path": "reference/w1l1_ladder/189_8.png",
+      "sha256": "696b9de36643f45a4c4a1014857d1a0de66c7a5e5031e02863a56ce01e9ed8b4"
+    },
+    "189_0": {
+      "path": "reference/w1l1_ladder_climb/189_0.png",
+      "sha256": "3d9f9b6b8a62c38c9dc01fbad75416a2ab12119d143e2454e53310ac1e3db6bc"
+    },
+    "190_6": {
+      "path": "reference/w1l1_ladder_climb/190_6.png",
+      "sha256": "4dee57df39da151d765ba88951f5f02cb4844a84440259eb1656157ed8e65e35"
+    },
+    "190_7": {
+      "path": "reference/w1l1_ladder_climb/190_7.png",
+      "sha256": "f95b6e993548ae2cf11f787f3cdd47789e5c46495d766afa7ebee47d846f82ff"
+    },
+    "191_4": {
+      "path": "reference/w1l1_ladder_climb/191_4.png",
+      "sha256": "acaef3c4b38febdc406744867f0180720b7b6598a1e80806378d08f1fcdc827d"
+    },
+    "191_5": {
+      "path": "reference/w1l1_ladder_climb/191_5.png",
+      "sha256": "35192411a711a95f426b86efecf74c02392d2469c40521ddf81a1af6e05542f4"
+    },
+    "191_6": {
+      "path": "reference/w1l1_ladder_climb/191_6.png",
+      "sha256": "2150ad8a44770965a4c4832d225cb56ce768b1e12f3f33e1f5ff3806a7b0eae5"
+    },
+    "192_7": {
+      "path": "reference/w1l1_ladder_climb/192_7.png",
+      "sha256": "f4175ecacbbfda7b235cd776cf3126a8162acc5bd52e5f5a7976dfb23400ea1c"
+    },
+    "193_1": {
+      "path": "reference/w1l1_ladder_climb/193_1.png",
+      "sha256": "39306898f8b63878b6fa4dcb4e8ca7e8c06e034362343272e74f51bc3af5aec0"
+    },
+    "194_3": {
+      "path": "reference/w1l1_ladder_climb/194_3.png",
+      "sha256": "bcd24dbbe5598ef42504aae95e7b061000b0f4fe22290bd4934c62da1fdb705b"
+    },
+    "194_5": {
+      "path": "reference/w1l1_ladder_climb/194_5.png",
+      "sha256": "b7eea8a36c47bfaaf890be0f77ec68a13ac7ee5362a9bdba69009aa6da45fff5"
+    },
+    "193_5": {
+      "path": "reference/w1l1_ladder_climb/193_5.png",
+      "sha256": "0ab3fa5724d54f1c60a9772d6f2ff422b2b92c48b98fa6bffa5c5b28ef97bee0"
+    },
+    "193_7": {
+      "path": "reference/w1l1_ladder_climb/193_7.png",
+      "sha256": "4f66b56bcf4070552bc2f28f0db9b8fa9ad68e54097e0abe4a821cbb3c8eb9f3"
+    }
+  },
+  "registrations": [
+    {
+      "from": "foot",
+      "to": "190_6",
+      "delta": [
+        -6,
+        12
+      ],
+      "patches": [
+        {
+          "delta": [
+            -6,
+            12
+          ],
+          "mae_rgb": 0.318519,
+          "runner_up_mae_rgb": 10.081481,
+          "patch": [
+            140,
+            20,
+            149,
+            30
+          ]
+        },
+        {
+          "delta": [
+            -6,
+            12
+          ],
+          "mae_rgb": 0.75463,
+          "runner_up_mae_rgb": 7.555556,
+          "patch": [
+            175,
+            18,
+            183,
+            27
+          ]
+        }
+      ],
+      "minimum_runner_up_margin": 3
+    },
+    {
+      "from": "foot",
+      "to": "190_7",
+      "delta": [
+        -12,
+        24
+      ],
+      "patches": [
+        {
+          "delta": [
+            -12,
+            24
+          ],
+          "mae_rgb": 0.685185,
+          "runner_up_mae_rgb": 10.077778,
+          "patch": [
+            140,
+            20,
+            149,
+            30
+          ]
+        },
+        {
+          "delta": [
+            -12,
+            24
+          ],
+          "mae_rgb": 1.231481,
+          "runner_up_mae_rgb": 7.555556,
+          "patch": [
+            175,
+            18,
+            183,
+            27
+          ]
+        }
+      ],
+      "minimum_runner_up_margin": 3
+    },
+    {
+      "from": "top",
+      "to": "191_4",
+      "delta": [
+        -12,
+        21
+      ],
+      "patches": [
+        {
+          "delta": [
+            -12,
+            21
+          ],
+          "mae_rgb": 2.060606,
+          "runner_up_mae_rgb": 13.065657,
+          "patch": [
+            156,
+            80,
+            168,
+            91
+          ]
+        },
+        {
+          "delta": [
+            -12,
+            21
+          ],
+          "mae_rgb": 2.31713,
+          "runner_up_mae_rgb": 14.729167,
+          "patch": [
+            178,
+            79,
+            190,
+            91
+          ]
+        }
+      ],
+      "minimum_runner_up_margin": 3
+    },
+    {
+      "from": "top",
+      "to": "191_5",
+      "delta": [
+        -12,
+        24
+      ],
+      "patches": [
+        {
+          "delta": [
+            -12,
+            24
+          ],
+          "mae_rgb": 2.146465,
+          "runner_up_mae_rgb": 12.90404,
+          "patch": [
+            156,
+            80,
+            168,
+            91
+          ]
+        },
+        {
+          "delta": [
+            -12,
+            24
+          ],
+          "mae_rgb": 2.240741,
+          "runner_up_mae_rgb": 14.74537,
+          "patch": [
+            178,
+            79,
+            190,
+            91
+          ]
+        }
+      ],
+      "minimum_runner_up_margin": 3
+    },
+    {
+      "from": "top",
+      "to": "191_6",
+      "delta": [
+        -12,
+        24
+      ],
+      "patches": [
+        {
+          "delta": [
+            -12,
+            24
+          ],
+          "mae_rgb": 2.146465,
+          "runner_up_mae_rgb": 12.90404,
+          "patch": [
+            156,
+            80,
+            168,
+            91
+          ]
+        },
+        {
+          "delta": [
+            -12,
+            24
+          ],
+          "mae_rgb": 2.240741,
+          "runner_up_mae_rgb": 14.74537,
+          "patch": [
+            178,
+            79,
+            190,
+            91
+          ]
+        }
+      ],
+      "minimum_runner_up_margin": 3
+    },
+    {
+      "from": "top",
+      "to": "192_7",
+      "delta": [
+        -12,
+        31
+      ],
+      "patches": [
+        {
+          "delta": [
+            -12,
+            31
+          ],
+          "mae_rgb": 4.522727,
+          "runner_up_mae_rgb": 13.709596,
+          "patch": [
+            156,
+            80,
+            168,
+            91
+          ]
+        },
+        {
+          "delta": [
+            -12,
+            31
+          ],
+          "mae_rgb": 3.638889,
+          "runner_up_mae_rgb": 14.777778,
+          "patch": [
+            178,
+            79,
+            190,
+            91
+          ]
+        }
+      ],
+      "minimum_runner_up_margin": 3
+    },
+    {
+      "from": "top",
+      "to": "193_1",
+      "delta": [
+        -12,
+        45
+      ],
+      "patches": [
+        {
+          "delta": [
+            -12,
+            45
+          ],
+          "mae_rgb": 6.010101,
+          "runner_up_mae_rgb": 15.217172,
+          "patch": [
+            156,
+            80,
+            168,
+            91
+          ]
+        },
+        {
+          "delta": [
+            -12,
+            45
+          ],
+          "mae_rgb": 4.594907,
+          "runner_up_mae_rgb": 12.87037,
+          "patch": [
+            178,
+            79,
+            190,
+            91
+          ]
+        }
+      ],
+      "minimum_runner_up_margin": 3
+    },
+    {
+      "from": "top",
+      "to": "194_3",
+      "delta": [
+        28,
+        60
+      ],
+      "patches": [
+        {
+          "delta": [
+            28,
+            60
+          ],
+          "mae_rgb": 6.979798,
+          "runner_up_mae_rgb": 15.671717,
+          "patch": [
+            156,
+            80,
+            168,
+            91
+          ]
+        },
+        {
+          "delta": [
+            28,
+            60
+          ],
+          "mae_rgb": 4.3125,
+          "runner_up_mae_rgb": 14.784722,
+          "patch": [
+            178,
+            79,
+            190,
+            91
+          ]
+        }
+      ],
+      "minimum_runner_up_margin": 3
+    },
+    {
+      "from": "top",
+      "to": "194_5",
+      "delta": [
+        55,
+        31
+      ],
+      "patches": [
+        {
+          "delta": [
+            55,
+            31
+          ],
+          "mae_rgb": 6.675926,
+          "runner_up_mae_rgb": 17.261574,
+          "patch": [
+            143,
+            78,
+            155,
+            90
+          ]
+        },
+        {
+          "delta": [
+            55,
+            31
+          ],
+          "mae_rgb": 8.527778,
+          "runner_up_mae_rgb": 24.441667,
+          "patch": [
+            70,
+            50,
+            80,
+            62
+          ]
+        }
+      ],
+      "minimum_runner_up_margin": 3
+    },
+    {
+      "from": "top",
+      "to": "193_5",
+      "delta": [
+        -12,
+        69
+      ],
+      "patches": [
+        {
+          "delta": [
+            -12,
+            69
+          ],
+          "mae_rgb": 10.434343,
+          "runner_up_mae_rgb": 16.838384,
+          "patch": [
+            156,
+            80,
+            168,
+            91
+          ]
+        },
+        {
+          "delta": [
+            -12,
+            69
+          ],
+          "mae_rgb": 4.303241,
+          "runner_up_mae_rgb": 13.087963,
+          "patch": [
+            178,
+            79,
+            190,
+            91
+          ]
+        }
+      ],
+      "minimum_runner_up_margin": 3
+    },
+    {
+      "from": "foot",
+      "to": "189_0",
+      "delta": [
+        -38,
+        -12
+      ],
+      "patches": [
+        {
+          "delta": [
+            -38,
+            -12
+          ],
+          "mae_rgb": 3.669048,
+          "runner_up_mae_rgb": 5.395238,
+          "patch": [
+            130,
+            42,
+            140,
+            56
+          ]
+        },
+        {
+          "delta": [
+            -38,
+            -12
+          ],
+          "mae_rgb": 2.45,
+          "runner_up_mae_rgb": 9.342857,
+          "patch": [
+            130,
+            63,
+            140,
+            77
+          ]
+        }
+      ],
+      "minimum_runner_up_margin": 1.5
+    },
+    {
+      "from": "foot",
+      "to": "189_8",
+      "delta": [
+        -14,
+        -13
+      ],
+      "patches": [
+        {
+          "delta": [
+            -14,
+            -13
+          ],
+          "mae_rgb": 1.414286,
+          "runner_up_mae_rgb": 3.740476,
+          "patch": [
+            130,
+            42,
+            140,
+            56
+          ]
+        },
+        {
+          "delta": [
+            -14,
+            -13
+          ],
+          "mae_rgb": 1.369048,
+          "runner_up_mae_rgb": 9.571429,
+          "patch": [
+            130,
+            63,
+            140,
+            77
+          ]
+        }
+      ],
+      "minimum_runner_up_margin": 2
+    },
+    {
+      "from": "top",
+      "to": "193_7",
+      "delta": [
+        -12,
+        88
+      ],
+      "patches": [
+        {
+          "delta": [
+            -12,
+            88
+          ],
+          "mae_rgb": 6.002778,
+          "runner_up_mae_rgb": 15.05,
+          "patch": [
+            180,
+            40,
+            192,
+            50
+          ]
+        },
+        {
+          "delta": [
+            -12,
+            88
+          ],
+          "mae_rgb": 2.244444,
+          "runner_up_mae_rgb": 7.397222,
+          "patch": [
+            200,
+            52,
+            210,
+            64
+          ]
+        }
+      ],
+      "minimum_runner_up_margin": 3
+    }
+  ],
+  "climb_poses": [
+    {
+      "source": "foot",
+      "crop": [
+        140,
+        48,
+        180,
+        112
+      ],
+      "anchor": [
+        20,
+        64
+      ],
+      "camera_translation_from_foot": [
+        0,
+        0
+      ],
+      "logical_feet": 112,
+      "opaque_pixels": 612
+    },
+    {
+      "source": "190_6",
+      "crop": [
+        134,
+        54,
+        174,
+        118
+      ],
+      "anchor": [
+        20,
+        64
+      ],
+      "camera_translation_from_foot": [
+        -6,
+        12
+      ],
+      "logical_feet": 118,
+      "opaque_pixels": 584
+    },
+    {
+      "source": "190_7",
+      "crop": [
+        128,
+        60,
+        168,
+        124
+      ],
+      "anchor": [
+        20,
+        64
+      ],
+      "camera_translation_from_foot": [
+        -12,
+        24
+      ],
+      "logical_feet": 124,
+      "opaque_pixels": 565
+    },
+    {
+      "source": "top",
+      "crop": [
+        110,
+        80,
+        150,
+        144
+      ],
+      "anchor": [
+        20,
+        64
+      ],
+      "camera_translation_from_foot": [
+        -30,
+        60
+      ],
+      "logical_feet": 144,
+      "opaque_pixels": 566
+    }
+  ],
+  "attack_poses": [
+    {
+      "source": "191_4",
+      "crop": [
+        54,
+        53,
+        166,
+        149
+      ],
+      "anchor": [
+        64,
+        96
+      ],
+      "canonical_facing": "left",
+      "opaque_pixels": 640
+    },
+    {
+      "source": "191_5",
+      "crop": [
+        54,
+        56,
+        166,
+        152
+      ],
+      "anchor": [
+        64,
+        96
+      ],
+      "canonical_facing": "left",
+      "opaque_pixels": 1179
+    },
+    {
+      "source": "191_6",
+      "crop": [
+        54,
+        56,
+        166,
+        152
+      ],
+      "anchor": [
+        64,
+        96
+      ],
+      "canonical_facing": "left",
+      "opaque_pixels": 861
+    }
+  ],
+  "guard": {
+    "source": "top",
+    "crop": [
+      79,
+      18,
+      127,
+      82
+    ],
+    "size": [
+      48,
+      64
+    ],
+    "anchor": [
+      24,
+      58
+    ],
+    "facing": "right"
+  },
+  "backgrounds": [
+    {
+      "name": "ladder_upper",
+      "source": "top",
+      "origin": [
+        -612,
+        321
+      ],
+      "observed_rgb_pixels_preserved": 27596,
+      "registered_foreground_pixels": 4253,
+      "estimated_pixels": 6551,
+      "estimated_terrain_pixels": 0,
+      "derived_ladder_pixels": 572
+    },
+    {
+      "name": "ladder_upper_exit",
+      "source": "192_7",
+      "origin": [
+        -624,
+        352
+      ],
+      "observed_rgb_pixels_preserved": 30069,
+      "registered_foreground_pixels": 3870,
+      "estimated_pixels": 4461,
+      "estimated_terrain_pixels": 3,
+      "derived_ladder_pixels": 0
+    }
+  ],
+  "climb_speed_pixels_per_update": 1,
+  "limits": [
+    "Silhouettes are manually masked from compressed video and quantized to the shared palette",
+    "Camera guide, patrol, timing and collision geometry remain authored approximations",
+    "Unseen sky/header and persistently covered grass are declared estimates",
+    "The blue floating object is removed from scenery; its unconfirmed behavior is not invented here",
+    "The next floating-island route and complete level/bosses remain unfinished"
+  ]
+}

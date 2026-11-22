@@ -4,14 +4,14 @@
     {
       "name": "Motore e sistemi di gioco",
       "weight": 15,
-      "earned": 9.25,
-      "evidence": "Controlli, combattimento con cinque guardie, vite/game over, camera continua e strisciamento verificati; ritorno dalla scala al tunnel senza scatti. Inizializzazione e interfacce non critiche spostate in ROM per compilare anche con GCC ARM 14. Geometria, IA e tempi ancora provvisori."
+      "earned": 10,
+      "evidence": "Controlli, sei guardie prototipo, vite/game over, camera continua, strisciamento e salita/discesa della scala verificati. Attacchi dalla scala in entrambe le direzioni; quattro pose di salita e tre fasi di spada controllate nella VRAM. 6940 aggiornamenti su 6940 fotogrammi attivi di scorrimento, incluse le due nuove viste. IA, collisioni e tempi ancora provvisori."
     },
     {
       "name": "Mondo 1 e boss",
       "weight": 20,
-      "earned": 6,
-      "evidence": "Diciannove inquadrature parziali collegate: dal passaggio basso si raggiunge la quinta guardia e il piede della scala, con ritorno e sconfitta persistente durante la partita. Cinque gemme conservate. Salita della scala, percorso seguente, livelli e boss incompleti."
+      "earned": 6.5,
+      "evidence": "Ventuno inquadrature parziali collegate: dal tunnel si raggiunge e si risale la scala, si affronta la sesta guardia e si ritorna al piano inferiore. Cinque gemme e sconfitte persistono nella partita. Percorso delle isole successive, livelli e boss incompleti."
     },
     {
       "name": "Mondo 2 e boss",
@@ -34,8 +34,8 @@
     {
       "name": "Fedeltà visiva, interfaccia, animazioni e audio",
       "weight": 15,
-      "earned": 0.25,
-      "evidence": "Menu, intro restaurata, pose aeree/risalita, nuvole e leva abbassata verificati nella ROM. Due nuovi fondali derivati da sei esposizioni del video; attori esclusi dai donatori. I pixel visibili dei nuovi fondali sono conservati fuori dalle maschere; cielo, parti coperte, piccolo frammento ripetuto della scala e raccordi restano stime dichiarate. Animazioni, barriera mobile, interfaccia e separazione audio incomplete."
+      "earned": 0.5,
+      "evidence": "Menu e tutti i 588 fotogrammi dell’intro verificati nella ROM. Aggiunte quattro pose di scala, tre attacchi dedicati, guardia estratta dal video e due viste superiori: tredici registrazioni su coppie di zone statiche. Donatori mascherati escludono gli attori; cielo coperto, piccoli frammenti di scala e raccordi restano stime dichiarate. Altre animazioni, interfaccia e audio incompleti."
     },
     {
       "name": "Riferimenti, validazione e consegna finale",

@@ -9,6 +9,8 @@ import hashlib
 import json
 import io
 import os
+import shutil
+import subprocess
 
 import numpy as np
 from PIL import Image
@@ -38,6 +40,10 @@ def export(build, name, out, scale=2):
     encoded[0].save(output, format='GIF', save_all=True, append_images=encoded[1:], loop=0,
                     duration=durations, optimize=False, disposal=1)
     payload = output.getvalue()
+    optimizer=os.environ.get('GIFSICLE') or shutil.which('gifsicle')
+    if optimizer:
+        optimized=subprocess.run([optimizer,'-O3'],input=payload,stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=True).stdout
+        if len(optimized)<len(payload):payload=optimized
     temporary = target.with_suffix('.gif.tmp')
     with temporary.open('wb') as stream:
         view = memoryview(payload)
@@ -74,7 +80,7 @@ def export(build, name, out, scale=2):
 def main():
     p=argparse.ArgumentParser();p.add_argument('build',type=Path);p.add_argument('--out',type=Path,default=Path('previews'));p.add_argument('--scale',type=int,choices=[1,2,3],default=2);a=p.parse_args()
     a.out.mkdir(parents=True,exist_ok=True)
-    for name in ['jump','ledge','scenery','continuation','bridge_run','ramp','island_gap','lever_route','post_lever','lower_landing','crawl','ladder_approach']:export(a.build,name,a.out,a.scale)
+    for name in ['jump','ledge','scenery','continuation','bridge_run','ramp','island_gap','lever_route','post_lever','lower_landing','crawl','ladder_approach','ladder_climb']:export(a.build,name,a.out,a.scale)
 
 
 if __name__=='__main__':main()

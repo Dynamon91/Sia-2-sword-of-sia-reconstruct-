@@ -1,4 +1,4 @@
-"""Two registered lower-route views; ladder climbing is not implemented here."""
+"""Two registered lower-route views; upper-route assets use convert_ladder_climb.py."""
 from pathlib import Path
 import argparse
 import hashlib
@@ -42,13 +42,15 @@ def png(rgb):
 def outputs():
     paths = [ROOT / 'reference/w1l1_lower_landing/186_1.png'] + [
         REF / f'{t}.png' for t in ['187_5', '189_8', '190_5', '190_75', '191']]
-    old, hall, clear, shaft, higher, top = [np.asarray(Image.open(p).convert('RGB')) for p in paths]
+    paths.append(ROOT/'reference/w1l1_ladder_climb/189_0.png')
+    old, hall, clear, shaft, higher, top, early = [np.asarray(Image.open(p).convert('RGB')) for p in paths]
     regs = [
         registration(old, hall, [(3, 64, 15, 73), (2, 73, 18, 87)], [92, 0], 2),
         registration(hall, shaft, [(70, 59, 86, 77), (88, 59, 104, 77)], [116, 57], 2),
         registration(shaft, clear, [(130, 42, 140, 56), (130, 63, 140, 77)], [-14, -13], 2),
         registration(shaft, higher, [(140, 20, 149, 30), (175, 18, 183, 27)], [-18, 36], 3),
         registration(shaft, top, [(140, 20, 149, 30), (175, 18, 183, 27)], [-30, 60], 3),
+        registration(shaft, early, [(130,42,140,56),(130,63,140,77)], [-38,-12], 1.5),
     ]
     palette = (ROOT / 'assets/continuation_palette.bin').read_bytes()
     words = np.frombuffer(palette, dtype='<u2')
@@ -56,11 +58,12 @@ def outputs():
                        for w in words], dtype=np.uint8)
     result = {}
     reports = []
-    frames = [old, hall, clear, shaft, higher, top]
-    shifts = [(-92, 0), (0, 0), (102, 44), (116, 57), (98, 93), (86, 117)]
+    frames = [old, hall, clear, shaft, higher, top, early]
+    shifts = [(-92, 0), (0, 0), (102, 44), (116, 57), (98, 93), (86, 117), (78,45)]
     actors = [[(142, 37, 50, 28)], [(30, 14, 42, 54), (128, 14, 60, 58)],
               [(155, 61, 38, 49), (102, 87, 55, 22)], [(142, 64, 42, 47), (102, 14, 22, 6)],
-              [(130, 73, 32, 53), (97, 14, 27, 40)], [(77, 28, 49, 62), (111, 96, 43, 58)]]
+              [(130, 73, 32, 53), (97, 14, 27, 40)], [(77, 28, 49, 62), (111, 96, 43, 58)],
+              [(108,76,38,38),(147,58,45,58)]]
     usable = []
     for frame, boxes in zip(frames, actors):
         valid = np.ones((160, 240), bool)
@@ -84,7 +87,7 @@ def outputs():
         # Foreground can be transferred between registered exposures. Actor and
         # recording rectangles in the donor are always excluded. Parallax sky
         # is never pasted as a rectangular donor patch.
-        for donor in [5, 0, 2, 4, 3, 1]:
+        for donor in [6, 5, 0, 2, 4, 3, 1]:
             if donor == target:
                 continue
             dx = shifts[donor][0] - shifts[target][0]
@@ -148,13 +151,13 @@ def outputs():
                         'estimated_pixels': int(estimated.sum()), 'estimated_repeated_rail_pixels': int(repeated.sum()),
                         'collision_geometry': 'provisional'})
     manifest = {'video_sha256': '7773b43f66bb03375dc18d33e9d6bcbb57a9e7869f5afe7cc1824228ddf06d51',
-                'source_seconds': [186.1, 187.5, 189.8, 190.5, 190.75, 191],
+                'source_seconds': [186.1, 187.5, 189.8, 190.5, 190.75, 191,189.0],
                 'sources': {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths},
                 'registrations': regs, 'views': reports,
                 'limits': ['Compressed video palette; shared nearest-color GBA palette without dithering',
                            'Actor rectangles are excluded in all donors; hidden sky/header and a repeated rail fragment remain estimates',
                            'Single existing guard pose, patrol, timing and collision geometry remain provisional',
-                           'The upper route, ladder climbing and additional enemy are not yet playable']}
+                           'These are lower approach assets; upper-route gameplay is described in ladder_climb_manifest.json']}
     result['ladder_approach_manifest.json'] = (json.dumps(manifest, indent=2) + '\n').encode()
     return result
 
@@ -172,7 +175,7 @@ def main():
                 assert path.read_bytes() == payload, name
         else:
             path.write_bytes(payload)
-    print('PASS ladder approach assets: five independent terrain registrations, two cleaned views and explicit repair masks')
+    print('PASS ladder approach assets: six independent terrain registrations, two cleaned views and explicit repair masks')
 
 
 if __name__ == '__main__':

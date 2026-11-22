@@ -226,3 +226,20 @@ scroll_world_open:
 .global crawl_passage_roof_patch
 crawl_passage_roof_patch:
 .incbin "assets/crawl_passage_roof_patch.bin"
+
+.balign 4
+.global ladder_cycle
+ladder_cycle:
+.incbin "assets/ladder_cycle.bin"
+.balign 4
+.global ladder_attack_cycle
+ladder_attack_cycle:
+.incbin "assets/ladder_attack_cycle.bin"
+.balign 4
+.global ladder_attack_bounds
+ladder_attack_bounds:
+.incbin "assets/ladder_attack_bounds.bin"
+.balign 4
+.global ladder_upper_guard
+ladder_upper_guard:
+.incbin "assets/ladder_upper_guard.bin"

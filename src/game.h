@@ -10,7 +10,7 @@
 #define WORLD_W 240
 #define PLATFORM_COUNT 2
 #define GEM_COUNT 5
-enum { LEDGE_NONE, LEDGE_HANG, LEDGE_PULL };
+enum { LEDGE_NONE, LEDGE_HANG, LEDGE_PULL, CLIMB_LADDER };
 enum { AIR_RISE, AIR_APEX, AIR_FALL, AIR_NONE };
 #define LEDGE_PULL_TICKS 12
 enum { LEFT=1, RIGHT=2, JUMP=4, ATTACK=8, RESET=16, UP=32, DOWN=64 };
@@ -19,7 +19,8 @@ typedef struct { int area,x,y; unsigned id; } Gem;
 extern const Gem level_gems[GEM_COUNT];
 typedef struct { int x,y,vx,vy,grounded,facing,attack,camera,previous;
     int climbing,gems,collected,sign_open,camera_y,area,falls,pickup_timer; int hurt_timer,game_over,enemy_x,enemy_dir,enemy_hp,enemy_flash; int enemy2_x,enemy2_dir,enemy2_hp,enemy2_flash; unsigned enemy2_last_swing,walk_ticks; unsigned swing_id,enemy_last_swing; unsigned ticks,lives; int ledge_y; unsigned ledge_ticks,ledge_cooldown; int enemy3_x,enemy3_dir,enemy3_hp,enemy3_flash; unsigned enemy3_last_swing; LevelProgress progress; int enemy4_x,enemy4_dir,enemy4_hp,enemy4_flash; unsigned enemy4_last_swing; int crawling; unsigned crawl_ticks;
-    int enemy5_x,enemy5_dir,enemy5_hp,enemy5_flash; unsigned enemy5_last_swing; } Game;
+    int enemy5_x,enemy5_dir,enemy5_hp,enemy5_flash; unsigned enemy5_last_swing;
+    int enemy6_x,enemy6_dir,enemy6_hp,enemy6_flash; unsigned enemy6_last_swing,ladder_ticks; } Game;
 extern const Platform platforms[PLATFORM_COUNT];
 int game_floor(int x);
 /* Provisional sixth-view walk plane, using character overlap at the edges. */
